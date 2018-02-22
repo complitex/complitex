@@ -43,6 +43,7 @@ import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceT
 import org.complitex.osznconnection.file.service.status.details.PrivilegeExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.PrivilegeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
+import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
@@ -89,6 +90,10 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
     @EJB
     private FacilityServiceTypeBindTaskBean facilityServiceTypeBindTaskBean;
+
+    @EJB
+    private RequestWarningBean requestWarningBean;
+
 
     @EJB
     private DwellingCharacteristicsBindTaskBean dwellingCharacteristicsBindTaskBean;
@@ -375,6 +380,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 //noinspection Duplicates
                 list.forEach(facilityServiceType -> {
                     try {
+                        requestWarningBean.delete(facilityServiceType);
                         facilityServiceTypeBindTaskBean.bind(serviceProviderCode, billingId, facilityServiceType);
 
                         if (facilityServiceType.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
@@ -395,6 +401,7 @@ public final class FacilityServiceTypeList extends TemplatePage {
                                 facilityServiceType.getStringField(FacilityServiceTypeDBF.APT));
 
                         if (privilegeGroup.getDwellingCharacteristics() != null){
+                            requestWarningBean.delete(privilegeGroup.getDwellingCharacteristics());
                             dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, billingId,
                                     privilegeGroup.getDwellingCharacteristics());
                         }

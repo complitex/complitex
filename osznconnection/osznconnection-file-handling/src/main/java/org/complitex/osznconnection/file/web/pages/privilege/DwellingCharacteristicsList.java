@@ -43,6 +43,7 @@ import org.complitex.osznconnection.file.service.privilege.task.FacilityServiceT
 import org.complitex.osznconnection.file.service.status.details.PrivilegeExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.PrivilegeStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailBean;
+import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
 import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
@@ -88,6 +89,10 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
     @EJB
     private DwellingCharacteristicsBindTaskBean dwellingCharacteristicsBindTaskBean;
+
+    @EJB
+    private RequestWarningBean requestWarningBean;
+
 
     @EJB
     private FacilityServiceTypeBindTaskBean facilityServiceTypeBindTaskBean;
@@ -381,6 +386,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
 
                         Long billingId = organizationStrategy.getBillingId(requestFile.getUserOrganizationId());
 
+                        requestWarningBean.delete(dwellingCharacteristics);
                         dwellingCharacteristicsBindTaskBean.bind(serviceProviderCode, billingId, dwellingCharacteristics);
 
                         if (dwellingCharacteristics.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
@@ -401,6 +407,7 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                                 dwellingCharacteristics.getStringField(DwellingCharacteristicsDBF.APT));
 
                         if (privilegeGroup.getFacilityServiceType() != null){
+                            requestWarningBean.delete(privilegeGroup.getFacilityServiceType());
                             facilityServiceTypeBindTaskBean.bind(serviceProviderCode, billingId, privilegeGroup.getFacilityServiceType());
                         }
                     } catch (Exception e) {

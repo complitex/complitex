@@ -106,9 +106,11 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
     }
 
     public void bind(String serviceProviderCode, Long billingId, FacilityServiceType facilityServiceType) throws MoreOneAccountException {
+        facilityServiceType.setAccountNumber(null);
+
         //resolve local account number
-        personAccountService.localResolveAccountNumber(facilityServiceType, facilityServiceType.getInn(), billingId, true
-        );
+        personAccountService.localResolveAccountNumber(facilityServiceType, facilityServiceType.getInn(),
+                billingId, true);
 
         boolean checkFacilityPerson = true;
 

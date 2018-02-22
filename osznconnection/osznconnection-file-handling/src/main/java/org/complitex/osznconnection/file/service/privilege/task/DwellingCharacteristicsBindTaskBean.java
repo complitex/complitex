@@ -103,10 +103,13 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
     }
 
     @SuppressWarnings("Duplicates") //todo extract abstract privilege bind
-    public void bind(String serviceProviderCode, Long billingId, DwellingCharacteristics dwellingCharacteristics) throws MoreOneAccountException {
+    public void bind(String serviceProviderCode, Long billingId, DwellingCharacteristics dwellingCharacteristics)
+            throws MoreOneAccountException {
+        dwellingCharacteristics.setAccountNumber(null);
+
         //resolve local account number
-        personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(), billingId, true
-        );
+        personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(),
+                billingId, true);
 
         boolean checkFacilityPerson = true;
 
