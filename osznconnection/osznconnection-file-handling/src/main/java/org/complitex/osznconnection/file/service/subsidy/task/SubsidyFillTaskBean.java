@@ -105,12 +105,12 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
         subsidySplitBean.clearSubsidySplits(subsidy.getId());
 
         if (dat1.compareTo(dat2) > 0) {
-            subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
-            subsidyBean.update(subsidy);
+            LocalDate minDate = dat2;
 
-            log.error("subsidy fill error: dat1 > dat2 {}", subsidy);
+            dat2 = dat1;
+            dat1 = minDate;
 
-            return;
+            log.warn("subsidy fill warn: dat1 > dat2 {}", subsidy);
         }
 
         if (numm > 1 || (numm == 0 && dat1.until(dat2).getMonths() > 1)){
