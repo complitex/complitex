@@ -125,6 +125,11 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
                 resolveLocalAccount(privilegeProlongation);
 
                 if (privilegeProlongation.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
+                    personAccountService.resolveAccountNumber(privilegeProlongation, puAccountNumber,
+                            serviceProviderCode, billingId, false);
+                }
+
+                if (privilegeProlongation.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, privilegeProlongation);
                     checkFacilityPerson = false;
 
