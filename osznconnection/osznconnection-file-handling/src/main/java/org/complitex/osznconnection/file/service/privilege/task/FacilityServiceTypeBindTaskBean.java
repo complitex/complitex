@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
-import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
+import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 /**
  *
@@ -105,6 +104,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
         return facilityServiceType.getStatus() == ACCOUNT_NUMBER_RESOLVED;
     }
 
+    @SuppressWarnings("Duplicates")
     public void bind(String serviceProviderCode, Long billingId, FacilityServiceType facilityServiceType) throws MoreOneAccountException {
         facilityServiceType.setAccountNumber(null);
 
@@ -126,6 +126,11 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
                 if (facilityServiceType.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType);
                     checkFacilityPerson = false;
+
+                    if (facilityServiceType.getAccountNumber() == null &&
+                            BENEFIT_OWNER_NOT_ASSOCIATED.equals(facilityServiceType.getStatus())){
+                        facilityServiceType.setStatus(ACCOUNT_NUMBER_NOT_FOUND);
+                    }
                 }
             }
         }

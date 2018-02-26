@@ -33,8 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
-import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
+import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 @Stateless(name = "DwellingCharacteristicsBindTaskBean")
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -125,6 +124,11 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
                 if (dwellingCharacteristics.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
                     checkFacilityPerson = false;
+
+                    if (dwellingCharacteristics.getAccountNumber() == null &&
+                            BENEFIT_OWNER_NOT_ASSOCIATED.equals(dwellingCharacteristics.getStatus())){
+                        dwellingCharacteristics.setStatus(ACCOUNT_NUMBER_NOT_FOUND);
+                    }
                 }
             }
         }
