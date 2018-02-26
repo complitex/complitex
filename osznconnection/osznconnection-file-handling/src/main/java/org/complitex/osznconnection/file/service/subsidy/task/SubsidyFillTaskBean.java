@@ -210,65 +210,69 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
                     Date.from(d1.atStartOfDay(ZoneId.systemDefault()).toInstant()),
                     Date.from(d2.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
-            if (!subsidyDataCursor.isEmpty()){
+            if (subsidyDataCursor.getResultCode() == 1){
                 List<SubsidyData> data = subsidyDataCursor.getData();
 
-                data = data.stream()
-                        .collect(Collectors.groupingBy(SubsidyData::getSubsMonth))
-                        .values().stream()
-                        .map(l -> l.stream().reduce(new SubsidyData(), (s1, s2) -> {
-                            SubsidyData s = new SubsidyData();
+                if (data != null && !data.isEmpty()){
+                    data = data.stream()
+                            .collect(Collectors.groupingBy(SubsidyData::getSubsMonth))
+                            .values().stream()
+                            .map(l -> l.stream().reduce(new SubsidyData(), (s1, s2) -> {
+                                SubsidyData s = new SubsidyData();
 
-                            s.setSm1((s1.getSm1() != null ? s1.getSm1() : ZERO).add(s2.getSm1()));
-                            s.setSm2((s1.getSm2() != null ? s1.getSm2() : ZERO).add(s2.getSm2()));
-                            s.setSm3((s1.getSm3() != null ? s1.getSm3() : ZERO).add(s2.getSm3()));
-                            s.setSm4((s1.getSm4() != null ? s1.getSm4() : ZERO).add(s2.getSm4()));
-                            s.setSm5((s1.getSm5() != null ? s1.getSm5() : ZERO).add(s2.getSm5()));
-                            s.setSm6((s1.getSm6() != null ? s1.getSm6() : ZERO).add(s2.getSm6()));
-                            s.setSm7((s1.getSm7() != null ? s1.getSm7() : ZERO).add(s2.getSm7()));
-                            s.setSm8((s1.getSm8() != null ? s1.getSm8() : ZERO).add(s2.getSm8()));
+                                s.setSm1((s1.getSm1() != null ? s1.getSm1() : ZERO).add(s2.getSm1()));
+                                s.setSm2((s1.getSm2() != null ? s1.getSm2() : ZERO).add(s2.getSm2()));
+                                s.setSm3((s1.getSm3() != null ? s1.getSm3() : ZERO).add(s2.getSm3()));
+                                s.setSm4((s1.getSm4() != null ? s1.getSm4() : ZERO).add(s2.getSm4()));
+                                s.setSm5((s1.getSm5() != null ? s1.getSm5() : ZERO).add(s2.getSm5()));
+                                s.setSm6((s1.getSm6() != null ? s1.getSm6() : ZERO).add(s2.getSm6()));
+                                s.setSm7((s1.getSm7() != null ? s1.getSm7() : ZERO).add(s2.getSm7()));
+                                s.setSm8((s1.getSm8() != null ? s1.getSm8() : ZERO).add(s2.getSm8()));
 
-                            s.setSubsMonth(s2.getSubsMonth());
+                                s.setSubsMonth(s2.getSubsMonth());
 
-                            return s;
-                        }))
-                        .collect(Collectors.toList());
+                                return s;
+                            }))
+                            .collect(Collectors.toList());
 
-                data.sort(Comparator.comparing(SubsidyData::getSubsMonth));
+                    data.sort(Comparator.comparing(SubsidyData::getSubsMonth));
 
-                SubsidyData d0 = data.get(0);
+                    SubsidyData d0 = data.get(0);
 
-                for (int i = 1; i < data.size(); ++i){
-                    SubsidyData d = data.get(i);
+                    for (int i = 1; i < data.size(); ++i){
+                        SubsidyData d = data.get(i);
 
-                    if (isDifferentSign(d.getSm1(), d0.getSm1()) ||
-                            isDifferentSign(d.getSm2(), d0.getSm2()) ||
-                            isDifferentSign(d.getSm3(), d0.getSm3()) ||
-                            isDifferentSign(d.getSm4(), d0.getSm4()) ||
-                            isDifferentSign(d.getSm5(), d0.getSm5()) ||
-                            isDifferentSign(d.getSm6(), d0.getSm6()) ||
-                            isDifferentSign(d.getSm7(), d0.getSm7()) ||
-                            isDifferentSign(d.getSm8(), d0.getSm8())){
-                        subsidy.setStatus(RequestStatus.SUBSIDY_RECALCULATE_ERROR);
-                        subsidyBean.update(subsidy);
+                        if (isDifferentSign(d.getSm1(), d0.getSm1()) ||
+                                isDifferentSign(d.getSm2(), d0.getSm2()) ||
+                                isDifferentSign(d.getSm3(), d0.getSm3()) ||
+                                isDifferentSign(d.getSm4(), d0.getSm4()) ||
+                                isDifferentSign(d.getSm5(), d0.getSm5()) ||
+                                isDifferentSign(d.getSm6(), d0.getSm6()) ||
+                                isDifferentSign(d.getSm7(), d0.getSm7()) ||
+                                isDifferentSign(d.getSm8(), d0.getSm8())){
+                            subsidy.setStatus(RequestStatus.SUBSIDY_RECALCULATE_ERROR);
+                            subsidyBean.update(subsidy);
 
-                        log.info("subsidy fill error: subsidy split recalculate error: not same sign {}", data);
+                            log.info("subsidy fill error: subsidy split recalculate error: not same sign {}", data);
 
-                        return;
+                            return;
+                        }
                     }
-                }
 
-                if (isDifferentSign(d0.getSm1(), subsidy.getBigDecimalField(SubsidyDBF.SM1)) ||
-                        isDifferentSign(d0.getSm2(), subsidy.getBigDecimalField(SubsidyDBF.SM2)) ||
-                        isDifferentSign(d0.getSm3(), subsidy.getBigDecimalField(SubsidyDBF.SM3)) ||
-                        isDifferentSign(d0.getSm4(), subsidy.getBigDecimalField(SubsidyDBF.SM4)) ||
-                        isDifferentSign(d0.getSm5(), subsidy.getBigDecimalField(SubsidyDBF.SM5)) ||
-                        isDifferentSign(d0.getSm6(), subsidy.getBigDecimalField(SubsidyDBF.SM6)) ||
-                        isDifferentSign(d0.getSm7(), subsidy.getBigDecimalField(SubsidyDBF.SM7)) ||
-                        isDifferentSign(d0.getSm8(), subsidy.getBigDecimalField(SubsidyDBF.SM8))) {
-                    recalculateRatio(subsidy, d1, d2, data);
+                    if (isDifferentSign(d0.getSm1(), subsidy.getBigDecimalField(SubsidyDBF.SM1)) ||
+                            isDifferentSign(d0.getSm2(), subsidy.getBigDecimalField(SubsidyDBF.SM2)) ||
+                            isDifferentSign(d0.getSm3(), subsidy.getBigDecimalField(SubsidyDBF.SM3)) ||
+                            isDifferentSign(d0.getSm4(), subsidy.getBigDecimalField(SubsidyDBF.SM4)) ||
+                            isDifferentSign(d0.getSm5(), subsidy.getBigDecimalField(SubsidyDBF.SM5)) ||
+                            isDifferentSign(d0.getSm6(), subsidy.getBigDecimalField(SubsidyDBF.SM6)) ||
+                            isDifferentSign(d0.getSm7(), subsidy.getBigDecimalField(SubsidyDBF.SM7)) ||
+                            isDifferentSign(d0.getSm8(), subsidy.getBigDecimalField(SubsidyDBF.SM8))) {
+                        recalculateRatio(subsidy, d1, d2, data);
+                    }else{
+                        recalculatePeriod(subsidy, d1.withDayOfMonth(1), d2, data);
+                    }
                 }else{
-                    recalculatePeriod(subsidy, d1.withDayOfMonth(1), d2, data);
+                    recalculatePeriod(subsidy, d1.withDayOfMonth(1), d2, new ArrayList<>());
                 }
             }else{
                 subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
