@@ -839,21 +839,25 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
                     Item item = (Item) dataView.get("item" + id);
 
-                    R rf = getRequestFile(id);
+                    if (item != null) {
+                        R rf = getRequestFile(id);
 
-                    if (rf != null){
-                        if (!((AbstractRequestFile)item.getModelObject()).getStatus().equals(rf.getStatus())){
-                            handler.add(item.get("itemCheckBoxPanel"));
-                        }
+                        if (rf != null){
+                            AbstractRequestFile f = ((AbstractRequestFile)item.getModelObject());
 
-                        //noinspection unchecked
-                        item.setModelObject(rf);
-
-                        item.visitChildren(Label.class, (component, iVisit) -> {
-                            if (component.getOutputMarkupId()){
-                                handler.add(component);
+                            if (f != null && f.getStatus() != null && !f.getStatus().equals(rf.getStatus())){
+                                handler.add(item.get("itemCheckBoxPanel"));
                             }
-                        });
+
+                            //noinspection unchecked
+                            item.setModelObject(rf);
+
+                            item.visitChildren(Label.class, (component, iVisit) -> {
+                                if (component.getOutputMarkupId()){
+                                    handler.add(component);
+                                }
+                            });
+                        }
                     }
                 }
             }
