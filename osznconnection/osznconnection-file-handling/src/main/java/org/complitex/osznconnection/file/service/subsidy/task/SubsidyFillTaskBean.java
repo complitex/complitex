@@ -213,28 +213,6 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
             if (!subsidyDataCursor.isEmpty()){
                 List<SubsidyData> data = subsidyDataCursor.getData();
 
-                SubsidyData d0 = data.get(0);
-
-                for (int i = 1; i < data.size(); ++i){
-                    SubsidyData d = data.get(i);
-
-                    if (isDifferentSign(d.getSm1(), d0.getSm1()) ||
-                            isDifferentSign(d.getSm2(), d0.getSm2()) ||
-                            isDifferentSign(d.getSm3(), d0.getSm3()) ||
-                            isDifferentSign(d.getSm4(), d0.getSm4()) ||
-                            isDifferentSign(d.getSm5(), d0.getSm5()) ||
-                            isDifferentSign(d.getSm6(), d0.getSm6()) ||
-                            isDifferentSign(d.getSm7(), d0.getSm7()) ||
-                            isDifferentSign(d.getSm8(), d0.getSm8())){
-                        subsidy.setStatus(RequestStatus.SUBSIDY_RECALCULATE_ERROR);
-                        subsidyBean.update(subsidy);
-
-                        log.info("subsidy fill error: subsidy split recalculate error: not same sign {}", data);
-
-                        return;
-                    }
-                }
-
                 data = data.stream()
                         .collect(Collectors.groupingBy(SubsidyData::getSubsMonth))
                         .values().stream()
@@ -257,6 +235,8 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
                         .collect(Collectors.toList());
 
                 data.sort(Comparator.comparing(SubsidyData::getSubsMonth));
+
+                SubsidyData d0 = data.get(0);
 
                 if (isDifferentSign(d0.getSm1(), subsidy.getBigDecimalField(SubsidyDBF.SM1)) ||
                         isDifferentSign(d0.getSm2(), subsidy.getBigDecimalField(SubsidyDBF.SM2)) ||
