@@ -1581,7 +1581,9 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     /*Subsidy*/
 
-    public Cursor<SubsidyData> getSubsidyData(Long userOrganization, String pAcc, Date pDateB, Date pDateE) throws RemoteCallException {
-        return getData(userOrganization, "getSubsidy", MapUtil.of("pAcc", pAcc, "pDateB", pDateB, "pDateE", pDateE));
+    public Cursor<SubsidyData> getSubsidyData(Long userOrganization, String pAcc, Date pDateB, Date pDateE, Date pOpMonth)
+            throws RemoteCallException {
+        return getData(userOrganization, "getSubsidy", MapUtil.of("pAcc", pAcc, "pDateB", pDateB,
+                "pDateE", pDateE, "pOpMonth", pOpMonth));
     }
 }

@@ -136,7 +136,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
             if (dat1.getDayOfMonth() == 1){
                 split(subsidy, d1, d2);
             }else {
-                recalculate(requestFile.getUserOrganizationId(), subsidy, d1, d2);
+                recalculate(requestFile.getUserOrganizationId(), subsidy, d1, d2, requestFile.getBeginDate());
             }
         }else{
             subsidy.setStatus(RequestStatus.PROCESSED);
@@ -203,12 +203,13 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
         subsidyBean.update(subsidy);
     }
 
-    private void recalculate(Long userOrganizationId, Subsidy subsidy, LocalDate d1, LocalDate d2) {
+    private void recalculate(Long userOrganizationId, Subsidy subsidy, LocalDate d1, LocalDate d2, Date opMonth) {
         try {
             Cursor<SubsidyData> subsidyDataCursor = serviceProviderAdapter.getSubsidyData(
                     userOrganizationId, subsidy.getAccountNumber(),
                     Date.from(d1.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                    Date.from(d2.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    Date.from(d2.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                    opMonth);
 
             if (subsidyDataCursor.getResultCode() == 1){
                 List<SubsidyData> data = subsidyDataCursor.getData();
