@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.PRIVILEGE_PROLONGATION;
-import static org.complitex.osznconnection.file.entity.RequestStatus.ACCOUNT_NUMBER_RESOLVED;
-import static org.complitex.osznconnection.file.entity.RequestStatus.MORE_ONE_ACCOUNTS_LOCALLY;
+import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 
 /**
  * @author inheaven on 02.07.2016.
@@ -128,6 +127,11 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
                 if (privilegeProlongation.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, privilegeProlongation);
                     checkFacilityPerson = false;
+
+                    if (privilegeProlongation.getAccountNumber() == null &&
+                            BENEFIT_OWNER_NOT_ASSOCIATED.equals(privilegeProlongation.getStatus())){
+                        privilegeProlongation.setStatus(ACCOUNT_NUMBER_NOT_FOUND);
+                    }
                 }
             }
         }
