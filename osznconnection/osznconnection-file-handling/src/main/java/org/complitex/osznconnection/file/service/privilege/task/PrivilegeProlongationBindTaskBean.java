@@ -114,7 +114,7 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
                     billingId, true);
         }
 
-        boolean checkFacilityPerson = true;
+        boolean checkLodgerPerson = true;
 
         //noinspection Duplicates
         if (privilegeProlongation.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
@@ -131,7 +131,7 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
 
                 if (privilegeProlongation.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, privilegeProlongation);
-                    checkFacilityPerson = false;
+                    checkLodgerPerson = false;
 
                     if (privilegeProlongation.getAccountNumber() == null &&
                             BENEFIT_OWNER_NOT_ASSOCIATED.equals(privilegeProlongation.getStatus())){
@@ -141,8 +141,8 @@ public class PrivilegeProlongationBindTaskBean extends AbstractRequestTaskBean<R
             }
         }
 
-        if (checkFacilityPerson && privilegeProlongation.getAccountNumber() != null){
-            serviceProviderAdapter.checkFacilityPerson(privilegeProlongation, privilegeProlongation.getAccountNumber(),
+        if (checkLodgerPerson && privilegeProlongation.getAccountNumber() != null){
+            serviceProviderAdapter.checkLodgerPerson(privilegeProlongation, privilegeProlongation.getAccountNumber(),
                     privilegeProlongation.getDate(), privilegeProlongation.getInn(), privilegeProlongation.getPassport());
         }
 

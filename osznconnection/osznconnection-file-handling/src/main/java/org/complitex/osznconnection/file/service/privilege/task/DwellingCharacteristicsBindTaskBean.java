@@ -110,7 +110,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
         personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(),
                 billingId, true);
 
-        boolean checkFacilityPerson = true;
+        boolean checkLodgerPerson = true;
 
         //noinspection Duplicates
         if (dwellingCharacteristics.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
@@ -123,7 +123,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
 
                 if (dwellingCharacteristics.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
-                    checkFacilityPerson = false;
+                    checkLodgerPerson = false;
 
                     if (dwellingCharacteristics.getAccountNumber() == null &&
                             BENEFIT_OWNER_NOT_ASSOCIATED.equals(dwellingCharacteristics.getStatus())){
@@ -133,8 +133,8 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
             }
         }
 
-        if (checkFacilityPerson && dwellingCharacteristics.getAccountNumber() != null){
-            serviceProviderAdapter.checkFacilityPerson(dwellingCharacteristics, dwellingCharacteristics.getAccountNumber(),
+        if (checkLodgerPerson && dwellingCharacteristics.getAccountNumber() != null){
+            serviceProviderAdapter.checkLodgerPerson(dwellingCharacteristics, dwellingCharacteristics.getAccountNumber(),
                     dwellingCharacteristics.getDate(), dwellingCharacteristics.getInn(), dwellingCharacteristics.getPassport());
         }
 

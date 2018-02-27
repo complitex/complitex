@@ -184,12 +184,54 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         for (AccountDetail accountDetail : cursor.getData()) {
-            checkFacilityPerson(request, accountDetail.getAccCode(), date, inn, passport);
+            Cursor<Lodger> lodgerCursor = getLodgers(request.getUserOrganizationId(), accountDetail.getAccCode(), date);
 
-            if (request.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
-                return;
+            if (!lodgerCursor.isEmpty() && cursor.getResultCode() == 1) {
+                for (Lodger l : lodgerCursor.getData()){
+                    if ((l.getIdCode() != null && !l.getIdCode().isEmpty() && l.getIdCode().equals(inn)) ||
+                            (passport != null && !passport.isEmpty() && passport.equals(l.getPassport()))){
+                        request.setAccountNumber(accountDetail.getAccCode());
+                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+
+                        return;
+                    }
+                }
             }
         }
+    }
+
+    public void checkLodgerPerson(AbstractAccountRequest request, String accountNumber, Date date, String inn, String passport){
+        Cursor<Lodger> cursor = getLodgers(request.getUserOrganizationId(), accountNumber, date);
+
+        if (cursor.isEmpty() && cursor.getResultCode() == 1){
+            warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.EMPTY_BENEFIT_DATA);
+        }
+
+        if (cursor.getData() != null) {
+            for (Lodger l : cursor.getData()){
+                if ((l.getIdCode() != null && !l.getIdCode().isEmpty() && l.getIdCode().equals(inn)) ||
+                        (passport != null && !passport.isEmpty() && passport.equals(l.getPassport()))){
+                    request.setAccountNumber(accountNumber);
+                    request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
+
+                    return;
+                }
+            }
+
+            if (cursor.getData().size() == 1){
+                Lodger d = cursor.getData().get(0);
+
+                warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.BENEFIT_OWNER_NOT_ASSOCIATED,
+                        new RequestWarningParameter(0, d.getIdCode()),
+                        new RequestWarningParameter(1, d.getPassport()),
+                        new RequestWarningParameter(2, ""));
+            }
+        }
+
+        log.info("checkFacilityPerson BENEFIT_OWNER_NOT_ASSOCIATED accountNumber={}, inn='{}', passport='{}', data={}",
+                accountNumber, inn, passport, cursor.getData());
+
+        request.setStatus(RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
     }
 
     public void checkFacilityPerson(AbstractAccountRequest request, String accountNumber, Date date, String inn, String passport){
