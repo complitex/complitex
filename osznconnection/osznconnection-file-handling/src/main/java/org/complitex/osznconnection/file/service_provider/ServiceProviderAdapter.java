@@ -189,7 +189,9 @@ public class ServiceProviderAdapter extends AbstractBean {
             if (!lodgerCursor.isEmpty() && cursor.getResultCode() == 1) {
                 for (Lodger l : lodgerCursor.getData()){
                     if ((l.getIdCode() != null && !l.getIdCode().isEmpty() && l.getIdCode().equals(inn)) ||
-                            (passport != null && !passport.isEmpty() && passport.equals(l.getPassport()))){
+                            (passport != null && !passport.isEmpty() && l.getPassport() != null && !l.getPassport().isEmpty() &&
+                                    passport.replace(" ", "")
+                                            .equalsIgnoreCase(l.getPassport().replace(" ", "")))){
                         request.setAccountNumber(accountDetail.getAccCode());
                         request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
@@ -210,7 +212,9 @@ public class ServiceProviderAdapter extends AbstractBean {
         if (cursor.getData() != null) {
             for (Lodger l : cursor.getData()){
                 if ((l.getIdCode() != null && !l.getIdCode().isEmpty() && l.getIdCode().equals(inn)) ||
-                        (passport != null && !passport.isEmpty() && passport.equals(l.getPassport()))){
+                        (passport != null && !passport.isEmpty() && l.getPassport() != null && !l.getPassport().isEmpty() &&
+                                passport.replace(" ", "")
+                                        .equalsIgnoreCase(l.getPassport().replace(" ", "")))){
                     request.setAccountNumber(accountNumber);
                     request.setStatus(RequestStatus.ACCOUNT_NUMBER_RESOLVED);
 
