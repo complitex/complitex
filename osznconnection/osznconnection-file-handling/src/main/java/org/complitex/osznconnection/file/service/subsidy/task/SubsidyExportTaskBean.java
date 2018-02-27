@@ -72,10 +72,6 @@ public class SubsidyExportTaskBean extends AbstractRequestTaskBean<RequestFile> 
 
         Date date = requestFile.getBeginDate();
 
-//        Calendar calendar = Calendar.getInstance(); test
-//        calendar.set(2016, Calendar.DECEMBER, 1);
-//        Date date = calendar.getTime();
-
         String zheuCode = osznOrganizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
                 requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
