@@ -274,30 +274,31 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     private void updateCursorResultCode(AbstractAccountRequest request, Cursor<AccountDetail> cursor) {
         switch (cursor.getResultCode()){
-            case 0:
-                request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+            case -13:
+                request.setStatus(RequestStatus.SERVICING_ORGANIZATION_NOT_FOUND);
                 break;
-            case -2:
+            case -11:
                 request.setStatus(RequestStatus.APARTMENT_NOT_FOUND);
                 break;
-            case -3:
+            case -9:
                 request.setStatus(RequestStatus.BUILDING_CORP_NOT_FOUND);
                 break;
-            case -4:
+            case -8:
                 request.setStatus(RequestStatus.BUILDING_NOT_FOUND);
                 break;
-            case -5:
+            case -7:
                 request.setStatus(RequestStatus.STREET_NOT_FOUND);
                 break;
             case -6:
                 request.setStatus(RequestStatus.STREET_TYPE_NOT_FOUND);
                 break;
-            case -7:
+            case -5:
                 request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
                 break;
-            case -8:
-                request.setStatus(RequestStatus.SERVICING_ORGANIZATION_NOT_FOUND);
+            case 0:
+                request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
                 break;
+
         }
     }
 
@@ -313,15 +314,16 @@ public class ServiceProviderAdapter extends AbstractBean {
      * и драйвер в соответствии со стандартом JDBC рассматривает закрытый курсор как ошибку и выбрасывает исключение.
      *
      * Обработка возвращаемых значений при получении л/с.
-     *  0 - нет л/с,
-     * -1 - больше 1 л/с, когда больше одного человека в ЦН, имеющие разные номера л/c, привязаны к одному адресу.
-     * -2 - нет квартиры,
-     * -3 - нет корпуса,
-     * -4 - нет дома,
-     * -5 - нет улицы,
-     * -6 - нет типа улицы,
-     * -7 - нет района,
-     * -8 - с.е. не найдена
+     * Реквизиты лицевого счёта.
+     * Возвращает: 1 либо код ошибки (INTEGER):
+     * -13 Не найдена организация
+     * -11 Не найдена квартира
+     * -9 Не найден корпус дома
+     * -8 Не найден дом
+     * -7 Не найдена улица
+     * -6 Не найден тип улицы
+     * -5 Не найден район
+     * 0 Не найдено ни одного лицевого счёта
      *
      * @return AccountDetails
      */
@@ -344,7 +346,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("date", date);
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".acquireAccountDetailsByAddress", params);
+            sqlSession(dataSource).selectOne(NS + ".getAccAttrs", params);
         } catch (Exception e) {
             throw new DBRuntimeException(e);
         } finally {

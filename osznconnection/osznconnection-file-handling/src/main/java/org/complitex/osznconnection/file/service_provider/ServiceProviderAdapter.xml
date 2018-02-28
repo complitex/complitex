@@ -10,9 +10,9 @@
         <result column="zheu" property="zheu"/>
     </resultMap>
 
-    <select id="acquireAccountDetailsByAddress" statementType="CALLABLE" parameterType="map">
+    <select id="getAccAttrs" statementType="CALLABLE" parameterType="map">
         <![CDATA[
-        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetAccAttrs(
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.getAccAttrs(
             #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{pOrgCode, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{pStSortName, mode=IN, javaType=string, jdbcType=VARCHAR},
