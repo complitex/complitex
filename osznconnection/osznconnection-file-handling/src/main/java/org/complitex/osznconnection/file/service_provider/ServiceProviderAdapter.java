@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.service_provider;
 
-import com.google.common.base.Predicate;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.wicket.util.string.Strings;
@@ -39,7 +38,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
@@ -298,7 +296,6 @@ public class ServiceProviderAdapter extends AbstractBean {
             case 0:
                 request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
                 break;
-
         }
     }
 
@@ -364,71 +361,48 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         int accountType = determineAccountType(account);
 
-        Map<String, Object> params = newHashMap();
-        params.put("pDistrName", district);
-        params.put("pOrgCode", organizationCode);
-        params.put("pAccCode", account);
-        params.put("pAccCodeType", accountType);
-        params.put("date", date);
+        Map<String, Object> map = newHashMap();
+        map.put("pDistrName", district);
+        map.put("pOrgCode", organizationCode);
+        map.put("pAccCode", account);
+        map.put("pAccCodeType", accountType);
+        map.put("date", date);
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".getAttrsByAccCode", params);
+            sqlSession(dataSource).selectOne(NS + ".getAttrsByAccCode", map);
         }catch (Exception e){
             throw new DBRuntimeException(e);
-        } finally {
-            log.info("acquireAccountDetailsByAccount getAttrsByAccCode {}", params);
         }
 
-        Integer resultCode = (Integer) params.get("resultCode");
-        List<AccountDetail> accountDetails = (List<AccountDetail>) params.get("details");
+        Integer resultCode = (Integer) map.get("resultCode");
+        List<AccountDetail> accountDetails = (List<AccountDetail>) map.get("details");
 
-        if (resultCode == null) {
-            log.error("acquireAccountDetailsByAccount. Result code is null. Request id: {}, request class: {}, calculation center: {}",
-                    request.getId(), request.getClass(), dataSource);
-            logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                            "GETATTRSBYACCCODE", "null", dataSource));
+        if (resultCode == null || (resultCode == 1 && (accountDetails == null || accountDetails.isEmpty()))) {
             request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
-        } else {
+
+            log.error("getAttrsByAccCode error code {} {}", resultCode, map);
+        }else if (resultCode <= 0){
             switch (resultCode) {
-                case 1:
-                    if (accountDetails == null || accountDetails.isEmpty()) {
-                        log.error("acquireAccountDetailsByAccount. Result code is 1 but account details data is null or empty. "
-                                        + "Request id: {}, request class: {}, calculation center: {}",
-                                request.getId(), request.getClass(), dataSource);
-                        logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent",
-                                        stringLocaleBean.getSystemLocale(), "GETATTRSBYACCCODE", dataSource));
-                        request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
-                    }
+                case -14:
+                    request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+                    break;
+                case -13:
+                    request.setStatus(RequestStatus.SERVICING_ORGANIZATION_NOT_FOUND);
+                    break;
+                case -5:
+                    request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
                     break;
                 case 0:
                     request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
                     break;
-                case -1:
-                    log.error("acquireAccountDetailsByAccount. Result code is -1 but account type code is {}. " +
-                                    "Request id: {}, request class: {}, calculation center: {}",
-                            accountType, request.getId(), request.getClass(), dataSource);
-                    logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "wrong_account_type_code", stringLocaleBean.getSystemLocale(),
-                                    "GETATTRSBYACCCODE", accountType, dataSource));
-                    request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
-                    break;
-                case -2:
-                    request.setStatus(RequestStatus.DISTRICT_NOT_FOUND);
-                    break;
-                case -8:
-                    request.setStatus(RequestStatus.SERVICING_ORGANIZATION_NOT_FOUND);
-                    break;
                 default:
-                    log.error("acquireAccountDetailsByAccount. Unexpected result code: {}. Request id: {}, request class: {}"
-                            + ", calculation center: {}", resultCode, request.getId(), request.getClass(), dataSource);
-                    logBean.error(Module.NAME, getClass(), request.getClass(), request.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                                    "GETATTRSBYACCCODE", resultCode, dataSource));
                     request.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
+
+            log.error("getAttrsByAccCode error {} {}", resultCode, map);
         }
+
+        log.info("acquireAccountDetailsByAccount getAttrsByAccCode {}", map);
 
         return accountDetails;
     }
@@ -567,8 +541,8 @@ public class ServiceProviderAdapter extends AbstractBean {
      * поэтому ситуации с не найденной коррекцией нет.
      *
      */
-    protected void processPaymentAndBenefitData(Long billingId, Set<Long> services, Payment payment,
-                                                List<Benefit> benefits, PaymentAndBenefitData data) {
+    private void processPaymentAndBenefitData(Long billingId, Set<Long> services, Payment payment,
+                                              List<Benefit> benefits, PaymentAndBenefitData data) {
         //payment
         //fields common for all service provider types
         payment.putField(PaymentDBF.FROG, data.getPercent());
@@ -785,7 +759,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    protected boolean handleSubsidyService(Payment payment, PaymentDBF field, BigDecimal rawTarif, int service) {
+    private boolean handleSubsidyService(Payment payment, PaymentDBF field, BigDecimal rawTarif, int service) {
         String serviceCode = getSubsidyServiceCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId(),
                 service, (Date) payment.getField(PaymentDBF.DAT1));
 
@@ -798,7 +772,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    protected boolean handleSubsidyTarif(Payment payment, PaymentDBF field, BigDecimal rawTarif, int service) {
+    private boolean handleSubsidyTarif(Payment payment, PaymentDBF field, BigDecimal rawTarif, int service) {
         String tarifCode = getSubsidyTarifCode(rawTarif, payment.getOrganizationId(), payment.getUserOrganizationId(),
                 service, (Date) payment.getField(PaymentDBF.DAT1));
 
@@ -824,7 +798,7 @@ public class ServiceProviderAdapter extends AbstractBean {
      * @param T11_CS_UNI
      * @return
      */
-    protected String getSubsidyServiceCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service, Date date) {
+    private String getSubsidyServiceCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service, Date date) {
         return subsidyTarifBean.getCode2(T11_CS_UNI, osznId, userOrganizationId, service, date);
     }
 
@@ -833,7 +807,7 @@ public class ServiceProviderAdapter extends AbstractBean {
      * @param T11_CS_UNI
      * @return
      */
-    protected String getSubsidyTarifCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service, Date date) {
+    private String getSubsidyTarifCode(BigDecimal T11_CS_UNI, long osznId, long userOrganizationId, int service, Date date) {
         return subsidyTarifBean.getCode3(T11_CS_UNI, osznId, userOrganizationId, service, date);
     }
 
@@ -924,7 +898,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         private String name;
         private String passport;
 
-        protected BenefitDataId(String inn, String name, String passport) {
+        BenefitDataId(String inn, String name, String passport) {
             this.inn = inn;
             this.name = name;
             this.passport = passport;
@@ -976,8 +950,8 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    protected boolean checkOrderFam(String dataSource, String method, List<BenefitData> benefitData,
-                                    List<Benefit> benefits, Date dat1) {
+    private boolean checkOrderFam(String dataSource, String method, List<BenefitData> benefitData,
+                                  List<Benefit> benefits, Date dat1) {
         String accountNumber = benefits.get(0).getAccountNumber();
         for (BenefitData data : benefitData) {
             if (Strings.isEmpty(data.getOrderFamily())) {
@@ -1016,8 +990,8 @@ public class ServiceProviderAdapter extends AbstractBean {
         return true;
     }
 
-    protected boolean checkBenefitCode(String dataSource, String method, List<BenefitData> benefitData,
-                                       List<Benefit> benefits, Date dat1) {
+    private boolean checkBenefitCode(String dataSource, String method, List<BenefitData> benefitData,
+                                     List<Benefit> benefits, Date dat1) {
         String accountNumber = benefits.get(0).getAccountNumber();
         for (BenefitData data : benefitData) {
             if (Strings.isEmpty(data.getCode())) {
@@ -1035,7 +1009,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         return true;
     }
 
-    protected void logEmptyBenefitData(String dataSource, String method, List<Benefit> benefits, Date dat1) {
+    private void logEmptyBenefitData(String dataSource, String method, List<Benefit> benefits, Date dat1) {
         String accountNumber = benefits.get(0).getAccountNumber();
         log.error(method + ". Inn, name and passport of benefit data are null. "
                         + "Account number: {}, dat1: {}, calculation center: {}",
@@ -1047,22 +1021,18 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    protected Map<BenefitDataId, Collection<BenefitData>> groupBenefitData(String method, Collection<BenefitData> benefitData) {
+    private Map<BenefitDataId, Collection<BenefitData>> groupBenefitData(String method, Collection<BenefitData> benefitData) {
         Map<BenefitDataId, Collection<BenefitData>> groupMap = newHashMap();
         for (BenefitData data : benefitData) {
             BenefitDataId id = new BenefitDataId(data.getInn(), data.getFirstName() + data.getMiddleName() + data.getLastName(),
                     data.getPassportSerial() + data.getPassportNumber());
-            Collection<BenefitData> list = groupMap.get(id);
-            if (list == null) {
-                list = newArrayList();
-                groupMap.put(id, list);
-            }
+            Collection<BenefitData> list = groupMap.computeIfAbsent(id, k -> newArrayList());
             list.add(data);
         }
         return groupMap;
     }
 
-    protected Collection<BenefitData> getBenefitDataWithMinPriv(String method, Collection<BenefitData> benefitData) {
+    private Collection<BenefitData> getBenefitDataWithMinPriv(String method, Collection<BenefitData> benefitData) {
         Collection<BenefitData> nonEmptyList = getNonEmptyBenefitData(benefitData);
         Map<BenefitDataId, Collection<BenefitData>> groupMap = groupBenefitData(method, nonEmptyList);
         Collection<BenefitData> benefitDataWithMinPriv = newArrayList();
@@ -1075,30 +1045,18 @@ public class ServiceProviderAdapter extends AbstractBean {
         return benefitDataWithMinPriv;
     }
 
-    protected Collection<BenefitData> getEmptyBenefitData(Collection<BenefitData> benefitData) {
-        return newArrayList(filter(benefitData, new Predicate<BenefitData>() {
-
-            @Override
-            public boolean apply(BenefitData data) {
-                return data.isEmpty();
-            }
-        }));
+    private Collection<BenefitData> getEmptyBenefitData(Collection<BenefitData> benefitData) {
+        return newArrayList(benefitData.stream().filter(BenefitData::isEmpty).collect(Collectors.toList()));
     }
 
-    protected Collection<BenefitData> getNonEmptyBenefitData(Collection<BenefitData> benefitData) {
+    private Collection<BenefitData> getNonEmptyBenefitData(Collection<BenefitData> benefitData) {
         Collection<BenefitData> nonEmptyList = newArrayList(benefitData);
         nonEmptyList.removeAll(getEmptyBenefitData(benefitData));
         return nonEmptyList;
     }
 
     protected List<BenefitData> getBenefitDataByINN(List<BenefitData> benefitDatas, final String inn) {
-        return newArrayList(filter(benefitDatas, new Predicate<BenefitData>() {
-
-            @Override
-            public boolean apply(BenefitData benefitData) {
-                return benefitData.getInn().equals(inn);
-            }
-        }));
+        return newArrayList(benefitDatas.stream().filter(benefitData -> benefitData.getInn().equals(inn)).collect(Collectors.toList()));
     }
 
     private static class BenefitDataComparator implements Comparator<BenefitData> {
@@ -1170,6 +1128,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         } else {
             switch (resultCode) {
                 case 1:
+                    //noinspection unchecked
                     List<BenefitData> benefitData = (List<BenefitData>) params.get("data");
 
                     if (benefitData != null && !benefitData.isEmpty()) {
@@ -1233,8 +1192,8 @@ public class ServiceProviderAdapter extends AbstractBean {
      * @param benefits Список benefit записей с одинаковым номером л/c
      * @param benefitData Список записей данных из ЦН
      */
-    protected void processBenefitData(String dataSource, List<Benefit> benefits,
-                                      List<BenefitData> benefitData, Date dat1) {
+    private void processBenefitData(String dataSource, List<Benefit> benefits,
+                                    List<BenefitData> benefitData, Date dat1) {
 
         final long osznId = benefits.get(0).getOrganizationId();
         final long userOrganizationId = benefits.get(0).getUserOrganizationId();
@@ -1328,13 +1287,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    protected List<Benefit> findByPassportNumber(List<Benefit> benefits, final String passportNumber) {
+    private List<Benefit> findByPassportNumber(List<Benefit> benefits, final String passportNumber) {
         return benefits.stream()
                 .filter(benefit -> passportNumber.equals(benefit.getStringField(BenefitDBF.PSP_NUM)))
                 .collect(Collectors.toList());
     }
 
-    protected List<Benefit> findByINN(List<Benefit> benefits, final String inn) {
+    private List<Benefit> findByINN(List<Benefit> benefits, final String inn) {
         return benefits.stream()
                 .filter(benefit -> inn.equals(benefit.getStringField(BenefitDBF.IND_COD)))
                 .collect(Collectors.toList());
@@ -1343,7 +1302,7 @@ public class ServiceProviderAdapter extends AbstractBean {
     private static final int MEGABANK_ACCOUNT_TYPE = 1;
     private static final int CALCULATION_CENTER_ACCOUNT_TYPE = 2;
 
-    protected int determineAccountType(String accountNumber) throws UnknownAccountNumberTypeException {
+    private int determineAccountType(String accountNumber) throws UnknownAccountNumberTypeException {
         if (Strings.isEmpty(accountNumber)) {
             throw new UnknownAccountNumberTypeException();
         }
@@ -1385,6 +1344,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         } else {
             switch (resultCode) {
                 case 1:
+                    //noinspection unchecked
                     List<ActualPaymentData> actualPaymentDatas = (List<ActualPaymentData>) params.get("data");
                     if (actualPaymentDatas != null && !actualPaymentDatas.isEmpty()) {
                         ActualPaymentData data = actualPaymentDatas.get(0);
@@ -1420,7 +1380,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
     }
 
-    protected void processActualPaymentData(ActualPayment actualPayment, ActualPaymentData data, Set<Long> serviceProviderTypeIds) {
+    private void processActualPaymentData(ActualPayment actualPayment, ActualPaymentData data, Set<Long> serviceProviderTypeIds) {
         if (serviceProviderTypeIds.contains(ServiceStrategy.APARTMENT_FEE)) {
             actualPayment.putField(ActualPaymentDBF.P1, data.getApartmentFeeCharge());
             actualPayment.putField(ActualPaymentDBF.N1, data.getApartmentFeeTarif());
