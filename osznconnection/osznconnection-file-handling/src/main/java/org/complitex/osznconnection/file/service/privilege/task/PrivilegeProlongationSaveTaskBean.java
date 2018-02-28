@@ -105,7 +105,7 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractRequestTaskBean<R
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"),
                             requestFile.getFullName(), zheuCode);
                 default:
-                    throw new SaveException("Код ошибки {}", collectionId);
+                    throw new SaveException("Код ошибки {0}", collectionId);
             }
         }
 

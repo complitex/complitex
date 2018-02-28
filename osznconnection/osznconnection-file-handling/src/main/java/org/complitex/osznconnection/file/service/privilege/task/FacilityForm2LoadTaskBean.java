@@ -150,11 +150,11 @@ public class FacilityForm2LoadTaskBean extends AbstractRequestTaskBean<RequestFi
         }else {
             //noinspection Duplicates
             switch (cursor.getResultCode()){
-                case -1: //Не найден р-он
+                case -5: //Не найден р-он
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_district_not_found"), district);
-                case -5: //Не указан месяц файла
+                case -18: //Не указан месяц файла
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_null_month"));
-                case -7: //Не определена организация
+                case -20: //Не определена организация
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"), zheuCode);
             }
         }

@@ -155,14 +155,16 @@ public class FacilityLocalLoadTaskBean extends AbstractRequestTaskBean<RequestFi
         } else {
             //noinspection Duplicates
             switch (cursor.getResultCode()) {
-                case -1: //Не найден р-он
+                case -5: //Не найден р-он
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_district_not_found"), district);
-                case -5: //Не указан месяц файла
+                case -18: //Не указан месяц файла
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_null_month"));
-                case -6: //Не указан месяц файла
+                case -21: //Неправильный последний месяц квартала
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_null_quarter"));
-                case -7: //Не определена организация
+                case -20: //Не определена организация
                     throw new LoadException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"), zheuCode);
+                default:
+                    throw new LoadException("Код ошибки {0}", cursor.getResultCode());
             }
         }
 

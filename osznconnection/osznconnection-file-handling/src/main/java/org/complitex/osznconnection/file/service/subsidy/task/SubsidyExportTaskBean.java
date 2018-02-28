@@ -111,7 +111,7 @@ public class SubsidyExportTaskBean extends AbstractRequestTaskBean<RequestFile> 
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_district_not_found"),
                             requestFile.getFullName(), district);
                 default:
-                    throw new SaveException("код ошибки: " + collectionId);
+                    throw new SaveException("код ошибки {0}", collectionId);
             }
         }
 
