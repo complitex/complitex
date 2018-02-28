@@ -473,7 +473,7 @@ public class ServiceProviderAdapter extends AbstractBean {
                                 + "calculation center: {}", payment.getId(), dataSource);
                     }
                     break;
-                case -1:
+                case 0:
                     payment.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
                     break;
                 default:
