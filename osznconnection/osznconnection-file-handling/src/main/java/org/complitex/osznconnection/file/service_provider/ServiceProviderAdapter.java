@@ -5,16 +5,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Cursor;
-import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.exception.DBRuntimeException;
 import org.complitex.common.service.AbstractBean;
-import org.complitex.common.service.LogBean;
-import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.MapUtil;
-import org.complitex.common.util.ResourceUtil;
 import org.complitex.organization.strategy.OrganizationStrategy;
 import org.complitex.organization.strategy.ServiceStrategy;
-import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.privilege.FacilityForm2;
 import org.complitex.osznconnection.file.entity.privilege.FacilityLocal;
@@ -23,7 +18,6 @@ import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyTarifBean;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
-import org.complitex.osznconnection.file.service.warning.WebWarningRenderer;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
@@ -42,16 +36,11 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
 
-/**
- *
- * @author Artem
- */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ServiceProviderAdapter extends AbstractBean {
-
     private final Logger log = LoggerFactory.getLogger(ServiceProviderAdapter.class);
-    private static final String RESOURCE_BUNDLE = ServiceProviderAdapter.class.getName();
+
     private static final String NS = ServiceProviderAdapter.class.getName();
 
     @EJB
@@ -61,37 +50,16 @@ public class ServiceProviderAdapter extends AbstractBean {
     private SubsidyTarifBean subsidyTarifBean;
 
     @EJB
-    private LogBean logBean;
-
-    @EJB
-    private StringLocaleBean stringLocaleBean;
-
-    @EJB
     private RequestWarningBean warningBean;
 
     @EJB
-    private WebWarningRenderer webWarningRenderer;
-
-    @EJB
     private OsznOrganizationStrategy organizationStrategy;
-
 
 
     /**
      * Получить номер личного счета в ЦН.
      *
      * Обработка возвращаемых значений при получении л/с.
-     * 0 - нет л/с,
-     * -1 - больше 1 л/с, когда больше одного человека в ЦН, имеющие разные номера л/c, привязаны к одному адресу.
-     * -2 - нет квартиры,
-     * -3 - нет корпуса,
-     * -4 - нет дома,
-     * -5 - нет улицы,
-     * -6 - нет типа улицы,
-     * -7 - нет района,
-     * -8 - неправильная с.е.
-     * остальное - номер л/с
-     *
      */
     public AccountDetail acquireAccountDetail(AbstractAccountRequest request, String lastName,
                                               String puAccountNumber, String district, String organizationCode, String streetType,
@@ -407,7 +375,6 @@ public class ServiceProviderAdapter extends AbstractBean {
         return accountDetails;
     }
 
-    @SuppressWarnings("unchecked")
     public Cursor<AccountDetail> getAccountDetailsByPerson(String dataSource, String districtName, String organizationCode,
                                                          String lastName, String firstName, String middleName,
                                                          String inn, String passport, Date date){
@@ -430,6 +397,7 @@ public class ServiceProviderAdapter extends AbstractBean {
             log.info("getAttrsByPerson GetAttrsByPerson {}", params);
         }
 
+        //noinspection unchecked
         return new Cursor<>((Integer) params.get("resultCode"), (List<AccountDetail>) params.get("accountDetails"));
     }
 
@@ -472,7 +440,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("dat1", payment.getField(PaymentDBF.DAT1));
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".processPaymentAndBenefit", params);
+            sqlSession(dataSource).selectOne(NS + ".getChargeAndParams", params);
         } catch (Exception e) {
             throw new DBRuntimeException(e);
         } finally {
@@ -481,12 +449,10 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         Integer resultCode = (Integer) params.get("resultCode");
         if (resultCode == null) {
+            payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
             log.error("processPaymentAndBenefit. Result code is null. Payment id: {}, calculation center: {}",
                     payment.getId(), dataSource);
-            logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                            "GETCHARGEANDPARAMS", "null", dataSource));
-            payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
         } else {
             switch (resultCode) {
                 case 1:
@@ -498,31 +464,23 @@ public class ServiceProviderAdapter extends AbstractBean {
                         if (paymentAndBenefitDatas.size() > 1) {
                             log.warn("processPaymentAndBenefit. Size of list of paymentAndBenefitData is more than 1. Only first entry will be used."
                                     + "Calculation center: {}", dataSource);
-                            logBean.warn(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
-                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "data_size_more_one", stringLocaleBean.getSystemLocale(),
-                                            "GETCHARGEANDPARAMS", dataSource));
                         }
                         processPaymentAndBenefitData(billingId, serviceIds, payment, benefits, data);
                     } else {
-                        log.error("processPaymentAndBenefit. Result code is 1 but paymentAndBenefitData is null or empty. Payment id: {},"
-                                        + "calculation center: {}",
-                                payment.getId(), dataSource);
-                        logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
-                                        "GETCHARGEANDPARAMS", dataSource));
                         payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
+                        log.error("processPaymentAndBenefit. Result code is 1 but paymentAndBenefitData is null or empty. Payment id: {},"
+                                + "calculation center: {}", payment.getId(), dataSource);
                     }
                     break;
                 case -1:
                     payment.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
                     break;
                 default:
+                    payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
                     log.error("processPaymentAndBenefit. Unexpected result code: {}. Payment id: {}, calculation center: {}",
                             resultCode, payment.getId(), dataSource);
-                    logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                                    "GETCHARGEANDPARAMS", resultCode, dataSource));
-                    payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
         }
     }
@@ -672,9 +630,6 @@ public class ServiceProviderAdapter extends AbstractBean {
             warning.addParameter(new RequestWarningParameter(0, errorTarif));
             warning.addParameter(new RequestWarningParameter(1, "organization", billingId));
             warningBean.save(warning);
-
-            logBean.error(Module.NAME, getClass(), Payment.class, payment.getId(), EVENT.EDIT,
-                    webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
         }
 
         //benefits
@@ -696,9 +651,6 @@ public class ServiceProviderAdapter extends AbstractBean {
                         warning.addParameter(new RequestWarningParameter(0, calcCenterOwnershipCode));
                         warning.addParameter(new RequestWarningParameter(1, "organization", billingId));
                         warningBean.save(warning);
-
-                        logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                                webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                     }
                 }
             } else {
@@ -717,10 +669,6 @@ public class ServiceProviderAdapter extends AbstractBean {
                         warning.addParameter(new RequestWarningParameter(0, "ownership", internalOwnershipId));
                         warning.addParameter(new RequestWarningParameter(1, "organization", osznId));
                         warningBean.save(warning);
-
-                        logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                                webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
-
                     }
                 } else {
                     Integer ownershipCodeAsInt = null;
@@ -739,9 +687,6 @@ public class ServiceProviderAdapter extends AbstractBean {
                             warning.addParameter(new RequestWarningParameter(1, "organization", osznId));
                             warning.addParameter(new RequestWarningParameter(2, "ownership", internalOwnershipId));
                             warningBean.save(warning);
-
-                            logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                                    webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                         }
                     }
 
@@ -828,12 +773,10 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         Integer resultCode = (Integer) params.get("resultCode");
         if (resultCode == null) {
+            benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
             log.error("getBenefitData. Result code is null. Benefit id: {}, dat1: {}, calculation center: {}",
                     benefit.getId(), dat1, dataSource);
-            logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                            "GETPRIVS", "null", dataSource));
-            benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
         } else {
             switch (resultCode) {
                 case 1:
@@ -852,25 +795,21 @@ public class ServiceProviderAdapter extends AbstractBean {
                             return finalBenefitData;
                         }
                     } else {
+                        benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
                         log.error("getBenefitData. Result code is 1 but benefit data is null or empty. Benefit id: {}, dat1: {}, "
                                         + "calculation center: {}",
                                 benefit.getId(), dat1, dataSource);
-                        logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
-                                        "GETPRIVS", dataSource));
-                        benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     }
                     break;
                 case -1:
                     benefit.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
                     break;
                 default:
+                    benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
                     log.error("getBenefitData. Unexpected result code: {}. Benefit id: {}, dat1: {}, calculation center: {}",
                             resultCode, benefit.getId(), dat1, dataSource);
-                    logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                                    "GETPRIVS", resultCode, dataSource));
-                    benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
         }
         return null;
@@ -959,9 +898,6 @@ public class ServiceProviderAdapter extends AbstractBean {
                         accountNumber, dat1, dataSource);
                 for (Benefit benefit : benefits) {
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
-                    logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_order_fam_null", stringLocaleBean.getSystemLocale(),
-                                    "GETPRIVS", accountNumber, dat1, dataSource));
                 }
                 return false;
             }
@@ -978,9 +914,6 @@ public class ServiceProviderAdapter extends AbstractBean {
                         + "Account number: {}, dat1: {}, calculation center: {}", data, duplicate, accountNumber, dat1, dataSource);
                 for (Benefit benefit : benefits) {
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
-                    logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_order_fam_not_unique", stringLocaleBean.getSystemLocale(),
-                                    "GETPRIVS", accountNumber, dat1, dataSource));
                 }
                 return false;
             } else {
@@ -999,9 +932,6 @@ public class ServiceProviderAdapter extends AbstractBean {
                         accountNumber, dat1, dataSource);
                 for (Benefit benefit : benefits) {
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
-                    logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_code_null", stringLocaleBean.getSystemLocale(),
-                                    "GETPRIVS", accountNumber, dat1, dataSource));
                 }
                 return false;
             }
@@ -1014,11 +944,6 @@ public class ServiceProviderAdapter extends AbstractBean {
         log.error(method + ". Inn, name and passport of benefit data are null. "
                         + "Account number: {}, dat1: {}, calculation center: {}",
                 accountNumber, dat1, dataSource);
-        for (Benefit benefit : benefits) {
-            logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "benefit_id_empty", stringLocaleBean.getSystemLocale(),
-                            "GETPRIVS", accountNumber, dat1, dataSource));
-        }
     }
 
     private Map<BenefitDataId, Collection<BenefitData>> groupBenefitData(String method, Collection<BenefitData> benefitData) {
@@ -1237,9 +1162,6 @@ public class ServiceProviderAdapter extends AbstractBean {
                     warning.addParameter(new RequestWarningParameter(0, data.getCode()));
                     warning.addParameter(new RequestWarningParameter(1, "organization", osznId));
                     warningBean.save(warning);
-
-                    logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                            webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                 }
             }
 
@@ -1260,9 +1182,6 @@ public class ServiceProviderAdapter extends AbstractBean {
                     warning.addParameter(new RequestWarningParameter(0, data.getOrderFamily()));
                     warning.addParameter(new RequestWarningParameter(1, "organization", billingId));
                     warningBean.save(warning);
-
-                    logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.EDIT,
-                            webWarningRenderer.display(warning, stringLocaleBean.getSystemLocale()));
                 }
             }
         }
@@ -1328,12 +1247,10 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         Integer resultCode = (Integer) params.get("resultCode");
         if (resultCode == null) {
+            actualPayment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
             log.error("processActualPayment. Result code is null. ActualPayment id: {}, calculation center: {}",
                     actualPayment.getId(), dataSource);
-            logBean.error(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
-                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                            "GETFACTCHARGEANDTARIF", "null", dataSource));
-            actualPayment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
         } else {
             switch (resultCode) {
                 case 1:
@@ -1344,31 +1261,23 @@ public class ServiceProviderAdapter extends AbstractBean {
                         if (actualPaymentDatas.size() > 1) {
                             log.warn("processActualPayment. Size of list of actualPaymentData is more than 1. Only first entry will be used."
                                     + "Calculation center: {}", dataSource);
-                            logBean.warn(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
-                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "data_size_more_one", stringLocaleBean.getSystemLocale(),
-                                            "GETFACTCHARGEANDTARIF", dataSource));
                         }
                         processActualPaymentData(actualPayment, data, serviceIds);
                     } else {
-                        log.error("processActualPayment. Result code is 1 but actualPaymentData is null or empty. ActualPayment id: {}"
-                                        + ", calculation center: {}",
-                                actualPayment.getId(), dataSource);
-                        logBean.error(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
-                                        "GETFACTCHARGEANDTARIF", dataSource));
                         actualPayment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
+                        log.error("processActualPayment. Result code is 1 but actualPaymentData is null or empty. ActualPayment id: {}"
+                                + ", calculation center: {}", actualPayment.getId(), dataSource);
                     }
                     break;
                 case 0:
                     actualPayment.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
                     break;
                 default:
+                    actualPayment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
+
                     log.error("processActualPayment. Unexpected result code: {}. ActualPayment id: {}, calculation center: {}",
                             resultCode, actualPayment.getId(), dataSource);
-                    logBean.error(Module.NAME, getClass(), ActualPayment.class, actualPayment.getId(), EVENT.GETTING_DATA,
-                            ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                                    "GETFACTCHARGEANDTARIF", resultCode, dataSource));
-                    actualPayment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
         }
     }
@@ -1423,7 +1332,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("dat1", date);
 
         try {
-            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".processPaymentAndBenefit", params);
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getChargeAndParams", params);
         } catch (Exception e) {
             throw new DBRuntimeException(e);
         } finally {

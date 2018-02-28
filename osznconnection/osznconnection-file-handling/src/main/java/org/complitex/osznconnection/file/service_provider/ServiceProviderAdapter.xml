@@ -100,9 +100,9 @@
         <result property="chargeDrainage" column="charge_gvo"/>
     </resultMap>
 
-    <select id="processPaymentAndBenefit" statementType="CALLABLE" parameterType="map">
+    <select id="getChargeAndParams" statementType="CALLABLE" parameterType="map">
         <![CDATA[
-         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetChargeAndParams(
+         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.getChargeAndParams(
             #{accountNumber, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{dat1, mode=IN, javaType=date, jdbcType=DATE},
             #{data, mode=OUT, jdbcType=CURSOR, resultMap=paymentAndBenefitDataResultMap})
