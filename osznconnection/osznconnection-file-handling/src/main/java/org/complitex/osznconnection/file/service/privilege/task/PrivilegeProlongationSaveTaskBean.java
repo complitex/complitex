@@ -83,17 +83,22 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractRequestTaskBean<R
 
             //noinspection Duplicates
             switch (collectionId.intValue()){
-                case -1: //Не найден р-он
+                case -5: //Не найден р-он
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_district_not_found"), district);
-                case -3: //Неправильное кол-во записей в файле
+                case -15: //Дублируется имя файла для заданного месяца
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_filename_duplicate"),
+                            requestFile.getFullName(), requestFile.getBeginDate());
+                case -16: //Неправильное кол-во записей в файле
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_record_count"),
                             requestFile.getLoadedRecordCount());
-                case -5: //Не указан месяц файла
+                case -18: //Не указан месяц файла
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_month"));
-                case -6: //Не указано имя файла
+                case -19: //Не указано имя файла
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_filename"));
-                case -7: //Не определена организация
+                case -20: //Не определена организация
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"), zheuCode);
+                default:
+                    throw new SaveException("Код ошибки {}", collectionId);
             }
         }
 
