@@ -372,6 +372,8 @@ public class ServiceProviderAdapter extends AbstractBean {
             sqlSession(dataSource).selectOne(NS + ".getAttrsByAccCode", map);
         }catch (Exception e){
             throw new DBRuntimeException(e);
+        }finally {
+            log.info("acquireAccountDetailsByAccount getAttrsByAccCode {}", map);
         }
 
         Integer resultCode = (Integer) map.get("resultCode");
@@ -401,8 +403,6 @@ public class ServiceProviderAdapter extends AbstractBean {
 
             log.error("getAttrsByAccCode error {} {}", resultCode, map);
         }
-
-        log.info("acquireAccountDetailsByAccount getAttrsByAccCode {}", map);
 
         return accountDetails;
     }
@@ -1102,34 +1102,32 @@ public class ServiceProviderAdapter extends AbstractBean {
         String accountNumber = benefits.get(0).getAccountNumber();
         String dataSource = organizationStrategy.getDataSourceByUserOrganizationId(benefits.get(0).getUserOrganizationId());
 
-        Map<String, Object> params = newHashMap();
-        params.put("accountNumber", accountNumber);
-        params.put("dat1", dat1);
+        Map<String, Object> map = newHashMap();
+        map.put("accountNumber", accountNumber);
+        map.put("dat1", dat1);
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
+            sqlSession(dataSource).selectOne(NS + ".getPrivs", map);
         }catch (Exception e){
             throw new DBRuntimeException(e);
-        } finally {
-            log.info("processBenefit getPrivs {}", params);
+        }finally {
+            log.info("processBenefit getPrivs {}", map);
         }
 
-        Integer resultCode = (Integer) params.get("resultCode");
+        Integer resultCode = (Integer) map.get("resultCode");
 
         if (resultCode == null) {
-            log.error("processBenefit. Result code is null. Account number: {}, dat1: {}, calculation center: {}",
-                    accountNumber, dat1, dataSource);
             for (Benefit benefit : benefits) {
-                logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                        ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                                "GETPRIVS", "null", dataSource));
                 benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
             }
+
+            log.error("processBenefit. Result code is null. Account number: {}, dat1: {}, calculation center: {}",
+                    accountNumber, dat1, dataSource);
         } else {
             switch (resultCode) {
                 case 1:
                     //noinspection unchecked
-                    List<BenefitData> benefitData = (List<BenefitData>) params.get("data");
+                    List<BenefitData> benefitData = (List<BenefitData>) map.get("data");
 
                     if (benefitData != null && !benefitData.isEmpty()) {
                         if (checkOrderFam(dataSource, "processBenefit", benefitData, benefits, dat1)
@@ -1137,30 +1135,25 @@ public class ServiceProviderAdapter extends AbstractBean {
                             processBenefitData(dataSource, benefits, benefitData, dat1);
                         }
                     } else {
-                        log.error("processBenefit. Result code is 1 but benefit data is null or empty. Account number: {}, dat1: {},"
-                                        + " calculation center: {}", accountNumber, dat1, dataSource);
-
                         for (Benefit benefit : benefits) {
-                            logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                                    ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_inconsistent", stringLocaleBean.getSystemLocale(),
-                                            "GETPRIVS", dataSource));
                             benefit.putField(BenefitDBF.OZN_ABS, 1);
                         }
+
+                        log.error("processBenefit. Result code is 1 but benefit data is null or empty. Account number: {}, dat1: {},"
+                                + " calculation center: {}", accountNumber, dat1, dataSource);
                     }
                     break;
-                case -1:
+                case 0:
                     setStatus(benefits, RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
 
                     break;
                 default:
-                    log.error("processBenefit. Unexpected result code: {}. Account number: {}, dat1: {}, calculation center: {}",
-                            resultCode, accountNumber, dat1, dataSource);
                     for (Benefit benefit : benefits) {
-                        logBean.error(Module.NAME, getClass(), Benefit.class, benefit.getId(), EVENT.GETTING_DATA,
-                                ResourceUtil.getFormatString(RESOURCE_BUNDLE, "result_code_unexpected", stringLocaleBean.getSystemLocale(),
-                                        "GETPRIVS", resultCode, dataSource));
                         benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                     }
+
+                    log.error("processBenefit. Unexpected result code: {}. Account number: {}, dat1: {}, calculation center: {}",
+                            resultCode, accountNumber, dat1, dataSource);
             }
         }
     }

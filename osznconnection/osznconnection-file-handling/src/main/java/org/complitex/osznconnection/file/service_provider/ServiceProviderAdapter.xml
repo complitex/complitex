@@ -135,7 +135,7 @@
         ]]>
     </sql>
 
-    <select id="getBenefitData" statementType="CALLABLE" parameterType="map">
+    <select id="getPrivs" statementType="CALLABLE" parameterType="map">
         <include refid="org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter.getPrivs"/>
     </select>
 
