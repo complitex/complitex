@@ -92,19 +92,24 @@ public class SubsidyExportTaskBean extends AbstractRequestTaskBean<RequestFile> 
 
             //noinspection Duplicates
             switch (collectionId.intValue()){
-                case -1: //Не найден р-он
-                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_district_not_found"), district);
-                case -2: //Дублируется имя файла для заданного месяца
-                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_duplicate_name"), requestFile.getName());
-                case -3: //Неправильное кол-во записей в файле
+                case -20: //Не определена организация
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"),
+                            requestFile.getFullName(), zheuCode);
+                case -19: //Не указано имя файла
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_filename"),
+                            requestFile.getFullName());
+                case -18: //Не указан месяц файла
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_month"),
+                            requestFile.getFullName());
+                case -16: //Неправильное кол-во записей в файле
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error_record_count"),
-                            requestFile.getLoadedRecordCount());
-                case -5: //Не указан месяц файла
-                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_month"));
-                case -6: //Не указано имя файла
-                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_null_filename"));
-                case -7: //Не определена организация
-                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_organization_undefined"), zheuCode);
+                            requestFile.getFullName(), requestFile.getLoadedRecordCount());
+                case -15: //Дублируется имя файла для заданного месяца
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_duplicate_name"),
+                            requestFile.getFullName());
+                case -5: //Не найден р-он
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error_district_not_found"),
+                            requestFile.getFullName(), district);
                 default:
                     throw new SaveException("код ошибки: " + collectionId);
             }
