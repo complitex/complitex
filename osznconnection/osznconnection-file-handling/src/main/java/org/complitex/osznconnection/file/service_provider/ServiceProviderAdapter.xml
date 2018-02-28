@@ -158,9 +158,9 @@
         <result property="drainageTarif" column="fact_tarif_gvo"/>
     </resultMap>
 
-    <select id="processActualPayment" statementType="CALLABLE" parameterType="map">
+    <select id="getFactChargeAndTarif" statementType="CALLABLE" parameterType="map">
         <![CDATA[
-         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GETFACTCHARGEANDTARIF(
+         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.getFactChargeAndTarif(
             #{accountNumber, mode=IN, javaType=string, jdbcType=VARCHAR},
             #{date, mode=IN, javaType=date, jdbcType=DATE},
             #{data, mode=OUT, jdbcType=CURSOR, resultMap=actualPaymentDataResultMap})

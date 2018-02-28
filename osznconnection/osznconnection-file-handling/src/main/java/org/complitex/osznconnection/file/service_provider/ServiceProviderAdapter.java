@@ -764,18 +764,18 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("dat1", dat1);
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".getBenefitData", params);
+            sqlSession(dataSource).selectOne(NS + ".getPrivs", params);
         }catch (Exception e){
             throw new DBRuntimeException(e);
         } finally {
-            log.info("getBenefitData. Calculation center: {}, parameters : {}", dataSource, params);
+            log.info("getPrivs. Calculation center: {}, parameters : {}", dataSource, params);
         }
 
         Integer resultCode = (Integer) params.get("resultCode");
         if (resultCode == null) {
             benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
 
-            log.error("getBenefitData. Result code is null. Benefit id: {}, dat1: {}, calculation center: {}",
+            log.error("getPrivs. Result code is null. Benefit id: {}, dat1: {}, calculation center: {}",
                     benefit.getId(), dat1, dataSource);
         } else {
             switch (resultCode) {
@@ -783,26 +783,26 @@ public class ServiceProviderAdapter extends AbstractBean {
                     @SuppressWarnings("unchecked")
                     List<BenefitData> benefitData = (List<BenefitData>) params.get("data");
                     if (benefitData != null && !benefitData.isEmpty()) {
-                        if (checkOrderFam(dataSource, "getBenefitData", benefitData, newArrayList(benefit), dat1)
-                                && checkBenefitCode(dataSource, "getBenefitData", benefitData, newArrayList(benefit), dat1)) {
+                        if (checkOrderFam(dataSource, "getPrivs", benefitData, newArrayList(benefit), dat1)
+                                && checkBenefitCode(dataSource, "getPrivs", benefitData, newArrayList(benefit), dat1)) {
                             Collection<BenefitData> emptyList = getEmptyBenefitData(benefitData);
                             if (emptyList != null && !emptyList.isEmpty()) {
-                                logEmptyBenefitData(dataSource, "getBenefitData", newArrayList(benefit), dat1);
+                                logEmptyBenefitData(dataSource, "getPrivs", newArrayList(benefit), dat1);
                             }
 
-                            Collection<BenefitData> finalBenefitData = getBenefitDataWithMinPriv("getBenefitData", benefitData);
+                            Collection<BenefitData> finalBenefitData = getBenefitDataWithMinPriv("getPrivs", benefitData);
                             finalBenefitData.addAll(emptyList);
                             return finalBenefitData;
                         }
                     } else {
                         benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
 
-                        log.error("getBenefitData. Result code is 1 but benefit data is null or empty. Benefit id: {}, dat1: {}, "
+                        log.error("getPrivs. Result code is 1 but benefit data is null or empty. Benefit id: {}, dat1: {}, "
                                         + "calculation center: {}",
                                 benefit.getId(), dat1, dataSource);
                     }
                     break;
-                case -1:
+                case 0:
                     benefit.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
                     break;
                 default:
@@ -821,7 +821,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("dat1", date);
 
         try {
-            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getBenefitData", params);
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getPrivs", params);
         }catch (Exception e){
             throw new DBRuntimeException(e);
         }finally {
@@ -928,11 +928,13 @@ public class ServiceProviderAdapter extends AbstractBean {
         String accountNumber = benefits.get(0).getAccountNumber();
         for (BenefitData data : benefitData) {
             if (Strings.isEmpty(data.getCode())) {
-                log.error(method + ". BenefitData's code is null. Account number: {}, dat1: {}, calculation center: {}",
-                        accountNumber, dat1, dataSource);
                 for (Benefit benefit : benefits) {
                     benefit.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
                 }
+
+                log.error(method + ". BenefitData's code is null. Account number: {}, dat1: {}, calculation center: {}",
+                        accountNumber, dat1, dataSource);
+
                 return false;
             }
         }
@@ -941,9 +943,9 @@ public class ServiceProviderAdapter extends AbstractBean {
 
     private void logEmptyBenefitData(String dataSource, String method, List<Benefit> benefits, Date dat1) {
         String accountNumber = benefits.get(0).getAccountNumber();
-        log.error(method + ". Inn, name and passport of benefit data are null. "
-                        + "Account number: {}, dat1: {}, calculation center: {}",
-                accountNumber, dat1, dataSource);
+
+        log.error(method + ". Inn, name and passport of benefit data are null. Account number: {}, dat1: {}, " +
+                        "calculation center: {}", accountNumber, dat1, dataSource);
     }
 
     private Map<BenefitDataId, Collection<BenefitData>> groupBenefitData(String method, Collection<BenefitData> benefitData) {
@@ -1238,7 +1240,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         params.put("date", date);
 
         try {
-            sqlSession(dataSource).selectOne(NS + ".processActualPayment", params);
+            sqlSession(dataSource).selectOne(NS + ".getFactChargeAndTarif", params);
         }catch (Exception e){
             throw new DBRuntimeException(e);
         } finally {
