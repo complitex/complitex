@@ -433,7 +433,7 @@ public final class SubsidyList extends TemplatePage {
                     try {
                         subsidyService.fill(requestFile, subsidy);
                     } catch (Exception e) {
-                        error(ExceptionUtil.getCauseMessage(e, true));
+                        error(ExceptionUtil.getCauseMessage(e, true) + "");
                     }
                 }
 
