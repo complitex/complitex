@@ -19,14 +19,16 @@ public abstract class AbstractPrivilegeBean extends AbstractRequestBean {
 
     protected void loadFacilityStreet(List<? extends AbstractAccountRequest> list){
         for (AbstractAccountRequest request : list){
-            FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(request.getRequestFileId(), request.getStreetCode());
+            if (request.getStreetCode() != null) {
+                FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(request.getRequestFileId(), request.getStreetCode());
 
-            if (facilityStreet != null) {
-                request.setStreet(facilityStreet.getStreet());
-                if (facilityStreet.getStreetType() != null) {
-                    request.setStreetType(facilityStreet.getStreetType().replace(".", ""));
+                if (facilityStreet != null) {
+                    request.setStreet(facilityStreet.getStreet());
+                    if (facilityStreet.getStreetType() != null) {
+                        request.setStreetType(facilityStreet.getStreetType().replace(".", ""));
+                    }
+                    request.setStreetTypeCode(facilityStreet.getStreetTypeCode());
                 }
-                request.setStreetTypeCode(facilityStreet.getStreetTypeCode());
             }
         }
     }
