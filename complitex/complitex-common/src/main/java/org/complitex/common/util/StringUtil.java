@@ -4,6 +4,7 @@ import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -199,7 +200,9 @@ public class StringUtil {
         return 0;
     }
 
+    private final static DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
+
     public static String currentTime(){
-        return LocalTime.now().toString() + " ";
+        return LocalTime.now().format(time) + " ";
     }
 }

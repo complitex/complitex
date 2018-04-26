@@ -801,7 +801,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                     case "onSuccess":
                         break;
                     case "onSkip":
-                        info(currentTime() + getString("process.skipped", requestFile.getFullName()));
+                        info(currentTime() + getString("process.skipped", requestFile.getId().toString(),
+                                requestFile.getFullName()));
 
                         handler.add(messages);
 
