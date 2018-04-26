@@ -215,20 +215,25 @@ public class ProcessManagerService {
         return groups;
     }
 
-    private List<RequestFile> updateAndGetRequestFiles(RequestFileStatus status, List<Long> ids) {
+    private List<RequestFile> updateAndGetRequestFiles(RequestFileStatus status, List<Long> ids, RequestFileStatus... skip) {
         List<RequestFile> requestFiles = new ArrayList<>();
+
+        List<RequestFileStatus> skipList = Arrays.asList(skip);
 
         for (Long id : ids) {
             RequestFile requestFile = requestFileBean.getRequestFile(id);
 
             if (!requestFile.isWaiting() && !requestFile.isProcessing()) {
-                requestFile.setStatus(status);
+                if (skipList.isEmpty() || skipList.contains(requestFile.getStatus())) {
+                    requestFile.setStatus(status);
 
-                requestFileBean.save(requestFile);
+                    requestFileBean.save(requestFile);
+                }
 
                 requestFiles.add(requestFile);
             }
         }
+
         return requestFiles;
     }
 
@@ -454,7 +459,7 @@ public class ProcessManagerService {
     }
 
     public void exportSubsidy(List<Long> ids) {
-        execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class, updateAndGetRequestFiles(EXPORT_WAIT, ids),
+        execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class, updateAndGetRequestFiles(EXPORT_WAIT, ids, FILLED, FILL_ERROR),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
 

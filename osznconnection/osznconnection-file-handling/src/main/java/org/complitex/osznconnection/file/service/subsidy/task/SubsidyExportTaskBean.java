@@ -53,6 +53,11 @@ public class SubsidyExportTaskBean extends AbstractRequestTaskBean<RequestFile> 
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
+        if (!requestFile.getStatus().equals(RequestFileStatus.FILLED) ||
+                !requestFile.getStatus().equals(RequestFileStatus.FILL_ERROR)){
+            return false;
+        }
+
         requestFile.setStatus(RequestFileStatus.SAVING);
         requestFileBean.save(requestFile);
 

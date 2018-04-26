@@ -163,10 +163,12 @@ public class ExecutorService {
         }
     }
 
-    public void execute(final ExecutorCommand executorCommand){
+    public void execute(ExecutorCommand<? extends IExecutorObject> executorCommand){
         if (executorCommand.isRunning()){
             throw new IllegalStateException();
         }
+
+        broadcastService.broadcast(getClass(), "onBegin", executorCommand);
 
         if (executorCommand.isEmpty()){
             executorCommand.setStatus(COMPLETED);
@@ -175,8 +177,6 @@ public class ExecutorService {
 
             return;
         }
-
-        broadcastService.broadcast(getClass(), "onBegin", executorCommand);
 
         log.info("Начат процесс {}, количество объектов: {}",
                 executorCommand.getTaskClass().getSimpleName(),

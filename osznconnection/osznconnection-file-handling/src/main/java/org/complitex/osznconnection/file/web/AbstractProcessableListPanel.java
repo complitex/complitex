@@ -28,7 +28,6 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.AbstractFilter;
-import org.complitex.common.service.ModuleBean;
 import org.complitex.common.service.executor.AbstractTaskBean;
 import org.complitex.common.service.executor.ExecutorService;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
@@ -97,10 +96,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     @EJB
     private ProcessManagerService processManagerService;
 
-
-    @EJB
-    private ModuleBean moduleBean;
-
     @EJB
     private CorrectionBean correctionBean;
 
@@ -124,6 +119,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     private ProcessType bindProcessType;
     private ProcessType fillProcessType;
     private ProcessType saveProcessType;
+    private ProcessType exportProcessType;
 
     private Long[] osznOrganizationTypes;
 
@@ -793,7 +789,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 return payload.getProcessType().equals(loadProcessType) ||
                         payload.getProcessType().equals(bindProcessType) ||
                         payload.getProcessType().equals(fillProcessType) ||
-                        payload.getProcessType().equals(saveProcessType);
+                        payload.getProcessType().equals(saveProcessType) ||
+                        payload.getProcessType().equals(exportProcessType);
             }
         });
 
@@ -802,7 +799,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             protected void onBroadcast(WebSocketRequestHandler handler, String key, AbstractRequestFile requestFile) {
                 switch (key){
                     case "onSuccess":
+                        break;
                     case "onSkip":
+                        info(currentTime() + getString("process.skipped", requestFile.getFullName()));
+
                         handler.add(messages);
 
                         break;
@@ -867,7 +867,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 return request.getProcessType().equals(loadProcessType) ||
                         request.getProcessType().equals(bindProcessType) ||
                         request.getProcessType().equals(fillProcessType) ||
-                        request.getProcessType().equals(saveProcessType);
+                        request.getProcessType().equals(saveProcessType) ||
+                        request.getProcessType().equals(exportProcessType);
             }
         });
 
@@ -950,5 +951,9 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         List<R> list =  getObjects(filter);
 
         return list != null && !list.isEmpty() ? list.get(0) : null;
+    }
+
+    public void setExportProcessType(ProcessType exportProcessType) {
+        this.exportProcessType = exportProcessType;
     }
 }

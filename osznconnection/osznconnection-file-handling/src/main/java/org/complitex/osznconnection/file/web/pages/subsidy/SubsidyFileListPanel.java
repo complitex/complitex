@@ -12,7 +12,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
@@ -22,7 +21,6 @@ import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationT
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.SUBSIDY;
 import static org.complitex.osznconnection.file.service.process.ProcessType.*;
@@ -43,6 +41,8 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     public SubsidyFileListPanel(String id) {
         super(id, SUBSIDY, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY,
                 new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE});
+
+        setExportProcessType(EXPORT_SUBSIDY);
 
         addColumn(new Column() {
                 @Override
@@ -105,12 +105,7 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
 
     @Override
     protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
-        processManagerService.exportSubsidy(selectedFileIds.stream()
-                .map(requestFileBean::getRequestFile)
-                .filter(rf -> rf.getStatus().equals(RequestFileStatus.FILLED) ||
-                        rf.getStatus().equals(RequestFileStatus.FILL_ERROR))
-                .map(RequestFile::getId)
-                .collect(Collectors.toList()));
+        processManagerService.exportSubsidy(selectedFileIds);
     }
 
     @Override
