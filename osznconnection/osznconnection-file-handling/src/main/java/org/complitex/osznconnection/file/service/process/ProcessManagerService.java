@@ -723,7 +723,7 @@ public class ProcessManagerService {
     }
 
     public void exportPrivilegeProlongation(List<Long> ids, Map processParameters) {
-        execute(EXPORT_PRIVILEGE_PROLONGATION, PrivilegeProlongationSaveTaskBean.class,
+        execute(EXPORT_PRIVILEGE_PROLONGATION, PrivilegeProlongationExportTaskBean.class,
                 updateAndGetRequestFiles(EXPORT_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }

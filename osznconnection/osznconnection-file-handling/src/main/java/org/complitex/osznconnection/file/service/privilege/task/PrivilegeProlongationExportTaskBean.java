@@ -25,10 +25,10 @@ import java.util.Map;
  * @author inheaven on 028 25.07.16.
  */
 @Stateless
-public class PrivilegeProlongationSaveTaskBean extends AbstractRequestTaskBean<RequestFile> {
-    private final Logger log = LoggerFactory.getLogger(PrivilegeProlongationSaveTaskBean.class);
+public class PrivilegeProlongationExportTaskBean extends AbstractRequestTaskBean<RequestFile> {
+    private final Logger log = LoggerFactory.getLogger(PrivilegeProlongationExportTaskBean.class);
 
-    private final static Class RESOURCE = PrivilegeProlongationSaveTaskBean.class;
+    private final static Class RESOURCE = PrivilegeProlongationExportTaskBean.class;
 
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
@@ -47,7 +47,7 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractRequestTaskBean<R
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        requestFile.setStatus(RequestFileStatus.SAVING);
+        requestFile.setStatus(RequestFileStatus.EXPORTING);
         requestFileBean.save(requestFile);
 
         String district = osznOrganizationStrategy.getDistrict(requestFile.getOrganizationId());
@@ -75,10 +75,10 @@ public class PrivilegeProlongationSaveTaskBean extends AbstractRequestTaskBean<R
 
             serviceProviderAdapter.exportPrivilegeProlongation(requestFile.getUserOrganizationId(), list);
 
-            requestFile.setStatus(RequestFileStatus.SAVED);
+            requestFile.setStatus(RequestFileStatus.EXPORTED);
             requestFileBean.save(requestFile);
         }else {
-            requestFile.setStatus(RequestFileStatus.SAVE_ERROR);
+            requestFile.setStatus(RequestFileStatus.EXPORT_ERROR);
             requestFileBean.save(requestFile);
 
             //noinspection Duplicates
