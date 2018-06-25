@@ -506,7 +506,9 @@ public class ServiceProviderAdapter extends AbstractBean {
         payment.putField(PaymentDBF.FROG, data.getPercent());
         payment.putField(PaymentDBF.FL_PAY, data.getApartmentFeeCharge());
         payment.putField(PaymentDBF.NM_PAY, data.getNormCharge());
-        payment.putField(PaymentDBF.DEBT, data.getSaldo());
+        if (data.getSaldo() != null) {
+            payment.putField(PaymentDBF.DEBT, data.getSaldo().compareTo(BigDecimal.ZERO) > 0 ? data.getSaldo() : BigDecimal.ZERO);
+        }
         payment.putField(PaymentDBF.NUMB, data.getLodgerCount());
         payment.putField(PaymentDBF.MARK, data.getUserCount());
         payment.putField(PaymentDBF.NORM_F_1, data.getReducedArea());
