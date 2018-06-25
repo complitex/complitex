@@ -215,16 +215,16 @@ public class ProcessManagerService {
         return groups;
     }
 
-    private List<RequestFile> updateAndGetRequestFiles(RequestFileStatus status, List<Long> ids, RequestFileStatus... skip) {
+    private List<RequestFile> updateAndGetRequestFiles(RequestFileStatus status, List<Long> ids, RequestFileStatus... forStatuses) {
         List<RequestFile> requestFiles = new ArrayList<>();
 
-        List<RequestFileStatus> skipList = Arrays.asList(skip);
+        List<RequestFileStatus> statuses = Arrays.asList(forStatuses);
 
         for (Long id : ids) {
             RequestFile requestFile = requestFileBean.getRequestFile(id);
 
             if (!requestFile.isWaiting() && !requestFile.isProcessing()) {
-                if (skipList.isEmpty() || skipList.contains(requestFile.getStatus())) {
+                if (statuses.isEmpty() || statuses.contains(requestFile.getStatus())) {
                     requestFile.setStatus(status);
 
                     requestFileBean.save(requestFile);

@@ -53,12 +53,7 @@ public class SubsidyExportTaskBean extends AbstractRequestTaskBean<RequestFile> 
 
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
-        if (!requestFile.getStatus().equals(RequestFileStatus.FILLED) ||
-                !requestFile.getStatus().equals(RequestFileStatus.FILL_ERROR)){
-            return false;
-        }
-
-        requestFile.setStatus(RequestFileStatus.SAVING);
+        requestFile.setStatus(RequestFileStatus.EXPORTING);
         requestFileBean.save(requestFile);
 
         String district = null;
@@ -92,7 +87,7 @@ public class SubsidyExportTaskBean extends AbstractRequestTaskBean<RequestFile> 
 
             serviceProviderAdapter.exportSubsidy(requestFile.getUserOrganizationId(), list);
         }else{
-            requestFile.setStatus(RequestFileStatus.SAVE_ERROR);
+            requestFile.setStatus(RequestFileStatus.EXPORT_ERROR);
             requestFileBean.save(requestFile);
 
             //noinspection Duplicates
@@ -120,7 +115,7 @@ public class SubsidyExportTaskBean extends AbstractRequestTaskBean<RequestFile> 
             }
         }
 
-        requestFile.setStatus(RequestFileStatus.SAVED);
+        requestFile.setStatus(RequestFileStatus.EXPORTED);
         requestFileBean.save(requestFile);
 
         return true;
