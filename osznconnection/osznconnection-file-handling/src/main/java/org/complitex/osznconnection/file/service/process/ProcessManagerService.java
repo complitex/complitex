@@ -228,9 +228,9 @@ public class ProcessManagerService {
                     requestFile.setStatus(status);
 
                     requestFileBean.save(requestFile);
-                }
 
-                requestFiles.add(requestFile);
+                    requestFiles.add(requestFile);
+                }
             }
         }
 
