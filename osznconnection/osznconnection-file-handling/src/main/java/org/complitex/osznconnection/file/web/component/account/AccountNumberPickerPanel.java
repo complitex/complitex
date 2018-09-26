@@ -78,7 +78,7 @@ public class AccountNumberPickerPanel extends Panel {
     }
 
     private void init() {
-        final RadioGroup<AccountDetail> radioGroup = new RadioGroup<AccountDetail>("radioGroup", accountDetailModel){
+        RadioGroup<AccountDetail> radioGroup = new RadioGroup<AccountDetail>("radioGroup", accountDetailModel){
             @Override
             protected void onBeforeRender() {
                 super.onBeforeRender();
@@ -98,7 +98,7 @@ public class AccountNumberPickerPanel extends Panel {
         });
         add(radioGroup);
 
-        final IModel<AccountDetail> filterModel = Model.of(new AccountDetail());
+        IModel<AccountDetail> filterModel = Model.of(new AccountDetail());
 
         add(new TextField<>("accCodeFilter", new PropertyModel<>(filterModel, "accCode")).add(new TextFieldUpdating()));
         add(new TextField<>("zheuFilter", new PropertyModel<>(filterModel, "zheu")).add(new TextFieldUpdating()));
