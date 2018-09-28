@@ -26,6 +26,6 @@ public final class DataRowHoverBehavior extends Behavior {
     }
 
     public void deactivateDataRow(AjaxRequestTarget target) {
-        target.appendJavaScript("(function(){ $('table tr.data-row.data-row-hover').removeClass('data-row-hover'); })();");
+//        target.appendJavaScript("(function(){ $('table tr.data-row.data-row-hover').removeClass('data-row-hover'); })();");
     }
 }

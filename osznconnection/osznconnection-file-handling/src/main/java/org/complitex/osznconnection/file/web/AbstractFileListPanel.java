@@ -20,6 +20,7 @@ import org.complitex.osznconnection.file.entity.RequestFileSubType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
+import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,8 @@ public abstract class AbstractFileListPanel extends AbstractProcessableListPanel
 
         this.requestFileType = requestFileType;
         this.requestFileSubType = requestFileSubType;
+
+        add(new DataRowHoverBehavior());
 
         //Имя
         addColumn(new Column() {

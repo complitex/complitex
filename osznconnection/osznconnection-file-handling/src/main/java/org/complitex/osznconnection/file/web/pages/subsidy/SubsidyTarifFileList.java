@@ -37,6 +37,7 @@ import org.complitex.osznconnection.file.service.process.LoadRequestFileBean;
 import org.complitex.osznconnection.file.service.process.Process;
 import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
+import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.LoadButton;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel.MonthParameterViewMode;
@@ -90,6 +91,8 @@ public class SubsidyTarifFileList extends TemplatePage {
 
     private void init() {
         add(new Label("title", getString("title")));
+
+        add(new DataRowHoverBehavior());
 
         final AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
         add(messages);

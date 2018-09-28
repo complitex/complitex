@@ -67,11 +67,11 @@ select{
 
 /*#LeftBlock h2 a:hover { color: #0090CD; text-decoration: none;}*/
 .LeftBlock .bottom { background:url('../images/leftBlock-bottom.gif') no-repeat bottom; padding: 2px 2px 4px 2px;}
-.LeftBlock .content { overflow: auto; padding: 0px 10px 0px 7px; font-size: 11px;}
-.LeftBlock .content p { padding: 0px 0px 8px 0px; margin: 0px; font-size: 11px;}
-.LeftBlock .content ul { margin: 0px; padding: 0px;}
-.LeftBlock .content ul li { margin: 0px; padding: 2px 0px 3px 0px; list-style-type: none; font-size: 12px; border-bottom: 1px solid #ECEFF1; }
-.LeftBlock .content table { margin: 0px; padding: 0px;}
+.LeftBlock .content { overflow: auto; padding: 0; font-size: 11px;}
+.LeftBlock .content p { padding: 0 0 8px 0; margin: 0; font-size: 11px;}
+.LeftBlock .content ul { margin: 0; padding: 0;}
+.LeftBlock .content ul li { margin: 0; padding: 2px 0 3px 7px; list-style-type: none; font-size: 12px; border-bottom: 1px solid #ECEFF1; }
+.LeftBlock .content table { margin: 0; padding: 0;}
 .LeftBlock .content table th{ background-color:#D9E9F0; border-right: 1px solid #FFFFFF; text-align: left; font-size: 11px; color: #007AAE; padding: 2px 5px 3px 5px;}
 .LeftBlock .content table td{ border-bottom: 1px solid #ECEFF1; border-right: 1px solid #FFFFFF; text-align: left; font-size: 11px; padding: 2px 5px 2px 5px;}
 

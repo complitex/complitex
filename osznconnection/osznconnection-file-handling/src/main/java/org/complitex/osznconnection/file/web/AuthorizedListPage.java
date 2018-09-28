@@ -7,6 +7,7 @@ import org.complitex.common.entity.ILongId;
 import org.complitex.common.service.SessionBean;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service.RequestFileBean;
+import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.template.web.template.ListTemplatePage;
 
 import javax.ejb.EJB;
@@ -23,6 +24,8 @@ public abstract class AuthorizedListPage<T extends ILongId>  extends ListTemplat
 
     public AuthorizedListPage(PageParameters pageParameters, String prefix, Class<? extends Page> backPage) {
         super(pageParameters, prefix, backPage);
+
+        add(new DataRowHoverBehavior());
     }
 
     @Override

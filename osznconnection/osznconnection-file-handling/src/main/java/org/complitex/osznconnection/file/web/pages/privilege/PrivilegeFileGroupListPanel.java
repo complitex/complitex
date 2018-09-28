@@ -18,6 +18,7 @@ import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.web.AbstractProcessableListPanel;
+import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 
@@ -45,6 +46,8 @@ public class PrivilegeFileGroupListPanel extends AbstractProcessableListPanel<Pr
                 new Long[]{OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE});
 
         add(new Label("title", new ResourceModel("title")));
+
+        add(new DataRowHoverBehavior());
 
         //Файл характеристик жилья
         addColumn(new Column() {
