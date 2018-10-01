@@ -10,10 +10,6 @@ import org.complitex.template.web.template.TemplatePage;
 
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 public class RequestFileDataProvider extends DataProvider<RequestFile> {
 
     private final TemplatePage page;
@@ -39,9 +35,7 @@ public class RequestFileDataProvider extends DataProvider<RequestFile> {
         {
             filter.setAscending(false);
             filter.setSortProperty(null);
-            page.setFilterObject(filter);
         }
-        page.setFilterObject(filter);
 
         //prepare filter object
         filter.setFirst(first);

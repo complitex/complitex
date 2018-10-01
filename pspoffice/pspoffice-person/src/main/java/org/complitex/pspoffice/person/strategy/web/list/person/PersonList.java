@@ -127,7 +127,6 @@ public final class PersonList extends ScrollListPage {
                 {
                     example.setAsc(false);
                     example.setOrderByAttributeTypeId(null);
-                    setFilterObject(example);
                 }
 
                 final boolean asc = getSort().isAscending();
