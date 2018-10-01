@@ -13,11 +13,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.complitex.common.service.SessionBean;
-import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.web.component.YearDropDownChoice;
 import org.complitex.common.web.component.organization.OrganizationIdPicker;
-import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
-import org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy;
 import org.complitex.template.web.template.TemplateSession;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 
@@ -25,31 +22,72 @@ import javax.ejb.EJB;
 
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.SERVICE_PROVIDER_TYPE;
 import static org.complitex.organization_type.strategy.OrganizationTypeStrategy.USER_ORGANIZATION_TYPE;
+import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE;
+import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE;
 
 public abstract class RequestFileLoadPanel extends Panel {
-    @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)
-    private OsznOrganizationStrategy organizationStrategy;
-
     @EJB
     private SessionBean sessionBean;
 
     private final Dialog dialog;
 
-    private Long[] osznOrganizationTypes;
-
     private static final String MONTH_COMPONENT_ID = "monthComponent";
+
     public enum MonthParameterViewMode { RANGE, EXACT, HIDDEN }
+
+    private enum LoadPreferenceKey {LOAD}
+
+    private static class LoadPreference{
+        private Long serviceProviderId;
+        private Long osznId;
+        private Integer year;
+        private Integer monthFrom;
+        private Integer monthTo;
+
+        public Long getServiceProviderId() {
+            return serviceProviderId;
+        }
+
+        public void setServiceProviderId(Long serviceProviderId) {
+            this.serviceProviderId = serviceProviderId;
+        }
+
+        public Long getOsznId() {
+            return osznId;
+        }
+
+        public void setOsznId(Long osznId) {
+            this.osznId = osznId;
+        }
+
+        public Integer getYear() {
+            return year;
+        }
+
+        public void setYear(Integer year) {
+            this.year = year;
+        }
+
+        public Integer getMonthFrom() {
+            return monthFrom;
+        }
+
+        public void setMonthFrom(Integer monthFrom) {
+            this.monthFrom = monthFrom;
+        }
+
+        public Integer getMonthTo() {
+            return monthTo;
+        }
+
+        public void setMonthTo(Integer monthTo) {
+            this.monthTo = monthTo;
+        }
+    }
 
     public RequestFileLoadPanel(String id, IModel<String> title, final MonthParameterViewMode monthParameterViewMode,
                                 Long[] osznOrganizationTypes) {
         super(id);
-
-        if (osznOrganizationTypes != null){
-            this.osznOrganizationTypes = osznOrganizationTypes;
-        }else{
-            this.osznOrganizationTypes = new Long[]{OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE,
-                    OsznOrganizationTypeStrategy.PRIVILEGE_DEPARTMENT_TYPE};
-        }
 
         dialog = new Dialog("dialog") {
 
@@ -79,7 +117,8 @@ public abstract class RequestFileLoadPanel extends Panel {
 
         //ОСЗН
         IModel<Long> osznModel = new Model<>();
-        form.add(new OrganizationIdPicker("oszn", osznModel, osznOrganizationTypes));
+        form.add(new OrganizationIdPicker("oszn", osznModel, osznOrganizationTypes != null ? osznOrganizationTypes :
+                new Long[]{SUBSIDY_DEPARTMENT_TYPE, PRIVILEGE_DEPARTMENT_TYPE}));
 
         //user organization
         final WebMarkupContainer userOrganizationContainer = new WebMarkupContainer("userOrganizationContainer");
@@ -130,6 +169,16 @@ public abstract class RequestFileLoadPanel extends Panel {
         }
         monthParameterContainer.add(monthComponent);
 
+        if (getPreferencePage() != null){
+            LoadPreference loadPreference = getSession().getPreferenceObject(getPreferencePage(), LoadPreferenceKey.LOAD,
+                    new LoadPreference());
+
+            serviceProviderModel.setObject(loadPreference.getServiceProviderId());
+            osznModel.setObject(loadPreference.getOsznId());
+            yearModel.setObject(loadPreference.getYear());
+            monthRangeModel.setObject(new MonthRange(loadPreference.getMonthFrom(), loadPreference.getMonthTo()));
+        }
+
         //Загрузить
         AjaxButton load = new AjaxButton("load", form) {
 
@@ -149,6 +198,17 @@ public abstract class RequestFileLoadPanel extends Panel {
 
                     monthFrom = monthRange.getMonthFrom();
                     monthTo = monthRange.getMonthTo();
+                }
+
+                if (getPreferencePage() != null){
+                    LoadPreference loadPreference = (LoadPreference) RequestFileLoadPanel.this.getSession()
+                            .getPreference(getPreferencePage(), LoadPreferenceKey.LOAD).getObject();
+
+                    loadPreference.setServiceProviderId(serviceProviderModel.getObject());
+                    loadPreference.setOsznId(osznModel.getObject());
+                    loadPreference.setYear(year);
+                    loadPreference.setMonthFrom(monthFrom);
+                    loadPreference.setMonthTo(monthTo);
                 }
 
                 load(serviceProviderModel.getObject(), currentUserOrganizationId, osznModel.getObject(), year, monthFrom, monthTo, target);
@@ -186,4 +246,8 @@ public abstract class RequestFileLoadPanel extends Panel {
 
     protected abstract void load(Long serviceProviderId, Long userOrganizationId, Long organizationId,
                                  int year, int monthFrom, int monthTo, AjaxRequestTarget target);
+
+    protected String getPreferencePage(){
+        return null;
+    }
 }

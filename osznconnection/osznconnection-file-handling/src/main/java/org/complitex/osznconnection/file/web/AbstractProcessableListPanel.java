@@ -370,8 +370,6 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             protected Iterable<R> getData(long first, long count) {
                 final F filter = model.getObject();
 
-                getSession().putPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, filter);
-
                 //prepare filter object
                 filter.setFirst(first);
                 filter.setCount(count);
@@ -746,6 +744,11 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                                 int year, int monthFrom, int monthTo, AjaxRequestTarget target) {
                 AbstractProcessableListPanel.this.load(serviceProviderId, userOrganizationId, organizationId,
                         year, monthFrom, monthTo);
+            }
+
+            @Override
+            protected String getPreferencePage() {
+                return AbstractProcessableListPanel.this.getPreferencePage();
             }
         };
         add(requestFileLoadPanel);

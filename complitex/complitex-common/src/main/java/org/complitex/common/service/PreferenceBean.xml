@@ -18,6 +18,10 @@
         select * from `preference` where `user_id` = #{id}
     </select>
 
+    <select id="selectAllPreferences" resultMap="preferenceResultMap">
+        select * from `preference`
+    </select>
+
     <insert id="insertPreference" parameterType="org.complitex.common.entity.Preference" keyProperty="id"
             useGeneratedKeys="true">
         insert into `preference` (`user_id`, `page`, `key`, `value`) value (#{userId}, #{page}, #{key}, #{value})

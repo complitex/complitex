@@ -49,6 +49,9 @@ public class PreferenceBean extends AbstractBean{
         return sqlSession().selectList(MAPPING_NAMESPACE + ".selectPreferences", userId);
     }
 
+    public List<Preference> getPreferences(){
+        return sqlSession().selectList(MAPPING_NAMESPACE + ".selectAllPreferences");
+    }
 
     public void save(Preference preference){
         try {

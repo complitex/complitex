@@ -157,7 +157,6 @@ public class DomainObjectListPanel extends Panel {
                 {
                     filter.setAsc(false);
                     filter.setOrderByAttributeTypeId(null);
-                    getSession().putPreferenceObject(page, PreferenceKey.FILTER_OBJECT, filter);
                 }
 
                 //store state

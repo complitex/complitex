@@ -101,10 +101,6 @@ public class DictionaryFwSession extends WebSession {
         putPreference(page, key, value, null, store);
     }
 
-    public void putPreferenceObject(String page, Enum key, Object object) {
-        putPreference(page, key.name(), null, object, false);
-    }
-
     public void putPreference(String page, Enum key, String value, boolean store) {
         putPreference(page, key.name(), value, null, store);
     }
@@ -175,13 +171,25 @@ public class DictionaryFwSession extends WebSession {
     }
 
     //Enum key
+    public Preference getPreference(String page, Enum key) {
+        return getPreference(page, key.name());
+    }
+
     private <T> T getNotNullOrDefault(T object, T _default) {
         return object != null ? object : _default;
     }
 
     @SuppressWarnings("unchecked")
     public <T> T getPreferenceObject(String page, Enum key, T _default) {
-        return getNotNullOrDefault((T) getPreference(page, key.name()).getObject(), _default);
+        T object = (T) getPreference(page, key).getObject();
+
+        if (object == null){
+            object = _default;
+
+            getPreference(page, key).setObject(object);
+        }
+
+        return object;
     }
 
     @SuppressWarnings("unchecked")
@@ -189,16 +197,12 @@ public class DictionaryFwSession extends WebSession {
         FilterWrapper<T> filterWrapper =  (FilterWrapper<T>) getPreference(page, PreferenceKey.FILTER_OBJECT.name()).getObject();
 
         if (filterWrapper == null){
-            putPreferenceFilter(page, _default);
+            filterWrapper = _default;
 
-            return _default;
+            getPreference(page, PreferenceKey.FILTER_OBJECT.name()).setObject(filterWrapper);
         }
 
         return filterWrapper;
-    }
-
-    public void putPreferenceFilter(String page, FilterWrapper filterWrapper){
-        putPreferenceObject(page, PreferenceKey.FILTER_OBJECT, filterWrapper);
     }
 
     public String getPreferenceString(String page, Enum key, String _default) {

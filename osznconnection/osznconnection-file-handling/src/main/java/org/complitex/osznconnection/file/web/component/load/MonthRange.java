@@ -2,29 +2,25 @@ package org.complitex.osznconnection.file.web.component.load;
 
 import java.io.Serializable;
 
-/**
- *
- * @author Artem
- */
 public class MonthRange implements Serializable {
 
-    private int monthFrom;
-    private int monthTo;
+    private Integer monthFrom;
+    private Integer monthTo;
 
-    public MonthRange(int monthFrom, int monthTo) {
+    public MonthRange(Integer monthFrom, Integer monthTo) {
         this.monthFrom = monthFrom;
         this.monthTo = monthTo;
     }
 
-    public MonthRange(int month) {
+    public MonthRange(Integer month) {
         this(month, month);
     }
 
-    public int getMonthFrom() {
+    public Integer getMonthFrom() {
         return monthFrom;
     }
 
-    public int getMonthTo() {
+    public Integer getMonthTo() {
         return monthTo;
     }
 }
