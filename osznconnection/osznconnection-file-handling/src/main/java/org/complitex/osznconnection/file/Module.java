@@ -43,9 +43,8 @@ public class Module {
         List<Preference> preferences = preferenceBean.getPreferences();
 
         preferences.stream()
-                .filter(p -> p.getPage().matches(".*\\d+") ||
-                        Objects.equals(p.getKey(), PreferenceKey.CURRENT_PAGE.name()) ||
-                        Objects.equals(p.getKey(), PreferenceKey.ROWS_PER_PAGE.name()))
+                .filter(p -> p.getPage().matches(".*\\d+")
+                        || Objects.equals(p.getKey(), PreferenceKey.CURRENT_PAGE.name()))
                 .forEach(p -> {
             p.setValue(null);
 

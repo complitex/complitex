@@ -267,6 +267,6 @@ public final class ActualPaymentList extends TemplatePage {
         };
         filterForm.add(back);
 
-        content.add(new PagingNavigator("navigator", data, getPreferencesPage() + fileId, content));
+        content.add(new PagingNavigator("navigator", data, getPreferencesPage(), content));
     }
 }

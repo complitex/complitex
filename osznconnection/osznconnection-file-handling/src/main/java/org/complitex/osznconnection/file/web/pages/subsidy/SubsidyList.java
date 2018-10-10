@@ -348,7 +348,7 @@ public final class SubsidyList extends TemplatePage {
             }
         };
         checkGroup.add(data);
-        checkGroup.add(new PagingNavigator("navigator", data, getPreferencesPage() + fileId, content));
+        checkGroup.add(new PagingNavigator("navigator", data, getPreferencesPage(), content));
 
         filterForm.add(new ArrowOrderByBorder("rashHeader", SubsidyBean.OrderBy.RASH.getOrderBy(), dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("firstNameHeader", SubsidyBean.OrderBy.FIRST_NAME.getOrderBy(), dataProvider, data, content));

@@ -117,7 +117,7 @@ public class AjaxPagingNavigator extends org.apache.wicket.ajax.markup.html.navi
 
             @Override
             public void setObject(Long rowsPerPage) {
-                getSession().putPreference(page, PreferenceKey.ROWS_PER_PAGE, rowsPerPage, false);
+                getSession().putPreference(page, PreferenceKey.ROWS_PER_PAGE, rowsPerPage, true);
                 ((IPageableItems)getPageable()).setItemsPerPage(rowsPerPage);
             }
         };

@@ -377,7 +377,7 @@ public class PrivilegeProlongationList extends TemplatePage {
         };
         filterForm.add(back);
 
-        content.add(new PagingNavigator("navigator", data, getPreferencesPage() + fileId, content));
+        content.add(new PagingNavigator("navigator", data, getPreferencesPage(), content));
 
         //Связать
         filterForm.add(new IndicatingAjaxButton("bind") {
