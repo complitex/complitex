@@ -113,6 +113,10 @@ public class DictionaryFwSession extends WebSession {
         putPreference(page, key.name(), value != null ? value.toString() : null, null, store);
     }
 
+    public void putPreferenceObject(String page, Enum key, Object object) {
+        putPreference(page, key.name(), null, object, false);
+    }
+
     public void storeGlobalSearchComponentState() {
         SearchComponentState state = searchComponentSessionState.get(GLOBAL_STATE_KEY);
 

@@ -370,6 +370,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             protected Iterable<R> getData(long first, long count) {
                 final F filter = model.getObject();
 
+                getSession().putPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, filter);
+
                 //prepare filter object
                 filter.setFirst(first);
                 filter.setCount(count);
