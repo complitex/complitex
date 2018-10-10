@@ -35,6 +35,7 @@ public class RequestFileDataProvider extends DataProvider<RequestFile> {
         {
             filter.setAscending(false);
             filter.setSortProperty(null);
+            page.setFilterObject(filter);
         }
 
         //prepare filter object

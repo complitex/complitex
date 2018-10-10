@@ -84,7 +84,7 @@ public class AjaxPagingNavigator extends org.apache.wicket.ajax.markup.html.navi
                             pageable.setCurrentPage(newPageNumber - 1);
                         }
 
-                        getSession().putPreference(page, CURRENT_PAGE, pageable.getCurrentPage(), true);
+                        getSession().putPreference(page, CURRENT_PAGE, pageable.getCurrentPage(), false);
                     }
                 }
             }
@@ -117,7 +117,7 @@ public class AjaxPagingNavigator extends org.apache.wicket.ajax.markup.html.navi
 
             @Override
             public void setObject(Long rowsPerPage) {
-                getSession().putPreference(page, PreferenceKey.ROWS_PER_PAGE, rowsPerPage, true);
+                getSession().putPreference(page, PreferenceKey.ROWS_PER_PAGE, rowsPerPage, false);
                 ((IPageableItems)getPageable()).setItemsPerPage(rowsPerPage);
             }
         };
@@ -152,7 +152,7 @@ public class AjaxPagingNavigator extends org.apache.wicket.ajax.markup.html.navi
             public void onChangePage() {
                 //preference
                 if (page != null) {
-                    getSession().putPreference(page, CURRENT_PAGE, getPageable().getCurrentPage(), true);
+                    getSession().putPreference(page, CURRENT_PAGE, getPageable().getCurrentPage(), false);
                 }
             }
         };

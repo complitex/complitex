@@ -345,6 +345,10 @@ public abstract class TemplatePage extends WebPage {
         this.page = page;
     }
 
+    public void setFilterObject(Object filterObject) {
+        getTemplateSession().putPreferenceObject(page, PreferenceKey.FILTER_OBJECT, filterObject);
+    }
+
     public <T> T getFilterObject(T _default) {
         return getTemplateSession().getPreferenceObject(page, PreferenceKey.FILTER_OBJECT, _default);
     }

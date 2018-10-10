@@ -93,7 +93,7 @@ public class PagingNavigator extends Panel {
             @Override
             public void setObject(Long items) {
                 if (page != null && items != null) {
-                    getSession().putPreference(page, PreferenceKey.ROWS_PER_PAGE, items, true);
+                    getSession().putPreference(page, PreferenceKey.ROWS_PER_PAGE, items, false);
                 }
 
                 dataView.setItemsPerPage(items != null ? items : SUPPORTED_PAGE_SIZES.get(0));
@@ -119,7 +119,7 @@ public class PagingNavigator extends Panel {
             public void onChangePage() {
                 //preference
                 if (page != null) {
-                    getSession().putPreference(page, CURRENT_PAGE, dataView.getCurrentPage(), true);
+                    getSession().putPreference(page, CURRENT_PAGE, dataView.getCurrentPage(), false);
                 }
             }
         });
@@ -221,7 +221,7 @@ public class PagingNavigator extends Panel {
                         }
 
                         if (page != null) {
-                            getSession().putPreference(page, CURRENT_PAGE, dataView.getCurrentPage(), true);
+                            getSession().putPreference(page, CURRENT_PAGE, dataView.getCurrentPage(), false);
                         }
                     }
                 }

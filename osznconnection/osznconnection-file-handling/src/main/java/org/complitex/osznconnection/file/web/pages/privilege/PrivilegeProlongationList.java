@@ -22,6 +22,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.address.entity.AddressEntity;
 import org.complitex.common.entity.FilterWrapper;
+import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.common.util.ExceptionUtil;
@@ -52,6 +53,7 @@ import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.complitex.template.web.template.TemplatePage;
+import org.complitex.template.web.template.TemplateSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +146,8 @@ public class PrivilegeProlongationList extends TemplatePage {
 
         Form filterForm = new Form("filterForm");
         content.add(filterForm);
-        example = new Model<>(newExample());
+        example = new Model<>(((TemplateSession) getSession()).getPreferenceObject(getPreferencesPage() + fileId,
+                PreferenceKey.FILTER_OBJECT, newExample()));
 
         StatusDetailPanel<PrivilegeExample> statusDetailPanel =
                 new StatusDetailPanel<PrivilegeExample>("statusDetailsPanel", example,
@@ -161,6 +164,9 @@ public class PrivilegeProlongationList extends TemplatePage {
 
             @Override
             protected Iterable<PrivilegeProlongation> getData(long first, long count) {
+                ((TemplateSession)getSession()).putPreferenceObject(getPreferencesPage() + fileId,
+                        PreferenceKey.FILTER_OBJECT, example.getObject());
+
                 example.getObject().setAsc(getSort().isAscending());
                 if (!Strings.isEmpty(getSort().getProperty())) {
                     example.getObject().setOrderByClause(getSort().getProperty());

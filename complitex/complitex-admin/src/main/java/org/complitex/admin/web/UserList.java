@@ -70,7 +70,7 @@ public class UserList extends TemplatePage {
     private void init() {
         add(new Label("title", new ResourceModel("title")));
 
-        UserFilter filter = userBean.newUserFilter();
+        UserFilter filter = getFilterObject(userBean.newUserFilter());
         final IModel<UserFilter> filterModel = new Model<>(filter);
 
         final WebMarkupContainer content = new WebMarkupContainer("content");
@@ -156,6 +156,7 @@ public class UserList extends TemplatePage {
                     filter.setAscending(false);
                     filter.setSortProperty(null);
                     filter.setSortAttributeTypeId(null);
+                    setFilterObject(filter);
                 }
 
                 final boolean asc = getSort().isAscending();

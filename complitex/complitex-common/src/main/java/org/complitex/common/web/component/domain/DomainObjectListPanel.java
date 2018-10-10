@@ -155,10 +155,9 @@ public class DomainObjectListPanel extends Panel {
             protected Iterable<? extends DomainObject> getData(long first, long count) {
                 //store preference, but before clear data order related properties.
                 {
-                    getSession().putPreferenceObject(page, PreferenceKey.FILTER_OBJECT, filter);
-
                     filter.setAsc(false);
                     filter.setOrderByAttributeTypeId(null);
+                    getSession().putPreferenceObject(page, PreferenceKey.FILTER_OBJECT, filter);
                 }
 
                 //store state

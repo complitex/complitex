@@ -20,6 +20,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
+import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.service.SessionBean;
 import org.complitex.common.util.StringUtil;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -42,6 +43,7 @@ import org.complitex.osznconnection.file.web.component.DataRowHoverBehavior;
 import org.complitex.osznconnection.file.web.component.StatusDetailPanel;
 import org.complitex.osznconnection.file.web.component.StatusRenderer;
 import org.complitex.template.web.template.TemplatePage;
+import org.complitex.template.web.template.TemplateSession;
 
 import javax.ejb.EJB;
 import java.io.File;
@@ -107,7 +109,8 @@ public final class BenefitList extends TemplatePage {
         add(content);
         final Form<Void> filterForm = new Form<Void>("filterForm");
         content.add(filterForm);
-        example = new Model<BenefitExample>(newExample());
+        example = new Model<>(((TemplateSession) getSession()).getPreferenceObject(getPreferencesPage() + fileId,
+                PreferenceKey.FILTER_OBJECT, newExample()));
 
         StatusDetailPanel<BenefitExample> statusDetailPanel = new StatusDetailPanel<BenefitExample>("statusDetailsPanel", example,
                 new BenefitExampleConfigurator(), new PaymentBenefitStatusDetailRenderer(), content) {
@@ -123,6 +126,9 @@ public final class BenefitList extends TemplatePage {
 
             @Override
             protected Iterable<? extends Benefit> getData(long first, long count) {
+                ((TemplateSession)getSession()).putPreferenceObject(getPreferencesPage() + fileId,
+                        PreferenceKey.FILTER_OBJECT, example.getObject());
+
                 example.getObject().setAsc(getSort().isAscending());
                 if (!Strings.isEmpty(getSort().getProperty())) {
                     example.getObject().setOrderByClause(getSort().getProperty());

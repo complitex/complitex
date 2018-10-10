@@ -143,7 +143,7 @@ public abstract class AbstractCorrectionList extends TemplatePage {
         final Form filterForm = new Form("filterForm");
         content.add(filterForm);
 
-        filterWrapper = FilterWrapper.of(newCorrection());
+        filterWrapper = FilterWrapper.of(getFilterObject(newCorrection()));
 
         final DataProvider<Correction> dataProvider = new DataProvider<Correction>() {
 
@@ -153,6 +153,7 @@ public abstract class AbstractCorrectionList extends TemplatePage {
                 {
                     filterWrapper.setAscending(false);
                     filterWrapper.setSortProperty(null);
+                    setFilterObject(filterWrapper.getObject());
                 }
 
                 filterWrapper.setAscending(getSort().isAscending());

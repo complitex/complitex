@@ -21,6 +21,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.entity.ILongId;
+import org.complitex.common.entity.PreferenceKey;
 import org.complitex.common.web.component.TextLabel;
 import org.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
@@ -74,12 +75,11 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         //Filter Model
         String pageKey = pageParameters.toString();
 
-        final IModel<FilterWrapper<T>> filterModel = Model.of(
-                getTemplateSession().getPreferenceFilter(getClass().getName() + pageKey,
-                        FilterWrapper.of(newFilterObject(pageParameters))));
+        FilterWrapper<T> filterWrapper = getTemplateSession().getPreferenceFilter(getClass().getName() + pageKey,
+                FilterWrapper.of(newFilterObject(pageParameters)));
 
         //Filter Form
-        final Form filterForm = new Form<>("filter_form", filterModel);
+        final Form filterForm = new Form<>("filter_form");
         filterForm.setOutputMarkupId(true);
         add(filterForm);
 
@@ -87,7 +87,8 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         AjaxLink filterReset = new AjaxLink("filter_reset") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                filterModel.setObject(FilterWrapper.of(newFilterObject(pageParameters)));
+                filterWrapper.setObject(newFilterObject(pageParameters));
+
                 target.add(filterForm);
             }
         };
@@ -114,7 +115,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
             protected void populateItem(ListItem<String> item) {
                 String p = "object." + prefix + item.getModelObject();
 
-                item.add(new InputPanel<>("filter_field", new PropertyModel<>(filterModel, p)));
+                item.add(new InputPanel<>("filter_field", new PropertyModel<>(filterWrapper, p)));
 
                 onPopulateFilter(item);
             }
@@ -124,7 +125,8 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         final DataProvider<T> dataProvider = new DataProvider<T>() {
             @Override
             protected Iterable<T> getData(long first, long count) {
-                FilterWrapper<T> filterWrapper = filterModel.getObject();
+                ((TemplateSession)getSession()).putPreferenceObject(getPreferencesPage() + pageKey,
+                        PreferenceKey.FILTER_OBJECT, filterWrapper);
 
                 filterWrapper.setFirst(first);
                 filterWrapper.setCount(count);
@@ -136,7 +138,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
 
             @Override
             protected Long getSize() {
-                return getCount(filterModel.getObject());
+                return getCount(filterWrapper);
             }
 
             @Override

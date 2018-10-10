@@ -12,7 +12,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -70,7 +69,7 @@ public class PersonAccountList extends ScrollListPage {
         final Form<Void> filterForm = new Form<Void>("filterForm");
         content.add(filterForm);
 
-        final IModel<FilterWrapper<PersonAccount>>  filterModel = Model.of(FilterWrapper.of(new PersonAccount()));
+        final IModel<FilterWrapper<PersonAccount>>  filterModel = newFilterModel(new PersonAccount());
 
         final DataProvider<PersonAccount> dataProvider = new DataProvider<PersonAccount>() {
 
