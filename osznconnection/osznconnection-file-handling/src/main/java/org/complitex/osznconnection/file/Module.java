@@ -1,5 +1,8 @@
 package org.complitex.osznconnection.file;
 
+import org.complitex.common.entity.Preference;
+import org.complitex.common.entity.PreferenceKey;
+import org.complitex.common.service.PreferenceBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean;
 
@@ -7,6 +10,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -23,9 +28,29 @@ public class Module {
     @EJB
     private RequestFileGroupBean requestFileGroupBean;
 
+    @EJB
+    private PreferenceBean preferenceBean;
+
     @PostConstruct
     public void init() {
         requestFileBean.fixProcessingOnInit();
         requestFileGroupBean.fixProcessingOnInit();
+
+        fixPreferences();
+    }
+
+    private void fixPreferences(){
+        List<Preference> preferences = preferenceBean.getPreferences();
+
+        preferences.stream()
+                .filter(p -> p.getPage().matches(".*\\d+") ||
+                        Objects.equals(p.getKey(), PreferenceKey.CURRENT_PAGE.name()) ||
+                        Objects.equals(p.getKey(), PreferenceKey.ROWS_PER_PAGE.name()))
+                .forEach(p -> {
+            p.setValue(null);
+
+            preferenceBean.save(p);
+        });
+
     }
 }
