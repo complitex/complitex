@@ -15,8 +15,8 @@
     <insert id="insertBuildingCorrection" parameterType="org.complitex.correction.entity.Correction"
             keyProperty="id" useGeneratedKeys="true">
         insert into `building_correction`(`street_id`, `object_id`, `external_id`,  `correction`, `correction_corp`,
-          `begin_date`, `end_date`, `organization_id`, `user_organization_id`, `module_id`)
-        values (#{streetId}, #{objectId}, #{externalId}, TO_CYRILLIC(#{correction}), TO_CYRILLIC(#{correctionCorp}), #{beginDate}, #{endDate},
+          `start_date`, `end_date`, `organization_id`, `user_organization_id`, `module_id`)
+        values (#{streetId}, #{objectId}, #{externalId}, TO_CYRILLIC(#{correction}), TO_CYRILLIC(#{correctionCorp}), #{startDate}, #{endDate},
            #{organizationId}, #{userOrganizationId}, #{moduleId})
     </insert>
 
