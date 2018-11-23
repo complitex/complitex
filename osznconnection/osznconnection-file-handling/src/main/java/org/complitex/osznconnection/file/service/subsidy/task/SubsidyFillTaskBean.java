@@ -122,6 +122,10 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
             log.warn("subsidy fill warn: dat1 > dat2 {}", subsidy);
         }
 
+//        if (){
+//
+//        }
+
         if (numm > 1 || (numm == 0 && dat1.until(dat2).getMonths() > 1)){
             LocalDate beginDate = requestFile.getBeginDate().toInstant().atZone(ZoneId.systemDefault())
                     .withDayOfMonth(1)

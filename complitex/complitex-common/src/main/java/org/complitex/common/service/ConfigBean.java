@@ -2,6 +2,7 @@ package org.complitex.common.service;
 
 import org.complitex.common.entity.IConfig;
 import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,7 +141,7 @@ public class ConfigBean extends AbstractBean{
     }
 
     protected Set<Class<? extends IConfig>> getIConfigClasses() {
-        Reflections reflections = new Reflections("org.complitex", "ru.flexpay");
+        Reflections reflections = new Reflections("org.complitex", "ru.flexpay", new SubTypesScanner());
 
         return reflections.getSubTypesOf(IConfig.class);
     }
