@@ -363,7 +363,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
     @SuppressWarnings("Duplicates")
     private void recalculatePeriod(Subsidy subsidy, LocalDate d1, LocalDate d2, List<SubsidyData> data) {
-        int n = d1.until(d2.plusDays(1)).getMonths();
+        int n = (int) d1.until(d2.plusDays(1)).toTotalMonths();
 
         BigDecimal sm1 = data.stream().map(SubsidyData::getSm1).reduce(ZERO, BigDecimal::add)
                 .add(subsidy.getBigDecimalField(SubsidyDBF.SM1)).divide(new BigDecimal(n), 2, HALF_EVEN);
