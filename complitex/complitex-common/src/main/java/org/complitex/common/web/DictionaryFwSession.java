@@ -3,6 +3,7 @@ package org.complitex.common.web;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.Strings;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.FilterWrapper;
@@ -12,7 +13,11 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.strategy.StringLocaleBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.common.web.component.search.SearchComponentState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +29,7 @@ import java.util.Map;
  * @author Artem
  */
 public class DictionaryFwSession extends WebSession {
+    private final Logger log = LoggerFactory.getLogger(DictionaryFwSession.class);
 
     public final static String GLOBAL_PAGE = "global";
     public final static String LOCALE_KEY = "locale";
@@ -298,5 +304,16 @@ public class DictionaryFwSession extends WebSession {
 
     public void setMainUserOrganization(DomainObject mainUserOrganization) {
         this.mainUserOrganization = mainUserOrganization;
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+
+        try {
+            ((HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest()).logout();
+        } catch (ServletException e) {
+            log.error("Couldn't to log out user.", e);
+        }
     }
 }

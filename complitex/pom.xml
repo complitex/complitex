@@ -43,10 +43,10 @@
 
     <properties>
         <!-- wicket version -->
-        <wicket.version>7.10.0</wicket.version>
+        <wicket.version>7.11.0</wicket.version>
 
         <!-- wicketstuff inject -->
-        <wicket-stuff.version>7.10.0</wicket-stuff.version>
+        <wicket-stuff.version>7.11.0</wicket-stuff.version>
 
         <!--skip test-->
         <maven.test.skip>true</maven.test.skip>

@@ -1,26 +1,25 @@
 package org.complitex.template.web.security;
 
-import java.security.Principal;
-import javax.servlet.ServletException;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.authorization.IUnauthorizedComponentInstantiationListener;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.complitex.template.web.pages.login.Login;
-
-import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.authroles.authorization.strategies.role.IRoleCheckingStrategy;
 import org.apache.wicket.authroles.authorization.strategies.role.RoleAuthorizationStrategy;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.complitex.common.entity.Log.EVENT;
 import org.complitex.common.service.LogBean;
 import org.complitex.common.util.EjbBeanLocator;
 import org.complitex.template.Module;
+import org.complitex.template.web.pages.login.Login;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
@@ -63,7 +62,7 @@ public abstract class ServletAuthWebApplication extends WebApplication implement
 
         boolean sessionNotExist = servletRequest.getSession(false) == null;
         if (sessionNotExist) { // user session has expired.
-            Session.get().invalidateNow();
+            Session.get().invalidate();
             throw new RestartResponseException(getApplicationSettings().getPageExpiredErrorPage());
         } else { // user session is active yet.
             Principal userPrincipal = servletRequest.getUserPrincipal();
@@ -81,19 +80,5 @@ public abstract class ServletAuthWebApplication extends WebApplication implement
                 throw new UnauthorizedInstantiationException(component.getClass());
             }
         }
-    }
-
-    /**
-     * Helper method in order for logout. Must be used in pages where logout action is required.
-     */
-    public void logout() {
-        HttpServletRequest servletRequest = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
-        try {
-            servletRequest.logout();
-        } catch (ServletException e) {
-            log.error("Couldn't to log out user.", e);
-        }
-        Session.get().invalidateNow();
-        throw new RestartResponseException(Login.class);
     }
 }

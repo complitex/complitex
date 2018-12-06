@@ -28,6 +28,7 @@ import org.complitex.common.util.ResourceUtil;
 import org.complitex.resources.WebCommonResourceInitializer;
 import org.complitex.template.web.component.MainUserOrganizationPickerFactory;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
+import org.complitex.template.web.pages.login.Login;
 import org.complitex.template.web.security.SecurityRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,7 +126,8 @@ public abstract class TemplatePage extends WebPage {
 
             @Override
             public void onSubmit() {
-                getTemplateWebApplication().logout();
+                getSession().invalidate();
+                setResponsePage(Login.class);
             }
         }.setVisible(isUserAuthorized));
     }
