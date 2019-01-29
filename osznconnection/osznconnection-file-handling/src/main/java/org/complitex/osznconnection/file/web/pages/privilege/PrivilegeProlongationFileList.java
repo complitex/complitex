@@ -50,7 +50,7 @@ public class PrivilegeProlongationFileList extends TemplatePage {
 
             @Override
             protected String getPreferencePage() {
-                return PrivilegeProlongationFileList.class.getName();
+                return PrivilegeProlongationFileList.class.getName() + subType;
             }
 
             @Override

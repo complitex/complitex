@@ -1,5 +1,6 @@
 package org.complitex.common.web;
 
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
@@ -37,15 +38,21 @@ public class DictionaryFwSession extends WebSession {
     public final static String GLOBAL_STATE_KEY = "SEARCH_COMPONENT_STATE";
     public final static String DEFAULT_STATE_PAGE = "default#search_component_state";
     public final static String IS_USE_DEFAULT_STATE_KEY = "is_use_default_search_component_state";
+
     private Map<String, SearchComponentState> searchComponentSessionState = new HashMap<String, SearchComponentState>();
-    private Map<String, Map<String, Preference>> preferences = new HashMap<String, Map<String, Preference>>();
+
     private ISessionStorage sessionStorage;
     private DomainObject mainUserOrganization;
+
+    private final static MetaDataKey<HashMap<String, Map<String, Preference>>> PREFERENCE_MAP_KEY =
+            new MetaDataKey<HashMap<String, Map<String, Preference>>>() {};
 
     public DictionaryFwSession(Request request, ISessionStorage sessionStorage) {
         super(request);
 
         this.sessionStorage = sessionStorage;
+
+        setMetaData(PREFERENCE_MAP_KEY, new HashMap<>());
 
         List<Preference> list = sessionStorage.load();
 
@@ -60,14 +67,7 @@ public class DictionaryFwSession extends WebSession {
     }
 
     public Map<String, Preference> getPreferenceMap(String page) {
-        Map<String, Preference> map = preferences.get(page);
-
-        if (map == null) {
-            map = new HashMap<>();
-            preferences.put(page, map);
-        }
-
-        return map;
+        return getMetaData(PREFERENCE_MAP_KEY).computeIfAbsent(page, k -> new HashMap<>());
     }
 
     public void putPreference(String page, String key, Preference value) {

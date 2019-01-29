@@ -270,6 +270,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public void onClick(AjaxRequestTarget target) {
                 F filterObject = newFilter();
+                AbstractProcessableListPanel.this.getSession().putPreferenceObject(getPreferencePage(),
+                        PreferenceKey.FILTER_OBJECT, filter);
                 model.setObject(filterObject);
                 target.add(form);
             }
@@ -368,9 +370,7 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             protected Iterable<R> getData(long first, long count) {
-                final F filter = model.getObject();
-
-                getSession().putPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, filter);
+                F filter = model.getObject();
 
                 //prepare filter object
                 filter.setFirst(first);
@@ -387,6 +387,8 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
 
             @Override
             protected Long getSize() {
+                getSession().putPreferenceObject(getPreferencePage(), PreferenceKey.FILTER_OBJECT, model.getObject());
+
                 return AbstractProcessableListPanel.this.getCount(model.getObject());
             }
         };
