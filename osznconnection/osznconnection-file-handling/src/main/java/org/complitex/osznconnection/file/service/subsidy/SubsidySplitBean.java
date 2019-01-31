@@ -30,7 +30,11 @@ public class SubsidySplitBean extends AbstractBean{
         return sqlSession().selectList(NS + ".selectSubsidySplits", subsidyId);
     }
 
-    public void clearSubsidySplits(Long subsidyId){
+    public void deleteSubsidySplits(Long subsidyId){
         sqlSession().delete(NS + ".deleteSubsidySplits", subsidyId);
+    }
+
+    public void deleteSubsidySplitsByRequestFileId(Long requestFileId){
+        sqlSession().delete(NS + ".deleteSubsidySplitsByRequestFileId", requestFileId);
     }
 }

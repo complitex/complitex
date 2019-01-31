@@ -59,4 +59,9 @@
     <delete id="deleteSubsidySplits" parameterType="long">
         delete from `subsidy_split` where `subsidy_id` = #{subsidyId}
     </delete>
+
+    <delete id="deleteSubsidySplitsByRequestFileId" parameterType="long">
+        delete subsidy_split from subsidy_split left join subsidy on subsidy_id = subsidy.id
+          where request_file_id = #{requestFileId}
+    </delete>
 </mapper>

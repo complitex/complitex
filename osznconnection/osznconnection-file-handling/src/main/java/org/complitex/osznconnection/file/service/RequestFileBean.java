@@ -48,6 +48,9 @@ public class RequestFileBean extends AbstractBean {
     private SubsidyBean subsidyBean;
 
     @EJB
+    private SubsidySplitBean subsidySplitBean;
+
+    @EJB
     private DwellingCharacteristicsBean dwellingCharacteristicsBean;
 
     @EJB
@@ -146,6 +149,7 @@ public class RequestFileBean extends AbstractBean {
                     actualPaymentBean.delete(requestFile.getId());
                     break;
                 case SUBSIDY:
+                    subsidySplitBean.deleteSubsidySplitsByRequestFileId(requestFile.getId());
                     subsidyBean.delete(requestFile.getId());
                     break;
                 case DWELLING_CHARACTERISTICS:

@@ -96,7 +96,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
     }
 
     public void fill(RequestFile requestFile, Subsidy subsidy) {
-        subsidySplitBean.clearSubsidySplits(subsidy.getId());
+        subsidySplitBean.deleteSubsidySplits(subsidy.getId());
 
         if (subsidy.getDateField(SubsidyDBF.DAT1) == null || subsidy.getDateField(SubsidyDBF.DAT2) == null){
             subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
