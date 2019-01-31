@@ -391,7 +391,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
             subsidySplit.putField(SubsidySplitField.DAT1, Date.from(d1.plusMonths(i)
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            subsidySplit.putField(SubsidySplitField.DAT2, Date.from(d1.plusMonths(i + 1).minusDays(1)
+            subsidySplit.putField(SubsidySplitField.DAT2, Date.from(d1.plusMonths(i).with(TemporalAdjusters.lastDayOfMonth())
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             SubsidyData subsidyData = data.stream()
@@ -433,7 +433,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
         subsidySplit.putField(SubsidySplitField.DAT1, Date.from(d1.plusMonths(n - 1)
                 .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        subsidySplit.putField(SubsidySplitField.DAT2, Date.from(d1.with(TemporalAdjusters.lastDayOfMonth())
+        subsidySplit.putField(SubsidySplitField.DAT2, Date.from(d1.plusMonths(n - 1).with(TemporalAdjusters.lastDayOfMonth())
                 .atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         subsidySplit.putField(SubsidySplitField.SM1, subsidy.getBigDecimalField(SubsidyDBF.SM1)
@@ -505,7 +505,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
 
             subsidySplit.putField(SubsidySplitField.DAT1, Date.from(date
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
-            subsidySplit.putField(SubsidySplitField.DAT2, Date.from(date.plusMonths(1).minusDays(1)
+            subsidySplit.putField(SubsidySplitField.DAT2, Date.from(date.with(TemporalAdjusters.lastDayOfMonth())
                     .atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
             if (sm1Sum.compareTo(ZERO) != 0){
