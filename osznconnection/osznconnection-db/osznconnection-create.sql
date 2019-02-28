@@ -547,6 +547,7 @@ CREATE TABLE `subsidy` (
   `NUMM` INTEGER(2) COMMENT '',
   `SUBS` DECIMAL(13,2) COMMENT '',
   `KVT` INTEGER(3) COMMENT '',
+  `MON` integer(1) COMMENT '',
 
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
