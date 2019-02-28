@@ -83,6 +83,7 @@
             <result column="NUMM" property="NUMM"/>
             <result column="SUBS" property="SUBS"/>
             <result column="KVT" property="KVT"/>
+            <result column="MON" property="MON"/>
         </association>
     </resultMap>
 
