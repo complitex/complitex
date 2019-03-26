@@ -3,10 +3,7 @@ package org.complitex.osznconnection.file.web.menu;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.osznconnection.file.web.pages.subsidy.ActualPaymentFileList;
-import org.complitex.osznconnection.file.web.pages.subsidy.GroupList;
-import org.complitex.osznconnection.file.web.pages.subsidy.SubsidyFileList;
-import org.complitex.osznconnection.file.web.pages.subsidy.SubsidyTarifFileList;
+import org.complitex.osznconnection.file.web.pages.subsidy.*;
 import org.complitex.template.web.template.ITemplateLink;
 import org.complitex.template.web.template.ResourceTemplateMenu;
 
@@ -83,6 +80,34 @@ public class SubsidyRequestMenu extends ResourceTemplateMenu {
             @Override
             public String[] getRoles() {
                 return new String[]{"SUBSIDY_ACTUAL"};
+            }
+        });
+
+        links.add(new ITemplateLink() {
+
+            @Override
+            public String getLabel(Locale locale) {
+                return getString(SubsidyRequestMenu.class, locale, "oschadbank_request");
+            }
+
+            @Override
+            public Class<? extends Page> getPage() {
+                return OschadbankRequestFileList.class;
+            }
+
+            @Override
+            public PageParameters getParameters() {
+                return new PageParameters();
+            }
+
+            @Override
+            public String getTagId() {
+                return "OschadbankRequestFileList";
+            }
+
+            @Override
+            public String[] getRoles() {
+                return new String[]{"SUBSIDY_GROUP"};
             }
         });
 

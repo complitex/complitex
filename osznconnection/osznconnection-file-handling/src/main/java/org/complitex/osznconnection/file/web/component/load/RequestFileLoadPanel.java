@@ -185,8 +185,16 @@ public abstract class RequestFileLoadPanel extends Panel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 Long mainUserOrganizationId = sessionBean.getCurrentUserOrganizationId(RequestFileLoadPanel.this.getSession());
-                long currentUserOrganizationId = mainUserOrganizationId != null ? mainUserOrganizationId
+                Long currentUserOrganizationId = mainUserOrganizationId != null ? mainUserOrganizationId
                         : userOrganizationModel.getObject();
+
+                if (currentUserOrganizationId == null){
+                    error(getString("error_null_user_organization"));
+
+                    target.add(messages);
+
+                    return;
+                }
 
                 int year = yearModel.getObject();
 

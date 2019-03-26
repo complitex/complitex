@@ -5,24 +5,19 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 import org.complitex.osznconnection.file.entity.RequestFileSubType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
-import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.template.TemplatePage;
 
-import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author inheaven on 009 09.12.16.
+ * @author inheaven 09.12.16
  */
 public abstract class AbstractFileList extends TemplatePage {
-    @EJB
-    private ProcessManagerService processManagerService;
-
-    private AbstractFileListPanel fileListPanel;
+      private AbstractFileListPanel fileListPanel;
 
     public AbstractFileList(RequestFileType requestFileType, RequestFileSubType requestFileSubType,
                             ProcessType loadProcessType, ProcessType bindProcessType,

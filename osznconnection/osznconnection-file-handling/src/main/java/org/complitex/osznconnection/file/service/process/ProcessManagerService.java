@@ -141,6 +141,10 @@ public class ProcessManagerService {
     }
 
     public boolean isProcessing(ProcessType processType) {
+        if (processType == null){
+            return false;
+        }
+
         return getProcess(processType).isProcessing();
     }
 
@@ -726,5 +730,21 @@ public class ProcessManagerService {
         execute(EXPORT_PRIVILEGE_PROLONGATION, PrivilegeProlongationExportTaskBean.class,
                 updateAndGetRequestFiles(EXPORT_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void loadOschadbankRequest(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int month){
+        try {
+            List<RequestFile> list = LoadUtil.getOschadbankRequests(userOrganizationId, organizationId, month, year);
+
+            execute(LOAD_OSCHADBANK_REQUEST, OschadbankRequestLoadTaskBean.class, list, null, LOAD_THREAD_SIZE,
+                    LOAD_MAX_ERROR_COUNT, null);
+        } catch (Exception e) {
+            log.error("Ошибка процесса загрузки файлов.", e);
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
+                    Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "onError", e);
+        }
     }
 }

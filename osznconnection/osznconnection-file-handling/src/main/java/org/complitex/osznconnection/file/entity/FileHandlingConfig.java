@@ -28,6 +28,8 @@ public enum FileHandlingConfig implements IConfig {
     PRIVILEGE_PROLONGATION_S_FILENAME_MASK("mask"),
     PRIVILEGE_PROLONGATION_P_FILENAME_MASK("mask"),
 
+    OSCHADBANK_REQUEST_FILENAME_MASK("mask"),
+
     LOAD_THREAD_SIZE("thread"),
     BIND_THREAD_SIZE("thread"),
     FILL_THREAD_SIZE("thread"),

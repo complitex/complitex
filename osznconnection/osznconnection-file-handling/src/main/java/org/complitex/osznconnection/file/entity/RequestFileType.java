@@ -21,7 +21,8 @@ public enum RequestFileType implements IFixedIdType{
     SUBSIDY_J_FILE(12),
     SUBSIDY_S_FILE(13),
     PRIVILEGE_PROLONGATION(14),
-    FACILITY_LOCAL(15);
+    FACILITY_LOCAL(15),
+    OSCHADBANK_REQUEST(16);
 
     private Integer id;
 

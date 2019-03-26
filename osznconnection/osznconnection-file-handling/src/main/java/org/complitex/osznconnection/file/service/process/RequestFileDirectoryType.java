@@ -3,10 +3,6 @@ package org.complitex.osznconnection.file.service.process;
 
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 
-/**
- *
- * @author Artem
- */
 public enum RequestFileDirectoryType {
 
     LOAD_PAYMENT_BENEFIT_FILES_DIR(OsznOrganizationStrategy.LOAD_PAYMENT_BENEFIT_FILES_DIR),
@@ -23,7 +19,8 @@ public enum RequestFileDirectoryType {
     SAVE_FACILITY_LOCAL_DIR(OsznOrganizationStrategy.SAVE_FACILITY_LOCAL_DIR),
     EXPORT_SUBSIDY_DIR(OsznOrganizationStrategy.ROOT_EXPORT_DIRECTORY),
     REFERENCES_DIR(OsznOrganizationStrategy.REFERENCES_DIR),
-    LOAD_PRIVILEGE_PROLONGATION_DIR(OsznOrganizationStrategy.LOAD_PRIVILEGE_PROLONGATION_DIR);
+    LOAD_PRIVILEGE_PROLONGATION_DIR(OsznOrganizationStrategy.LOAD_PRIVILEGE_PROLONGATION_DIR),
+    LOAD_OSCHADBANK_REQUEST_DIR(OsznOrganizationStrategy.LOAD_OSCHADBANK_REQUEST_DIR);
     
     private long entityAttributeId;
 
