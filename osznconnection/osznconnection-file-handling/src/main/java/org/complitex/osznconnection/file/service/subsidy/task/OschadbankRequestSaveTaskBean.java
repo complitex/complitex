@@ -22,8 +22,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Anatoly A. Ivanov
@@ -52,48 +54,32 @@ public class OschadbankRequestSaveTaskBean extends AbstractRequestTaskBean<Reque
             List<OschadbankRequest> oschadbankRequests = oschadbankRequestBean.getOschadbankRequests(
                     FilterWrapper.of(new OschadbankRequest(requestFile.getId())));
 
-            XSSFWorkbook workbook = new XSSFWorkbook();
-            XSSFSheet sheet = workbook.createSheet("Реєстр нарахувань");
+            XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("OschadbankRequestSaveTaskBean.tmpl"));
+            workbook.getProperties().getCoreProperties().setCreated(Optional.of(new Date()));
+            workbook.getProperties().getCoreProperties().setCreator(XSSFWorkbook.DOCUMENT_CREATOR);
+            XSSFSheet sheet = workbook.getSheetAt(0);
 
             XSSFRow row;
 
-            row = sheet.createRow(0);
+            row = sheet.getRow(0);
 
-            row.createCell(0).setCellValue("ЄДРПОУ:");
             row.createCell(1).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.EDRPOU));
-            row.createCell(2).setCellValue("Звітний період:");
             row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.REPORTING_PERIOD));
 
-            row = sheet.createRow(1);
+            row = sheet.getRow(1);
 
-            row.createCell(0).setCellValue("Назва постачальника:");
             row.createCell(1).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_NAME));
-            row.createCell(2).setCellValue("Код Банку Постачальника послуги:");
             row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_CODE));
 
-            row = sheet.createRow(2);
+            row = sheet.getRow(2);
 
-            row.createCell(0).setCellValue("№ Анкети:");
             row.createCell(1).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.DOCUMENT_NUMBER));
-            row.createCell(2).setCellValue("р/р Постачальника послуги:");
             row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_ACCOUNT));
 
-            row = sheet.createRow(3);
+            row = sheet.getRow(3);
 
-            row.createCell(0).setCellValue("Назва послуги:");
             row.createCell(1).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.SERVICE_NAME));
-            row.createCell(2).setCellValue("IBAN Постачальника:");
-            row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_ACCOUNT));
-
-            //todo row format
-
-            row = sheet.createRow(5);
-            row.createCell(0).setCellValue("Номер УПСЗН");
-            row.createCell(1).setCellValue("Номер облікового запису одержувача житлової субсидії в АТ «Ощадбанк»");
-            row.createCell(2).setCellValue("ПІБ одержувача субсидії");
-            row.createCell(3).setCellValue("Номер особового рахунку у постачальника");
-            row.createCell(4).setCellValue("Загальна нарахована сума за спожиті послуги у звітному місяці (грн.)");
-            row.createCell(5).setCellValue("Загальна сума до сплати, що включає заборгованість/переплату за попередні періоди (грн.)");
+            row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_IBAN));
 
             for (int i = 0; i < oschadbankRequests.size(); i++) {
                 OschadbankRequest r = oschadbankRequests.get(i);
