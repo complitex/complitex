@@ -41,6 +41,7 @@
     <update id="updateRequestFile" parameterType="org.complitex.osznconnection.file.entity.RequestFile">
         update `request_file` set
              <if test="groupId != null">`group_id` = #{groupId}, </if>
+             <if test="dbfRecordCount != null">`dbf_record_count` = #{dbfRecordCount}, </if>
             `status` = #{status}
         where `id` = #{id}
     </update>

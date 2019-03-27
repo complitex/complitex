@@ -20,4 +20,8 @@ public class OschadbankRequestBean extends AbstractBean {
     public Long getOschadbankRequestsCount(FilterWrapper<OschadbankRequest> filterWrapper){
         return 0L;
     }
+
+    public void save(OschadbankRequest oschadbankRequest){
+        System.out.println(oschadbankRequest);
+    }
 }

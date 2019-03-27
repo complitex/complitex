@@ -1,3 +1,7 @@
+-- Update request file name
+
+ALTER TABLE request_file MODIFY `name` VARCHAR(32) NOT NULL COMMENT 'Имя файла';
+
 -- ------------------------------
 -- Oschadbank request file
 -- ------------------------------

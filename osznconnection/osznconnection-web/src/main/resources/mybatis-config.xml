@@ -83,6 +83,8 @@
         <mapper resource="org/complitex/osznconnection/file/service/subsidy/BenefitBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidyTarifBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidySplitBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/OschadbankRequestFileBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/subsidy/OschadbankRequestBean.xml"/>
 
         <mapper resource="org/complitex/osznconnection/file/service/privilege/AbstractPrivilegeBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeFileGroupBean.xml"/>

@@ -83,6 +83,7 @@ public class RequestFileBean extends AbstractBean {
             case FACILITY_STREET_TYPE_REFERENCE:
             case FACILITY_STREET_REFERENCE:
             case FACILITY_TARIF_REFERENCE:
+            case OSCHADBANK_REQUEST:
                 return getLoadedRequestFiles(filter);
 
             case ACTUAL_PAYMENT:
@@ -182,7 +183,7 @@ public class RequestFileBean extends AbstractBean {
         return sqlSession().selectOne(NS + ".selectLoadedId", requestFile);
     }
 
-    private boolean checkLoaded(RequestFile requestFile) {
+    public boolean checkLoaded(RequestFile requestFile) {
         return sqlSession().selectOne(NS + ".selectIsLoaded", requestFile);
     }
 
