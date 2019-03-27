@@ -20,7 +20,8 @@ public enum RequestFileDirectoryType {
     EXPORT_SUBSIDY_DIR(OsznOrganizationStrategy.ROOT_EXPORT_DIRECTORY),
     REFERENCES_DIR(OsznOrganizationStrategy.REFERENCES_DIR),
     LOAD_PRIVILEGE_PROLONGATION_DIR(OsznOrganizationStrategy.LOAD_PRIVILEGE_PROLONGATION_DIR),
-    LOAD_OSCHADBANK_REQUEST_DIR(OsznOrganizationStrategy.LOAD_OSCHADBANK_REQUEST_DIR);
+    LOAD_OSCHADBANK_REQUEST_DIR(OsznOrganizationStrategy.LOAD_OSCHADBANK_REQUEST_DIR),
+    SAVE_OSCHADBANK_REQUEST_DIR(OsznOrganizationStrategy.SAVE_OSCHADBANK_REQUEST_DIR);
     
     private long entityAttributeId;
 

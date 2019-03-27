@@ -747,4 +747,9 @@ public class ProcessManagerService {
             broadcastService.broadcast(getClass(), "onError", e);
         }
     }
+
+    public void saveOschadbankRequest(List<Long> ids, Map processParameters) {
+        execute(SAVE_OSCHADBANK_REQUEST, OschadbankRequestSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+    }
 }

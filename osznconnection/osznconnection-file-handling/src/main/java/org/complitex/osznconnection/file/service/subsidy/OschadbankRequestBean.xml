@@ -37,7 +37,8 @@
 
     <select id="selectOschadbankRequests" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="oschadbankRequestResultMap">
-        select * from oschadbank_request where request_file_id = #{object.requestFileId} ${limit}
+        select * from oschadbank_request where request_file_id = #{object.requestFileId}
+        <if test="count > 0">${limit}</if>
     </select>
 
     <select id="selectOschadbankRequestsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">

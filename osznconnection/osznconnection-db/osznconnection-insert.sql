@@ -171,9 +171,15 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (931, 1, UP
   (931, 2, UPPER('Директория входящих файлов продления льгот'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (931, 900, 0, 931, 1, 1);
 
+-- Oschadbank request file directory --
+
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (932, 1, UPPER('Директория входящих файлов запросов от ощадбанка')),
   (932, 2, UPPER('Директорія вхідних файлів запитів від ощадбанку'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (932, 900, 0, 932, 1, 1);
+
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (933, 1, UPPER('Директория исходящих файлов запросов от ощадбанка')),
+    (933, 2, UPPER('Директорія вихідних файлів запитів від ощадбанку'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (933, 900, 0, 933, 1, 1);
 
 -- --------------------------------
 -- Ownership

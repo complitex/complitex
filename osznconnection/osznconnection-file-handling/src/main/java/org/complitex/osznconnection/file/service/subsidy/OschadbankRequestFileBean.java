@@ -13,6 +13,10 @@ import javax.ejb.Stateless;
 public class OschadbankRequestFileBean extends AbstractBean {
     public static final String NS = OschadbankRequestFileBean.class.getName();
 
+    public OschadbankRequestFile getOschadbankRequestFile(Long requestFileId){
+        return sqlSession().selectOne(NS + ".selectOschadbankRequestFile", requestFileId);
+    }
+
     public void save(OschadbankRequestFile oschadbankRequestFile){
         if (oschadbankRequestFile.getId() == null){
             sqlSession().insert(NS + ".insertOschadbankRequestFile", oschadbankRequestFile);

@@ -10,9 +10,12 @@ import org.complitex.osznconnection.file.web.AbstractFileList;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
+import java.util.List;
+import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.OSCHADBANK_REQUEST;
 import static org.complitex.osznconnection.file.service.process.ProcessType.LOAD_OSCHADBANK_REQUEST;
+import static org.complitex.osznconnection.file.service.process.ProcessType.SAVE_OSCHADBANK_REQUEST;
 import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE;
 
 /**
@@ -31,8 +34,8 @@ public class OschadbankRequestFileList extends AbstractFileList {
     private OschadbankRequestFileBean oschadbankRequestFileBean;
 
     public OschadbankRequestFileList() {
-        super(OSCHADBANK_REQUEST, null, LOAD_OSCHADBANK_REQUEST, null, null, null,
-                new Long[]{SUBSIDY_DEPARTMENT_TYPE});
+        super(OSCHADBANK_REQUEST, null, LOAD_OSCHADBANK_REQUEST, null, null,
+                SAVE_OSCHADBANK_REQUEST, new Long[]{SUBSIDY_DEPARTMENT_TYPE});
     }
 
     @Override
@@ -43,6 +46,11 @@ public class OschadbankRequestFileList extends AbstractFileList {
     @Override
     protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
         processManagerService.loadOschadbankRequest(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
+    }
+
+    @Override
+    protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerService.saveOschadbankRequest(selectedFileIds, parameters);
     }
 
     @Override
