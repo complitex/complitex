@@ -48,6 +48,10 @@ public class RequestFile extends AbstractRequestFile {
     }
 
     public String getEdrpou(){
+        if (getType().equals(RequestFileType.OSCHADBANK_REQUEST)){
+            return getName().substring(0, getName().indexOf("_"));
+        }
+
         Matcher matcher = getEdrpouPattern().matcher(getName());
 
         if (matcher.matches()){

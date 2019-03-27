@@ -13,15 +13,23 @@ import java.util.List;
  */
 @Stateless
 public class OschadbankRequestBean extends AbstractBean {
+    public static final String NS = OschadbankRequestBean.class.getName();
+
     public List<OschadbankRequest> getOschadbankRequests(FilterWrapper<OschadbankRequest> filterWrapper){
-        return null;
+        return sqlSession().selectList(NS + ".selectOschadbankRequests", filterWrapper);
     }
 
     public Long getOschadbankRequestsCount(FilterWrapper<OschadbankRequest> filterWrapper){
-        return 0L;
+        return sqlSession().selectOne(NS + ".selectOschadbankRequestsCount", filterWrapper);
     }
 
     public void save(OschadbankRequest oschadbankRequest){
-        System.out.println(oschadbankRequest);
+        if (oschadbankRequest.getId() == null){
+            sqlSession().insert(NS + ".insertOschadbankRequest", oschadbankRequest);
+        }
+    }
+
+    public void delete(Long requestFileId){
+        sqlSession().delete(NS + ".deleteOschadbankRequests", requestFileId);
     }
 }

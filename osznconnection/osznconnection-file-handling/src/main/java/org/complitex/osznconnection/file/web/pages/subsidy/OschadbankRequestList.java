@@ -20,7 +20,7 @@ public class OschadbankRequestList extends AuthorizedListPage<OschadbankRequest>
     private OschadbankRequestBean oschadbankRequestBean;
 
     public OschadbankRequestList(PageParameters pageParameters) {
-        super(pageParameters, ".dbfFields", OschadbankRequestFileList.class);
+        super(pageParameters, "dbfFields.", OschadbankRequestFileList.class);
     }
 
     @Override

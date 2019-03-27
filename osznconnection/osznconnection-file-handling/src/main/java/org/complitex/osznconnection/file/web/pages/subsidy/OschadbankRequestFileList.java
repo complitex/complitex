@@ -2,7 +2,10 @@ package org.complitex.osznconnection.file.web.pages.subsidy;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebPage;
+import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.service.process.ProcessManagerService;
+import org.complitex.osznconnection.file.service.subsidy.OschadbankRequestBean;
+import org.complitex.osznconnection.file.service.subsidy.OschadbankRequestFileBean;
 import org.complitex.osznconnection.file.web.AbstractFileList;
 import org.complitex.template.web.security.SecurityRole;
 
@@ -21,6 +24,12 @@ public class OschadbankRequestFileList extends AbstractFileList {
     @EJB
     private ProcessManagerService processManagerService;
 
+    @EJB
+    private OschadbankRequestBean oschadbankRequestBean;
+
+    @EJB
+    private OschadbankRequestFileBean oschadbankRequestFileBean;
+
     public OschadbankRequestFileList() {
         super(OSCHADBANK_REQUEST, null, LOAD_OSCHADBANK_REQUEST, null, null, null,
                 new Long[]{SUBSIDY_DEPARTMENT_TYPE});
@@ -34,5 +43,13 @@ public class OschadbankRequestFileList extends AbstractFileList {
     @Override
     protected void load(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int monthFrom, int monthTo) {
         processManagerService.loadOschadbankRequest(serviceProviderId, userOrganizationId, organizationId, year, monthFrom);
+    }
+
+    @Override
+    protected void delete(RequestFile requestFile) {
+        oschadbankRequestBean.delete(requestFile.getId());
+        oschadbankRequestFileBean.delete(requestFile.getId());
+
+        super.delete(requestFile);
     }
 }

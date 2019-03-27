@@ -21,8 +21,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Anatoly A. Ivanov
@@ -94,25 +96,27 @@ public class OschadbankRequestLoadTaskBean extends AbstractRequestTaskBean<Reque
             while (it.hasNext()){
                 row = it.next();
 
-                recordCount++;
-
                 OschadbankRequest oschadbankRequest = new OschadbankRequest(requestFile.getId());
 
                 oschadbankRequest.putField(OschadbankRequestField.UTSZN, row.getCell(0).getStringCellValue());
-                oschadbankRequest.putField(OschadbankRequestField.ACCOUNT_NUMBER, row.getCell(1).getStringCellValue());
+                oschadbankRequest.putField(OschadbankRequestField.OSCHADBANK_ACCOUNT, row.getCell(1).getStringCellValue());
                 oschadbankRequest.putField(OschadbankRequestField.FIO, row.getCell(2).getStringCellValue());
                 oschadbankRequest.putField(OschadbankRequestField.SERVICE_ACCOUNT, row.getCell(3).getStringCellValue());
-                oschadbankRequest.putField(OschadbankRequestField.MONTH_SUM, row.getCell(4).getStringCellValue());
-                oschadbankRequest.putField(OschadbankRequestField.SUM, row.getCell(5).getStringCellValue());
+                oschadbankRequest.putField(OschadbankRequestField.MONTH_SUM, getBigDecimal(row.getCell(4).getStringCellValue()));
+                oschadbankRequest.putField(OschadbankRequestField.SUM, getBigDecimal(row.getCell(5).getStringCellValue()));
 
-                oschadbankRequestBean.save(oschadbankRequest);
+                if (oschadbankRequest.getDbfFields().values().stream().anyMatch(Objects::nonNull)) {
+                    recordCount++;
+
+                    oschadbankRequestBean.save(oschadbankRequest);
+                }
             }
 
             requestFile.setDbfRecordCount(recordCount);
             requestFile.setStatus(RequestFileStatus.LOADED);
 
             requestFileBean.save(requestFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
             requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
 
             requestFileBean.save(requestFile);
@@ -121,5 +125,9 @@ public class OschadbankRequestLoadTaskBean extends AbstractRequestTaskBean<Reque
         }
 
         return true;
+    }
+
+    private BigDecimal getBigDecimal(String s){
+        return s != null && !s.isEmpty() ? new BigDecimal(s) : null;
     }
 }

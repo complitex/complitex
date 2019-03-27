@@ -11,7 +11,15 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class OschadbankRequestFileBean extends AbstractBean {
+    public static final String NS = OschadbankRequestFileBean.class.getName();
+
     public void save(OschadbankRequestFile oschadbankRequestFile){
-        System.out.println(oschadbankRequestFile);
+        if (oschadbankRequestFile.getId() == null){
+            sqlSession().insert(NS + ".insertOschadbankRequestFile", oschadbankRequestFile);
+        }
+    }
+
+    public void delete(Long requestFileId){
+        sqlSession().delete(NS + ".deleteOschadbankRequestFile", requestFileId);
     }
 }

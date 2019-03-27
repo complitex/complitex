@@ -5,5 +5,5 @@ package org.complitex.osznconnection.file.entity.subsidy;
  * 26.03.2019 15:26
  */
 public enum OschadbankRequestField {
-    UTSZN, ACCOUNT_NUMBER, FIO, SERVICE_ACCOUNT, MONTH_SUM, SUM
+    UTSZN, OSCHADBANK_ACCOUNT, FIO, SERVICE_ACCOUNT, MONTH_SUM, SUM
 }

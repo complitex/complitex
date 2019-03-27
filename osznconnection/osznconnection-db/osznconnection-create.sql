@@ -1198,7 +1198,6 @@ DROP TABLE IF EXISTS `oschadbank_request_file`;
 CREATE TABLE `oschadbank_request_file` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор файла запросов от ощадбанка',
   `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла запросов',
-
   `EDRPOU` VARCHAR(16) COMMENT 'ЕДРПОУ',
   `PROVIDER_NAME` VARCHAR(128) COMMENT 'Название поставщика',
   `DOCUMENT_NUMBER` VARCHAR(64) COMMENT '№ Анкеты',
@@ -1207,7 +1206,6 @@ CREATE TABLE `oschadbank_request_file` (
   `PROVIDER_CODE` VARCHAR(16) COMMENT 'Код Банка Поставщика услуги',
   `PROVIDER_ACCOUNT` VARCHAR(32) COMMENT 'р/с Поставщика услуги',
   `PROVIDER_IBAN` VARCHAR(64) COMMENT 'IBAN Поставщика',
-
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
   CONSTRAINT `fk_oschadbank_request_file__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
@@ -1220,15 +1218,12 @@ DROP TABLE IF EXISTS `oschadbank_request`;
 CREATE TABLE `oschadbank_request` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор запросов от ощадбанка',
   `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла запросов',
-
   `UTSZN` VARCHAR(64) COMMENT 'Номер УТСЗН',
-  `ACCOUNT_NUMBER` VARCHAR(64) COMMENT 'Номер учетной записи получателя жилищной субсидии в АО «Ощадбанк»',
-
+  `OSCHADBANK_ACCOUNT` VARCHAR(64) COMMENT 'Номер учетной записи получателя жилищной субсидии в АО «Ощадбанк»',
   `FIO` VARCHAR(128) COMMENT 'ФИО получателя субсидии',
   `SERVICE_ACCOUNT` VARCHAR(64) COMMENT 'Номер лицевого счета у поставщика',
   `MONTH_SUM` DECIMAL(13,2) COMMENT 'Общая начисленная сумма за потребленные услуги в отчетном месяце (грн.)',
   `SUM` DECIMAL(13,2) COMMENT 'Общая сумма к оплате, включающая задолженность / переплату за предыдущие периоды (грн.)',
-
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
   CONSTRAINT `fk_oschadbank_request__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)

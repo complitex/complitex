@@ -3,13 +3,16 @@ package org.complitex.osznconnection.file.web;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
+import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileSubType;
 import org.complitex.osznconnection.file.entity.RequestFileType;
+import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.component.load.RequestFileLoadPanel;
 import org.complitex.template.web.component.toolbar.ToolbarButton;
 import org.complitex.template.web.template.TemplatePage;
 
+import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +20,10 @@ import java.util.Map;
  * @author inheaven 09.12.16
  */
 public abstract class AbstractFileList extends TemplatePage {
-      private AbstractFileListPanel fileListPanel;
+    @EJB
+    private RequestFileBean requestFileBean;
+
+    private AbstractFileListPanel fileListPanel;
 
     public AbstractFileList(RequestFileType requestFileType, RequestFileSubType requestFileSubType,
                             ProcessType loadProcessType, ProcessType bindProcessType,
@@ -59,6 +65,11 @@ public abstract class AbstractFileList extends TemplatePage {
             }
 
             @Override
+            protected void delete(RequestFile requestFile) {
+                AbstractFileList.this.delete(requestFile);
+            }
+
+            @Override
             protected RequestFileLoadPanel.MonthParameterViewMode getLoadMonthParameterViewMode() {
                 return RequestFileLoadPanel.MonthParameterViewMode.EXACT;
             }
@@ -74,6 +85,8 @@ public abstract class AbstractFileList extends TemplatePage {
             }
         });
     }
+
+
 
     protected List<ToolbarButton> getToolbarButtons(String id) {
         return fileListPanel.getToolbarButtons(id);
@@ -92,5 +105,9 @@ public abstract class AbstractFileList extends TemplatePage {
     }
 
     protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+    }
+
+    protected void delete(RequestFile requestFile){
+        requestFileBean.delete(requestFile);
     }
 }
