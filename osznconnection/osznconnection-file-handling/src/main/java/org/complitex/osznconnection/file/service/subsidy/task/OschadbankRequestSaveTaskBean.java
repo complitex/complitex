@@ -20,6 +20,8 @@ import org.complitex.osznconnection.file.service.subsidy.OschadbankRequestFileBe
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
@@ -32,6 +34,7 @@ import java.util.Optional;
  * 27.03.2019 21:58
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class OschadbankRequestSaveTaskBean extends AbstractRequestTaskBean<RequestFile> {
     @EJB
     private RequestFileBean requestFileBean;
