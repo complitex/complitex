@@ -748,6 +748,11 @@ public class ProcessManagerService {
         }
     }
 
+    public void fillOschadbankRequest(List<Long> ids, Map processParameters) {
+        execute(FILL_OSCHADBANK_REQUEST, OschadbankRequestFillTaskBean.class, updateAndGetRequestFiles(FILL_WAIT, ids),
+                requestFileListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
+    }
+
     public void saveOschadbankRequest(List<Long> ids, Map processParameters) {
         execute(SAVE_OSCHADBANK_REQUEST, OschadbankRequestSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);

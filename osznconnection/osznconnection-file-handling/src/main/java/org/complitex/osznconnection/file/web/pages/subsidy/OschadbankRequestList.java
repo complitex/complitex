@@ -30,7 +30,11 @@ public class OschadbankRequestList extends AuthorizedListPage<OschadbankRequest>
 
     @Override
     protected List<OschadbankRequest> getList(FilterWrapper<OschadbankRequest> filterWrapper) {
-        return oschadbankRequestBean.getOschadbankRequests(filterWrapper);
+        List<OschadbankRequest> list = oschadbankRequestBean.getOschadbankRequests(filterWrapper);
+
+        list.forEach(r -> r.putField("STATUS", r.getStatus().name()));
+
+        return list;
     }
 
     @Override
@@ -40,6 +44,10 @@ public class OschadbankRequestList extends AuthorizedListPage<OschadbankRequest>
 
     @Override
     protected List<String> getProperties() {
-        return StringUtil.asList(OschadbankRequestField.class);
+        List<String> list =  StringUtil.asList(OschadbankRequestField.class);
+
+        list.add("STATUS");
+
+        return list;
     }
 }

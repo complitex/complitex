@@ -83,7 +83,6 @@ public class RequestFileBean extends AbstractBean {
             case FACILITY_STREET_TYPE_REFERENCE:
             case FACILITY_STREET_REFERENCE:
             case FACILITY_TARIF_REFERENCE:
-            case OSCHADBANK_REQUEST:
                 return getLoadedRequestFiles(filter);
 
             case ACTUAL_PAYMENT:
@@ -92,6 +91,7 @@ public class RequestFileBean extends AbstractBean {
             case FACILITY_FORM2:
             case FACILITY_LOCAL:
             case PRIVILEGE_PROLONGATION:
+            case OSCHADBANK_REQUEST:
                 return getProcessedRequestFiles(filter);
 
             case SUBSIDY:

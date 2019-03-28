@@ -26,10 +26,16 @@ public class OschadbankRequestBean extends AbstractBean {
     public void save(OschadbankRequest oschadbankRequest){
         if (oschadbankRequest.getId() == null){
             sqlSession().insert(NS + ".insertOschadbankRequest", oschadbankRequest);
+        }else{
+            sqlSession().update(NS + ".updateOschadbankRequest", oschadbankRequest);
         }
     }
 
     public void delete(Long requestFileId){
         sqlSession().delete(NS + ".deleteOschadbankRequests", requestFileId);
+    }
+
+    public boolean isOschadbankRequestFileFilled(Long requestFileId){
+        return sqlSession().selectOne(NS + ".selectOschadbankRequestFileFilled", requestFileId);
     }
 }

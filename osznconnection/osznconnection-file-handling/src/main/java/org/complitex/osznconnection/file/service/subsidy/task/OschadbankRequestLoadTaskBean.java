@@ -19,6 +19,8 @@ import org.complitex.osznconnection.file.service.subsidy.OschadbankRequestFileBe
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -31,6 +33,7 @@ import java.util.Objects;
  * 26.03.2019 15:17
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class OschadbankRequestLoadTaskBean extends AbstractRequestTaskBean<RequestFile> {
     @EJB
     private RequestFileBean requestFileBean;

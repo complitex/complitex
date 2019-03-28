@@ -372,4 +372,13 @@
         #{data, mode=OUT, jdbcType=CURSOR, resultMap=subsidyDataResultMap}
         )}
     </select>
+
+    <select id="getChargeToPay" statementType="CALLABLE" parameterType="org.complitex.osznconnection.file.service_provider.entity.ChargeToPay">
+        {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.getChargeToPay(
+        #{pAcc, mode=IN, javaType=string, jdbcType=VARCHAR},
+        #{pDate, mode=IN, javaType=date, jdbcType=DATE},
+        #{pCharge, mode=OUT, javaType=bigdecimal, jdbcType=DECIMAL},
+        #{pToPay, mode=OUT, javaType=bigdecimal, jdbcType=DECIMAL}
+        )}
+    </select>
 </mapper>

@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.OSCHADBANK_REQUEST;
-import static org.complitex.osznconnection.file.service.process.ProcessType.LOAD_OSCHADBANK_REQUEST;
-import static org.complitex.osznconnection.file.service.process.ProcessType.SAVE_OSCHADBANK_REQUEST;
+import static org.complitex.osznconnection.file.service.process.ProcessType.*;
 import static org.complitex.osznconnection.organization_type.strategy.OsznOrganizationTypeStrategy.SUBSIDY_DEPARTMENT_TYPE;
 
 /**
@@ -34,8 +33,8 @@ public class OschadbankRequestFileList extends AbstractFileList {
     private OschadbankRequestFileBean oschadbankRequestFileBean;
 
     public OschadbankRequestFileList() {
-        super(OSCHADBANK_REQUEST, null, LOAD_OSCHADBANK_REQUEST, null, null,
-                SAVE_OSCHADBANK_REQUEST, new Long[]{SUBSIDY_DEPARTMENT_TYPE});
+        super(OSCHADBANK_REQUEST, null, LOAD_OSCHADBANK_REQUEST, null,
+                FILL_OSCHADBANK_REQUEST, SAVE_OSCHADBANK_REQUEST, new Long[]{SUBSIDY_DEPARTMENT_TYPE});
     }
 
     @Override
@@ -49,6 +48,11 @@ public class OschadbankRequestFileList extends AbstractFileList {
     }
 
     @Override
+    protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerService.fillOschadbankRequest(selectedFileIds, parameters);
+    }
+
+    @Override
     protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
         processManagerService.saveOschadbankRequest(selectedFileIds, parameters);
     }
@@ -59,5 +63,10 @@ public class OschadbankRequestFileList extends AbstractFileList {
         oschadbankRequestFileBean.delete(requestFile.getId());
 
         super.delete(requestFile);
+    }
+
+    @Override
+    protected boolean isFillVisible() {
+        return true;
     }
 }

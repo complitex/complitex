@@ -18,6 +18,7 @@ import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.privilege.OwnershipCorrectionBean;
 import org.complitex.osznconnection.file.service.subsidy.SubsidyTarifBean;
 import org.complitex.osznconnection.file.service.warning.RequestWarningBean;
+import org.complitex.osznconnection.file.service_provider.entity.ChargeToPay;
 import org.complitex.osznconnection.file.service_provider.exception.UnknownAccountNumberTypeException;
 import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
@@ -1499,5 +1500,17 @@ public class ServiceProviderAdapter extends AbstractBean {
             throws RemoteCallException {
         return getData(userOrganization, "getSubsidy", MapUtil.of("pAcc", pAcc, "pDateB", pDateB,
                 "pDateE", pDateE, "pOpMonth", pOpMonth));
+    }
+
+    public ChargeToPay getChargeToPay(Long userOrganization, ChargeToPay chargeToPay) throws RemoteCallException {
+        try {
+            sqlSession(getDataSource(userOrganization)).selectOne(NS + ".getChargeToPay", chargeToPay);
+
+            log.info("getChargeToPay: {}", chargeToPay);
+
+            return chargeToPay;
+        } catch (Exception e) {
+            throw new RemoteCallException(e);
+        }
     }
 }

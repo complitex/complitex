@@ -4,6 +4,7 @@
     <resultMap id="oschadbankRequestResultMap" type="org.complitex.osznconnection.file.entity.subsidy.OschadbankRequest">
         <id column="id" property="id"/>
         <result column="request_file_id" property="requestFileId"/>
+        <result column="status" property="status"/>
         <association property="dbfFields" javaType="map">
             <result column="UTSZN" property="UTSZN"/>
             <result column="OSCHADBANK_ACCOUNT" property="OSCHADBANK_ACCOUNT"/>
@@ -15,7 +16,7 @@
     </resultMap>
 
     <insert id="insertOschadbankRequest" parameterType="org.complitex.osznconnection.file.entity.subsidy.OschadbankRequest">
-        INSERT INTO `oschadbank_request`
+        INSERT INTO oschadbank_request
         (
         <trim suffixOverrides=",">
             `request_file_id`,
@@ -35,6 +36,13 @@
         )
     </insert>
 
+    <update id="updateOschadbankRequest" parameterType="org.complitex.osznconnection.file.entity.subsidy.OschadbankRequest">
+        update oschadbank_request set `status` = #{status}
+        <if test="dbfFields.MONTH_SUM != null">, MONTH_SUM = #{dbfFields.MONTH_SUM}</if>
+        <if test="dbfFields.SUM != null">, SUM = #{dbfFields.SUM}</if>
+        where id = #{id}
+    </update>
+
     <select id="selectOschadbankRequests" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="oschadbankRequestResultMap">
         select * from oschadbank_request where request_file_id = #{object.requestFileId}
@@ -48,4 +56,8 @@
     <delete id="deleteOschadbankRequests" parameterType="long">
         delete from oschadbank_request where `request_file_id` = #{requestFileId}
     </delete>
+
+    <select id="selectOschadbankRequestFileFilled" parameterType="long" resultType="boolean">
+        select count(id) = 0 from oschadbank_request where `status` != 215
+    </select>
 </mapper>

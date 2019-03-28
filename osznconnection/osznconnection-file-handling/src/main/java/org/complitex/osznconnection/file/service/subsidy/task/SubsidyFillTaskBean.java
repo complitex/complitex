@@ -218,7 +218,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
             subsidySplit.putField(SubsidySplitField.SUBS, subsidy.getBigDecimalField(SubsidyDBF.SUBS));
             subsidySplit.putField(SubsidySplitField.NUMM, 1);
 
-            if (subsidySplit.getBigDecimalField(SubsidySplitField.SUMMA).compareTo(ZERO) != 0) {
+            if (numm > 1 || subsidySplit.getBigDecimalField(SubsidySplitField.SUMMA).compareTo(ZERO) != 0) {
                 subsidySplits.add(subsidySplit);
             }
         }
@@ -255,7 +255,7 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
         subsidySplit.putField(SubsidySplitField.SUBS, subsidy.getBigDecimalField(SubsidyDBF.SUBS));
         subsidySplit.putField(SubsidySplitField.NUMM, 1);
 
-        if (subsidySplit.getBigDecimalField(SubsidySplitField.SUMMA).compareTo(ZERO) != 0) {
+        if (numm > 1 || subsidySplit.getBigDecimalField(SubsidySplitField.SUMMA).compareTo(ZERO) != 0) {
             subsidySplits.add(subsidySplit);
         }
 

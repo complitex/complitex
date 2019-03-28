@@ -81,12 +81,14 @@ public abstract class AbstractFileList extends TemplatePage {
 
             @Override
             protected boolean isFillVisible() {
-                return false;
+                return AbstractFileList.this.isFillVisible();
             }
         });
     }
 
-
+    protected boolean isFillVisible() {
+        return false;
+    }
 
     protected List<ToolbarButton> getToolbarButtons(String id) {
         return fileListPanel.getToolbarButtons(id);

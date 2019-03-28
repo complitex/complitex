@@ -1218,6 +1218,9 @@ DROP TABLE IF EXISTS `oschadbank_request`;
 CREATE TABLE `oschadbank_request` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор запросов от ощадбанка',
   `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла запросов',
+  `account_number` VARCHAR(100) NULL COMMENT 'Номер счета',
+  `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
+
   `UTSZN` VARCHAR(64) COMMENT 'Номер УТСЗН',
   `OSCHADBANK_ACCOUNT` VARCHAR(64) COMMENT 'Номер учетной записи получателя жилищной субсидии в АО «Ощадбанк»',
   `FIO` VARCHAR(128) COMMENT 'ФИО получателя субсидии',
