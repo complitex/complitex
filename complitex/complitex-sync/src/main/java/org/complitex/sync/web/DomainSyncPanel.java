@@ -165,10 +165,14 @@ public class DomainSyncPanel extends Panel {
         add(new BroadcastBehavior(DomainSyncService.class) {
             private Long lastProcessed = System.currentTimeMillis();
 
+            private Long index = 0L;
+
             @SuppressWarnings("Duplicates")
             @Override
             protected void onBroadcast(WebSocketRequestHandler handler, String key, Object payload) {
                 if ("begin".equals(key)){
+                    index = 0L;
+
                     SyncBeginMessage begin = (SyncBeginMessage) payload;
 
                     getSession().info(String.format(getString("load.onBegin"),
@@ -199,10 +203,22 @@ public class DomainSyncPanel extends Panel {
 
                     DomainSync domainSync = (DomainSync) payload;
 
-                    String message = StringUtil.valueOf(domainSync.getParentId()) + " " +
-                            domainSync.getName() + " " +
-                            StringUtil.valueOf(domainSync.getAdditionalName());
+                    String parent = domainSync.getParentId() + "";
 
+                    if (domainSync.getParentId() != null){
+                        DomainSync filter = new DomainSync();
+
+                        filter.setExternalId(domainSync.getParentId());
+
+                        List<DomainSync> domainSyncs = domainSyncBean.getList(FilterWrapper.of(filter));
+
+                        if (!domainSyncs.isEmpty()){
+                            parent = domainSyncs.get(0).getName() + " " + StringUtil.valueOf(domainSyncs.get(0).getAdditionalName());
+                        }
+                    }
+
+                    String message = index++ + ", " + parent + " " +
+                            domainSync.getName() + " " + StringUtil.valueOf(domainSync.getAdditionalName());
 
                     processed.setDefaultModelObject(message);
                     handler.add(processed);

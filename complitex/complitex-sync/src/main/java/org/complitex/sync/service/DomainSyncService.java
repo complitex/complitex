@@ -3,6 +3,7 @@ package org.complitex.sync.service;
 import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.Cursor;
 import org.complitex.common.entity.DomainObject;
+import org.complitex.common.entity.Status;
 import org.complitex.common.service.BroadcastService;
 import org.complitex.common.util.DateUtil;
 import org.complitex.common.util.EjbBeanLocator;
@@ -216,6 +217,12 @@ public class DomainSyncService {
                         DomainObject domainObject = handler.getStrategy().getDomainObject(correction.getObjectId());
 
                         if (handler.isCorresponds(domainObject, ds, organizationId)){
+                            if (!domainObject.getStatus().equals(Status.ACTIVE)){
+                                handler.getStrategy().enable(domainObject);
+
+                                log.info("sync: enable domain object {}", correction);
+                            }
+
                             ds.setStatus(SYNCHRONIZED);
                             domainSyncBean.updateStatus(ds);
                         }else{
