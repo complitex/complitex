@@ -8,6 +8,8 @@ import org.complitex.correction.entity.Correction;
 import org.complitex.sync.entity.DomainSync;
 
 import javax.ejb.Local;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.Date;
 import java.util.List;
 
@@ -29,8 +31,10 @@ public interface IDomainSyncHandler {
 
     List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId);
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     Correction insertCorrection(DomainObject domainObject, DomainSync domainSync, Long organizationId);
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId);
 
     IStrategy getStrategy();
