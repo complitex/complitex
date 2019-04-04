@@ -92,13 +92,14 @@ public class OschadbankRequestLoadTaskBean extends AbstractRequestTaskBean<Reque
 
             oschadbankRequestFileBean.save(oschadbankRequestFile);
 
-            it.next();
-            it.next();
-
             int recordCount = 0;
 
             while (it.hasNext()){
                 row = it.next();
+
+                if (row.getRowNum() < 6){
+                    continue;
+                }
 
                 OschadbankRequest oschadbankRequest = new OschadbankRequest(requestFile.getId());
 
