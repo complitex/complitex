@@ -43,23 +43,14 @@ import static org.complitex.common.util.StringUtil.lowerCamelToUnderscore;
 public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
     protected transient Logger log;
 
+    public static final String FILTER_FIELD = "filter_field";
+    public static final String DATA_FIELD = "data_field";
+
     private String prefix = "";
 
     private boolean camelToUnderscore = false;
 
     private Class<? extends Page> backPage;
-
-    protected abstract T newFilterObject(PageParameters pageParameters);
-
-    protected abstract List<T> getList(FilterWrapper<T> filterWrapper);
-
-    protected abstract Long getCount(FilterWrapper<T> filterWrapper);
-
-    protected abstract List<String> getProperties();
-
-    protected void onPopulateFilter(ListItem<String> item){}
-
-    protected void onPopulateData(ListItem<String> item){}
 
     public ListTemplatePage(final PageParameters pageParameters) {
         //Authorize
@@ -69,7 +60,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         add(new Label("title", new ResourceModel("title"))); //todo add file name
 
         //Feedback Panel
-        final AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
+        AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
         //Filter Model
@@ -79,7 +70,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
                 FilterWrapper.of(newFilterObject(pageParameters)));
 
         //Filter Form
-        final Form filterForm = new Form<>("filter_form");
+        Form filterForm = new Form<>("filter_form");
         filterForm.setOutputMarkupId(true);
         add(filterForm);
 
@@ -113,11 +104,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         filterForm.add(new ListView<String>("filter_list", getProperties()){
             @Override
             protected void populateItem(ListItem<String> item) {
-                String p = "object." + prefix + item.getModelObject();
-
-                item.add(new InputPanel<>("filter_field", new PropertyModel<>(filterWrapper, p)));
-
-                onPopulateFilter(item);
+                onPopulateFilter(item, filterWrapper);
             }
         });
 
@@ -160,10 +147,8 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
                 item.add(new ListView<String>("data_list", getProperties()) {
 
                     @Override
-                    protected void populateItem(ListItem<String> column) {
-                        column.add(new TextLabel("data", new PropertyModel<>(item.getModel(), prefix + column.getModelObject())));
-
-                        onPopulateData(column);
+                    protected void populateItem(ListItem<String> item) {
+                        onPopulateData(item);
                     }
                 });
 
@@ -191,7 +176,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
                 ArrowOrderByBorder border = new ArrowOrderByBorder("header_border",
                         camelToUnderscore ? lowerCamelToUnderscore(property) : property,
                         dataProvider, dataView, filterForm);
-                border.add(new Label("header_label", getStringOrKey(property)));
+                border.add(new Label("header_label", onPopulateHeader(property)));
 
                 item.add(border);
             }
@@ -216,6 +201,28 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
 
         setPrefix(prefix);
         setBackPage(backPage);
+    }
+
+    protected abstract T newFilterObject(PageParameters pageParameters);
+
+    protected abstract List<T> getList(FilterWrapper<T> filterWrapper);
+
+    protected abstract Long getCount(FilterWrapper<T> filterWrapper);
+
+    protected abstract List<String> getProperties();
+
+    protected String onPopulateHeader(String property) {
+        return getStringOrKey(property);
+    }
+
+    protected void onPopulateFilter(ListItem<String> item, FilterWrapper<T> filterWrapper){
+        String p = "object." + getPrefix() + item.getModelObject();
+
+        item.add(new InputPanel<>(FILTER_FIELD, new PropertyModel<>(filterWrapper, p)));
+    }
+
+    protected void onPopulateData(ListItem<String> item){
+        item.add(new TextLabel(DATA_FIELD, new PropertyModel<>(item.getModel(), getPrefix() + item.getModelObject())));
     }
 
     public String getPrefix() {

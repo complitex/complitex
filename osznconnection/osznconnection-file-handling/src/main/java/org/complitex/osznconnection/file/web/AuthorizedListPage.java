@@ -15,7 +15,7 @@ import javax.ejb.EJB;
 /**
  * @author inheaven on 020 20.01.17.
  */
-public abstract class AuthorizedListPage<T extends ILongId>  extends ListTemplatePage<T>{
+public abstract class AuthorizedListPage<T extends ILongId> extends ListTemplatePage<T>{
     @EJB
     private SessionBean sessionBean;
 
