@@ -43,14 +43,31 @@
         where id = #{id}
     </update>
 
+    <sql id="selectOschadbankRequestsWhere">
+        <if test="object.dbfFields.UTSZN != null">and UTSZN like concat('%', #{object.dbfFields.UTSZN}, '%')</if>
+        <if test="object.dbfFields.OSCHADBANK_ACCOUNT != null">and OSCHADBANK_ACCOUNT like concat('%', #{object.dbfFields.OSCHADBANK_ACCOUNT}, '%')</if>
+        <if test="object.dbfFields.FIO != null">and FIO like concat('%', #{object.dbfFields.FIO}, '%')</if>
+        <if test="object.dbfFields.SERVICE_ACCOUNT != null">and SERVICE_ACCOUNT like concat('%', #{object.dbfFields.SERVICE_ACCOUNT}, '%')</if>
+        <if test="object.dbfFields.MONTH_SUM != null">and MONTH_SUM like concat('%', #{object.dbfFields.MONTH_SUM}, '%')</if>
+        <if test="object.dbfFields.SUM != null">and SUM like concat('%', #{object.dbfFields.SUM}, '%')</if>
+        <if test="object.status != null">and status = #{object.status}</if>
+    </sql>
+
+    <sql id="selectOschadbankRequestsOrderBy">
+        <if test="sortProperty != null">order by ${sortProperty} ${asc}</if>
+    </sql>
+
     <select id="selectOschadbankRequests" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="oschadbankRequestResultMap">
         select * from oschadbank_request where request_file_id = #{object.requestFileId}
+        <include refid="selectOschadbankRequestsWhere"/>
+        <include refid="selectOschadbankRequestsOrderBy"/>
         <if test="count > 0">${limit}</if>
     </select>
 
     <select id="selectOschadbankRequestsCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
         select count(id) from oschadbank_request where `request_file_id` = #{object.requestFileId}
+        <include refid="selectOschadbankRequestsWhere"/>
     </select>
 
     <delete id="deleteOschadbankRequests" parameterType="long">

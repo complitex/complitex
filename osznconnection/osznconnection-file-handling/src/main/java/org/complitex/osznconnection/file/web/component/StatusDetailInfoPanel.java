@@ -1,6 +1,5 @@
 package org.complitex.osznconnection.file.web.component;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -25,7 +24,7 @@ import java.util.List;
 public abstract class StatusDetailInfoPanel extends Panel {
     private ListView<StatusDetailInfo> statusDetailsInfo;
 
-    public StatusDetailInfoPanel(String id, IStatusDetailRenderer statusDetailRenderer, Component... update) {
+    public StatusDetailInfoPanel(String id, IStatusDetailRenderer statusDetailRenderer) {
         super(id);
         setOutputMarkupId(true);
 
@@ -55,11 +54,7 @@ public abstract class StatusDetailInfoPanel extends Panel {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        for (Component component : update) {
-                            target.add(component);
-                        }
-
-                        onStatusDetailInfo(statusDetailInfo);
+                        onStatusDetailInfo(target, statusDetailInfo);
 
                         if (statusDetailInfo.getStatusDetails() != null && !statusDetailInfo.getStatusDetails().isEmpty()) {
                             statusDetailsContainer.setVisible(!statusDetailsContainer.isVisible());
@@ -84,11 +79,7 @@ public abstract class StatusDetailInfoPanel extends Panel {
 
                             @Override
                             public void onClick(AjaxRequestTarget target) {
-                                onStatusDetail(statusDetailInfo, statusDetail);
-
-                                for (Component component : update) {
-                                    target.add(component);
-                                }
+                                onStatusDetail(target, statusDetailInfo, statusDetail);
                             }
                         };
                         item.add(filter);
@@ -106,13 +97,9 @@ public abstract class StatusDetailInfoPanel extends Panel {
         container.add(statusDetailsInfo);
     }
 
-    protected void onStatusDetailInfo(StatusDetailInfo statusDetailInfo) {
+    public abstract void onStatusDetailInfo(AjaxRequestTarget target, StatusDetailInfo statusDetailInfo);
 
-    }
-
-    protected void onStatusDetail(StatusDetailInfo statusDetailInfo, StatusDetail statusDetail) {
-
-    }
+    public abstract void onStatusDetail(AjaxRequestTarget target, StatusDetailInfo statusDetailInfo, StatusDetail statusDetail);
 
     public abstract List<StatusDetailInfo> loadStatusDetails();
 

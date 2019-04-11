@@ -5,10 +5,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLoc
 import org.apache.wicket.markup.html.border.Border;
 import org.apache.wicket.markup.repeater.data.DataView;
 
-/**
- *
- * @author Artem
- */
 public class EnhancedOrderByBorder extends Border {
 
     private EnhancedOrderByLink link;

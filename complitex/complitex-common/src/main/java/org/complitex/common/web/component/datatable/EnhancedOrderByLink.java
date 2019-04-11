@@ -18,10 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- *
- * @author Artem
- */
 public class EnhancedOrderByLink extends AjaxLink<Void> {
 
     /** sortable property */
@@ -61,9 +57,7 @@ public class EnhancedOrderByLink extends AjaxLink<Void> {
      *            locator used to locate sort state object that this will use to read/write state of
      *            sorted properties
      * @param cssProvider
-     *            CSS provider that will be used generate the value of class attribute for this link
-     *
-     * @see OrderByLink.ICssProvider
+     *            CSS provider that will be used generate the value of class attribute for this link     *
      *
      */
     public EnhancedOrderByLink(String id, String property, ISortStateLocator stateLocator,

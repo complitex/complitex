@@ -56,6 +56,8 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
 
     private Form filterForm;
 
+    private FilterWrapper<T> filterWrapper;
+
     public ListTemplatePage(final PageParameters pageParameters) {
         //Authorize
         authorize(pageParameters);
@@ -73,7 +75,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         //Filter Model
         String pageKey = pageParameters.toString();
 
-        FilterWrapper<T> filterWrapper = getTemplateSession().getPreferenceFilter(getClass().getName() + pageKey,
+        filterWrapper = getTemplateSession().getPreferenceFilter(getClass().getName() + pageKey,
                 FilterWrapper.of(newFilterObject(pageParameters)));
 
         //Filter Form
@@ -111,7 +113,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         filterForm.add(new ListView<String>("filter_list", getProperties()){
             @Override
             protected void populateItem(ListItem<String> item) {
-                onPopulateFilter(item, filterWrapper);
+                onPopulateFilter(item);
             }
         });
 
@@ -150,17 +152,17 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         //Data View
         DataView dataView = new DataView<T>("data_view", dataProvider) {
             @Override
-            protected void populateItem(final Item<T> item) {
-                item.add(new ListView<String>("data_list", getProperties()) {
+            protected void populateItem(Item<T> row) {
+                row.add(new ListView<String>("data_list", getProperties()) {
 
                     @Override
-                    protected void populateItem(ListItem<String> item) {
-                        onPopulateData(item);
+                    protected void populateItem(ListItem<String> column) {
+                        onPopulateData(row, column);
                     }
                 });
 
-                item.add(new ListView<Component>("data_action_list", getActionComponents("data_action",
-                        item.getModelObject())) {
+                row.add(new ListView<Component>("data_action_list", getActionComponents("data_action",
+                        row.getModelObject())) {
                     @Override
                     protected void populateItem(ListItem<Component> item) {
                         item.add(item.getModelObject());
@@ -222,14 +224,14 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         return getStringOrKey(property);
     }
 
-    protected void onPopulateFilter(ListItem<String> item, FilterWrapper<T> filterWrapper){
+    protected void onPopulateFilter(ListItem<String> item){
         String p = "object." + getPrefix() + item.getModelObject();
 
         item.add(new InputPanel<>(FILTER_FIELD, new PropertyModel<>(filterWrapper, p)));
     }
 
-    protected void onPopulateData(ListItem<String> item){
-        item.add(new TextLabel(DATA_FIELD, new PropertyModel<>(item.getModel(), getPrefix() + item.getModelObject())));
+    protected void onPopulateData(ListItem<T> row, ListItem<String> column){
+        column.add(new TextLabel(DATA_FIELD, new PropertyModel<>(row.getModel(), getPrefix() + column.getModelObject())));
     }
 
     public String getPrefix() {
@@ -278,5 +280,9 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
 
     public Form getFilterForm() {
         return filterForm;
+    }
+
+    public FilterWrapper<T> getFilterWrapper() {
+        return filterWrapper;
     }
 }
