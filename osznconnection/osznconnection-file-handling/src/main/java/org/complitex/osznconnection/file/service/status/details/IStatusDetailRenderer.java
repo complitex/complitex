@@ -3,13 +3,10 @@ package org.complitex.osznconnection.file.service.status.details;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetail;
 
+import java.io.Serializable;
 import java.util.Locale;
 
-/**
- *
- * @author Artem
- */
-public interface IStatusDetailRenderer {
+public interface IStatusDetailRenderer extends Serializable {
 
-    String displayStatusDetail(RequestStatus status, StatusDetail statusDetail, Locale locale);
+    String displayStatusDetail(StatusDetail statusDetail, RequestStatus status, Locale locale);
 }

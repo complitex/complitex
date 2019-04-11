@@ -84,7 +84,14 @@ public class OschadbankRequestFillTaskBean extends AbstractRequestTaskBean<Reque
                     request.setStatus(RequestStatus.PROCESSED);
                     oschadbankRequestBean.save(request);
                 }else{
-                    request.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
+                    if (chargeToPay.getResultCode() == 0){
+                        request.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+                    } else if (chargeToPay.getResultCode() == -12){
+                        request.setStatus(RequestStatus.MORE_ONE_ACCOUNTS);
+                    } else{
+                        request.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
+                    }
+
                     oschadbankRequestBean.save(request);
 
                     log.error("oschadbank fill error {} {}", request, chargeToPay);

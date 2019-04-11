@@ -4,10 +4,6 @@ import org.complitex.osznconnection.file.entity.RequestStatus;
 
 import java.io.Serializable;
 
-/**
- *
- * @author Artem
- */
 public class AbstractRequestExample implements Serializable {
 
     private RequestStatus status;

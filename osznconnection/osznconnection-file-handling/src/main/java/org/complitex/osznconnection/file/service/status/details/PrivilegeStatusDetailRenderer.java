@@ -13,7 +13,7 @@ public class PrivilegeStatusDetailRenderer implements IStatusDetailRenderer, Ser
     private static final String RESOURCE_BUNDLE = PrivilegeStatusDetailRenderer.class.getName();
 
     @Override
-    public String displayStatusDetail(RequestStatus status, StatusDetail statusDetail, Locale locale) {
+    public String displayStatusDetail(StatusDetail statusDetail, RequestStatus status, Locale locale) {
 
         switch (status) {
             case ACCOUNT_NUMBER_NOT_FOUND:

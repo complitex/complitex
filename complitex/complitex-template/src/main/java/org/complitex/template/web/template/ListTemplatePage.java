@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
@@ -45,12 +46,15 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
 
     public static final String FILTER_FIELD = "filter_field";
     public static final String DATA_FIELD = "data_field";
+    public static final String STATUS_DETAIL_PANEL = "status_detail_panel";
 
     private String prefix = "";
 
     private boolean camelToUnderscore = false;
 
     private Class<? extends Page> backPage;
+
+    private Form filterForm;
 
     public ListTemplatePage(final PageParameters pageParameters) {
         //Authorize
@@ -63,6 +67,9 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         AjaxFeedbackPanel messages = new AjaxFeedbackPanel("messages");
         add(messages);
 
+        //StatusDetail Panel
+        add(newStatusDetailPanel());
+
         //Filter Model
         String pageKey = pageParameters.toString();
 
@@ -70,7 +77,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
                 FilterWrapper.of(newFilterObject(pageParameters)));
 
         //Filter Form
-        Form filterForm = new Form<>("filter_form");
+        filterForm = new Form<>("filter_form");
         filterForm.setOutputMarkupId(true);
         add(filterForm);
 
@@ -109,7 +116,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         });
 
         //Data Provider
-        final DataProvider<T> dataProvider = new DataProvider<T>() {
+        DataProvider<T> dataProvider = new DataProvider<T>() {
             @Override
             protected Iterable<T> getData(long first, long count) {
                 ((TemplateSession)getSession()).putPreferenceObject(getPreferencesPage() + pageKey,
@@ -136,12 +143,12 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         dataProvider.setSort("id", SortOrder.DESCENDING);
 
         //Data Container
-        final WebMarkupContainer dataContainer = new WebMarkupContainer("data_container");
+        WebMarkupContainer dataContainer = new WebMarkupContainer("data_container");
         dataContainer.setOutputMarkupId(true);
         filterForm.add(dataContainer);
 
         //Data View
-        final DataView dataView = new DataView<T>("data_view", dataProvider) {
+        DataView dataView = new DataView<T>("data_view", dataProvider) {
             @Override
             protected void populateItem(final Item<T> item) {
                 item.add(new ListView<String>("data_list", getProperties()) {
@@ -152,8 +159,8 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
                     }
                 });
 
-                item.add(new ListView<Component>("data_action_list",
-                        getActionComponents("data_action", item.getModelObject())) {
+                item.add(new ListView<Component>("data_action_list", getActionComponents("data_action",
+                        item.getModelObject())) {
                     @Override
                     protected void populateItem(ListItem<Component> item) {
                         item.add(item.getModelObject());
@@ -164,7 +171,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
         dataContainer.add(dataView);
 
         //Paging Navigator
-        final PagingNavigator paging = new PagingNavigator("paging", dataView, getClass().getName(), filterForm);
+        PagingNavigator paging = new PagingNavigator("paging", dataView, getClass().getName(), filterForm);
         filterForm.add(paging);
 
         //Headers
@@ -263,5 +270,13 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
 
     protected void authorize(PageParameters pageParameters){
 
+    }
+
+    protected WebMarkupContainer newStatusDetailPanel(){
+        return new EmptyPanel(STATUS_DETAIL_PANEL);
+    }
+
+    public Form getFilterForm() {
+        return filterForm;
     }
 }

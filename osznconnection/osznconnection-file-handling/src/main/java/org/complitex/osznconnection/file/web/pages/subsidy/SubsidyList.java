@@ -134,8 +134,8 @@ public final class SubsidyList extends TemplatePage {
         example = new Model<>(((TemplateSession) getSession()).getPreferenceObject(getPreferencesPage() + fileId,
                 PreferenceKey.FILTER_OBJECT, newExample()));
 
-        StatusDetailPanel<SubsidyExample> statusDetailPanel = new StatusDetailPanel<SubsidyExample>("statusDetailsPanel", example,
-                new SubsidyExampleConfigurator(), new SubsidyStatusDetailRenderer(), content) {
+        StatusDetailPanel<SubsidyExample> statusDetailPanel = new StatusDetailPanel<SubsidyExample>("statusDetailsPanel",
+                example, new SubsidyExampleConfigurator(), new SubsidyStatusDetailRenderer(), content) {
 
             @Override
             public List<StatusDetailInfo> loadStatusDetails() {

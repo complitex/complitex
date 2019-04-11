@@ -21,7 +21,6 @@ public class StatusDetailBean extends AbstractBean {
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
-    @SuppressWarnings("unchecked")
     public List<StatusDetailInfo> getPaymentStatusDetails(Long requestFileId) {
         return sqlSession().selectList(NS + ".getPaymentStatusDetailInfo", requestFileId);
     }
@@ -79,4 +78,9 @@ public class StatusDetailBean extends AbstractBean {
             }
         }
     }
+
+    public List<StatusDetailInfo> getOschadbankRequestDetails(Long requestFileId) {
+        return sqlSession().selectList(NS + ".getOschadbankRequestStatusDetailInfo", requestFileId);
+    }
+
 }

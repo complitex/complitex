@@ -4,10 +4,6 @@ import org.complitex.osznconnection.file.entity.StatusDetail;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
 import org.complitex.osznconnection.file.entity.example.AbstractRequestExample;
 
-/**
- *
- * @author Artem
- */
 public interface ExampleConfigurator<T extends AbstractRequestExample> {
 
     T createExample(Class<T> exampleClass, StatusDetailInfo statusDetailInfo);

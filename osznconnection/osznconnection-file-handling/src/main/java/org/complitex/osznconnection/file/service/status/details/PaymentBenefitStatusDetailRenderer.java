@@ -13,7 +13,7 @@ import java.util.Locale;
 public class PaymentBenefitStatusDetailRenderer implements IStatusDetailRenderer, Serializable {
 
     @Override
-    public String displayStatusDetail(RequestStatus status, StatusDetail statusDetail, Locale locale) {
+    public String displayStatusDetail(StatusDetail statusDetail, RequestStatus status, Locale locale) {
         switch (status) {
             case ACCOUNT_NUMBER_NOT_FOUND:
             case MORE_ONE_ACCOUNTS: {

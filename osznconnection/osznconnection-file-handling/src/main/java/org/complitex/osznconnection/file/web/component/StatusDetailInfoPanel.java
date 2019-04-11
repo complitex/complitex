@@ -10,32 +10,24 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetail;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
-import org.complitex.osznconnection.file.entity.example.AbstractRequestExample;
 import org.complitex.osznconnection.file.service.StatusRenderUtil;
-import org.complitex.osznconnection.file.service.status.details.ExampleConfigurator;
 import org.complitex.osznconnection.file.service.status.details.IStatusDetailRenderer;
 import org.complitex.osznconnection.file.service.status.details.StatusDetailRenderUtil;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru
- *         Date: 24.11.10 15:49
+ *         Date: 11.04.19 17:37
  */
-public abstract class StatusDetailPanel<T extends AbstractRequestExample> extends Panel {
+public abstract class StatusDetailInfoPanel extends Panel {
     private ListView<StatusDetailInfo> statusDetailsInfo;
 
-    public StatusDetailPanel(String id, IModel<T> exampleModel, ExampleConfigurator<T> exampleConfigurator,
-                             IStatusDetailRenderer statusDetailRenderer, Component... update) {
+    public StatusDetailInfoPanel(String id, IStatusDetailRenderer statusDetailRenderer, Component... update) {
         super(id);
         setOutputMarkupId(true);
-
-        @SuppressWarnings("unchecked")
-        Class<T> exampleClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
         WebMarkupContainer container = new WebMarkupContainer("container");
         add(container);
@@ -54,7 +46,6 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
             protected void populateItem(ListItem<StatusDetailInfo> item) {
                 StatusDetailInfo statusDetailInfo = item.getModelObject();
 
-                //Контейнер для ajax обновления вложенного списка
                 WebMarkupContainer statusDetailsContainer = new WebMarkupContainer("statusDetailsContainer");
                 statusDetailsContainer.setOutputMarkupId(true);
                 statusDetailsContainer.setOutputMarkupPlaceholderTag(true);
@@ -68,7 +59,7 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
                             target.add(component);
                         }
 
-                        filterByStatusDetailInfo(statusDetailInfo, exampleClass, exampleModel, exampleConfigurator);
+                        onStatusDetailInfo(statusDetailInfo);
 
                         if (statusDetailInfo.getStatusDetails() != null && !statusDetailInfo.getStatusDetails().isEmpty()) {
                             statusDetailsContainer.setVisible(!statusDetailsContainer.isVisible());
@@ -78,8 +69,8 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
                 };
                 item.add(expand);
 
-                String info = StatusRenderUtil.displayStatus(statusDetailInfo.getStatus(), getLocale())
-                        + StatusDetailRenderUtil.displayCount(statusDetailInfo.getCount());
+                String info = StatusRenderUtil.displayStatus(statusDetailInfo.getStatus(), getLocale()) +
+                        StatusDetailRenderUtil.displayCount(statusDetailInfo.getCount());
                 expand.add(new Label("info", info));
 
                 ListView<StatusDetail> statusDetails = new ListView<StatusDetail>("statusDetails",
@@ -93,7 +84,7 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
 
                             @Override
                             public void onClick(AjaxRequestTarget target) {
-                                filterByStatusDetail(statusDetail, statusDetailInfo.getStatus(), exampleModel, exampleConfigurator);
+                                onStatusDetail(statusDetailInfo, statusDetail);
 
                                 for (Component component : update) {
                                     target.add(component);
@@ -102,9 +93,8 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
                         };
                         item.add(filter);
 
-                        filter.add(new Label("name",
-                                StatusDetailRenderUtil.displayStatusDetail(statusDetailInfo.getStatus(),
-                                        statusDetail, statusDetailRenderer, getLocale())));
+                        filter.add(new Label("name", StatusDetailRenderUtil.displayStatusDetail(
+                                statusDetailInfo.getStatus(), statusDetail, statusDetailRenderer, getLocale())));
                     }
                 };
                 statusDetailsContainer.setVisible(false);
@@ -116,19 +106,12 @@ public abstract class StatusDetailPanel<T extends AbstractRequestExample> extend
         container.add(statusDetailsInfo);
     }
 
-    protected void filterByStatusDetailInfo(StatusDetailInfo statusDetailInfo, Class<T> exampleClass, IModel<T> exampleModel,
-                                            ExampleConfigurator<T> exampleConfigurator) {
-        T example = exampleConfigurator.createExample(exampleClass, statusDetailInfo);
-        example.setRequestFileId(exampleModel.getObject().getRequestFileId());
-        exampleModel.setObject(example);
+    protected void onStatusDetailInfo(StatusDetailInfo statusDetailInfo) {
+
     }
 
-    protected void filterByStatusDetail(StatusDetail statusDetail, RequestStatus requestStatus, IModel<T> exampleModel,
-                                        ExampleConfigurator<T> exampleConfigurator) {
-        T example = exampleConfigurator.createExample(statusDetail);
-        example.setRequestFileId(exampleModel.getObject().getRequestFileId());
-        example.setStatus(requestStatus);
-        exampleModel.setObject(example);
+    protected void onStatusDetail(StatusDetailInfo statusDetailInfo, StatusDetail statusDetail) {
+
     }
 
     public abstract List<StatusDetailInfo> loadStatusDetails();
