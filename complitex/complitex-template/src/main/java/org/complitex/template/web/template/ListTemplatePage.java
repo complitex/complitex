@@ -142,7 +142,7 @@ public abstract class ListTemplatePage<T extends ILongId> extends TemplatePage{
                 return Model.of(object);
             }
         };
-        dataProvider.setSort("id", SortOrder.DESCENDING);
+        dataProvider.setSort("id", SortOrder.ASCENDING);
 
         //Data Container
         WebMarkupContainer dataContainer = new WebMarkupContainer("data_container");

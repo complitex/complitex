@@ -92,6 +92,7 @@ public class RequestFileBean extends AbstractBean {
             case FACILITY_LOCAL:
             case PRIVILEGE_PROLONGATION:
             case OSCHADBANK_REQUEST:
+            case OSCHADBANK_RESPONSE:
                 return getProcessedRequestFiles(filter);
 
             case SUBSIDY:

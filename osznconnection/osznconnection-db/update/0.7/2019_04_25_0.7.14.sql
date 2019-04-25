@@ -61,6 +61,6 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES
     (935, 900, 0, 935, 1, 1);
 
-INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_RESPONSE_FILENAME_MASK','\\d*\\.xlsx');
+INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_RESPONSE_FILENAME_MASK','.*\\.xlsx');
 
 INSERT INTO `update` (`version`) VALUE ('20190425_0.7.14');

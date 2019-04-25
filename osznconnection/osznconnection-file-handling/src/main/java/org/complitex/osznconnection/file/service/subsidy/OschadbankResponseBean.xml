@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.osznconnection.file.service.subsidy.OschadbankResponseBean">
+    <resultMap id="oschadbankResponseResultMap" type="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponse">
+        <id column="id" property="id"/>
+        <result column="request_file_id" property="requestFileId"/>
+        <result column="status" property="status"/>
+        <association property="dbfFields" javaType="map">
+            <result column="UTSZN" property="UTSZN"/>
+            <result column="OSCHADBANK_ACCOUNT" property="OSCHADBANK_ACCOUNT"/>
+            <result column="FIO" property="FIO"/>
+            <result column="SERVICE_ACCOUNT" property="SERVICE_ACCOUNT"/>
+            <result column="MONTH_SUM" property="MONTH_SUM"/>
+            <result column="SUM" property="SUM"/>
+            <result column="SUBSIDY_SUM" property="SUBSIDY_SUM"/>
+            <result column="DESCRIPTION" property="DESCRIPTION"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertOschadbankResponse" parameterType="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponse">
+        INSERT INTO oschadbank_response
+        (
+        <trim suffixOverrides=",">
+            `request_file_id`,
+            <foreach collection="dbfFields.keys" item="key">
+                `${key}`,
+            </foreach>
+        </trim>
+        )
+        VALUE
+        (
+        <trim suffixOverrides=",">
+            #{requestFileId},
+            <foreach collection="dbfFields.keys" item="key">
+                #{dbfFields.${key}},
+            </foreach>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateOschadbankResponse" parameterType="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponse">
+        update oschadbank_response set `status` = #{status}
+        <if test="dbfFields.MONTH_SUM != null">, MONTH_SUM = #{dbfFields.MONTH_SUM}</if>
+        <if test="dbfFields.SUM != null">, SUM = #{dbfFields.SUM}</if>
+        where id = #{id}
+    </update>
+
+    <sql id="selectOschadbankResponsesWhere">
+        <if test="object.dbfFields.UTSZN != null">and UTSZN like concat('%', #{object.dbfFields.UTSZN}, '%')</if>
+        <if test="object.dbfFields.OSCHADBANK_ACCOUNT != null">and OSCHADBANK_ACCOUNT like concat('%', #{object.dbfFields.OSCHADBANK_ACCOUNT}, '%')</if>
+        <if test="object.dbfFields.FIO != null">and FIO like concat('%', #{object.dbfFields.FIO}, '%')</if>
+        <if test="object.dbfFields.SERVICE_ACCOUNT != null">and SERVICE_ACCOUNT like concat('%', #{object.dbfFields.SERVICE_ACCOUNT}, '%')</if>
+        <if test="object.dbfFields.MONTH_SUM != null">and MONTH_SUM like concat('%', #{object.dbfFields.MONTH_SUM}, '%')</if>
+        <if test="object.dbfFields.SUM != null">and SUM like concat('%', #{object.dbfFields.SUM}, '%')</if>
+        <if test="object.dbfFields.SUBSIDY_SUM != null">and SUBSIDY_SUM like concat('%', #{object.dbfFields.SUBSIDY_SUM}, '%')</if>
+        <if test="object.dbfFields.DESCRIPTION != null">and DESCRIPTION like concat('%', #{object.dbfFields.DESCRIPTION}, '%')</if>
+        <if test="object.status != null">and status = #{object.status}</if>
+    </sql>
+
+    <sql id="selectOschadbankResponsesOrderBy">
+        <if test="sortProperty != null">order by ${sortProperty} ${asc}</if>
+    </sql>
+
+    <select id="selectOschadbankResponses" parameterType="org.complitex.common.entity.FilterWrapper"
+            resultMap="oschadbankResponseResultMap">
+        select * from oschadbank_response where request_file_id = #{object.requestFileId}
+        <include refid="selectOschadbankResponsesWhere"/>
+        <include refid="selectOschadbankResponsesOrderBy"/>
+        <if test="count > 0">${limit}</if>
+    </select>
+
+    <select id="selectOschadbankResponsesCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
+        select count(id) from oschadbank_response where `request_file_id` = #{object.requestFileId}
+        <include refid="selectOschadbankResponsesWhere"/>
+    </select>
+
+    <delete id="deleteOschadbankResponses" parameterType="long">
+        delete from oschadbank_response where `request_file_id` = #{requestFileId}
+    </delete>
+
+    <select id="selectOschadbankResponseFileFilled" parameterType="long" resultType="boolean">
+        select count(id) = 0 from oschadbank_response where `status` != 215
+    </select>
+</mapper>

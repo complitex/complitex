@@ -115,6 +115,34 @@ public class SubsidyRequestMenu extends ResourceTemplateMenu {
 
             @Override
             public String getLabel(Locale locale) {
+                return getString(SubsidyRequestMenu.class, locale, "oschadbank_response");
+            }
+
+            @Override
+            public Class<? extends Page> getPage() {
+                return OschadbankResponseFileList.class;
+            }
+
+            @Override
+            public PageParameters getParameters() {
+                return new PageParameters();
+            }
+
+            @Override
+            public String getTagId() {
+                return "OschadbankResponseFileList";
+            }
+
+            @Override
+            public String[] getRoles() {
+                return new String[]{"SUBSIDY_GROUP"};
+            }
+        });
+
+        links.add(new ITemplateLink() {
+
+            @Override
+            public String getLabel(Locale locale) {
                 return getString(SubsidyRequestMenu.class, locale, "subsidy");
             }
 
