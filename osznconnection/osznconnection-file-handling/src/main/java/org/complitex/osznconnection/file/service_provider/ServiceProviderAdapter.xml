@@ -381,4 +381,27 @@
         #{pToPay, mode=OUT, javaType=bigdecimal, jdbcType=DECIMAL}
         )}
     </select>
+
+    <select id="createProvHeader" statementType="CALLABLE" parameterType="map">
+        {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateProvHeader(
+                #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
+                #{pDate, mode=IN, javaType=DATE, jdbcType=DATE},
+                #{pFile, mode=IN, javaType=string, jdbcType=VARCHAR},
+                #{pAbout, mode=IN, javaType=string, jdbcType=VARCHAR},
+                #{pBIK, mode=IN, javaType=string, jdbcType=VARCHAR}
+            )}
+    </select>
+
+    <select id="createProvRec" statementType="CALLABLE" parameterType="map">
+        {#{resultCode, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateProvRec(
+                #{pColl, mode=IN, javaType=long, jdbcType=NUMERIC},
+                #{pFIO, mode=IN, javaType=string, jdbcType=VARCHAR},
+                #{pExt, mode=IN, javaType=string, jdbcType=VARCHAR},
+                #{pInt, mode=IN, javaType=string, jdbcType=VARCHAR},
+                #{pSum, mode=IN, javaType=bigdecimal, jdbcType=DECIMAL},
+                #{pToPay, mode=IN, javaType=bigdecimal, jdbcType=DECIMAL},
+                #{pDateB, mode=IN, javaType=date, jdbcType=DATE},
+                #{pDateE, mode=IN, javaType=date, jdbcType=DATE}
+            )}
+    </select>
 </mapper>

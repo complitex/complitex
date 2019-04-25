@@ -774,4 +774,9 @@ public class ProcessManagerService {
             broadcastService.broadcast(getClass(), "onError", e);
         }
     }
+
+    public void exportOschadbankResponse(List<Long> ids) {
+        execute(EXPORT_OSCHADBANK_RESPONSE, OschadbankResponseExportTaskBean.class, updateAndGetRequestFiles(EXPORT_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
+    }
 }

@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.web.pages.subsidy;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebPage;
 import org.complitex.osznconnection.file.entity.RequestFile;
@@ -10,6 +11,7 @@ import org.complitex.osznconnection.file.web.AbstractFileList;
 import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
+import java.util.List;
 
 import static org.complitex.osznconnection.file.entity.RequestFileType.OSCHADBANK_RESPONSE;
 import static org.complitex.osznconnection.file.service.process.ProcessType.LOAD_OSCHADBANK_RESPONSE;
@@ -51,5 +53,18 @@ public class OschadbankResponseFileList extends AbstractFileList {
         oschadbankResponseFileBean.delete(requestFile.getId());
 
         super.delete(requestFile);
+    }
+
+    protected boolean isSaveVisible(){
+        return false;
+    }
+
+    protected boolean isExportVisible(){
+        return true;
+    }
+
+    @Override
+    protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
+        processManagerService.exportOschadbankResponse(selectedFileIds);
     }
 }
