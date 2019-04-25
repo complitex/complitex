@@ -1232,6 +1232,57 @@ CREATE TABLE `oschadbank_request` (
   CONSTRAINT `fk_oschadbank_request__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Запросы от ощадбанка';
 
+-- ------------------------------
+-- Oschadbank response file
+-- ------------------------------
+DROP TABLE IF EXISTS `oschadbank_response_file`;
+CREATE TABLE `oschadbank_response_file` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор файла запросов от ощадбанка',
+  `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла запросов',
+  `EDRPOU` VARCHAR(16) COMMENT 'ЕДРПОУ',
+  `PROVIDER_NAME` VARCHAR(128) COMMENT 'Название поставщика',
+  `DOCUMENT_NUMBER` VARCHAR(64) COMMENT '№ Анкеты',
+  `SERVICE_NAME` VARCHAR(1024) COMMENT 'Название услуги',
+  `REPORTING_PERIOD` VARCHAR(16) COMMENT 'Отчетный период',
+  `PROVIDER_CODE` VARCHAR(16) COMMENT 'Код Банка Поставщика услуги',
+  `PROVIDER_ACCOUNT` VARCHAR(32) COMMENT 'р/с Поставщика услуги',
+  `PROVIDER_IBAN` VARCHAR(64) COMMENT 'IBAN Поставщика',
+  `PAYMENT_NUMBER` VARCHAR(64) COMMENT 'Номер платежного документа',
+  `REFERENCE_DOCUMENT` VARCHAR(32) COMMENT 'Референс документа',
+  `PAYMENT_DATE` VARCHAR(16) COMMENT 'Дата формирования платежного документа',
+  `TOTAL_AMOUNT` DECIMAL(13,2) COMMENT 'Общая сумма перечисления',
+  `ANALYTICAL_ACCOUNT` VARCHAR(32) COMMENT 'Номер аналитического счета',
+  `FEE` DECIMAL(13,2) COMMENT 'Комиссионное вознаграждение Банка',
+  `FEE_CODE` VARCHAR(16) COMMENT 'Код банка для перечисления комиссии',
+  `REGISTRY_ID` VARCHAR(32) COMMENT 'ID реестра',
+  PRIMARY KEY (`id`),
+  KEY `key_request_file_id` (`request_file_id`),
+  CONSTRAINT `fk_oschadbank_request_file__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Файл ответа от ощадбанка';
+
+-- ------------------------------
+-- Oschadbank response
+-- ------------------------------
+DROP TABLE IF EXISTS `oschadbank_response`;
+CREATE TABLE `oschadbank_response` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор запросов от ощадбанка',
+  `request_file_id` BIGINT(20) NOT NULL COMMENT 'Идентификатор файла запросов',
+  `account_number` VARCHAR(100) NULL COMMENT 'Номер счета',
+  `status` INTEGER NOT NULL DEFAULT 240 COMMENT 'Статус',
+
+  `UTSZN` VARCHAR(64) COMMENT 'Номер УТСЗН',
+  `OSCHADBANK_ACCOUNT` VARCHAR(64) COMMENT 'Номер учетной записи получателя жилищной субсидии в АО «Ощадбанк»',
+  `FIO` VARCHAR(128) COMMENT 'ФИО получателя субсидии',
+  `SERVICE_ACCOUNT` VARCHAR(64) COMMENT 'Номер лицевого счета у поставщика',
+  `MONTH_SUM` DECIMAL(13,2) COMMENT 'Общая начисленная сумма за потребленные услуги в отчетном месяце (грн.)',
+  `SUM` DECIMAL(13,2) COMMENT 'Общая сумма к оплате, включающая задолженность / переплату за предыдущие периоды (грн.)',
+  `SUBSIDY_SUM` DECIMAL(13,2) COMMENT 'Сумма, уплаченная за счет субсидии',
+  `DESCRIPTION` VARCHAR(1024) COMMENT 'Описание ошибок',
+  PRIMARY KEY (`id`),
+  KEY `key_request_file_id` (`request_file_id`),
+  CONSTRAINT `fk_oschadbank_request__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Ответы от ощадбанка';
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

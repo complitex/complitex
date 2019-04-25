@@ -1,0 +1,10 @@
+package org.complitex.osznconnection.file.entity.subsidy;
+
+/**
+ * @author Anatoly A. Ivanov
+ * 25.04.2019 18:34
+ */
+public enum OschadbankResponseFileField {
+    EDRPOU, PROVIDER_NAME, DOCUMENT_NUMBER, SERVICE_NAME, REPORTING_PERIOD, PROVIDER_CODE, PROVIDER_ACCOUNT, PROVIDER_IBAN,
+    PAYMENT_NUMBER, REFERENCE_DOCUMENT, PAYMENT_DATE, TOTAL_AMOUNT, ANALYTICAL_ACCOUNT, FEE, FEE_CODE, REGISTRY_ID
+}

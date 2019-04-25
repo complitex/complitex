@@ -181,6 +181,16 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (933, 1, UP
     (933, 2, UPPER('Директорія вихідних файлів запитів від ощадбанку'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES (933, 900, 0, 933, 1, 1);
 
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES  (934, 1, UPPER('Директория входящих файлов ответов от ощадбанка')),
+    (934, 2, UPPER('Директорія вхідних файлів відповідей від ощадбанку'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES
+    (934, 900, 0, 934, 1, 1);
+
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (935, 1, UPPER('Директория исходящих файлов ответов от ощадбанка')),
+    (935, 2, UPPER('Директорія вихідних файлів відповідей від ощадбанку'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES
+    (935, 900, 0, 935, 1, 1);
+
 -- --------------------------------
 -- Ownership
 -- --------------------------------
