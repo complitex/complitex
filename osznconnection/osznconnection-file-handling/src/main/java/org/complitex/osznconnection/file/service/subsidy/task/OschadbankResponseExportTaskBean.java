@@ -3,6 +3,7 @@ package org.complitex.osznconnection.file.service.subsidy.task;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.common.util.DateUtil;
+import org.complitex.common.util.ResourceUtil;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.subsidy.OschadbankResponse;
@@ -36,6 +37,8 @@ import java.util.Map;
 public class OschadbankResponseExportTaskBean extends AbstractRequestTaskBean<RequestFile> {
     private final Logger log = LoggerFactory.getLogger(OschadbankResponseExportTaskBean.class);
 
+    private final static Class RESOURCE = OschadbankResponseExportTaskBean.class;
+
     @EJB
     private RequestFileBean requestFileBean;
 
@@ -58,8 +61,10 @@ public class OschadbankResponseExportTaskBean extends AbstractRequestTaskBean<Re
         LocalDate beginDate = LocalDate.parse(oschadbankResponseFile.getStringField(OschadbankResponseFileField.REPORTING_PERIOD) + "-01");
         LocalDate endDate = beginDate.with(TemporalAdjusters.lastDayOfMonth());
 
+        String zheuCode = "ЖКС";
+
         Long collectionId = serviceProviderAdapter.createProvHeader(requestFile.getUserOrganizationId(),
-                "ЖКС", DateUtil.getDate(beginDate), requestFile.getName(), "Ответ от Ощадбанка",
+                zheuCode, DateUtil.getDate(beginDate), requestFile.getName(), "Ответ от Ощадбанка",
                 oschadbankResponseFile.getStringField(OschadbankResponseFileField.PROVIDER_CODE));
 
         if (collectionId == null){
@@ -85,7 +90,25 @@ public class OschadbankResponseExportTaskBean extends AbstractRequestTaskBean<Re
             requestFile.setStatus(RequestFileStatus.EXPORT_ERROR);
             requestFileBean.save(requestFile);
 
-            throw new SaveException("код ошибки {0}", collectionId);
+            switch (collectionId.intValue()){
+                case -20: //Не определена организация
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error-20"),
+                            requestFile.getFullName(), zheuCode);
+                case -19: //Не указано имя файла
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error-19"),
+                            requestFile.getFullName());
+                case -18: //Не указан месяц файла
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error-18"),
+                            requestFile.getFullName());
+                case -23: //Не указано описание
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error-23"),
+                            requestFile.getFullName(), requestFile.getLoadedRecordCount());
+                case -24: //Не найден БИК
+                    throw new SaveException(ResourceUtil.getString(RESOURCE, "error-24"),
+                            requestFile.getFullName());
+                default:
+                    throw new SaveException("код ошибки {0}", collectionId);
+            }
         }
 
         requestFile.setStatus(RequestFileStatus.EXPORTED);
