@@ -102,7 +102,7 @@ public class OschadbankResponseExportTaskBean extends AbstractRequestTaskBean<Re
                             requestFile.getFullName());
                 case -23: //Не указано описание
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error-23"),
-                            requestFile.getFullName(), requestFile.getLoadedRecordCount());
+                            requestFile.getFullName());
                 case -24: //Не найден БИК
                     throw new SaveException(ResourceUtil.getString(RESOURCE, "error-24"),
                             requestFile.getFullName());
