@@ -84,6 +84,8 @@ public class OschadbankResponseExportTaskBean extends AbstractRequestTaskBean<Re
         }else {
             requestFile.setStatus(RequestFileStatus.EXPORT_ERROR);
             requestFileBean.save(requestFile);
+
+            throw new SaveException("код ошибки {0}", collectionId);
         }
 
         requestFile.setStatus(RequestFileStatus.EXPORTED);
