@@ -7,6 +7,7 @@ import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.ExecuteException;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestFileStatus;
+import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.OschadbankRequest;
 import org.complitex.osznconnection.file.entity.subsidy.OschadbankRequestField;
 import org.complitex.osznconnection.file.entity.subsidy.OschadbankRequestFile;
@@ -93,8 +94,14 @@ public class OschadbankRequestSaveTaskBean extends AbstractRequestTaskBean<Reque
                 row.createCell(1).setCellValue(r.getStringField(OschadbankRequestField.OSCHADBANK_ACCOUNT));
                 row.createCell(2).setCellValue(r.getStringField(OschadbankRequestField.FIO));
                 row.createCell(3).setCellValue(r.getStringField(OschadbankRequestField.SERVICE_ACCOUNT));
-                row.createCell(4).setCellValue(r.getStringField(OschadbankRequestField.MONTH_SUM));
-                row.createCell(5).setCellValue(r.getStringField(OschadbankRequestField.SUM));
+
+                if (r.getStatus().equals(RequestStatus.PROCESSED)) {
+                    row.createCell(4).setCellValue(r.getStringField(OschadbankRequestField.MONTH_SUM));
+                    row.createCell(5).setCellValue(r.getStringField(OschadbankRequestField.SUM));
+                }else {
+                    row.createCell(4).setCellValue("0");
+                    row.createCell(5).setCellValue("0");
+                }
             }
 
             String dir = RequestFileStorage.INSTANCE.getRequestFilesStorageDirectory(requestFile.getUserOrganizationId(),
