@@ -185,6 +185,7 @@
             <field scale="2" length="13" type="java.math.BigDecimal" name="SUBS"/>
             <field length="3" type="java.lang.Integer" name="KVT"/>
             <field length="1" type="java.lang.Integer" name="MON"/>
+            <field length="10" type="java.lang.String" name="EBK"/>
         </fields>
     </file-description>
 

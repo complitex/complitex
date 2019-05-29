@@ -84,6 +84,7 @@
             <result column="SUBS" property="SUBS"/>
             <result column="KVT" property="KVT"/>
             <result column="MON" property="MON"/>
+            <result column="EBK" property="EBK"/>
         </association>
     </resultMap>
 
