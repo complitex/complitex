@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.web;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
@@ -65,6 +66,11 @@ public abstract class AbstractFileList extends TemplatePage {
             }
 
             @Override
+            protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
+                AbstractFileList.this.export(target, selectedFileIds);
+            }
+
+            @Override
             protected void delete(RequestFile requestFile) {
                 AbstractFileList.this.delete(requestFile);
             }
@@ -83,10 +89,28 @@ public abstract class AbstractFileList extends TemplatePage {
             protected boolean isFillVisible() {
                 return AbstractFileList.this.isFillVisible();
             }
+
+            @Override
+            protected boolean isSaveVisible() {
+                return AbstractFileList.this.isSaveVisible();
+            }
+
+            @Override
+            protected boolean isExportVisible() {
+                return AbstractFileList.this.isExportVisible();
+            }
         });
     }
 
     protected boolean isFillVisible() {
+        return false;
+    }
+
+    protected boolean isSaveVisible() {
+        return true;
+    }
+
+    protected boolean isExportVisible(){
         return false;
     }
 
@@ -107,6 +131,9 @@ public abstract class AbstractFileList extends TemplatePage {
     }
 
     protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+    }
+
+    protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
     }
 
     protected void delete(RequestFile requestFile){

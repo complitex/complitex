@@ -6,6 +6,8 @@ import org.joda.time.Months;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -306,5 +308,9 @@ public class DateUtil {
 
     public static int getMonthDiff(Date date1, Date date2) {
         return Months.monthsBetween(new DateTime(date1), new DateTime(date2)).getMonths();
+    }
+
+    public static Date getDate(LocalDate localDate){
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }

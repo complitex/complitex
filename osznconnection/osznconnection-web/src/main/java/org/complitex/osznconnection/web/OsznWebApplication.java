@@ -42,8 +42,11 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/subsidy/request/payment/${request_file_id}", PaymentList.class);
         mountPage("/subsidy/request/benefit/${request_file_id}", BenefitList.class);
 
-        mountPage("/subsidy/oschadbank", OschadbankRequestFileList.class);
-        mountPage("/subsidy/oschadbank/${request_file_id}", OschadbankRequestList.class);
+        mountPage("/subsidy/oschadbank/request", OschadbankRequestFileList.class);
+        mountPage("/subsidy/oschadbank/request/${request_file_id}", OschadbankRequestList.class);
+
+        mountPage("/subsidy/oschadbank/response", OschadbankResponseFileList.class);
+        mountPage("/subsidy/oschadbank/response/${request_file_id}", OschadbankResponseList.class);
 
         mountPage("/subsidy/actual", ActualPaymentFileList.class);
         mountPage("/subsidy/actual/${request_file_id}", ActualPaymentList.class);

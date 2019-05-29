@@ -9,6 +9,7 @@ import org.complitex.common.service.LogBean;
 import org.complitex.common.service.executor.ExecutorService;
 import org.complitex.common.service.executor.IExecutorListener;
 import org.complitex.common.service.executor.ITaskBean;
+import org.complitex.common.util.MapUtil;
 import org.complitex.osznconnection.file.Module;
 import org.complitex.osznconnection.file.entity.*;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup;
@@ -756,5 +757,26 @@ public class ProcessManagerService {
     public void saveOschadbankRequest(List<Long> ids, Map processParameters) {
         execute(SAVE_OSCHADBANK_REQUEST, OschadbankRequestSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void loadOschadbankResponse(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int month){
+        try {
+            List<RequestFile> list = LoadUtil.getOschadbankResponses(userOrganizationId, organizationId, month, year);
+
+            execute(LOAD_OSCHADBANK_RESPONSE, OschadbankResponseLoadTaskBean.class, list, null, LOAD_THREAD_SIZE,
+                    LOAD_MAX_ERROR_COUNT, MapUtil.of("year", year, "month", month));
+        } catch (Exception e) {
+            log.error("Ошибка процесса загрузки файлов.", e);
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
+                    Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "onError", e);
+        }
+    }
+
+    public void exportOschadbankResponse(List<Long> ids) {
+        execute(EXPORT_OSCHADBANK_RESPONSE, OschadbankResponseExportTaskBean.class, updateAndGetRequestFiles(EXPORT_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
 }

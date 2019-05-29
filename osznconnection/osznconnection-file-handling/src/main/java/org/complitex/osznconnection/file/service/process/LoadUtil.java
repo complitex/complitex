@@ -429,14 +429,29 @@ public class LoadUtil {
 
     public static List<RequestFile> getOschadbankRequests(Long userOrganizationId, Long osznId, int month, int year)
             throws StorageNotFoundException {
+        return getOschadbankFiles(userOrganizationId, osznId, month, year, LOAD_OSCHADBANK_REQUEST_DIR,
+                OSCHADBANK_REQUEST_FILENAME_MASK, RequestFileType.OSCHADBANK_REQUEST);
+    }
+
+    public static List<RequestFile> getOschadbankResponses(Long userOrganizationId, Long osznId, int month, int year)
+            throws StorageNotFoundException {
+        return getOschadbankFiles(userOrganizationId, osznId, month, year, LOAD_OSCHADBANK_RESPONSE_DIR,
+                OSCHADBANK_RESPONSE_FILENAME_MASK, RequestFileType.OSCHADBANK_RESPONSE);
+    }
+
+    private static List<RequestFile> getOschadbankFiles(Long userOrganizationId, Long osznId, int month, int year,
+                                                        RequestFileDirectoryType requestFileDirectoryType,
+                                                        FileHandlingConfig fileHandlingConfig,
+                                                        RequestFileType requestFileType)
+            throws StorageNotFoundException {
         RequestFiles requestFiles = RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId,
-                LOAD_OSCHADBANK_REQUEST_DIR, file -> isMatches(OSCHADBANK_REQUEST_FILENAME_MASK, file.getName(), month, year));
+                requestFileDirectoryType, file -> isMatches(fileHandlingConfig, file.getName(), month, year));
 
         List<RequestFile> list = new ArrayList<>();
 
         for (File file : requestFiles.getFiles()) {
             RequestFile requestFile = newRequestFile(userOrganizationId, osznId, month, year, requestFiles, file,
-                    RequestFileType.OSCHADBANK_REQUEST);
+                    requestFileType);
 
             list.add(requestFile);
         }

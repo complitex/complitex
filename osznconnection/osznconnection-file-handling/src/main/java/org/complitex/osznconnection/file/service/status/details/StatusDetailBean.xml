@@ -633,4 +633,32 @@
             from `oschadbank_request` where `request_file_id` = #{id} and `status` = #{status}
         group by `id`
     </select>
+
+    <!-- oschadbank response status detail info -->
+    <resultMap id="oschadbankResponseStatusDetailInfo" type="org.complitex.osznconnection.file.entity.StatusDetailInfo"
+               extends="statusDetailInfo">
+        <collection property="statusDetails" column="status=status,id=request_file_id"
+                    ofType="org.complitex.osznconnection.file.entity.StatusDetail"
+                    select="getOschadbankResponseStatusDetails"/>
+    </resultMap>
+
+    <resultMap id="oschadbankResponseStatusDetail" type="org.complitex.osznconnection.file.entity.StatusDetail"
+               extends="statusDetail">
+        <association property="details" javaType="map">
+            <result column="OSCHADBANK_ACCOUNT" property="OSCHADBANK_ACCOUNT"/>
+            <result column="FIO" property="FIO"/>
+            <result column="SERVICE_ACCOUNT" property="SERVICE_ACCOUNT"/>
+        </association>
+    </resultMap>
+
+    <select id="getOschadbankResponseStatusDetailInfo" parameterType="long" resultMap="oschadbankResponseStatusDetailInfo">
+        select count(1) `count`, `status`, `request_file_id` from `oschadbank_request` where `request_file_id` = #{id}
+        group by `status` order by `count` desc
+    </select>
+
+    <select id="getOschadbankResponseStatusDetails" parameterType="map" resultMap="oschadbankResponseStatusDetail">
+        select `id` `id`, count(1) `count`, `OSCHADBANK_ACCOUNT`, `FIO`, `SERVICE_ACCOUNT`
+        from `oschadbank_request` where `request_file_id` = #{id} and `status` = #{status}
+        group by `id`
+    </select>
 </mapper>

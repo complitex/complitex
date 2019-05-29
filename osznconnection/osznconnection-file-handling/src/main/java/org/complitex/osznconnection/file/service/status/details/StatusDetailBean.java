@@ -83,4 +83,8 @@ public class StatusDetailBean extends AbstractBean {
         return sqlSession().selectList(NS + ".getOschadbankRequestStatusDetailInfo", requestFileId);
     }
 
+    public List<StatusDetailInfo> getOschadbankResponseDetails(Long requestFileId) {
+        return sqlSession().selectList(NS + ".getOschadbankResponseStatusDetailInfo", requestFileId);
+    }
+
 }

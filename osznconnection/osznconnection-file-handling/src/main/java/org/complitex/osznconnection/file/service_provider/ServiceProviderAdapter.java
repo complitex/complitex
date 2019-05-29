@@ -1513,4 +1513,49 @@ public class ServiceProviderAdapter extends AbstractBean {
             throw new RemoteCallException(e);
         }
     }
+
+    public Long createProvHeader(Long userOrganizationId, String pZheuCode, Date pDate, String pFile,
+                                  String pAbout, String pBIK){
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("pZheuCode", pZheuCode);
+        map.put("pDate", pDate);
+        map.put("pFile", pFile);
+        map.put("pAbout", pAbout);
+        map.put("pBIK", pBIK);
+
+        try {
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".createProvHeader", map);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("createProvHeader {}", map);
+        }
+
+        return (Long) map.get("collectionId");
+    }
+
+    public Long createProvRec(Long userOrganizationId, Long pColl, String pFIO, String pExt, String pInt,
+                                 BigDecimal pSum, BigDecimal pToPay, Date pDateB, Date pDateE){
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("pColl", pColl);
+        map.put("pFIO", pFIO);
+        map.put("pExt", pExt);
+        map.put("pInt", pInt);
+        map.put("pSum", pSum);
+        map.put("pToPay", pToPay);
+        map.put("pDateB", pDateB);
+        map.put("pDateE", pDateE);
+
+        try {
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".createProvRec", map);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("createProvRec {}", map);
+        }
+
+        return (Long) map.get("resultCode");
+    }
 }

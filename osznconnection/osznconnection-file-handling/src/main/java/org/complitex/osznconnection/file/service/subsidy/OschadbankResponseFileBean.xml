@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.osznconnection.file.service.subsidy.OschadbankResponseFileBean">
+    <resultMap id="oschadbankResponseFileResultMap" type="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponseFile">
+        <id column="id" property="id"/>
+        <result column="request_file_id" property="requestFileId"/>
+        <association property="dbfFields" javaType="map">
+            <result column="EDRPOU" property="EDRPOU"/>
+            <result column="PROVIDER_NAME" property="PROVIDER_NAME"/>
+            <result column="DOCUMENT_NUMBER" property="DOCUMENT_NUMBER"/>
+            <result column="SERVICE_NAME" property="SERVICE_NAME"/>
+            <result column="REPORTING_PERIOD" property="REPORTING_PERIOD"/>
+            <result column="PROVIDER_CODE" property="PROVIDER_CODE"/>
+            <result column="PROVIDER_ACCOUNT" property="PROVIDER_ACCOUNT"/>
+            <result column="PROVIDER_IBAN" property="PROVIDER_IBAN"/>
+            <result column="PAYMENT_NUMBER" property="PAYMENT_NUMBER"/>
+            <result column="REFERENCE_DOCUMENT" property="REFERENCE_DOCUMENT"/>
+            <result column="PAYMENT_DATE" property="PAYMENT_DATE"/>
+            <result column="TOTAL_AMOUNT" property="TOTAL_AMOUNT"/>
+            <result column="ANALYTICAL_ACCOUNT" property="ANALYTICAL_ACCOUNT"/>
+            <result column="FEE" property="FEE"/>
+            <result column="FEE_CODE" property="FEE_CODE"/>
+            <result column="REGISTRY_ID" property="REGISTRY_ID"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertOschadbankResponseFile" parameterType="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponseFile">
+        INSERT INTO `oschadbank_response_file`
+        (
+        <trim suffixOverrides=",">
+            `request_file_id`,
+            <foreach collection="dbfFields.keys" item="key">
+                `${key}`,
+            </foreach>
+        </trim>
+        )
+        VALUE
+        (
+        <trim suffixOverrides=",">
+            #{requestFileId},
+            <foreach collection="dbfFields.keys" item="key">
+                #{dbfFields.${key}},
+            </foreach>
+        </trim>
+        )
+    </insert>
+
+    <select id="selectOschadbankResponseFile" parameterType="long" resultMap="oschadbankResponseFileResultMap">
+        select * from oschadbank_response_file where request_file_id = #{object.requestFileId}
+    </select>
+
+    <delete id="deleteOschadbankResponseFile" parameterType="long">
+        delete from oschadbank_response_file where `request_file_id` = #{requestFileId}
+    </delete>
+</mapper>

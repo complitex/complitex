@@ -158,6 +158,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         return true;
     }
 
+    protected boolean isSaveVisible(){
+        return true;
+    }
+
     protected boolean isExportVisible(){
         return false;
     }
@@ -612,6 +616,11 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
                 selectManager.clearSelection();
 
                 target.add(messages, form);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return isSaveVisible();
             }
         });
 
