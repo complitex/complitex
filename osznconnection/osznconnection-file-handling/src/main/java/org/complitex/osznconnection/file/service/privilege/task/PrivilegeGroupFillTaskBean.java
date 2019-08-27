@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.complitex.osznconnection.file.entity.RequestFileStatus.FILL_ERROR;
-import static org.complitex.osznconnection.file.entity.RequestFileType.DWELLING_CHARACTERISTICS;
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
 import static org.complitex.osznconnection.file.entity.privilege.FacilityServiceTypeDBF.*;
@@ -174,6 +173,10 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
             return;
         }
 
+        if (!dwellingCharacteristics.getAccountNumber().equals("1000190786")){
+            return;
+        }
+
         //service code
         String serviceCode = null;
 
@@ -285,7 +288,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
 
                     facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
                 }else{
-                    RequestWarning warning = new RequestWarning(facilityServiceType.getId(), DWELLING_CHARACTERISTICS,
+                    RequestWarning warning = new RequestWarning(facilityServiceType.getId(), FACILITY_SERVICE_TYPE,
                             RequestWarningStatus.EMPTY_BENEFIT_DATA);
                     requestWarningBean.save(warning);
                 }
