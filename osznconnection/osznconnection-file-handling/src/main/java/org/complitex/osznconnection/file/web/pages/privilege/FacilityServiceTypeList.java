@@ -293,6 +293,17 @@ public final class FacilityServiceTypeList extends TemplatePage {
                 };
         add(lookupPanel);
 
+        final PrivilegeConnectPanel privilegeConnectPanel = new PrivilegeConnectPanel("privilegeConnectPanel",
+                content, statusDetailPanel) {
+
+            @Override
+            protected void closeDialog(AjaxRequestTarget target) {
+                super.closeDialog(target);
+                dataRowHoverBehavior.deactivateDataRow(target);
+            }
+        };
+        add(privilegeConnectPanel);
+
         CheckGroup<FacilityServiceType> checkGroup = new CheckGroup<>("checkGroup", new ArrayList<>());
         filterForm.add(checkGroup);
 
@@ -344,6 +355,19 @@ public final class FacilityServiceTypeList extends TemplatePage {
                     }
                 };
                 item.add(lookup);
+
+                item.add(new IndicatingAjaxLink("connect") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        privilegeConnectPanel.open(target, facilityServiceType);
+                    }
+
+                    @Override
+                    public boolean isVisible() {
+                        return (facilityServiceType.getStatus() == RequestStatus.BENEFIT_OWNER_NOT_ASSOCIATED);
+                    }
+                });
             }
         };
         checkGroup.add(data);
