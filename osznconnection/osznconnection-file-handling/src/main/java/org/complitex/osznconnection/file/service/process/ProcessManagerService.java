@@ -464,7 +464,7 @@ public class ProcessManagerService {
     }
 
     public void exportSubsidy(List<Long> ids) {
-        execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class, updateAndGetRequestFiles(EXPORT_WAIT, ids, FILLED, FILL_ERROR),
+        execute(EXPORT_SUBSIDY, SubsidyExportTaskBean.class, updateAndGetRequestFiles(EXPORT_WAIT, ids, FILLED, FILL_ERROR, EXPORT_ERROR),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
 
