@@ -284,9 +284,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
 
                     facilityServiceType.putUpdateField(RAH, facilityServiceType.getAccountNumber());
                 }else{
-                    RequestWarning warning = new RequestWarning(facilityServiceType.getId(), FACILITY_SERVICE_TYPE,
-                            RequestWarningStatus.EMPTY_BENEFIT_DATA);
-                    requestWarningBean.save(warning);
+                    facilityServiceType.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
                 }
             }else {
                 facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
