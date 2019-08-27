@@ -173,10 +173,6 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
             return;
         }
 
-        if (!dwellingCharacteristics.getAccountNumber().equals("1000190786")){
-            return;
-        }
-
         //service code
         String serviceCode = null;
 
