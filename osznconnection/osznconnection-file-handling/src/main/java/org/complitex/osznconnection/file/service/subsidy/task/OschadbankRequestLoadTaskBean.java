@@ -88,7 +88,10 @@ public class OschadbankRequestLoadTaskBean extends AbstractRequestTaskBean<Reque
             row = it.next();
 
             oschadbankRequestFile.putField(OschadbankRequestFileField.SERVICE_NAME, row.getCell(1).getStringCellValue());
-            oschadbankRequestFile.putField(OschadbankRequestFileField.PROVIDER_IBAN, row.getCell(3).getStringCellValue());
+
+            if (row.getCell(3) != null) {
+                oschadbankRequestFile.putField(OschadbankRequestFileField.PROVIDER_IBAN, row.getCell(3).getStringCellValue());
+            }
 
             oschadbankRequestFileBean.save(oschadbankRequestFile);
 
