@@ -112,7 +112,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
         personAccountService.localResolveAccountNumber(facilityServiceType, facilityServiceType.getInn(),
                 billingId, true);
 
-        boolean checkLodgerPerson = true;
+//        boolean checkLodgerPerson = true;
 
         //noinspection Duplicates
         if (facilityServiceType.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
@@ -125,7 +125,7 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
 
                 if (facilityServiceType.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, facilityServiceType);
-                    checkLodgerPerson = false;
+//                    checkLodgerPerson = false;
 
                     if (facilityServiceType.getAccountNumber() == null &&
                             BENEFIT_OWNER_NOT_ASSOCIATED.equals(facilityServiceType.getStatus())){
@@ -135,10 +135,10 @@ public class FacilityServiceTypeBindTaskBean extends AbstractRequestTaskBean<Req
             }
         }
 
-        if (checkLodgerPerson && facilityServiceType.getAccountNumber() != null){
-            serviceProviderAdapter.checkLodgerPerson(facilityServiceType, facilityServiceType.getAccountNumber(),
-                    facilityServiceType.getDate(), facilityServiceType.getInn(), facilityServiceType.getPassport());
-        }
+//        if (checkLodgerPerson && facilityServiceType.getAccountNumber() != null){
+//            serviceProviderAdapter.checkLodgerPerson(facilityServiceType, facilityServiceType.getAccountNumber(),
+//                    facilityServiceType.getDate(), facilityServiceType.getInn(), facilityServiceType.getPassport());
+//        }
 
         // обновляем facility service type запись
         facilityServiceTypeBean.update(facilityServiceType);

@@ -110,7 +110,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
         personAccountService.localResolveAccountNumber(dwellingCharacteristics, dwellingCharacteristics.getInn(),
                 billingId, true);
 
-        boolean checkLodgerPerson = true;
+//        boolean checkLodgerPerson = true;
 
         //noinspection Duplicates
         if (dwellingCharacteristics.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
@@ -123,7 +123,7 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
 
                 if (dwellingCharacteristics.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)) {
                     resolveRemoteAccountNumber(serviceProviderCode, dwellingCharacteristics);
-                    checkLodgerPerson = false;
+//                    checkLodgerPerson = false;
 
                     if (dwellingCharacteristics.getAccountNumber() == null &&
                             BENEFIT_OWNER_NOT_ASSOCIATED.equals(dwellingCharacteristics.getStatus())){
@@ -133,10 +133,10 @@ public class DwellingCharacteristicsBindTaskBean extends AbstractRequestTaskBean
             }
         }
 
-        if (checkLodgerPerson && dwellingCharacteristics.getAccountNumber() != null){
-            serviceProviderAdapter.checkLodgerPerson(dwellingCharacteristics, dwellingCharacteristics.getAccountNumber(),
-                    dwellingCharacteristics.getDate(), dwellingCharacteristics.getInn(), dwellingCharacteristics.getPassport());
-        }
+//        if (checkLodgerPerson && dwellingCharacteristics.getAccountNumber() != null){
+//            serviceProviderAdapter.checkLodgerPerson(dwellingCharacteristics, dwellingCharacteristics.getAccountNumber(),
+//                    dwellingCharacteristics.getDate(), dwellingCharacteristics.getInn(), dwellingCharacteristics.getPassport());
+//        }
 
         // обновляем dwelling characteristics запись
         dwellingCharacteristicsBean.update(dwellingCharacteristics);
