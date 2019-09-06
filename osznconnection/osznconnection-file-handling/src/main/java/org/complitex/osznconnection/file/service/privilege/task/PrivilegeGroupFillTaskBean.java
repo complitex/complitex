@@ -259,7 +259,7 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
             Cursor<BenefitData> cursor = serviceProviderAdapter.getBenefitData(dwellingCharacteristics.getUserOrganizationId(),
                     dwellingCharacteristics.getAccountNumber(), dwellingCharacteristics.getDate());
 
-            if (cursor.getResultCode() != -1){
+            if (cursor.getResultCode() != -1 && !cursor.getData().isEmpty()){
                 BenefitData benefitData = cursor.getData().stream()
                         .filter(bd -> (bd.getInn() == null || bd.getInn().isEmpty() || bd.getInn().equals(facilityServiceType.getInn())) &&
                                 (facilityServiceType.getPassport() == null || facilityServiceType.getPassport()
@@ -293,7 +293,11 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
                             new RequestWarningParameter(2, ""));
                 }
             }else {
-                facilityServiceType.setStatus(RequestStatus.ACCOUNT_NUMBER_NOT_FOUND);
+                facilityServiceType.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
+
+                requestWarningBean.save(facilityServiceType.getRequestFileType(), facilityServiceType.getId(),
+                        RequestWarningStatus.BENEFIT_OWNER_NOT_ASSOCIATED,
+                        new RequestWarningParameter(2, "(Нет данных)"));
             }
         }
 
