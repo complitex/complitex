@@ -36,6 +36,8 @@ import java.util.stream.Collectors;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static org.complitex.address.util.AddressUtil.replaceApartmentSymbol;
+import static org.complitex.common.util.StringUtil.equalNotEmpty;
+import static org.complitex.common.util.StringUtil.isNotEmpty;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -155,8 +157,8 @@ public class ServiceProviderAdapter extends AbstractBean {
 
             if (!lodgerCursor.isEmpty() && cursor.getResultCode() == 1) {
                 for (Lodger l : lodgerCursor.getData()){
-                    if ((l.getIdCode() != null && !l.getIdCode().isEmpty() && l.getIdCode().equals(inn)) ||
-                            (passport != null && !passport.isEmpty() && l.getPassport() != null && !l.getPassport().isEmpty() &&
+                    if ((equalNotEmpty(inn, l.getIdCode())) ||
+                            (isNotEmpty(passport) && isNotEmpty(l.getPassport()) &&
                                     passport.replace(" ", "")
                                             .equalsIgnoreCase(l.getPassport().replace(" ", "")))){
                         request.setAccountNumber(accountDetail.getAccCode());
@@ -178,8 +180,8 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         if (cursor.getData() != null) {
             for (Lodger l : cursor.getData()){
-                if ((l.getIdCode() != null && !l.getIdCode().isEmpty() && l.getIdCode().equals(inn)) ||
-                        (passport != null && !passport.isEmpty() && l.getPassport() != null && !l.getPassport().isEmpty() &&
+                if ((equalNotEmpty(inn, l.getIdCode())) ||
+                        (isNotEmpty(passport) && isNotEmpty(l.getPassport()) &&
                                 passport.replace(" ", "")
                                         .equalsIgnoreCase(l.getPassport().replace(" ", "")))){
                     request.setAccountNumber(accountNumber);
