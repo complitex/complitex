@@ -259,7 +259,9 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
             Cursor<BenefitData> cursor = serviceProviderAdapter.getBenefitData(dwellingCharacteristics.getUserOrganizationId(),
                     dwellingCharacteristics.getAccountNumber(), dwellingCharacteristics.getDate());
 
-            if (cursor.getResultCode() != -1 && !cursor.getData().isEmpty()){
+            if (cursor.getResultCode() == 0){
+                facilityServiceType.setStatus(ACCOUNT_NUMBER_NOT_FOUND);
+            }else if (!cursor.getData().isEmpty()){
                 BenefitData benefitData = cursor.getData().stream()
                         .filter(bd -> (bd.getInn() == null || bd.getInn().isEmpty() || bd.getInn().equals(facilityServiceType.getInn())) &&
                                 (facilityServiceType.getPassport() == null || facilityServiceType.getPassport()
