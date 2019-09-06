@@ -37,6 +37,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.common.util.StringUtil.equalNotEmpty;
+import static org.complitex.common.util.StringUtil.isNotEmpty;
 import static org.complitex.osznconnection.file.entity.RequestFileStatus.FILL_ERROR;
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
@@ -228,9 +230,11 @@ public class FacilityServiceTypeFillTaskBean extends AbstractRequestTaskBean<Req
             }
 
             for (BenefitData bd : cursor.getData()){
-                if ((facilityServiceType.getInn() == null || facilityServiceType.getInn().equals(bd.getInn()))
-                        && (facilityServiceType.getPassport() == null ||
-                        facilityServiceType.getPassport().matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber()))) {
+                if ((equalNotEmpty(bd.getInn(), facilityServiceType.getInn())) ||
+                        (isNotEmpty(facilityServiceType.getPassport()) &&
+                                ((isNotEmpty(bd.getPassportSerial()) || isNotEmpty(bd.getPassportNumber())) &&
+                                        facilityServiceType.getPassport().matches(bd.getPassportSerial() +
+                                                "\\s*" + bd.getPassportNumber())))) {
                     if ("Ф".equals(bd.getBudget())) {
                         facilityServiceType.putUpdateField(KAT, bd.getCode());
                     }

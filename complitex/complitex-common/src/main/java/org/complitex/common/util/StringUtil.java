@@ -205,4 +205,12 @@ public class StringUtil {
     public static String currentTime(){
         return LocalTime.now().format(time) + " ";
     }
+
+    public static boolean isNotEmpty(String s){
+        return s != null && !s.isEmpty();
+    }
+
+    public static boolean equalNotEmpty(String s1, String s2){
+        return isNotEmpty(s1) && isNotEmpty(s2) && s1.equals(s2);
+    }
 }

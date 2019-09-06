@@ -33,6 +33,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import static org.complitex.common.util.StringUtil.equalNotEmpty;
+import static org.complitex.common.util.StringUtil.isNotEmpty;
 import static org.complitex.osznconnection.file.entity.RequestFileStatus.FILL_ERROR;
 import static org.complitex.osznconnection.file.entity.RequestFileType.FACILITY_SERVICE_TYPE;
 import static org.complitex.osznconnection.file.entity.RequestStatus.*;
@@ -263,9 +265,11 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
                 facilityServiceType.setStatus(ACCOUNT_NUMBER_NOT_FOUND);
             }else if (!cursor.getData().isEmpty()){
                 BenefitData benefitData = cursor.getData().stream()
-                        .filter(bd -> (bd.getInn() == null || bd.getInn().isEmpty() || bd.getInn().equals(facilityServiceType.getInn())) &&
-                                (facilityServiceType.getPassport() == null || facilityServiceType.getPassport()
-                                        .matches(bd.getPassportSerial() + "\\s*" + bd.getPassportNumber())))
+                        .filter(bd -> (equalNotEmpty(bd.getInn(), facilityServiceType.getInn())) ||
+                                (isNotEmpty(facilityServiceType.getPassport()) &&
+                                        ((isNotEmpty(bd.getPassportSerial()) || isNotEmpty(bd.getPassportNumber())) &&
+                                                facilityServiceType.getPassport().matches(bd.getPassportSerial() +
+                                                        "\\s*" + bd.getPassportNumber()))))
                         .findAny()
                         .orElse(null);
 
