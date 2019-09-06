@@ -167,6 +167,10 @@ public class ServiceProviderAdapter extends AbstractBean {
                         return;
                     }
                 }
+
+                warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.NO_MATCH);
+            }else{
+                warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.NO_DATA);
             }
         }
     }
@@ -198,7 +202,11 @@ public class ServiceProviderAdapter extends AbstractBean {
                         new RequestWarningParameter(0, d.getIdCode()),
                         new RequestWarningParameter(1, d.getPassport()),
                         new RequestWarningParameter(2, ""));
+            }else{
+                warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.NO_MATCH);
             }
+        }else{
+            warningBean.save(request.getRequestFileType(), request.getId(), RequestWarningStatus.NO_DATA);
         }
 
         log.info("checkFacilityPerson BENEFIT_OWNER_NOT_ASSOCIATED accountNumber={}, inn='{}', passport='{}', data={}",
