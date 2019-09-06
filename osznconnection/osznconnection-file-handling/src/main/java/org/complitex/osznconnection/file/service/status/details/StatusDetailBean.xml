@@ -466,6 +466,7 @@
             <result column="HOUSE" property="building"/>
             <result column="BUILD" property="buildingCorp"/>
             <result column="APT" property="apartment"/>
+            <result column="rw_status" property="status"/>
         </association>
     </resultMap>
 
@@ -478,8 +479,17 @@
 
     <select id="getFacilityServiceTypeStatusDetails" parameterType="map" resultMap="facilityServiceTypeStatusDetail">
         <choose>
+            <when test="status = 217">
+                SELECT `FIO` `id`, COUNT(1) `count`,
+                TO_CYRILLIC(`FIO`) FIO,
+                (select rw.status from request_warning rw where rw.request_id = fst.id) `rw_status`
+                FROM `facility_service_type` fst
+                WHERE fst.`request_file_id` = #{id} AND fst.`status` = #{status}
+                GROUP BY `id`
+            </when>
+
             <!--account number -->
-            <when test="status == 212 or status == 213 or status = 217">
+            <when test="status == 212 or status == 213">
                 SELECT `FIO` `id`, COUNT(1) `count`,
                 TO_CYRILLIC(`first_name`) first_name,
                 TO_CYRILLIC(`middle_name`) middle_name,

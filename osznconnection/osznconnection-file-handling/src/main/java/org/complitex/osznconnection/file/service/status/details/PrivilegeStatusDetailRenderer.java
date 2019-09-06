@@ -16,6 +16,12 @@ public class PrivilegeStatusDetailRenderer implements IStatusDetailRenderer, Ser
     public String displayStatusDetail(StatusDetail statusDetail, RequestStatus status, Locale locale) {
 
         switch (status) {
+            case BENEFIT_OWNER_NOT_ASSOCIATED:
+                return statusDetail.getDetail("fio") + " " +
+                        (Objects.equals(statusDetail.getDetail("status"), "312") ? "(нет данных)"
+                                : (Objects.equals(statusDetail.getDetail("status"), "313")) ? "(нет соответствия)"
+                                : "");
+
             case ACCOUNT_NUMBER_NOT_FOUND:
             case MORE_ONE_ACCOUNTS: {
                 return statusDetail.getDetail("fio");
