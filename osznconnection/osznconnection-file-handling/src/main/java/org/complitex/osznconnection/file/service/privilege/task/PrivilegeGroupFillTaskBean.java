@@ -289,15 +289,13 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
                     facilityServiceType.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
 
                     requestWarningBean.save(facilityServiceType.getRequestFileType(), facilityServiceType.getId(),
-                            RequestWarningStatus.BENEFIT_OWNER_NOT_ASSOCIATED,
-                            new RequestWarningParameter(2, "(нет соответствия)"));
+                            RequestWarningStatus.NO_DATA);
                 }
             }else {
                 facilityServiceType.setStatus(BENEFIT_OWNER_NOT_ASSOCIATED);
 
                 requestWarningBean.save(facilityServiceType.getRequestFileType(), facilityServiceType.getId(),
-                        RequestWarningStatus.BENEFIT_OWNER_NOT_ASSOCIATED,
-                        new RequestWarningParameter(2, "(нет данных)"));
+                        RequestWarningStatus.NO_MATCH);
             }
         }
 
