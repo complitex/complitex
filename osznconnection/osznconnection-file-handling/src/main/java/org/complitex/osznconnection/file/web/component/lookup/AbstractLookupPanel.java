@@ -563,25 +563,25 @@ public abstract class AbstractLookupPanel<T extends AbstractAccountRequest> exte
             case 0:
                 error(StatusRenderUtil.displayStatus(ACCOUNT_NUMBER_NOT_FOUND, getLocale()));
                 break;
-            case -2:
+            case -11:
                 error(StatusRenderUtil.displayStatus(APARTMENT_NOT_FOUND, getLocale()));
                 break;
-            case -3:
+            case -9:
                 error(StatusRenderUtil.displayStatus(BUILDING_CORP_NOT_FOUND, getLocale()));
                 break;
-            case -4:
+            case -8:
                 error(StatusRenderUtil.displayStatus(BUILDING_NOT_FOUND, getLocale()));
                 break;
-            case -5:
+            case -7:
                 error(StatusRenderUtil.displayStatus(STREET_NOT_FOUND, getLocale()));
                 break;
             case -6:
                 error(StatusRenderUtil.displayStatus(STREET_TYPE_NOT_FOUND, getLocale()));
                 break;
-            case -7:
+            case -5:
                 error(StatusRenderUtil.displayStatus(DISTRICT_NOT_FOUND, getLocale()));
                 break;
-            case -8:
+            case -13:
                 error(StatusRenderUtil.displayStatus(SERVICING_ORGANIZATION_NOT_FOUND, getLocale()));
                 break;
         }
