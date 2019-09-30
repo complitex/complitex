@@ -482,7 +482,7 @@
             <when test="status = 217">
                 SELECT `FIO` `id`, COUNT(1) `count`,
                 TO_CYRILLIC(`FIO`) FIO,
-                (select rw.status from request_warning rw where rw.request_id = fst.id) `rw_status`
+                (select rw.status from request_warning rw where rw.request_id = fst.id limit 1) `rw_status`
                 FROM `facility_service_type` fst
                 WHERE fst.`request_file_id` = #{id} AND fst.`status` = #{status}
                 GROUP BY `id`
