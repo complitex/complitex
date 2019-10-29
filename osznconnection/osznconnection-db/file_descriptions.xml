@@ -382,6 +382,8 @@
             <field length="10" type="java.lang.String" name="DATEIN"/>
             <field length="10" type="java.lang.String" name="DATEOUT"/>
             <field length="25" type="java.lang.String" name="RAH"/>
+            <field length="1" type="java.lang.Integer" name="MONEY"/>
+            <field length="10" type="java.lang.String" name="EBK"/>
         </fields>
     </file-description>
 </file-descriptions>

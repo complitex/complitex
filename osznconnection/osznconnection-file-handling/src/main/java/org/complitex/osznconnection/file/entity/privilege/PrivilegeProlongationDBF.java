@@ -19,5 +19,7 @@ public enum PrivilegeProlongationDBF {
     LGCODE, //Код услуги (500 - квп, 5061|5062 - мусор)
     DATEIN, //Дата начала действия льготы
     DATEOUT, //Дата окончания действия льготы
-    RAH //Номер л/с ПУ
+    RAH, //Номер л/с ПУ
+    MONEY,
+    EBK
 }
