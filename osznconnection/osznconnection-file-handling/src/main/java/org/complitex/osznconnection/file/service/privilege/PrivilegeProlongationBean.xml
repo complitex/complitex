@@ -51,6 +51,8 @@
             <result column="DATEIN" property="DATEIN"/>
             <result column="DATEOUT" property="DATEOUT"/>
             <result column="RAH" property="RAH"/>
+            <result column="MONEY" property="MONEY"/>
+            <result column="EBK" property="EBK"/>
         </association>
     </resultMap>
 
