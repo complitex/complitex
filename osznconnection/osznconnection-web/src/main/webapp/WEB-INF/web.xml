@@ -95,5 +95,8 @@
 
     <session-config>
         <session-timeout>180</session-timeout>
+        <cookie-config>
+            <name>jsessionid</name>
+        </cookie-config>
     </session-config>
 </web-app>
