@@ -10,8 +10,6 @@ import org.complitex.osznconnection.file.entity.RequestFileStatus;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.subsidy.OschadbankRequest;
 import org.complitex.osznconnection.file.entity.subsidy.OschadbankRequestField;
-import org.complitex.osznconnection.file.entity.subsidy.OschadbankRequestFile;
-import org.complitex.osznconnection.file.entity.subsidy.OschadbankRequestFileField;
 import org.complitex.osznconnection.file.service.AbstractRequestTaskBean;
 import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.RequestFileDirectoryType;
@@ -29,6 +27,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.complitex.osznconnection.file.service.process.RequestFileDirectoryType.LOAD_OSCHADBANK_REQUEST_DIR;
 
 /**
  * @author Anatoly A. Ivanov
@@ -52,48 +53,26 @@ public class OschadbankRequestSaveTaskBean extends AbstractRequestTaskBean<Reque
         requestFileBean.save(requestFile);
 
         try {
-            OschadbankRequestFile oschadbankRequestFile = oschadbankRequestFileBean.getOschadbankRequestFile(
-                    requestFile.getId());
-
             List<OschadbankRequest> oschadbankRequests = oschadbankRequestBean.getOschadbankRequests(
                     FilterWrapper.of(new OschadbankRequest(requestFile.getId())));
 
-            XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("OschadbankRequestSaveTaskBean.tmpl"));
+            String loadDir = RequestFileStorage.INSTANCE.getRequestFilesStorageDirectory(requestFile.getUserOrganizationId(),
+                    requestFile.getOrganizationId(), LOAD_OSCHADBANK_REQUEST_DIR);
+
+            XSSFWorkbook workbook = new XSSFWorkbook(loadDir + File.separator + requestFile.getName());
             workbook.getProperties().getCoreProperties().setCreated(Optional.of(new Date()));
             workbook.getProperties().getCoreProperties().setCreator(XSSFWorkbook.DOCUMENT_CREATOR);
             XSSFSheet sheet = workbook.getSheetAt(0);
 
             XSSFRow row;
 
-            row = sheet.getRow(0);
-
-            row.createCell(1).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.EDRPOU));
-            row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.REPORTING_PERIOD));
-
-            row = sheet.getRow(1);
-
-            row.createCell(1).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_NAME));
-            row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_CODE));
-
-            row = sheet.getRow(2);
-
-            row.createCell(1).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.DOCUMENT_NUMBER));
-            row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_ACCOUNT));
-
-            row = sheet.getRow(3);
-
-            row.createCell(1).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.SERVICE_NAME));
-            row.createCell(3).setCellValue(oschadbankRequestFile.getStringField(OschadbankRequestFileField.PROVIDER_IBAN));
+            Map<String, OschadbankRequest> map = oschadbankRequests.stream()
+                    .collect(Collectors.toMap(r -> r.getStringField(OschadbankRequestField.OSCHADBANK_ACCOUNT), r -> r));
 
             for (int i = 0; i < oschadbankRequests.size(); i++) {
-                OschadbankRequest r = oschadbankRequests.get(i);
+                row = sheet.getRow(6 + i);
 
-                row = sheet.createRow(6 + i);
-
-                row.createCell(0).setCellValue(r.getStringField(OschadbankRequestField.UTSZN));
-                row.createCell(1).setCellValue(r.getStringField(OschadbankRequestField.OSCHADBANK_ACCOUNT));
-                row.createCell(2).setCellValue(r.getStringField(OschadbankRequestField.FIO));
-                row.createCell(3).setCellValue(r.getStringField(OschadbankRequestField.SERVICE_ACCOUNT));
+                OschadbankRequest r = map.get(row.getCell(1).getStringCellValue());
 
                 if (r.getStatus().equals(RequestStatus.PROCESSED)) {
                     row.createCell(4).setCellValue(r.getStringField(OschadbankRequestField.MONTH_SUM));
@@ -104,10 +83,10 @@ public class OschadbankRequestSaveTaskBean extends AbstractRequestTaskBean<Reque
                 }
             }
 
-            String dir = RequestFileStorage.INSTANCE.getRequestFilesStorageDirectory(requestFile.getUserOrganizationId(),
+            String saveDir = RequestFileStorage.INSTANCE.getRequestFilesStorageDirectory(requestFile.getUserOrganizationId(),
                     requestFile.getOrganizationId(), RequestFileDirectoryType.SAVE_OSCHADBANK_REQUEST_DIR);
 
-            try (FileOutputStream fileOutputStream = new FileOutputStream(new File(dir, requestFile.getName()))){
+            try (FileOutputStream fileOutputStream = new FileOutputStream(new File(saveDir, requestFile.getName()))){
                 workbook.write(fileOutputStream);
             }
 
