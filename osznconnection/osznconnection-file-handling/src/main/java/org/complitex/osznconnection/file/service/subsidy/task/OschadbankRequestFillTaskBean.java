@@ -73,10 +73,6 @@ public class OschadbankRequestFillTaskBean extends AbstractRequestTaskBean<Reque
                     throw new FillException(new CanceledByUserException(), true, requestFile);
                 }
 
-                if (request.getStringField(OschadbankRequestField.MONTH_SUM) != null){
-                    continue;
-                }
-
                 ChargeToPay chargeToPay = new ChargeToPay();
                 chargeToPay.setpAcc(request.getStringField(OschadbankRequestField.SERVICE_ACCOUNT));
                 chargeToPay.setpDate(opMonth);
