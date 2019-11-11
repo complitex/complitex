@@ -1,5 +1,6 @@
 package org.complitex.osznconnection.file.service.subsidy.task;
 
+import org.complitex.address.exception.RemoteCallException;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.exception.CanceledByUserException;
 import org.complitex.common.exception.ExecuteException;
@@ -25,6 +26,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +73,10 @@ public class OschadbankRequestFillTaskBean extends AbstractRequestTaskBean<Reque
                     throw new FillException(new CanceledByUserException(), true, requestFile);
                 }
 
+                if (request.getStringField(OschadbankRequestField.MONTH_SUM) != null){
+                    continue;
+                }
+
                 ChargeToPay chargeToPay = new ChargeToPay();
                 chargeToPay.setpAcc(request.getStringField(OschadbankRequestField.SERVICE_ACCOUNT));
                 chargeToPay.setpDate(opMonth);
@@ -109,12 +115,14 @@ public class OschadbankRequestFillTaskBean extends AbstractRequestTaskBean<Reque
 
             return true;
         } catch (Exception e) {
-            log.error("oschadbank fill error ", e);
-
             requestFile.setStatus(RequestFileStatus.FILL_ERROR);
             requestFileBean.save(requestFile);
 
-            throw new ExecuteException(e, false, "");
+            try {
+                throw e;
+            } catch (ParseException | RemoteCallException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 }
