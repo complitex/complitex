@@ -109,6 +109,8 @@ public class OschadbankRequestFillTaskBean extends AbstractRequestTaskBean<Reque
 
             return true;
         } catch (Exception e) {
+            log.error("oschadbank fill error ", e);
+
             requestFile.setStatus(RequestFileStatus.FILL_ERROR);
             requestFileBean.save(requestFile);
 
