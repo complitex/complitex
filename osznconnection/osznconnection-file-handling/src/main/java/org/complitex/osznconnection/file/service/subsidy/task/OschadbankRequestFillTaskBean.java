@@ -117,7 +117,7 @@ public class OschadbankRequestFillTaskBean extends AbstractRequestTaskBean<Reque
             try {
                 throw e;
             } catch (ParseException | RemoteCallException ex) {
-                throw new RuntimeException(ex);
+                throw new ExecuteException(ex, false, "");
             }
         }
     }
