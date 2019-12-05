@@ -29,22 +29,25 @@ public class WebapiResource {
     @Path("/getActualDebt")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject getActualDebt(@QueryParam("acc") String acc) throws SQLException {
+    public JsonObject getActualDebt(@QueryParam("acc") String account) throws SQLException {
         try (Connection connection = this.dataSource.getConnection()) {
             CallableStatement ps = connection.prepareCall(
                     "{? = call COMP.z$runtime_sz_utl.getAccDebtToday(?, ?, ?)}"
             );
 
             ps.registerOutParameter(1, Types.INTEGER);
-            ps.setString(2, acc);
+            ps.setString(2, account);
             ps.registerOutParameter(3, Types.VARCHAR);
             ps.registerOutParameter(4, Types.VARCHAR);
 
             ps.execute();
 
+            String acc = ps.getString(3);
+            String debt = ps.getString(4);
+
             return Json.createObjectBuilder()
-                    .add("acc", ps.getString(3))
-                    .add("debt", ps.getString(4))
+                    .add("acc",  acc != null ? acc : "")
+                    .add("debt", debt != null ? debt : "")
                     .build();
         }
     }
