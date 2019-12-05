@@ -20,6 +20,13 @@
         </dependency>
 
         <dependency>
+            <groupId>io.helidon.microprofile</groupId>
+            <artifactId>helidon-microprofile-access-log</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>io.helidon.integrations.cdi</groupId>
             <artifactId>helidon-integrations-cdi-datasource-ucp</artifactId>
             <version>1.4.0</version>
