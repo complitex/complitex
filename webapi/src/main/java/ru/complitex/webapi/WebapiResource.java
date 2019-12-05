@@ -30,6 +30,10 @@ public class WebapiResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject getActualDebt(@QueryParam("acc") String account) throws SQLException {
+        if (account == null || account.isEmpty()){
+            return null;
+        }
+
         try (Connection connection = this.dataSource.getConnection()) {
             CallableStatement ps = connection.prepareCall(
                     "{? = call COMP.z$runtime_sz_utl.getAccDebtToday(?, ?, ?)}"
