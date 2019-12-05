@@ -3,6 +3,7 @@ package ru.complitex.webapi;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.sql.DataSource;
@@ -24,6 +25,7 @@ import java.sql.Types;
 @ApplicationScoped
 public class WebapiResource {
     @Inject
+    @Named("webapi")
     private DataSource dataSource;
 
     @Path("/getActualDebt")
