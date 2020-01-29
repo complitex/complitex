@@ -102,6 +102,7 @@ public class PrivilegeGroupBindTaskBean extends AbstractRequestTaskBean<Privileg
                             f.setBuildingId(d.getBuildingId());
 
                             f.setOutgoingCity(d.getOutgoingCity());
+                            f.setOutgoingDistrict(d.getOutgoingDistrict());
                             f.setOutgoingStreetType(d.getOutgoingStreetType());
                             f.setOutgoingStreet(d.getOutgoingStreet());
                             f.setOutgoingBuildingNumber(d.getOutgoingBuildingNumber());

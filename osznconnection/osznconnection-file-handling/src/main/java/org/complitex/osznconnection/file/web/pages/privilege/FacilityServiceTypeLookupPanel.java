@@ -16,10 +16,6 @@ import org.complitex.osznconnection.file.web.component.lookup.AbstractLookupPane
 
 import javax.ejb.EJB;
 
-/**
- *
- * @author Artem
- */
 public class FacilityServiceTypeLookupPanel extends AbstractLookupPanel<FacilityServiceType> {
 
     @EJB
