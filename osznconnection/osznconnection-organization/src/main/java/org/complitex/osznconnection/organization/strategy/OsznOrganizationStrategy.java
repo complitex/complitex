@@ -295,6 +295,10 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         }
     }
 
+    public String getUserOrganizationCode(Long userOrganizationId){
+        return getDomainObject(userOrganizationId).getStringValue(OsznOrganizationStrategy.CODE);
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Long getServiceProviderId(String edrpou, Long organizationId, Long userOrganizationId){
         Long serviceProviderId = null;

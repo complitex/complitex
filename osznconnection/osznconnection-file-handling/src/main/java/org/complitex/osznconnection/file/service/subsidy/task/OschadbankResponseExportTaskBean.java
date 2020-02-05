@@ -16,6 +16,7 @@ import org.complitex.osznconnection.file.service.exception.SaveException;
 import org.complitex.osznconnection.file.service.subsidy.OschadbankResponseBean;
 import org.complitex.osznconnection.file.service.subsidy.OschadbankResponseFileBean;
 import org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter;
+import org.complitex.osznconnection.organization.strategy.OsznOrganizationStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,9 @@ public class OschadbankResponseExportTaskBean extends AbstractRequestTaskBean<Re
     @EJB
     private ServiceProviderAdapter serviceProviderAdapter;
 
+    @EJB
+    private OsznOrganizationStrategy osznOrganizationStrategy;
+
     @Override
     public boolean execute(RequestFile requestFile, Map commandParameters) throws ExecuteException {
         requestFile.setStatus(RequestFileStatus.EXPORTING);
@@ -61,7 +65,7 @@ public class OschadbankResponseExportTaskBean extends AbstractRequestTaskBean<Re
         LocalDate beginDate = LocalDate.parse(oschadbankResponseFile.getStringField(OschadbankResponseFileField.REPORTING_PERIOD) + "-01");
         LocalDate endDate = beginDate.with(TemporalAdjusters.lastDayOfMonth());
 
-        String zheuCode = "ЖКС";
+        String zheuCode = osznOrganizationStrategy.getUserOrganizationCode(requestFile.getUserOrganizationId());
 
         Long collectionId = serviceProviderAdapter.createProvHeader(requestFile.getUserOrganizationId(),
                 zheuCode, DateUtil.getDate(beginDate), requestFile.getName(), "Ответ от Ощадбанка",
