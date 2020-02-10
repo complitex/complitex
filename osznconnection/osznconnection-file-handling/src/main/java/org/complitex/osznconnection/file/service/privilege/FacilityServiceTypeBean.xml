@@ -129,7 +129,7 @@
             </if>
 
             <if test="fio != null">
-                and TO_CYRILLIC(fst.`FIO`) = #{fio}
+                and TO_CYRILLIC(fst.`FIO`) = TO_CYRILLIC(#{fio})
             </if>
 
             <if test="inn != null">
