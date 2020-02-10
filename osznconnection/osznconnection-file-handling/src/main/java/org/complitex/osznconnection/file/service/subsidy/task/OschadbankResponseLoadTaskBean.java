@@ -25,6 +25,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -158,7 +159,7 @@ public class OschadbankResponseLoadTaskBean extends AbstractRequestTaskBean<Requ
 
         if (cell != null){
             if (cell.getCellType().equals(CellType.NUMERIC)){
-                return cell.getNumericCellValue() + "";
+                return BigDecimal.valueOf(cell.getNumericCellValue()).toPlainString()  + "";
             }
 
             return cell.getStringCellValue();
