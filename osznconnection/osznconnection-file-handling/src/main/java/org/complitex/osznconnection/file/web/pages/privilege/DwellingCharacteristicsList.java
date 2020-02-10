@@ -30,6 +30,7 @@ import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.common.web.component.datatable.DataProvider;
 import org.complitex.common.web.component.paging.PagingNavigator;
 import org.complitex.correction.web.address.component.AddressCorrectionDialog;
+import org.complitex.osznconnection.file.entity.AbstractAddressRequest;
 import org.complitex.osznconnection.file.entity.RequestFile;
 import org.complitex.osznconnection.file.entity.RequestStatus;
 import org.complitex.osznconnection.file.entity.StatusDetailInfo;
@@ -61,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristicsDBF.CDUL;
 
@@ -203,21 +205,6 @@ public final class DwellingCharacteristicsList extends TemplatePage {
         filterForm.add(new TextField<>("middleNameFilter", new PropertyModel<>(example, "middleName")));
         filterForm.add(new TextField<>("lastNameFilter", new PropertyModel<>(example, "lastName")));
         filterForm.add(new TextField<>("streetReferenceFilter", new Model<String>(){
-            @Override
-            public String getObject() {
-                String streetCode = example.getObject().getStreetCode();
-
-                if (streetCode != null) {
-                    FacilityStreet facilityStreet = facilityReferenceBookBean.getFacilityStreet(streetCode,
-                            requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
-
-                    if (facilityStreet != null){
-                        return facilityStreet.getStreet();
-                    }
-                }
-
-                return null;
-            }
 
             @Override
             public void setObject(String object) {
@@ -227,8 +214,11 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                 List<FacilityStreet> facilityStreets = facilityReferenceBookBean.getFacilityStreets(FilterWrapper.of(facilityStreet));
 
                 if (!facilityStreets.isEmpty()){
-                    example.getObject().setStreetCode(facilityStreets.get(0).getStreetCode());
+                    example.getObject().setStreetCodes(facilityStreets.stream().map(AbstractAddressRequest::getStreetCode)
+                            .collect(Collectors.toList()));
                 }
+
+                super.setObject(object);
             }
         }, String.class));
 

@@ -1,5 +1,7 @@
 package org.complitex.osznconnection.file.entity.example;
 
+import java.util.List;
+
 /**
  * @author inheaven on 025 25.04.16 15:16
  */
@@ -29,6 +31,8 @@ public class PrivilegeExample extends AbstractRequestExample{
 
     private String orderByClause;
     private boolean asc;
+
+    List<String> streetCodes;
 
     public Long getGroupId() {
         return groupId;
@@ -180,5 +184,13 @@ public class PrivilegeExample extends AbstractRequestExample{
 
     public void setAsc(boolean asc) {
         this.asc = asc;
+    }
+
+    public List<String> getStreetCodes() {
+        return streetCodes;
+    }
+
+    public void setStreetCodes(List<String> streetCodes) {
+        this.streetCodes = streetCodes;
     }
 }

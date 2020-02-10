@@ -137,6 +137,10 @@
                 AND d.`CDUL` =  #{streetCode}
             </if>
 
+            <if test="streetCodes != null and !streetCodes.empty">
+                and d.`CDUL` in <foreach collection="streetCodes" open="(" item="s" separator="," close=")">${s}</foreach>
+            </if>
+
             <if test="building != null">
                 AND d.`HOUSE` = #{building}
             </if>
