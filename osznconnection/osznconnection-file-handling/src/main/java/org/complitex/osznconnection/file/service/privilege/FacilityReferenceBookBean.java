@@ -130,6 +130,7 @@ public class FacilityReferenceBookBean extends AbstractBean {
                 "userOrganizationId", userOrganizationId));
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public FacilityStreet getFacilityStreet(Long requestFileId, String streetCode){
         return sqlSession().selectOne(NS + ".selectFacilityStreetByRequestFile", of("requestFileId", requestFileId,
                 "streetCode", streetCode));
