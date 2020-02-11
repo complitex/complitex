@@ -132,6 +132,10 @@ public class FacilityReferenceBookBean extends AbstractBean {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public FacilityStreet getFacilityStreet(Long requestFileId, String streetCode){
+        if (streetCode == null){
+            return null;
+        }
+
         return sqlSession().selectOne(NS + ".selectFacilityStreetByRequestFile", of("requestFileId", requestFileId,
                 "streetCode", streetCode));
     }
