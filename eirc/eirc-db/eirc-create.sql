@@ -30,13 +30,13 @@ CREATE TABLE `eirc_account` (
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Service --
-DROP TABLE IF EXISTS `service`;
-CREATE TABLE `service` (
+DROP TABLE IF EXISTS `eirc_service`;
+CREATE TABLE `eirc_service` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(128),
   `parent_id` BIGINT(20),
   PRIMARY KEY  (`id`),
-  CONSTRAINT `fk_parent_service` FOREIGN KEY (`parent_id`) REFERENCES `service` (`id`)
+  CONSTRAINT `fk_parent_service` FOREIGN KEY (`parent_id`) REFERENCES `eirc_service` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `service_string_value`;
@@ -49,7 +49,7 @@ CREATE TABLE `service_string_value` (
   UNIQUE KEY `unique_id__locale` (`service_id`,`locale_id`),
   KEY `key_locale` (`locale_id`),
   KEY `key_value` (`value`),
-  CONSTRAINT `fk_service_string_value__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_service_string_value__service` FOREIGN KEY (`service_id`) REFERENCES `eirc_service` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_service_string_value__locale` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -76,7 +76,7 @@ CREATE TABLE `service_provider_account` (
   KEY `key_end_date` (`end_date`),
   CONSTRAINT `fk_service_provider_account__eirc_account` FOREIGN KEY (`eirc_account_id`) REFERENCES `eirc_account` (`object_id`),
   CONSTRAINT `fk_service_provider_account__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
-  CONSTRAINT `fk_service_provider_account__service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`),
+  CONSTRAINT `fk_service_provider_account__service` FOREIGN KEY (`service_id`) REFERENCES `eirc_service` (`id`),
   CONSTRAINT `fk_service_provider_account__registry_record_container` FOREIGN KEY (`registry_record_container_id`)
   REFERENCES `registry_record_container` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -106,7 +106,7 @@ CREATE TABLE `service_provider_account_attribute` (
   CONSTRAINT `fk_sp_account_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_sp_account_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES entity_attribute_value_type (`id`)
+  REFERENCES entity_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Дополнительные атрибуты л/с ПУ (кол-во проживающих и т.п.)';
 
 DROP TABLE IF EXISTS `service_provider_account_string_value`;
@@ -689,7 +689,7 @@ CREATE TABLE `service_correction` (
   KEY `key_user_organization_id` (`user_organization_id`),
   KEY `key_module_id` (`module_id`),
   KEY `key_status` (`status`),
-  CONSTRAINT `fk_service__correction__service_object` FOREIGN KEY (`object_id`) REFERENCES `service` (`id`),
+  CONSTRAINT `fk_service__correction__service_object` FOREIGN KEY (`object_id`) REFERENCES `eirc_service` (`id`),
   CONSTRAINT `fk_service__correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_service__correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция услуги';
@@ -779,7 +779,7 @@ CREATE TABLE `module_instance_attribute` (
   CONSTRAINT `fk_module_instance_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_module_instance_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES entity_attribute_value_type (`id`)
+  REFERENCES entity_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты модуля';
 
 DROP TABLE IF EXISTS `module_instance_string_value`;
@@ -850,7 +850,7 @@ CREATE TABLE `module_instance_type_attribute` (
   CONSTRAINT `fk_module_instance_type_attribute__entity_attribute` FOREIGN KEY (`entity_attribute_id`)
   REFERENCES `entity_attribute` (`id`),
   CONSTRAINT `fk_module_instance_type_attribute__entity_attribute_value_type` FOREIGN KEY (`value_type_id`)
-  REFERENCES entity_attribute_value_type (`id`)
+  REFERENCES entity_value_type (`id`)
 ) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Атрибуты типа модуля';
 
 DROP TABLE IF EXISTS `module_instance_type_string_value`;

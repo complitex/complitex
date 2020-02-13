@@ -180,7 +180,7 @@
             <dependency>
                 <artifactId>wicket-jquery-ui-plugins</artifactId>
                 <groupId>com.googlecode.wicket-jquery-ui</groupId>
-                <version>6.15.0</version>
+                <version>7.10.2</version>
             </dependency>
 
         </dependencies>

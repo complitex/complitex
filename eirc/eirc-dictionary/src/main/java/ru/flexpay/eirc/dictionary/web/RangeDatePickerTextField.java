@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * @author Pavel Sknar
@@ -45,7 +46,6 @@ public class RangeDatePickerTextField extends com.googlecode.wicket.jquery.ui.pl
                 RangeDatePickerTextField.class, RangeDatePickerTextField.class.getSimpleName() + ".css")));
     }
 
-    @Override
     public void onValueChanged(AjaxRequestTarget target) {
         super.onValueChanged(target);
         DateRange dateRange = getModelObject();
@@ -64,7 +64,7 @@ public class RangeDatePickerTextField extends com.googlecode.wicket.jquery.ui.pl
     @Override
     protected DateFormat newDateFormat(Locale locale) {
         DateFormat df = new SimpleDateFormat(DEFAULT_DATE_FORMAT, locale);
-        df.setTimeZone(DateRange.UTC);
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         return df;
     }

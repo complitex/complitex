@@ -19,8 +19,6 @@
 
     <select id="selectServiceCorrectionsCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
         select count(*) from `service_correction` c
-        <where>
-            <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhereIf"/>
-        </where>
+        <include refid="org.complitex.correction.service.CorrectionBean.selectCorrectionWhere"/>
     </select>
 </mapper>

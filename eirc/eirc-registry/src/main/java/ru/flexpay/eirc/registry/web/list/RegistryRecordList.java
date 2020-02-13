@@ -63,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 import static ru.flexpay.eirc.dictionary.web.util.DateRangeUtil.getAllDateRange;
@@ -78,7 +79,7 @@ public class RegistryRecordList extends TemplatePage {
     private static final SimpleDateFormat FILTER_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     static {
-        FILTER_DATE_FORMAT.setTimeZone(DateRange.UTC);
+        FILTER_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     @EJB

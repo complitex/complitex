@@ -4,6 +4,9 @@
 <configuration>
     <typeHandlers>
         <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.common.entity.Status"/>
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.common.entity.ValueType"/>
+
+        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressEntity"/>
     </typeHandlers>
 
     <plugins>
@@ -32,28 +35,26 @@
 
         <mapper resource="org/complitex/common/service/LogBean.xml"/>
         <mapper resource="org/complitex/common/service/SessionBean.xml"/>
-        <mapper resource="org/complitex/common/service/PermissionBean.xml"/>
+        <mapper resource="org/complitex/common/service/PreferenceBean.xml"/>
         <mapper resource="org/complitex/common/service/NameBean.xml"/>
         <mapper resource="org/complitex/common/service/ConfigBean.xml"/>
 
-        <mapper resource="org/complitex/address/strategy/building/Building.xml"/>
-        <mapper resource="org/complitex/address/strategy/building_address/BuildingAddress.xml"/>
-        <mapper resource="org/complitex/address/strategy/street/Street.xml"/>
-        <mapper resource="org/complitex/address/strategy/city/City.xml"/>
-        <mapper resource="org/complitex/address/strategy/district/District.xml"/>
-        <mapper resource="org/complitex/address/strategy/apartment/Apartment.xml"/>
-        <mapper resource="org/complitex/address/strategy/room/Room.xml"/>
+        <mapper resource="org/complitex/address/strategy/building/BuildingStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/building_address/BuildingAddressStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/street/StreetStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/city/CityStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/district/DistrictStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/apartment/ApartmentStrategy.xml"/>
+        <mapper resource="org/complitex/address/strategy/room/RoomStrategy.xml"/>
 
         <mapper resource="org/complitex/admin/service/UserBean.xml"/>
         <mapper resource="org/complitex/admin/service/UserProfileBean.xml"/>
         <mapper resource="org/complitex/logging/service/LogListBean.xml"/>
 
-        <mapper resource="org/complitex/organization/strategy/Organization.xml"/>
+        <mapper resource="org/complitex/organization/strategy/OrganizationStrategy.xml"/>
         <mapper resource="org/complitex/organization/service/OrganizationImportBean.xml"/>
 
         <mapper resource="org/complitex/correction/service/CorrectionBean.xml"/>
-        <mapper resource="org/complitex/correction/service/AddressCorrectionBean.xml"/>
-        <mapper resource="org/complitex/correction/service/OrganizationCorrectionBean.xml"/>
         <mapper resource="ru/flexpay/eirc/service/correction/service/ServiceCorrectionBean.xml"/>
         <mapper resource="ru/flexpay/eirc/service_provider_account/service/ServiceProviderAccountCorrectionBean.xml"/>
 
