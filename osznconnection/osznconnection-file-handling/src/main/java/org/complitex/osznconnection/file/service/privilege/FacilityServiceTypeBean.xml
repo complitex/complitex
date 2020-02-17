@@ -140,11 +140,11 @@
                 and fst.`PASPPIL` = #{passport}
             </if>
 
-            <if test="streetCode != null and !streetCodes.empty">
+            <if test="streetCode != null">
                 and fst.`CDUL` = #{streetCode}
             </if>
 
-            <if test="streetCodes != null">
+            <if test="streetCodes != null and !streetCodes.empty">
                 and fst.`CDUL` in <foreach collection="streetCodes" open="(" item="s" separator="," close=")">${s}</foreach>
             </if>
 
