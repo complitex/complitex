@@ -53,15 +53,15 @@ public class CitySyncHandler implements IDomainSyncHandler{
         return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.REGION, DomainSyncStatus.SYNCHRONIZED)));
     }
 
-    private Long getParentObjectId(DomainSync domainSync, Long organizationId){ //todo parent entity correction
-        List<Correction> cityCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.REGION,
+    private Long getParentObjectId(DomainSync domainSync, Long organizationId){
+        List<Correction> regionCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.REGION,
                 domainSync.getParentId(), organizationId, null);
 
-        if (cityCorrections.isEmpty()){
+        if (regionCorrections.isEmpty()){
             throw new CorrectionNotFoundException("region correction not found " + domainSync);
         }
 
-        return cityCorrections.get(0).getObjectId();
+        return regionCorrections.get(0).getObjectId();
     }
 
     private Long getAdditionalParentObjectId(DomainSync domainSync, Long organizationId){

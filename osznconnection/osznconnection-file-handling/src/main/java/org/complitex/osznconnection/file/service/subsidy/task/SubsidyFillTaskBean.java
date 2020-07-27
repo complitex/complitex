@@ -98,6 +98,15 @@ public class SubsidyFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
     public void fill(RequestFile requestFile, Subsidy subsidy) {
         subsidySplitBean.deleteSubsidySplits(subsidy.getId());
 
+        if (RequestStatus.unboundStatuses().contains(subsidy.getStatus())){
+            subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
+            subsidyBean.update(subsidy);
+
+            log.error("subsidy fill error: account number is not resolved {}", subsidy);
+
+            return;
+        }
+
         if (subsidy.getDateField(SubsidyDBF.DAT1) == null || subsidy.getDateField(SubsidyDBF.DAT2) == null){
             subsidy.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
             subsidyBean.update(subsidy);

@@ -104,9 +104,9 @@ public class StreetSyncHandler implements IDomainSyncHandler {
 
     @Override
     public boolean isCorresponds(Correction correction1, Correction correction2) {
-        return correction1.getParentId().equals(correction2.getParentId()) &&
-                correction1.getAdditionalParentId().equals(correction2.getAdditionalParentId()) &&
-                StringUtil.isEqualIgnoreCase(correction2.getCorrection(), correction2.getCorrection());
+        return Objects.equals(correction1.getParentId(), correction2.getParentId()) &&
+                Objects.equals(correction1.getAdditionalParentId(), correction2.getAdditionalParentId()) &&
+                StringUtil.isEqualIgnoreCase(correction1.getCorrection(), correction2.getCorrection());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class StreetSyncHandler implements IDomainSyncHandler {
 
     @Override
     public void updateCorrection(Correction correction, DomainSync domainSync, Long organizationId) {
-        correction.setAdditionalParentId(getAdditionalParentObjectId(domainSync, organizationId));
+        correction.setAdditionalParentId(getAdditionalParentObjectId(domainSync, organizationId)); //todo parentId
         correction.setCorrection(domainSync.getName());
 
         correctionBean.save(correction);
