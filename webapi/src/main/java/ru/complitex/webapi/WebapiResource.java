@@ -8,11 +8,9 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.sql.DataSource;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -30,14 +28,37 @@ public class WebapiResource {
     @Named("webapi")
     private DataSource dataSource;
 
-    @Path("/getActualDebt")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject getActualDebt(@QueryParam("acc") String account) throws SQLException {
-        if (account == null || account.isEmpty()){
-            return null;
+    public static class AccDebtToday {
+        private int result;
+        private String acc;
+        private String debt;
+
+        public int getResult() {
+            return result;
         }
 
+        public void setResult(int result) {
+            this.result = result;
+        }
+
+        public String getAcc() {
+            return acc;
+        }
+
+        public void setAcc(String acc) {
+            this.acc = acc;
+        }
+
+        public String getDebt() {
+            return debt;
+        }
+
+        public void setDebt(String debt) {
+            this.debt = debt;
+        }
+    }
+
+    public AccDebtToday getAccDebtToday(String account)  throws SQLException{
         try (Connection connection = this.dataSource.getConnection()) {
             @SuppressWarnings("SqlResolve") CallableStatement ps = connection.prepareCall(
                     "{? = call COMP.z$runtime_sz_utl.getAccDebtToday(?, ?, ?)}"
@@ -50,52 +71,59 @@ public class WebapiResource {
 
             ps.execute();
 
-            String acc = ps.getString(3);
-            String debt = ps.getString(4);
+            AccDebtToday accDebtToday = new AccDebtToday();
 
-            return Json.createObjectBuilder()
-                    .add("acc",  acc != null ? acc : "")
-                    .add("debt", debt != null ? debt : "")
-                    .build();
+            accDebtToday.setResult(ps.getInt(1));
+            accDebtToday.setAcc(ps.getString(3));
+            accDebtToday.setDebt(ps.getString(4));
+
+            return accDebtToday;
         }
     }
 
-    @Path("/getZerro")
+    @Path("/getActualDebt")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject getZerro(@QueryParam("accId") String accId) throws SQLException {
+    public JsonObject getActualDebt(@QueryParam("acc") String account) throws SQLException {
+        if (account == null || account.isEmpty()){
+            return null;
+        }
+
+        AccDebtToday accDebtToday = getAccDebtToday(account);
+
+        return Json.createObjectBuilder()
+                .add("acc",  accDebtToday.getAcc() != null ? accDebtToday.getAcc() : "")
+                .add("debt", accDebtToday.getDebt() != null ? accDebtToday.getDebt() : "")
+                .build();
+    }
+
+    @Path("/getZerro")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public JsonObject getZerro(String nInfo) throws SQLException {
+        JsonObject nInfoJson = Json.createReader(new StringReader(nInfo)).readObject();
+
+        String accId = nInfoJson.getString("accId");
+
         if (accId == null || accId.isEmpty()){
             return null;
         }
 
-        try (Connection connection = this.dataSource.getConnection()) {
-            @SuppressWarnings("SqlResolve") CallableStatement ps = connection.prepareCall(
-                    "{? = call COMP.z$runtime_sz_utl.getAccDebtToday(?, ?, ?)}"
-            );
+        AccDebtToday accDebtToday = getAccDebtToday(accId);
 
-            ps.registerOutParameter(1, Types.INTEGER);
-            ps.setString(2, accId);
-            ps.registerOutParameter(3, Types.VARCHAR);
-            ps.registerOutParameter(4, Types.VARCHAR);
+        JsonObjectBuilder json =  Json.createObjectBuilder();
 
-            ps.execute();
+        json.add("accId", accId);
 
-            String acc = ps.getString(3);
-            String debt = ps.getString(4);
+        if (accDebtToday.getDebt() != null && new BigDecimal(accDebtToday.getDebt()).compareTo(BigDecimal.ZERO) > 0){
+            json.add("result", "0");
 
-            JsonObjectBuilder json =  Json.createObjectBuilder();
-
-            json.add("accId", accId);
-
-            if (debt != null && new BigDecimal(debt).compareTo(BigDecimal.ZERO) > 0){
-                json.add("result", "0");
-
-                json.add("conditions", Json.createArrayBuilder().add(Json.createObjectBuilder().add("saldo", debt)));
-            } else {
-                json.add("result", "1");
-            }
-
-            return json.build();
+            json.add("conditions", Json.createArrayBuilder().add(Json.createObjectBuilder().add("saldo", accDebtToday.getDebt())));
+        } else {
+            json.add("result", "1");
         }
+
+        return json.build();
     }
 }
