@@ -11,11 +11,11 @@ import java.util.Map;
  *         Date: 29.10.10 18:51
  */
 public interface ITaskBean<T extends IExecutorObject> {
-    boolean execute(T object, Map commandParameters) throws ExecuteException;
+    boolean execute(T object, Map<?, ?> commandParameters) throws ExecuteException;
 
     String getModuleName();
 
-    Class getControllerClass();
+    Class<?> getControllerClass();
 
     Log.EVENT getEvent();
 }

@@ -458,4 +458,21 @@ public class LoadUtil {
 
         return list;
     }
+
+    public static List<RequestFile> getDebts(Long userOrganizationId, Long osznId, int month, int year)
+            throws StorageNotFoundException {
+        RequestFiles requestFiles = RequestFileStorage.INSTANCE.getInputRequestFiles(userOrganizationId, osznId,
+                LOAD_DEBT_DIR, file -> isMatches(DEBT_FILENAME_MASK, file.getName(), month, year));
+
+        List<RequestFile> list = new ArrayList<>();
+
+        for (File file : requestFiles.getFiles()) {
+            RequestFile requestFile = newRequestFile(userOrganizationId, osznId, month, year, requestFiles, file,
+                    RequestFileType.DEBT);
+
+            list.add(requestFile);
+        }
+
+        return list;
+    }
 }

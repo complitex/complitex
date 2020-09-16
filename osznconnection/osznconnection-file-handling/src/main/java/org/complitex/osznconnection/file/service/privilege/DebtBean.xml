@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.complitex.osznconnection.file.service.privilege.DebtBean">
+    <resultMap id="facilityLocalResultMap" type="org.complitex.osznconnection.file.entity.privilege.Debt"
+               extends="org.complitex.osznconnection.file.service.AbstractRequestBean.abstractRequest">
+        <association property="dbfFields" javaType="map">
+            <result column="COD" property="COD"/>
+            <result column="CDPR" property="CDPR"/>
+            <result column="NCARD" property="NCARD"/>
+            <result column="IDPIL" property="IDPIL"/>
+            <result column="PASPPIL" property="PASPPIL"/>
+            <result column="FIOPIL" property="FIOPIL"/>
+            <result column="INDEX" property="INDEX"/>
+            <result column="CDUL" property="CDUL"/>
+            <result column="HOUSE" property="HOUSE"/>
+            <result column="BUILD" property="BUILD"/>
+            <result column="APT" property="APT"/>
+            <result column="KAT" property="KAT"/>
+            <result column="LGCODE" property="LGCODE"/>
+            <result column="DATEIN" property="DATEIN"/>
+            <result column="DATEOUT" property="DATEOUT"/>
+            <result column="MONTHZV" property="MONTHZV"/>
+            <result column="YEARZV" property="YEARZV"/>
+            <result column="RAH" property="RAH"/>
+            <result column="MONEY" property="MONEY"/>
+            <result column="EBK" property="EBK"/>
+            <result column="SUM_BORG" property="SUM_BORG"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertDebtList" parameterType="list">
+        INSERT INTO `debt`
+        (
+        <trim suffixOverrides=",">
+            `request_file_id`,
+            <foreach collection="list[0].dbfFields.keys" item="key">
+                `${key}`,
+            </foreach>
+        </trim>
+        )
+        VALUES
+        <foreach collection="list" separator="," item="item">
+            (
+            <trim suffixOverrides=",">
+                #{item.requestFileId},
+                <foreach collection="item.dbfFields.keys" item="key">
+                    #{item.dbfFields.${key}},
+                </foreach>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectDebt" resultMap="facilityLocalResultMap" parameterType="long">
+        select * from `debt` where `request_file_id` = #{id}
+    </select>
+
+    <select id="selectDebtList" resultMap="facilityLocalResultMap" parameterType="org.complitex.common.entity.FilterWrapper">
+        select * from `debt` where `request_file_id` = #{object.requestFileId} ${limit}
+    </select>
+
+    <select id="selectDebtListCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
+        select count(id) from `debt` where `request_file_id` = #{object.requestFileId}
+    </select>
+
+    <delete id="deleteDebt" parameterType="long">
+        delete from `debt` where `request_file_id` = #{id}
+    </delete>
+</mapper>

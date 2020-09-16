@@ -23,7 +23,9 @@ public enum RequestFileDirectoryType {
     LOAD_OSCHADBANK_REQUEST_DIR(OsznOrganizationStrategy.LOAD_OSCHADBANK_REQUEST_DIR),
     SAVE_OSCHADBANK_REQUEST_DIR(OsznOrganizationStrategy.SAVE_OSCHADBANK_REQUEST_DIR),
     LOAD_OSCHADBANK_RESPONSE_DIR(OsznOrganizationStrategy.LOAD_OSCHADBANK_RESPONSE_DIR),
-    SAVE_OSCHADBANK_RESPONSE_DIR(OsznOrganizationStrategy.SAVE_OSCHADBANK_RESPONSE_DIR);
+    SAVE_OSCHADBANK_RESPONSE_DIR(OsznOrganizationStrategy.SAVE_OSCHADBANK_RESPONSE_DIR),
+    LOAD_DEBT_DIR(OsznOrganizationStrategy.LOAD_DEBT_DIR),
+    SAVE_DEBT_DIR(OsznOrganizationStrategy.SAVE_DEBT_DIR);
     
     private long entityAttributeId;
 

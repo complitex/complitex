@@ -36,6 +36,7 @@ INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_TARIF_REFERENCE_FILENAME
 INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_S_FILENAME_MASK','(\\d{8}|\\d{10})\\.s\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_P_FILENAME_MASK','(\\d{8}|\\d{10})\\.p\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_REQUEST_FILENAME_MASK','\\d*_{YYYY}{MM}\\d*\\.xlsx');
+INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_FILENAME_MASK','\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('LOAD_THREAD_SIZE','2');
 INSERT INTO `config` (`name`,`value`) VALUES ('BIND_THREAD_SIZE','4');
 INSERT INTO `config` (`name`,`value`) VALUES ('FILL_THREAD_SIZE','4');
@@ -190,6 +191,18 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (935, 1, UP
     (935, 2, UPPER('Директорія вихідних файлів відповідей від ощадбанку'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES
     (935, 900, 0, 935, 1, 1);
+
+-- Debt
+
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES  (936, 1, UPPER('Директория входящих файлов задолженностей')),
+    (936, 2, UPPER('Директорія вхідних файлів заборгованостей'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES
+    (936, 900, 0, 936, 1, 1);
+
+INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (937, 1, UPPER('Директория исходящих файлов задолженностей')),
+    (937, 2, UPPER('Директорія вихідних файлів заборгованостей'));
+INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES
+    (937, 900, 0, 937, 1, 1);
 
 -- --------------------------------
 -- Ownership

@@ -23,7 +23,8 @@ public enum RequestFileType implements IFixedIdType{
     PRIVILEGE_PROLONGATION(14),
     FACILITY_LOCAL(15),
     OSCHADBANK_REQUEST(16),
-    OSCHADBANK_RESPONSE(17);
+    OSCHADBANK_RESPONSE(17),
+    DEBT(18);
 
     private Integer id;
 

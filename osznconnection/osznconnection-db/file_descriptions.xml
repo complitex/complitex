@@ -386,4 +386,30 @@
             <field length="10" type="java.lang.String" name="EBK"/>
         </fields>
     </file-description>
+
+    <file-description type="DEBT">
+        <fields>
+            <field length="4" type="java.lang.Integer" name="COD"/>
+            <field length="12" type="java.lang.Long" name="CDPR"/>
+            <field length="10" type="java.lang.Long" name="NCARD"/>
+            <field length="10" type="java.lang.String" name="IDPIL"/>
+            <field length="14" type="java.lang.String" name="PASPPIL"/>
+            <field length="50" type="java.lang.String" name="FIOPIL"/>
+            <field length="6" type="java.lang.Integer" name="INDEX"/>
+            <field length="5" type="java.lang.Integer" name="CDUL"/>
+            <field length="7" type="java.lang.String" name="HOUSE"/>
+            <field length="2" type="java.lang.String" name="BUILD"/>
+            <field length="4" type="java.lang.String" name="APT"/>
+            <field length="4" type="java.lang.Integer" name="KAT"/>
+            <field length="4" type="java.lang.Integer" name="LGCODE"/>
+            <field length="10" type="java.lang.String" name="DATEIN"/>
+            <field length="10" type="java.lang.String" name="DATEOUT"/>
+            <field length="4" type="java.lang.Integer" name="MONTHZV"/>
+            <field length="4" type="java.lang.Integer" name="YEARZV"/>
+            <field length="25" type="java.lang.String" name="RAH"/>
+            <field length="6" type="java.lang.Integer" name="MONEY"/>
+            <field length="10" type="java.lang.String" name="EBK"/>
+            <field length="9" type="java.lang.Long" name="SUM_BORG"/>
+        </fields>
+    </file-description>
 </file-descriptions>

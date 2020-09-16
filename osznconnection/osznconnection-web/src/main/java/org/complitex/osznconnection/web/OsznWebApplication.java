@@ -88,6 +88,9 @@ public class OsznWebApplication extends ComplitexWebApplication{
         mountPage("/privilege/prolongation", PrivilegeProlongationFileList.class); //todo add types
         mountPage("/privilege/prolongation/${request_file_id}", PrivilegeProlongationList.class);
 
+        mountPage("/privilege/debt", DebtFileList.class);
+        mountPage("/privilege/debt/${request_file_id}", DebtList.class);
+
         //correction
         mountPage("/correction/country", CountryCorrectionList.class);
         mountPage("/correction/region", RegionCorrectionList.class);

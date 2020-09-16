@@ -31,6 +31,8 @@ public enum FileHandlingConfig implements IConfig {
     OSCHADBANK_REQUEST_FILENAME_MASK("mask"),
     OSCHADBANK_RESPONSE_FILENAME_MASK("mask"),
 
+    DEBT_FILENAME_MASK("mask"),
+
     LOAD_THREAD_SIZE("thread"),
     BIND_THREAD_SIZE("thread"),
     FILL_THREAD_SIZE("thread"),

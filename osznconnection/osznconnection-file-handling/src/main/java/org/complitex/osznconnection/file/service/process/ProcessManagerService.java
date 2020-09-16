@@ -779,4 +779,26 @@ public class ProcessManagerService {
         execute(EXPORT_OSCHADBANK_RESPONSE, OschadbankResponseExportTaskBean.class, updateAndGetRequestFiles(EXPORT_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
+
+    /* DEBT */
+
+    public void loadDebt(Long serviceProviderId, Long userOrganizationId, Long organizationId, int year, int month){
+        try {
+            List<RequestFile> list = LoadUtil.getDebts(userOrganizationId, organizationId, month, year);
+
+            execute(LOAD_DEBT, DebtLoadTaskBean.class, list, null, LOAD_THREAD_SIZE,
+                    LOAD_MAX_ERROR_COUNT, MapUtil.of("year", year, "month", month));
+        } catch (Exception e) {
+            log.error("Ошибка процесса загрузки файлов.", e);
+            logBean.error(Module.NAME, ProcessManagerService.class, RequestFile.class, null,
+                    Log.EVENT.CREATE, "Ошибка процесса загрузки файлов. Причина: {0}", e.getMessage());
+
+            broadcastService.broadcast(getClass(), "onError", e);
+        }
+    }
+
+    public void saveDebt(List<Long> ids, Map processParameters) {
+        execute(SAVE_DEBT, DebtSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+    }
 }

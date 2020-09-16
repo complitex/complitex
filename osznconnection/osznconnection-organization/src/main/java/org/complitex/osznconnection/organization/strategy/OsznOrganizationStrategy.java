@@ -117,6 +117,9 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
     public final static long LOAD_OSCHADBANK_RESPONSE_DIR = 934;
     public final static long SAVE_OSCHADBANK_RESPONSE_DIR = 935;
 
+    public final static long LOAD_DEBT_DIR = 936;
+    public final static long SAVE_DEBT_DIR = 937;
+
     private final Logger log = LoggerFactory.getLogger(OsznOrganizationStrategy.class);
     public static final String OSZN_ORGANIZATION_STRATEGY_NAME = IOrganizationStrategy.BEAN_NAME;
     private static final String RESOURCE_BUNDLE = OsznOrganizationStrategy.class.getName();
@@ -125,7 +128,8 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
                     LOAD_PAYMENT_BENEFIT_FILES_DIR, SAVE_PAYMENT_BENEFIT_FILES_DIR,
                     LOAD_ACTUAL_PAYMENT_DIR, SAVE_ACTUAL_PAYMENT_DIR, LOAD_SUBSIDY_DIR, SAVE_SUBSIDY_DIR,
                     LOAD_OSCHADBANK_REQUEST_DIR, SAVE_OSCHADBANK_REQUEST_DIR,
-                    LOAD_OSCHADBANK_RESPONSE_DIR, SAVE_OSCHADBANK_RESPONSE_DIR);
+                    LOAD_OSCHADBANK_RESPONSE_DIR, SAVE_OSCHADBANK_RESPONSE_DIR,
+                    LOAD_DEBT_DIR, SAVE_DEBT_DIR);
 
     public static final List<Long> LOAD_SAVE_FILE_DIR_PRIVILEGES_ATTRIBUTES =
             ImmutableList.of(LOAD_DWELLING_CHARACTERISTICS_DIR, SAVE_DWELLING_CHARACTERISTICS_DIR,
