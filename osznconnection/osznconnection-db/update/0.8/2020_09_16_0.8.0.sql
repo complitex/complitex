@@ -1,4 +1,4 @@
-INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_FILENAME_MASK','\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_FILENAME_MASK','\\d{8}\\.m\\d{2}');
 
 INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES  (936, 1, UPPER('Директория входящих файлов задолженностей')),
     (936, 2, UPPER('Директорія вхідних файлів заборгованостей'));
@@ -9,6 +9,32 @@ INSERT INTO `entity_string_value`(`id`, `locale_id`, `value`) VALUES (937, 1, UP
     (937, 2, UPPER('Директорія вихідних файлів заборгованостей'));
 INSERT INTO `entity_attribute`(`id`, `entity_id`, `required`, `name_id`, `system`, `value_type_id`) VALUES
     (937, 900, 0, 937, 1, 1);
+
+INSERT INTO `request_file_description`(`request_file_type`,`date_pattern`) VALUES ('DEBT','dd.MM.yyyy');
+SET @request_file_description_id = LAST_INSERT_ID();
+INSERT INTO `request_file_field_description`(`request_file_description_id`, `name`, `type`, `length`)
+VALUES (@request_file_description_id, 'COD', 'java.lang.Integer', 4),
+       (@request_file_description_id, 'CDPR', 'java.lang.Long', 12),
+       (@request_file_description_id, 'NCARD', 'java.lang.Long', 10),
+       (@request_file_description_id, 'IDPIL', 'java.lang.String', 10),
+       (@request_file_description_id, 'PASPPIL', 'java.lang.String', 14),
+       (@request_file_description_id, 'FIOPIL', 'java.lang.String', 50),
+       (@request_file_description_id, 'INDEX', 'java.lang.Integer', 6),
+       (@request_file_description_id, 'CDUL', 'java.lang.Integer', 5),
+       (@request_file_description_id, 'HOUSE', 'java.lang.String', 7),
+       (@request_file_description_id, 'BUILD', 'java.lang.String', 2),
+       (@request_file_description_id, 'APT', 'java.lang.String', 4),
+       (@request_file_description_id, 'KAT', 'java.lang.Integer', 4),
+       (@request_file_description_id, 'LGCODE', 'java.lang.Integer', 4),
+       (@request_file_description_id, 'DATEIN', 'java.lang.String', 10),
+       (@request_file_description_id, 'DATEOUT', 'java.lang.String', 10),
+       (@request_file_description_id, 'MONTHZV', 'java.lang.Integer', 4),
+       (@request_file_description_id, 'YEARZV', 'java.lang.Integer', 4),
+       (@request_file_description_id, 'RAH', 'java.lang.String', 25),
+       (@request_file_description_id, 'MONEY', 'java.lang.Integer', 6),
+       (@request_file_description_id, 'EBK', 'java.lang.String', 10);
+INSERT INTO `request_file_field_description`(`request_file_description_id`, `name`, `type`, `length`, `scale`) VALUE
+    (@request_file_description_id, 'SUM_BORG', 'java.math.BigDecimal', 10, 2);
 
 CREATE TABLE `debt` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор',
@@ -55,8 +81,8 @@ CREATE TABLE `debt` (
   `YEARZV` INTEGER(4),
   `RAH` VARCHAR(25),
   `MONEY` INTEGER(6),
-  `EBK` INTEGER(10),
-  `SUM_BORG` INTEGER(9),
+  `EBK` VARCHAR(10),
+  `SUM_BORG` DECIMAL(10, 2),
 
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),

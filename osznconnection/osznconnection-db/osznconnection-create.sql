@@ -1337,8 +1337,8 @@ CREATE TABLE `debt` (
   `YEARZV` INTEGER(4),
   `RAH` VARCHAR(25),
   `MONEY` INTEGER(6),
-  `EBK` INTEGER(10),
-  `SUM_BORG` INTEGER(9),
+  `EBK` VARCHAR(10),
+  `SUM_BORG` DECIMAL(10, 2),
 
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),

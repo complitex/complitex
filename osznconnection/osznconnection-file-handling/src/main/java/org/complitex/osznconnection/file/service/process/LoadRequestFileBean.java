@@ -81,7 +81,7 @@ public class LoadRequestFileBean {
 
             //обработка строк файла.
             Object[] rowObjects;
-            List<AbstractRequest> batch = new ArrayList<>();
+            List<AbstractRequest<?>> batch = new ArrayList<>();
 
             while ((rowObjects = reader.nextRecord()) != null) {
                 if (requestFile.isCanceled()) {
@@ -94,12 +94,15 @@ public class LoadRequestFileBean {
                 if (index == 0) {
                     //проверка наличия всех полей в файле.
                     {
-                        final Set<String> realFieldNames = new HashSet<String>();
+                        Set<String> realFieldNames = new HashSet<String>();
+
                         for (int i = 0; i < reader.getFieldCount(); i++) {
-                            realFieldNames.add(reader.getField(i).getName());
+                            realFieldNames.add(reader.getField(i).getName().toUpperCase());
                         }
+
                         for (Enum<?> expectedField : loadRequestFile.getFieldNames()) {
-                            final String expectedFieldName = expectedField.name();
+                            String expectedFieldName = expectedField.name();
+
                             if (!realFieldNames.contains(expectedFieldName)) {
                                 throw new FieldNotFoundException(expectedFieldName);
                             }
@@ -114,7 +117,7 @@ public class LoadRequestFileBean {
                     }
                 }
 
-                AbstractRequest request = loadRequestFile.newObject();
+                AbstractRequest<?> request = loadRequestFile.newObject();
                 request.setOrganizationId(requestFile.getOrganizationId());
                 request.setUserOrganizationId(requestFile.getUserOrganizationId());
 
@@ -123,12 +126,12 @@ public class LoadRequestFileBean {
                     Object value = rowObjects[i];
 
                     //обрезать начальные и конечные пробелы, если это строка.
-                    if (value != null && value instanceof String) {
+                    if (value instanceof String) {
                         value = ((String) value).trim();
                     }
 
                     DBFField field = reader.getField(i);
-                    currentFieldName = field.getName();
+                    currentFieldName = field.getName().toUpperCase();
 
                     request.putField(currentFieldName, value);
                 }
@@ -212,23 +215,28 @@ public class LoadRequestFileBean {
             throws FieldNotFoundException, FieldWrongTypeException, FieldWrongSizeException {
 
         //проверить имя поля.
-        final String fieldName = dBFField.getName();
-        final RequestFileFieldDescription fieldDescription = description.getField(fieldName);
+        String fieldName = dBFField.getName().toUpperCase();
+
+        RequestFileFieldDescription fieldDescription = description.getField(fieldName);
+
         if (fieldDescription == null) {
             throw new FieldNotFoundException(fieldName);
         }
 
         //проверить тип поля.
-        final Class<?> realFieldType = DBFFieldTypeConverter.toJavaType(dBFField);
-        final Class<?> expectedFieldType = fieldDescription.getFieldType();
+        Class<?> realFieldType = DBFFieldTypeConverter.toJavaType(dBFField);
+
+        Class<?> expectedFieldType = fieldDescription.getFieldType();
+
         if (!expectedFieldType.equals(realFieldType)) {
             throw new FieldWrongTypeException(fieldName, realFieldType, expectedFieldType);
         }
 
         //проверить длину поля.
         if (!expectedFieldType.equals(Date.class)) {
-            final int realFieldLength = dBFField.getFieldLength();
-            final int expectedFieldLength = fieldDescription.getLength();
+            int realFieldLength = dBFField.getFieldLength();
+            int expectedFieldLength = fieldDescription.getLength();
+
             if (realFieldLength > expectedFieldLength) {
                 throw new FieldWrongSizeException(fieldName);
             }
@@ -236,8 +244,10 @@ public class LoadRequestFileBean {
 
         //для чисел нужно проверить масштаб.
         if (expectedFieldType == BigDecimal.class || expectedFieldType == Long.class) {
-            final int realFieldScale = dBFField.getDecimalCount();
+            int realFieldScale = dBFField.getDecimalCount();
+
             Integer expectedFieldScale = fieldDescription.getScale();
+
             if (expectedFieldScale == null) {
                 expectedFieldScale = 0;
             }

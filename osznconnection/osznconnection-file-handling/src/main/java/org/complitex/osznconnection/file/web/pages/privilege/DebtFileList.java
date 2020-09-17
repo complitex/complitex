@@ -28,7 +28,7 @@ public class DebtFileList extends AbstractFileList {
 
     @Override
     protected Class<? extends WebPage> getItemListPageClass() {
-        return null;
+        return DebtList.class;
     }
 
     @Override

@@ -36,7 +36,7 @@ INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_TARIF_REFERENCE_FILENAME
 INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_S_FILENAME_MASK','(\\d{8}|\\d{10})\\.s\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_P_FILENAME_MASK','(\\d{8}|\\d{10})\\.p\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_REQUEST_FILENAME_MASK','\\d*_{YYYY}{MM}\\d*\\.xlsx');
-INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_FILENAME_MASK','\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_FILENAME_MASK','\\d{8}\\.m\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('LOAD_THREAD_SIZE','2');
 INSERT INTO `config` (`name`,`value`) VALUES ('BIND_THREAD_SIZE','4');
 INSERT INTO `config` (`name`,`value`) VALUES ('FILL_THREAD_SIZE','4');

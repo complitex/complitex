@@ -98,6 +98,7 @@
         <mapper resource="org/complitex/osznconnection/file/service/privilege/OwnershipCorrectionBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeCorrectionBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeProlongationBean.xml"/>
+        <mapper resource="org/complitex/osznconnection/file/service/privilege/DebtBean.xml"/>
 
         <mapper resource="org/complitex/osznconnection/file/service/PersonAccountBean.xml"/>
         <mapper resource="org/complitex/osznconnection/file/service/RequestFileHistoryBean.xml"/>

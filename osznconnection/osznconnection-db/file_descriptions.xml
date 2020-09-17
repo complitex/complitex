@@ -409,7 +409,7 @@
             <field length="25" type="java.lang.String" name="RAH"/>
             <field length="6" type="java.lang.Integer" name="MONEY"/>
             <field length="10" type="java.lang.String" name="EBK"/>
-            <field length="9" type="java.lang.Long" name="SUM_BORG"/>
+            <field length="10" scale="2" type="java.math.BigDecimal" name="SUM_BORG"/>
         </fields>
     </file-description>
 </file-descriptions>
