@@ -10,7 +10,7 @@ import org.complitex.template.web.template.ResourceTemplateMenu;
 
 import java.util.Locale;
 
-@AuthorizeInstantiation({"PRIVILEGE_GROUP", "PRIVILEGE_FORM_2", "PRIVILEGE_PROLONGATION_S", "PRIVILEGE_PROLONGATION_P", "PRIVILEGE_LOCAL"})
+@AuthorizeInstantiation({"PRIVILEGE_GROUP", "PRIVILEGE_FORM_2", "PRIVILEGE_PROLONGATION_S", "PRIVILEGE_PROLONGATION_P", "PRIVILEGE_LOCAL", "PRIVILEGE_DEBT"})
 public class PrivilegeRequestMenu extends ResourceTemplateMenu {
     public PrivilegeRequestMenu() {
         add("privilege_list", PrivilegeFileGroupList.class, new String[]{"PRIVILEGE_GROUP"});
@@ -23,7 +23,7 @@ public class PrivilegeRequestMenu extends ResourceTemplateMenu {
         add("facility_local_list", FacilityLocalFileList.class, new String[]{"PRIVILEGE_LOCAL"});
         add("facility_local__janitor_list", FacilityLocalJanitorFileList.class, new String[]{"PRIVILEGE_LOCAL"});
         add("facility_local_compensation_list", FacilityLocalCompensationFileList.class, new String[]{"PRIVILEGE_LOCAL"});
-        add("debt_list", DebtFileList.class, new String[]{"PRIVILEGE_LOCAL"});
+        add("debt_list", DebtFileList.class, new String[]{"PRIVILEGE_DEBT"});
 
         add("facility_tarif_file_list", FacilityTarifFileList.class, new String[]{"PRIVILEGE_GROUP"});
         add("facility_street_type_file_list", FacilityStreetTypeFileList.class);

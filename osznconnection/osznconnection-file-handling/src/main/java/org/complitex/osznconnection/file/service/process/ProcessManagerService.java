@@ -177,7 +177,7 @@ public class ProcessManagerService {
 
     private <T extends IExecutorObject> void execute(ProcessType processType, Class<? extends ITaskBean<T>> taskClass,
             List<T> list, IExecutorListener<T> listener,
-            FileHandlingConfig threadCount, FileHandlingConfig maxErrorCount, Map processParameters) {
+            FileHandlingConfig threadCount, FileHandlingConfig maxErrorCount, Map<?, ?> processParameters) {
         Process<T> process = getProcess(processType);
 
         if (!process.isRunning()) {
@@ -413,17 +413,17 @@ public class ProcessManagerService {
         }
     }
 
-    public void bindActualPayment(List<Long> ids, Map processParameters) {
+    public void bindActualPayment(List<Long> ids, Map<?, ?> processParameters) {
         execute(BIND_ACTUAL_PAYMENT, ActualPaymentBindTaskBean.class, updateAndGetRequestFiles(BIND_WAIT, ids),
                 requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void fillActualPayment(List<Long> ids, Map processParameters) {
+    public void fillActualPayment(List<Long> ids, Map<?, ?> processParameters) {
         execute(FILL_ACTUAL_PAYMENT, ActualPaymentFillTaskBean.class, updateAndGetRequestFiles(FILL_WAIT, ids),
                 requestFileListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void saveActualPayment(List<Long> ids, Map processParameters) {
+    public void saveActualPayment(List<Long> ids, Map<?, ?> processParameters) {
         execute(SAVE_ACTUAL_PAYMENT, ActualPaymentSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
@@ -448,17 +448,17 @@ public class ProcessManagerService {
         }
     }
 
-    public void bindSubsidy(List<Long> ids, Map processParameters) {
+    public void bindSubsidy(List<Long> ids, Map<?, ?> processParameters) {
         execute(BIND_SUBSIDY, SubsidyBindTaskBean.class, updateAndGetRequestFiles(BIND_WAIT, ids),
                 requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void fillSubsidy(List<Long> ids, Map processParameters) {
+    public void fillSubsidy(List<Long> ids, Map<?, ?> processParameters) {
         execute(FILL_SUBSIDY, SubsidyFillTaskBean.class, updateAndGetRequestFiles(FILL_WAIT, ids),
                 requestFileListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void saveSubsidy(List<Long> ids, Map processParameters) {
+    public void saveSubsidy(List<Long> ids, Map<?, ?> processParameters) {
         execute(SAVE_SUBSIDY, SubsidySaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
@@ -689,17 +689,17 @@ public class ProcessManagerService {
         }
     };
 
-    public void bindPrivilegeGroup(List<Long> ids, Map processParameters) {
+    public void bindPrivilegeGroup(List<Long> ids, Map<?, ?> processParameters) {
         execute(BIND_PRIVILEGE_GROUP, PrivilegeGroupBindTaskBean.class, updateAndGetPrivilegeFileGroups(BIND_WAIT, ids),
                 privilegeFileGroupListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void fillPrivilegeGroup(List<Long> ids, Map processParameters) {
+    public void fillPrivilegeGroup(List<Long> ids, Map<?, ?> processParameters) {
         execute(FILL_PRIVILEGE_GROUP, PrivilegeGroupFillTaskBean.class, updateAndGetPrivilegeFileGroups(FILL_WAIT, ids),
                 privilegeFileGroupListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void savePrivilegeGroup(List<Long> ids, Map processParameters) {
+    public void savePrivilegeGroup(List<Long> ids, Map<?, ?> processParameters) {
         execute(SAVE_PRIVILEGE_GROUP, PrivilegeGroupSaveTaskBean.class, updateAndGetPrivilegeFileGroups(SAVE_WAIT, ids),
                 privilegeFileGroupListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
@@ -721,13 +721,13 @@ public class ProcessManagerService {
         }
     }
 
-    public void bindPrivilegeProlongation(List<Long> ids, Map processParameters) {
+    public void bindPrivilegeProlongation(List<Long> ids, Map<?, ?> processParameters) {
         execute(BIND_PRIVILEGE_PROLONGATION, PrivilegeProlongationBindTaskBean.class,
                 updateAndGetRequestFiles(BIND_WAIT, ids),
                 requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void exportPrivilegeProlongation(List<Long> ids, Map processParameters) {
+    public void exportPrivilegeProlongation(List<Long> ids, Map<?, ?> processParameters) {
         execute(EXPORT_PRIVILEGE_PROLONGATION, PrivilegeProlongationExportTaskBean.class,
                 updateAndGetRequestFiles(EXPORT_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
@@ -749,12 +749,12 @@ public class ProcessManagerService {
         }
     }
 
-    public void fillOschadbankRequest(List<Long> ids, Map processParameters) {
+    public void fillOschadbankRequest(List<Long> ids, Map<?, ?> processParameters) {
         execute(FILL_OSCHADBANK_REQUEST, OschadbankRequestFillTaskBean.class, updateAndGetRequestFiles(FILL_WAIT, ids),
                 requestFileListener, FILL_THREAD_SIZE, FILL_MAX_ERROR_COUNT, processParameters);
     }
 
-    public void saveOschadbankRequest(List<Long> ids, Map processParameters) {
+    public void saveOschadbankRequest(List<Long> ids, Map<?, ?> processParameters) {
         execute(SAVE_OSCHADBANK_REQUEST, OschadbankRequestSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
     }
@@ -797,8 +797,14 @@ public class ProcessManagerService {
         }
     }
 
-    public void saveDebt(List<Long> ids, Map processParameters) {
+    public void saveDebt(List<Long> ids, Map<?, ?> processParameters) {
         execute(SAVE_DEBT, DebtSaveTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, processParameters);
+    }
+
+    public void bindDebt(List<Long> ids, Map<?, ?> processParameters) {
+        execute(BIND_DEBT, DebtBindTaskBean.class,
+                updateAndGetRequestFiles(BIND_WAIT, ids),
+                requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 }

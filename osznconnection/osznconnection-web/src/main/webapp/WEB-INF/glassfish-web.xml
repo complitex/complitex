@@ -96,4 +96,8 @@
         <role-name>PRIVILEGE_PROLONGATION_P</role-name>
         <group-name>PRIVILEGE_PROLONGATION_P</group-name>
     </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PRIVILEGE_DEBT</role-name>
+        <group-name>PRIVILEGE_DEBT</group-name>
+    </security-role-mapping>
 </glassfish-web-app>

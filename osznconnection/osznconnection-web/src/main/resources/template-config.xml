@@ -32,5 +32,6 @@
         <group name="PRIVILEGE_LOCAL"/>
         <group name="PRIVILEGE_PROLONGATION_S"/>
         <group name="PRIVILEGE_PROLONGATION_P"/>
+        <group name="PRIVILEGE_DEBT"/>
     </groups>
 </template>

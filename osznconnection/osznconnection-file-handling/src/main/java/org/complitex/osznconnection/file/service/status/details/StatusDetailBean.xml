@@ -671,4 +671,84 @@
         from `oschadbank_request` where `request_file_id` = #{id} and `status` = #{status}
         group by `id`
     </select>
+    
+    <!-- Debt -->
+     <resultMap id="debtStatusDetailInfo" type="org.complitex.osznconnection.file.entity.StatusDetailInfo"
+               extends="statusDetailInfo">
+        <collection property="statusDetails" column="status=status,id=request_file_id"
+                    ofType="org.complitex.osznconnection.file.entity.StatusDetail"
+                    select="getDebtStatusDetails"/>
+    </resultMap>
+    
+     <resultMap id="debtStatusDetail" type="org.complitex.osznconnection.file.entity.StatusDetail"
+               extends="statusDetail">
+        <association property="details" javaType="map">
+            <result column="FIO" property="fio"/>
+            <result column="first_name" property="firstName"/>
+            <result column="middle_name" property="middleName"/>
+            <result column="last_name" property="lastName"/>
+            <result column="KLKUL_CODE" property="streetTypeCode"/>
+            <result column="KLKUL_NAME" property="streetType"/>
+            <result column="CDUL" property="streetCode"/>
+            <result column="KL_NAME" property="street"/>
+            <result column="HOUSE" property="building"/>
+            <result column="BUILD" property="buildingCorp"/>
+            <result column="APT" property="apartment"/>
+        </association>
+    </resultMap>
+
+    <select id="getDebtStatusDetailInfo" parameterType="long" resultMap="debtStatusDetailInfo">
+        SELECT COUNT(1) `count`, `status`, `request_file_id` FROM `debt` WHERE `request_file_id` = #{id}
+        GROUP BY `status`
+        ORDER BY `count` DESC
+    </select>
+
+    <select id="getDebtStatusDetails" parameterType="map" resultMap="debtStatusDetail">
+        <choose>
+            <!--account number -->
+            <when test="status == 212 or status == 213">
+                SELECT `FIOPIL` `id`, COUNT(1) `count`,
+                TO_CYRILLIC(`first_name`) first_name, TO_CYRILLIC(`middle_name`) middle_name, TO_CYRILLIC(`last_name`) last_name,
+                TO_CYRILLIC(`FIOPIL`) FIO
+                FROM `debt`
+                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                GROUP BY `id`
+            </when>
+
+            <!--street-->
+            <when test="status == 201 or status == 208 or status == 207 or status == 224 or status == 237 or status == 207 or status == 223">
+                SELECT `CDUL` `id`, COUNT(1) `count`, CDUL
+                FROM `debt`
+                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                GROUP BY `id`
+            </when>
+
+            <!--building-->
+            <when test="status == 202 or status == 209 or status == 225">
+                SELECT CONCAT(`CDUL`, `HOUSE`) `id`, COUNT(1) `count`, `HOUSE`, `CDUL`
+                FROM `debt`
+                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                GROUP BY `id`
+            </when>
+
+            <!--building corp-->
+            <when test="status == 226">
+                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD`
+                FROM `debt`
+                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                GROUP BY `id`
+            </when>
+
+            <!-- apartment -->
+            <when test="status == 227">
+                SELECT CONCAT(`CDUL`, `HOUSE`, `BUILD`, `APT`) `id`, COUNT(1) `count`, `CDUL`, `HOUSE`, `BUILD`, `APT`
+                FROM `debt`
+                WHERE `request_file_id` = #{id} AND `status` = #{status}
+                GROUP BY `id`
+            </when>
+            <otherwise>
+                SELECT 1 FROM DUAL where 1=0;
+            </otherwise>
+        </choose>
+    </select>
 </mapper>

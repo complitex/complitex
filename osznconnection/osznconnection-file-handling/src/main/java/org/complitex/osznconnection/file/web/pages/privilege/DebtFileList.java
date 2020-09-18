@@ -17,7 +17,7 @@ import static org.complitex.osznconnection.organization_type.strategy.OsznOrgani
  * @author Anatoly Ivanov
  * 16.09.2020 20:26
  */
-@AuthorizeInstantiation("PRIVILEGE_LOCAL")
+@AuthorizeInstantiation("PRIVILEGE_DEBT")
 public class DebtFileList extends AbstractFileList {
     @EJB
     private ProcessManagerService processManagerService;
@@ -39,5 +39,15 @@ public class DebtFileList extends AbstractFileList {
     @Override
     protected void save(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
         processManagerService.saveDebt(selectedFileIds, parameters);
+    }
+
+    @Override
+    protected boolean isBindVisible() {
+        return true;
+    }
+
+    @Override
+    protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerService.bindDebt(selectedFileIds, parameters);
     }
 }

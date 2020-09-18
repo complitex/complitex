@@ -82,7 +82,7 @@ public abstract class AbstractFileList extends TemplatePage {
 
             @Override
             protected boolean isBindVisible() {
-                return false;
+                return AbstractFileList.this.isBindVisible();
             }
 
             @Override
@@ -100,6 +100,10 @@ public abstract class AbstractFileList extends TemplatePage {
                 return AbstractFileList.this.isExportVisible();
             }
         });
+    }
+
+    protected boolean isBindVisible() {
+        return false;
     }
 
     protected boolean isFillVisible() {

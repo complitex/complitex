@@ -61,6 +61,14 @@ public class StatusDetailBean extends AbstractBean {
         return list;
     }
 
+    public List<StatusDetailInfo> getDebtStatusDetails(Long requestFileId) {
+        List<StatusDetailInfo>  list =  sqlSession().selectList(NS + ".getDebtStatusDetailInfo", requestFileId);
+
+        loadFacilityStreet(requestFileId, list);
+
+        return list;
+    }
+
     private void loadFacilityStreet(Long requestFileId, List<StatusDetailInfo> list){
         for (StatusDetailInfo info : list){
             for (StatusDetail detail : info.getStatusDetails()){

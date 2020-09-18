@@ -5,11 +5,13 @@ import org.complitex.address.util.AddressUtil;
 import org.complitex.common.entity.FilterWrapper;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.osznconnection.file.entity.*;
+import org.complitex.osznconnection.file.entity.privilege.Debt;
 import org.complitex.osznconnection.file.entity.privilege.DwellingCharacteristics;
 import org.complitex.osznconnection.file.entity.privilege.FacilityServiceType;
 import org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation;
 import org.complitex.osznconnection.file.entity.subsidy.*;
 import org.complitex.osznconnection.file.service.exception.MoreOneAccountException;
+import org.complitex.osznconnection.file.service.privilege.DebtBean;
 import org.complitex.osznconnection.file.service.privilege.DwellingCharacteristicsBean;
 import org.complitex.osznconnection.file.service.privilege.FacilityServiceTypeBean;
 import org.complitex.osznconnection.file.service.privilege.PrivilegeProlongationBean;
@@ -79,6 +81,9 @@ public class PersonAccountService extends AbstractBean {
 
     @EJB
     private PrivilegeProlongationBean privilegeProlongationBean;
+
+    @EJB
+    private DebtBean debtBean;
 
     public String getLocalAccountNumber(AbstractAccountRequest request, String puAccountNumber) throws MoreOneAccountException {
         return getLocalAccountNumber(request, puAccountNumber, false);
@@ -361,6 +366,28 @@ public class PersonAccountService extends AbstractBean {
             RequestFile requestFile = requestFileBean.getRequestFile(requestFileId);
 
             if (privilegeProlongationBean.isPrivilegeProlongationBound(requestFileId)) {
+                requestFile.setStatus(RequestFileStatus.BOUND);
+                requestFileBean.save(requestFile);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateAccountNumber(Debt debt, String accountNumber) {
+        try {
+            debt.setAccountNumber(accountNumber);
+            serviceProviderAdapter.checkFacilityPerson(debt, accountNumber, debt.getDate(),
+                    debt.getInn(), debt.getPassport());
+
+            debtBean.updateDebtAccountNumber(debt);
+            save(debt, !Strings.isNullOrEmpty(debt.getPuAccountNumber())
+                    ? debt.getPuAccountNumber() : debt.getInn());
+
+            Long requestFileId = debt.getRequestFileId();
+            RequestFile requestFile = requestFileBean.getRequestFile(requestFileId);
+
+            if (debtBean.isDebtBound(requestFileId)) {
                 requestFile.setStatus(RequestFileStatus.BOUND);
                 requestFileBean.save(requestFile);
             }

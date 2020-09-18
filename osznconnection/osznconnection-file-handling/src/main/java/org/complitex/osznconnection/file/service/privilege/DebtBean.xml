@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.complitex.osznconnection.file.service.privilege.DebtBean">
-    <resultMap id="facilityLocalResultMap" type="org.complitex.osznconnection.file.entity.privilege.Debt"
+    <resultMap id="debtResultMap" type="org.complitex.osznconnection.file.entity.privilege.Debt"
                extends="org.complitex.osznconnection.file.service.AbstractRequestBean.abstractRequest">
         <id column="id" property="id"/>
 
@@ -27,6 +27,14 @@
         <result column="city" property="city"/>
 
         <association property="dbfFields" javaType="map">
+            <result column="IDPIL_CYR" property="IDPIL_CYR"/>
+            <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
+
+            <result column="FIOPIL_CYR" property="FIOPIL_CYR"/>
+            <result column="HOUSE_CYR" property="HOUSE_CYR"/>
+            <result column="BUILD_CYR" property="BUILD_CYR"/>
+            <result column="APT_CYR" property="APT_CYR"/>
+
             <result column="COD" property="COD"/>
             <result column="CDPR" property="CDPR"/>
             <result column="NCARD" property="NCARD"/>
@@ -57,19 +65,143 @@
         </include>
     </insert>
 
-    <select id="selectDebt" resultMap="facilityLocalResultMap" parameterType="long">
+    <select id="selectDebt" resultMap="debtResultMap" parameterType="long">
         select * from `debt` where `request_file_id` = #{id}
     </select>
 
-    <select id="selectDebtList" resultMap="facilityLocalResultMap" parameterType="org.complitex.common.entity.FilterWrapper">
-        select * from `debt` where `request_file_id` = #{object.requestFileId} ${limit}
+     <sql id="filter">
+        <where>
+            <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.filterPrivilege"/>
+
+            <if test="fio != null">
+                and r.`FIOPIL` = #{fio}
+            </if>
+
+            <if test="spAccountNumber != null">
+                and r.`RAH` = #{spAccountNumber}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectDebtsCount" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample">
+        SELECT COUNT(distinct r.`id`) FROM `debt` r
+        <include refid="filter"/>
     </select>
 
-    <select id="selectDebtListCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
-        select count(id) from `debt` where `request_file_id` = #{object.requestFileId}
+    <select id="selectDebts" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample"
+            resultMap="debtResultMap">
+        SELECT t.*,
+        w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
+        p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
+        FROM (
+        SELECT DISTINCT r.`id`, r.`status`, r.`request_file_id`, r.`FIOPIL`, r.`IDPIL`, r.`PASPPIL`,
+        r.`CDUL`, r.`HOUSE`, r.`BUILD`, r.`APT`, r.`date`, r.`RAH`,
+
+        TO_CYRILLIC(r.`IDPIL`) IDPIL_CYR,
+        TO_CYRILLIC(r.`PASPPIL`) PASPPIL_CYR,
+
+        TO_CYRILLIC(r.`first_name`) first_name_cyr,
+        TO_CYRILLIC(r.`middle_name`) middle_name_cyr,
+        TO_CYRILLIC(r.`last_name`) last_name_cyr,
+
+        TO_CYRILLIC(r.`FIOPIL`) FIOPIL_CYR,
+        TO_CYRILLIC(r.`HOUSE`) HOUSE_CYR,
+        TO_CYRILLIC(r.`BUILD`) BUILD_CYR,
+        TO_CYRILLIC(r.`APT`) APT_CYR,
+
+        f.`organization_id`, f.`user_organization_id`, f.`group_id`,
+        r.`internal_city_id`, r.`internal_street_id`, r.`internal_street_type_id`, r.`internal_building_id`,
+        r.`outgoing_city`, r.`outgoing_district`, r.`outgoing_street`, r.`outgoing_street_type`, r.`outgoing_building_number`,
+        r.`outgoing_building_corp`, r.`outgoing_apartment`,
+        r.`city`, r.account_number
+        FROM `debt` r
+        LEFT JOIN `request_file` f ON f.`id` = r.`request_file_id`
+
+        <include refid="filter"/>
+
+        <if test="orderByClause != null">
+            <choose>
+                <when test="orderByClause == 'street_reference'">
+                    ORDER BY r.`CDUL`
+                </when>
+
+                <when test="orderByClause == 'IDCODE' or orderByClause == 'HOUSE' or orderByClause == 'BUILD' or orderByClause == 'APT' or orderByClause == 'RAH'">
+                    ORDER BY `${orderByClause}`+0
+                </when>
+                <otherwise>ORDER BY `${orderByClause}`</otherwise>
+            </choose>
+            <choose>
+                <when test="asc">ASC</when>
+                <otherwise>DESC</otherwise>
+            </choose>
+        </if>
+
+        <if test="count != 0">limit #{first},#{count}</if>
+        ) t
+        LEFT JOIN `request_warning` w ON (w.`request_id` = t.`id`)
+        LEFT JOIN `request_warning_parameter` p ON w.`id` = p.`request_warning_id`
     </select>
 
     <delete id="deleteDebt" parameterType="long">
         delete from `debt` where `request_file_id` = #{id}
     </delete>
+
+    <update id="updateDebt" parameterType="org.complitex.osznconnection.file.entity.privilege.Debt">
+        <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.updatePrivilege">
+            <property name="table" value="debt"/>
+        </include>
+    </update>
+
+    <select id="selectDebtIds" parameterType="long" resultType="long">
+        SELECT `id` FROM `debt` WHERE `request_file_id` = #{requestFileId}
+    </select>
+
+    <select id="selectDebtForOperation" parameterType="map" resultMap="debtResultMap">
+        SELECT f.`organization_id`, f.`user_organization_id`, f.`group_id`,
+
+        TO_CYRILLIC(r.`IDPIL`) IDPIL_CYR,
+        TO_CYRILLIC(r.`PASPPIL`) PASPPIL_CYR,
+
+        TO_CYRILLIC(r.`FIOPIL`) FIOPIL_CYR,
+        TO_CYRILLIC(r.`HOUSE`) HOUSE_CYR,
+        TO_CYRILLIC(r.`BUILD`) BUILD_CYR,
+        TO_CYRILLIC(r.`APT`) APT_CYR,
+
+        TO_CYRILLIC(r.`first_name`) first_name_cyr,
+        TO_CYRILLIC(r.`middle_name`) middle_name_cyr,
+        TO_CYRILLIC(r.`last_name`) last_name_cyr,
+
+        r.*
+        FROM `debt` r
+        JOIN `request_file` f ON r.`request_file_id` = f.`id`
+        WHERE r.`request_file_id` = #{requestFileId}
+        AND r.`id` IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="clearDebtBound" parameterType="map">
+        <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.clearPrivilegeBound">
+            <property name="table" value="debt"/>
+        </include>
+    </update>
+
+    <update id="markDebtCorrected" parameterType="map">
+        <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.markPrivilegeCorrected">
+            <property name="table" value="debt"/>
+        </include>
+    </update>
+
+    <select id="countByFile" resultType="int" parameterType="map">
+        SELECT COUNT(1) FROM `debt`
+        WHERE `request_file_id` = #{requestFileId} AND `status` IN
+        <foreach collection="statuses" item="status" open="(" close=")" separator=",">
+            #{status}
+        </foreach>
+    </select>
+
+    <update id="updateDebtAccountNumber" parameterType="org.complitex.osznconnection.file.entity.privilege.Debt">
+        UPDATE `debt` SET `account_number` = #{accountNumber}, `status` = #{status} WHERE `id` = #{id}
+    </update>
 </mapper>
