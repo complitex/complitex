@@ -803,8 +803,12 @@ public class ProcessManagerService {
     }
 
     public void bindDebt(List<Long> ids, Map<?, ?> processParameters) {
-        execute(BIND_DEBT, DebtBindTaskBean.class,
-                updateAndGetRequestFiles(BIND_WAIT, ids),
-                requestFileListener, BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+        execute(BIND_DEBT, DebtBindTaskBean.class, updateAndGetRequestFiles(BIND_WAIT, ids), requestFileListener,
+                BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
+    }
+
+    public void fillDebt(List<Long> ids, Map<?, ?> processParameters) {
+        execute(FILL_DEBT, DebtFillTaskBean.class, updateAndGetRequestFiles(FILL_WAIT, ids), requestFileListener,
+                BIND_THREAD_SIZE, BIND_MAX_ERROR_COUNT, processParameters);
     }
 }

@@ -227,6 +227,7 @@ public class DebtList extends TemplatePage {
         filterForm.add(new TextField<>("buildingFilter", new PropertyModel<>(example, "building")));
         filterForm.add(new TextField<>("corpFilter", new PropertyModel<>(example, "corp")));
         filterForm.add(new TextField<>("apartmentFilter", new PropertyModel<>(example, "apartment")));
+        filterForm.add(new TextField<>("debtFilter", Model.of("")));
         filterForm.add(new DropDownChoice<>("statusFilter", new PropertyModel<>(example, "status"),
                 Arrays.asList(RequestStatus.values()), new StatusRenderer()).setNullValid(true));
 
@@ -323,6 +324,7 @@ public class DebtList extends TemplatePage {
                 item.add(new Label("building", debt.getBuildingNumber()));
                 item.add(new Label("corp", debt.getBuildingCorp()));
                 item.add(new Label("apartment", debt.getApartment()));
+                item.add(new Label("debt", debt.getBigDecimalField(DebtDBF.SUM_BORG)));
                 item.add(new Label("status", StatusRenderUtil.displayStatus(debt.getStatus(), getLocale())));
                 item.add(new Label("statusDetails", webWarningRenderer.display(debt.getWarnings(), getLocale())));
 
@@ -362,6 +364,7 @@ public class DebtList extends TemplatePage {
         filterForm.add(new ArrowOrderByBorder("buildingHeader", "HOUSE", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("corpHeader", "CORP", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("apartmentHeader", "APT", dataProvider, data, content));
+        filterForm.add(new ArrowOrderByBorder("debtHeader", "SUM_BORG", dataProvider, data, content));
         filterForm.add(new ArrowOrderByBorder("statusHeader", "status", dataProvider, data, content));
 
         Link<Void> back = new Link<Void>("back") {

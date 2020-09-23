@@ -50,4 +50,14 @@ public class DebtFileList extends AbstractFileList {
     protected void bind(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
         processManagerService.bindDebt(selectedFileIds, parameters);
     }
+
+    @Override
+    protected boolean isFillVisible() {
+        return true;
+    }
+
+    @Override
+    protected void fill(List<Long> selectedFileIds, Map<Enum<?>, Object> parameters) {
+        processManagerService.fillDebt(selectedFileIds, parameters);
+    }
 }

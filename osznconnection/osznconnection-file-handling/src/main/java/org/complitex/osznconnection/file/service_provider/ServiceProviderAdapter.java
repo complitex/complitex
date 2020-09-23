@@ -1568,4 +1568,22 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         return (Long) map.get("resultCode");
     }
+
+    public BigDecimal getDebtHope(Long userOrganizationId, String accountNumber, Date date, Integer months){
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("pAcc", accountNumber);
+        map.put("pDate", date);
+        map.put("pMonths", months);
+
+        try {
+            sqlSession(getDataSource(userOrganizationId)).selectOne(NS + ".getDebtHope", map);
+        } catch (Exception e) {
+            throw new DBRuntimeException(e);
+        } finally {
+            log.info("getDebtHope {}", map);
+        }
+
+        return (BigDecimal) map.get("data");
+    }
 }

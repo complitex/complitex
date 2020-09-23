@@ -95,7 +95,7 @@
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
         SELECT DISTINCT r.`id`, r.`status`, r.`request_file_id`, r.`FIOPIL`, r.`IDPIL`, r.`PASPPIL`,
-        r.`CDUL`, r.`HOUSE`, r.`BUILD`, r.`APT`, r.`date`, r.`RAH`,
+        r.`CDUL`, r.`HOUSE`, r.`BUILD`, r.`APT`, r.`date`, r.`RAH`, r.`SUM_BORG`,
 
         TO_CYRILLIC(r.`IDPIL`) IDPIL_CYR,
         TO_CYRILLIC(r.`PASPPIL`) PASPPIL_CYR,

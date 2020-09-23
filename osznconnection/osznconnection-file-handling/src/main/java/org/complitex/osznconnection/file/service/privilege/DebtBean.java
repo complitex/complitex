@@ -98,6 +98,10 @@ public class DebtBean extends AbstractPrivilegeBean {
         return countByFile(fileId, RequestStatus.unboundStatuses()) == 0;
     }
 
+    public boolean isDebtFileFilled(Long requestFileId){
+        return countByFile(requestFileId, RequestStatus.UNPROCESSED_SET_STATUSES) == 0;
+    }
+
     public void updateDebtAccountNumber(Debt debt){
         sqlSession().update(NS + ".updateDebtAccountNumber", debt);
     }

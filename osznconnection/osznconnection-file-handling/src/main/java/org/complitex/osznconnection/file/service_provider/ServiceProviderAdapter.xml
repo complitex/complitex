@@ -405,4 +405,12 @@
                 #{pDateE, mode=IN, javaType=date, jdbcType=DATE}
             )}
     </select>
+
+    <select id="getDebtHope" statementType="CALLABLE" parameterType="map">
+        {#{data, mode=OUT, javaType=bigdecimal, jdbcType=DECIMAL} = call COMP.z$runtime_sz_utl.getDebtHope(
+                #{pAcc, mode=IN, javaType=string, jdbcType=VARCHAR},
+                #{pDate, mode=IN, javaType=date, jdbcType=DATE},
+                #{pMonths, mode=IN, javaType=int, jdbcType=NUMERIC}
+        )}
+    </select>
 </mapper>
