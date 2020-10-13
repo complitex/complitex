@@ -86,7 +86,7 @@ public class DebtFillTaskBean extends AbstractRequestTaskBean<RequestFile> {
     }
 
     public void fill(RequestFile requestFile, Debt debt) {
-        if (!debt.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){
+        if (debt.getAccountNumber() == null){
             debt.setStatus(RequestStatus.PROCESSED_WITH_ERROR);
 
             debtBean.update(debt);
