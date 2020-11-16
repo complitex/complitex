@@ -1,7 +1,5 @@
 package ru.complitex.webapi;
 
-import io.helidon.common.CollectionsHelper;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -16,6 +14,6 @@ import java.util.Set;
 public class WebapiApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
-        return CollectionsHelper.setOf(WebapiResource.class);
+        return Set.of(WebapiResource.class);
     }
 }

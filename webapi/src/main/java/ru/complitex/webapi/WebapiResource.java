@@ -1,10 +1,11 @@
 package ru.complitex.webapi;
 
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.sql.DataSource;
@@ -12,17 +13,15 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
+import java.time.LocalDate;
 
 /**
  * @author Anatoly A. Ivanov
  * 05.12.2019 7:10 PM
  */
 @Path("/webapi")
-@ApplicationScoped
+@RequestScoped
 public class WebapiResource {
     @Inject
     @Named("webapi")
@@ -125,5 +124,84 @@ public class WebapiResource {
         }
 
         return json.build();
+    }
+
+    @Path("/getAccountInfo")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject getAccountInfo(@QueryParam("acc") String account, @QueryParam("date") String date) throws SQLException {
+        if (account == null || account.isEmpty() || date == null || date.isEmpty()){
+            return null;
+        }
+
+        LocalDate localDate = LocalDate.parse(date);
+
+        JsonArrayBuilder info = Json.createArrayBuilder();
+        JsonArrayBuilder corr = Json.createArrayBuilder();
+
+        try (Connection connection = this.dataSource.getConnection()) {
+            @SuppressWarnings("SqlResolve") CallableStatement psInfo = connection.prepareCall(
+                    "{? = call COMP.z$runtime_sz_utl.getAccInfo(?, ?, ?)}"
+            );
+
+            psInfo.registerOutParameter(1, Types.INTEGER);
+            psInfo.setString(2, account);
+            psInfo.setDate(3, Date.valueOf(localDate));
+
+            psInfo.registerOutParameter(4, Types.REF_CURSOR);
+
+            psInfo.execute();
+
+            if (psInfo.getInt(1) != 1){
+                return Json.createObjectBuilder().add("error_code", psInfo.getInt(1)).build();
+            }
+
+            ResultSet rsInfo = psInfo.getObject(4, ResultSet.class);
+
+            while (rsInfo.next()){
+                info.add(Json.createObjectBuilder()
+                        .add("street", rsInfo.getString("STREET"))
+                        .add("house", rsInfo.getString("HOUSE"))
+                        .add("flat", rsInfo.getString("FLAT"))
+                        .add("tarif", rsInfo.getBigDecimal("TARIF"))
+                        .add("saldo", rsInfo.getBigDecimal("SALDO"))
+                        .add("charge", rsInfo.getBigDecimal("CHARGE"))
+                        .add("corr", rsInfo.getBigDecimal("CORR"))
+                        .add("pays", rsInfo.getBigDecimal("PAYS"))
+                        .add("to_pay", rsInfo.getBigDecimal("TOPAY")).build()
+                );
+            }
+
+
+            @SuppressWarnings("SqlResolve") CallableStatement psCorr = connection.prepareCall(
+                    "{? = call COMP.z$runtime_sz_utl.getAccSrvCorr(?, ?, ?)}"
+            );
+
+            psCorr.registerOutParameter(1, Types.INTEGER);
+            psCorr.setString(2, account);
+            psCorr.setDate(3, Date.valueOf(localDate));
+
+            psCorr.registerOutParameter(4, Types.REF_CURSOR);
+
+            psCorr.execute();
+
+            if (psCorr.getInt(1) != 1){
+                return Json.createObjectBuilder().add("error_code", psCorr.getInt(1)).build();
+            }
+
+            ResultSet rsCorr = psCorr.getObject(4, ResultSet.class);
+
+            while (rsCorr.next()){
+                corr.add(Json.createObjectBuilder()
+                        .add("srv", rsCorr.getString("SRV"))
+                        .add("corr", rsCorr.getString("CORR")).build()
+                );
+            }
+        }
+
+        return Json.createObjectBuilder()
+                .add("acc_info", info.build())
+                .add("acc_srv_corr", corr.build())
+                .build();
     }
 }
