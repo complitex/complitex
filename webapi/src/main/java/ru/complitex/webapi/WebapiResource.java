@@ -129,7 +129,8 @@ public class WebapiResource {
     @Path("/getAccountInfo")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject getAccountInfo(@QueryParam("acc") String account, @QueryParam("date") String date) throws SQLException {
+    public JsonObject getAccountInfo(@QueryParam("acc") String account, @QueryParam("date") String date,
+                                     @QueryParam("locale") String locale) throws SQLException {
         if (account == null || account.isEmpty() || date == null || date.isEmpty()){
             return null;
         }
@@ -141,7 +142,7 @@ public class WebapiResource {
 
         try (Connection connection = this.dataSource.getConnection()) {
             @SuppressWarnings("SqlResolve") CallableStatement psInfo = connection.prepareCall(
-                    "{? = call COMP.z$runtime_sz_utl.getAccInfo(?, ?, ?)}"
+                    "{? = call COMP.z$runtime_sz_utl.getAccInfo(?, ?, ?, ?)}"
             );
 
             psInfo.registerOutParameter(1, Types.INTEGER);
@@ -149,6 +150,8 @@ public class WebapiResource {
             psInfo.setDate(3, Date.valueOf(localDate));
 
             psInfo.registerOutParameter(4, Types.REF_CURSOR);
+
+            psInfo.setString(5, locale);
 
             psInfo.execute();
 
