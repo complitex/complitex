@@ -177,7 +177,7 @@ public class WebapiResource {
 
 
             @SuppressWarnings("SqlResolve") CallableStatement psCorr = connection.prepareCall(
-                    "{? = call COMP.z$runtime_sz_utl.getAccSrvCorr(?, ?, ?)}"
+                    "{? = call COMP.z$runtime_sz_utl.getAccSrvCorr(?, ?, ?, ?)}"
             );
 
             psCorr.registerOutParameter(1, Types.INTEGER);
@@ -185,6 +185,8 @@ public class WebapiResource {
             psCorr.setDate(3, Date.valueOf(localDate));
 
             psCorr.registerOutParameter(4, Types.REF_CURSOR);
+
+            psCorr.setString(5, locale);
 
             psCorr.execute();
 
