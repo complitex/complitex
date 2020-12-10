@@ -106,9 +106,9 @@ public class WebapiResource {
     public JsonObject getZerro(String nInfo) throws SQLException, NoSuchAlgorithmException {
         JsonObject nInfoJson = Json.createReader(new StringReader(nInfo)).readObject();
 
-        String accId = nInfoJson.get("accId").toString();
+        String accId = nInfoJson.get("accId").toString().replace("\"", "");
 
-        if (accId == null || accId.isEmpty()){
+        if (accId.isEmpty()){
             return null;
         }
 
