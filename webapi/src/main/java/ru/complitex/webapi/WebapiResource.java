@@ -103,7 +103,7 @@ public class WebapiResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonObject getZerro(String nInfo) throws SQLException, NoSuchAlgorithmException {
+    public JsonObject getZerro(String nInfo) throws NoSuchAlgorithmException {
         JsonObject nInfoJson = Json.createReader(new StringReader(nInfo)).readObject();
 
         String accId = nInfoJson.get("accId").toString().replace("\"", "");
@@ -112,18 +112,31 @@ public class WebapiResource {
             return null;
         }
 
-        AccDebtToday accDebtToday = getAccDebtToday(accId);
-
         JsonObjectBuilder json = Json.createObjectBuilder();
 
         json.add("accId", accId);
 
-        if (accDebtToday.getDebt() != null && new BigDecimal(accDebtToday.getDebt()).compareTo(BigDecimal.ZERO) > 0){
+        AccDebtToday accDebtToday;
+
+        try {
+            accDebtToday = getAccDebtToday(accId);
+
+            if (accDebtToday.getResult() == 0){
+                json.add("result", "0");
+
+                json.add("error", "л/с не найден");
+            } else if (accDebtToday.getDebt() != null && new BigDecimal(accDebtToday.getDebt()).compareTo(BigDecimal.ZERO) > 0){
+                json.add("result", "0");
+
+                json.add("conditions", Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder().add("saldo", accDebtToday.getDebt())));
+            } else {
+                json.add("result", "1");
+            }
+        } catch (Exception e) {
             json.add("result", "0");
 
-            json.add("conditions", Json.createArrayBuilder().add(Json.createObjectBuilder().add("saldo", accDebtToday.getDebt())));
-        } else {
-            json.add("result", "1");
+            json.add("error", "неизвестная ошибка");
         }
 
         JsonObject zerro = json.build();
