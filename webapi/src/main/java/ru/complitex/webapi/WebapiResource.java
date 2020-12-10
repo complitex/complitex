@@ -11,8 +11,11 @@ import javax.json.JsonObjectBuilder;
 import javax.sql.DataSource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.DatatypeConverter;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -100,10 +103,10 @@ public class WebapiResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonObject getZerro(String nInfo) throws SQLException {
+    public JsonObject getZerro(String nInfo) throws SQLException, NoSuchAlgorithmException {
         JsonObject nInfoJson = Json.createReader(new StringReader(nInfo)).readObject();
 
-        String accId = nInfoJson.getString("accId");
+        String accId = nInfoJson.get("accId").toString();
 
         if (accId == null || accId.isEmpty()){
             return null;
@@ -111,7 +114,7 @@ public class WebapiResource {
 
         AccDebtToday accDebtToday = getAccDebtToday(accId);
 
-        JsonObjectBuilder json =  Json.createObjectBuilder();
+        JsonObjectBuilder json = Json.createObjectBuilder();
 
         json.add("accId", accId);
 
@@ -123,7 +126,17 @@ public class WebapiResource {
             json.add("result", "1");
         }
 
-        return json.build();
+        JsonObject zerro = json.build();
+
+        MessageDigest md = MessageDigest.getInstance("MD5");
+
+        md.update(zerro.toString().getBytes());
+
+        byte[] digest = md.digest();
+
+        return Json.createObjectBuilder(zerro)
+                .add( "hash", DatatypeConverter.printHexBinary(digest))
+                .build();
     }
 
     @Path("/getAccountInfo")
