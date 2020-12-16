@@ -197,7 +197,9 @@ public class WebapiResource {
                         .add("charge", rsInfo.getBigDecimal("CHARGE"))
                         .add("corr", rsInfo.getBigDecimal("CORR"))
                         .add("pays", rsInfo.getBigDecimal("PAYS"))
-                        .add("to_pay", rsInfo.getBigDecimal("TOPAY")).build()
+                        .add("to_pay", rsInfo.getBigDecimal("TOPAY"))
+                        .add("fio", rsInfo.getString("FIO"))
+                        .build()
                 );
             }
 
