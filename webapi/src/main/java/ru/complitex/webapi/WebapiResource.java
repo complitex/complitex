@@ -62,22 +62,22 @@ public class WebapiResource {
 
     public AccDebtToday getAccDebtToday(String account)  throws SQLException{
         try (Connection connection = this.dataSource.getConnection()) {
-            @SuppressWarnings("SqlResolve") CallableStatement ps = connection.prepareCall(
+            @SuppressWarnings("SqlResolve") CallableStatement cs = connection.prepareCall(
                     "{? = call COMP.z$runtime_sz_utl.getAccDebtToday(?, ?, ?)}"
             );
 
-            ps.registerOutParameter(1, Types.INTEGER);
-            ps.setString(2, account);
-            ps.registerOutParameter(3, Types.VARCHAR);
-            ps.registerOutParameter(4, Types.VARCHAR);
+            cs.registerOutParameter(1, Types.INTEGER);
+            cs.setString(2, account);
+            cs.registerOutParameter(3, Types.VARCHAR);
+            cs.registerOutParameter(4, Types.VARCHAR);
 
-            ps.execute();
+            cs.execute();
 
             AccDebtToday accDebtToday = new AccDebtToday();
 
-            accDebtToday.setResult(ps.getInt(1));
-            accDebtToday.setAcc(ps.getString(3));
-            accDebtToday.setDebt(ps.getString(4));
+            accDebtToday.setResult(cs.getInt(1));
+            accDebtToday.setAcc(cs.getString(3));
+            accDebtToday.setDebt(cs.getString(4));
 
             return accDebtToday;
         }
@@ -167,25 +167,25 @@ public class WebapiResource {
         JsonArrayBuilder corr = Json.createArrayBuilder();
 
         try (Connection connection = this.dataSource.getConnection()) {
-            @SuppressWarnings("SqlResolve") CallableStatement psInfo = connection.prepareCall(
+            @SuppressWarnings("SqlResolve") CallableStatement csInfo = connection.prepareCall(
                     "{? = call COMP.z$runtime_sz_utl.getAccInfo(?, ?, ?, ?)}"
             );
 
-            psInfo.registerOutParameter(1, Types.INTEGER);
-            psInfo.setString(2, account);
-            psInfo.setDate(3, Date.valueOf(localDate));
+            csInfo.registerOutParameter(1, Types.INTEGER);
+            csInfo.setString(2, account);
+            csInfo.setDate(3, Date.valueOf(localDate));
 
-            psInfo.registerOutParameter(4, Types.REF_CURSOR);
+            csInfo.registerOutParameter(4, Types.REF_CURSOR);
 
-            psInfo.setString(5, locale);
+            csInfo.setString(5, locale);
 
-            psInfo.execute();
+            csInfo.execute();
 
-            if (psInfo.getInt(1) != 1){
-                return Json.createObjectBuilder().add("error_code", psInfo.getInt(1)).build();
+            if (csInfo.getInt(1) != 1){
+                return Json.createObjectBuilder().add("error_code", csInfo.getInt(1)).build();
             }
 
-            ResultSet rsInfo = psInfo.getObject(4, ResultSet.class);
+            ResultSet rsInfo = csInfo.getObject(4, ResultSet.class);
 
             while (rsInfo.next()){
                 info.add(Json.createObjectBuilder()
@@ -235,6 +235,65 @@ public class WebapiResource {
         return Json.createObjectBuilder()
                 .add("acc_info", info.build())
                 .add("acc_srv_corr", corr.build())
+                .build();
+    }
+
+    @Path("/getAccountProv")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject getAccountProv(@QueryParam("acc") String account,
+                                     @QueryParam("date-begin") String dateBegin,
+                                     @QueryParam("date-end") String dateEnd) throws SQLException {
+        if (account == null || account.isEmpty() || dateBegin == null || dateBegin.isEmpty() ||
+                dateEnd == null || dateEnd.isEmpty()){
+            return null;
+        }
+
+        LocalDate localDateBegin = LocalDate.parse(dateBegin);
+        LocalDate localDateEnd = LocalDate.parse(dateEnd);
+
+        JsonArrayBuilder prov = Json.createArrayBuilder();
+
+        try (Connection connection = this.dataSource.getConnection()) {
+            @SuppressWarnings("SqlResolve") CallableStatement cs = connection.prepareCall(
+                    "{? = call COMP.z$runtime_sz_utl.getAccProv(?, ?, ?, ?)}"
+            );
+
+            cs.registerOutParameter(1, Types.INTEGER);
+
+            cs.setString(2, account);
+            cs.setDate(3, Date.valueOf(localDateBegin));
+            cs.setDate(4, Date.valueOf(localDateEnd));
+
+            cs.registerOutParameter(5, Types.REF_CURSOR);
+
+            cs.execute();
+
+            if (cs.getInt(1) != 1){
+                return Json.createObjectBuilder().add("error_code", cs.getInt(1)).build();
+            }
+
+            ResultSet rs = cs.getObject(5, ResultSet.class);
+
+            while (rs.next()){
+                prov.add(Json.createObjectBuilder()
+                        .add("om", rs.getString("OM"))
+                        .add("saldo", rs.getBigDecimal("SALDO"))
+                        .add("charge", rs.getBigDecimal("CHARGE"))
+                        .add("corr", rs.getBigDecimal("CORR"))
+                        .add("pays", rs.getBigDecimal("PAYS"))
+                        .add("priv", rs.getBigDecimal("PRIV"))
+                        .add("subs", rs.getBigDecimal("SUBS"))
+                        .build()
+                );
+            }
+        }
+
+        return Json.createObjectBuilder()
+                .add("acc", account)
+                .add("date-begin", dateBegin)
+                .add("date-end", dateEnd)
+                .add("prov", prov.build())
                 .build();
     }
 }
