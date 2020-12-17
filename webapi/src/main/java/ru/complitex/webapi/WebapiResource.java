@@ -93,6 +93,13 @@ public class WebapiResource {
 
         AccDebtToday accDebtToday = getAccDebtToday(account);
 
+        if (accDebtToday.getResult() == 0){
+            return Json.createObjectBuilder()
+                    .add("error_code", 0)
+                    .add("error", "л/с не найден")
+                    .build();
+        }
+
         return Json.createObjectBuilder()
                 .add("acc",  accDebtToday.getAcc() != null ? accDebtToday.getAcc() : "")
                 .add("debt", accDebtToday.getDebt() != null ? accDebtToday.getDebt() : "")
@@ -181,8 +188,23 @@ public class WebapiResource {
 
             csInfo.execute();
 
-            if (csInfo.getInt(1) != 1){
-                return Json.createObjectBuilder().add("error_code", csInfo.getInt(1)).build();
+            int resultCodeInfo = csInfo.getInt(1);
+
+            if (resultCodeInfo == 0){
+                return Json.createObjectBuilder()
+                        .add("error_code", 0)
+                        .add("error", "л/с не найден")
+                        .build();
+            } else if (resultCodeInfo == -10){
+                return Json.createObjectBuilder()
+                        .add("error_code", -10)
+                        .add("error", "Неопознанная ошибка")
+                        .build();
+            } else if (resultCodeInfo == -26){
+                return Json.createObjectBuilder()
+                        .add("error_code", -26)
+                        .add("error", "Неизвестная локаль")
+                        .build();
             }
 
             ResultSet rsInfo = csInfo.getObject(4, ResultSet.class);
@@ -204,25 +226,40 @@ public class WebapiResource {
             }
 
 
-            @SuppressWarnings("SqlResolve") CallableStatement psCorr = connection.prepareCall(
+            @SuppressWarnings("SqlResolve") CallableStatement csCorr = connection.prepareCall(
                     "{? = call COMP.z$runtime_sz_utl.getAccSrvCorr(?, ?, ?, ?)}"
             );
 
-            psCorr.registerOutParameter(1, Types.INTEGER);
-            psCorr.setString(2, account);
-            psCorr.setDate(3, Date.valueOf(localDate));
+            csCorr.registerOutParameter(1, Types.INTEGER);
+            csCorr.setString(2, account);
+            csCorr.setDate(3, Date.valueOf(localDate));
 
-            psCorr.registerOutParameter(4, Types.REF_CURSOR);
+            csCorr.registerOutParameter(4, Types.REF_CURSOR);
 
-            psCorr.setString(5, locale);
+            csCorr.setString(5, locale);
 
-            psCorr.execute();
+            csCorr.execute();
 
-            if (psCorr.getInt(1) != 1){
-                return Json.createObjectBuilder().add("error_code", psCorr.getInt(1)).build();
+            int resultCodeCorr = csCorr.getInt(1);
+
+            if (resultCodeCorr == 0){
+                return Json.createObjectBuilder()
+                        .add("error_code", 0)
+                        .add("error", "л/с не найден")
+                        .build();
+            } else if (resultCodeCorr == -10){
+                return Json.createObjectBuilder()
+                        .add("error_code", -10)
+                        .add("error", "Неопознанная ошибка")
+                        .build();
+            } else if (resultCodeCorr == -26){
+                return Json.createObjectBuilder()
+                        .add("error_code", -26)
+                        .add("error", "Неизвестная локаль")
+                        .build();
             }
 
-            ResultSet rsCorr = psCorr.getObject(4, ResultSet.class);
+            ResultSet rsCorr = csCorr.getObject(4, ResultSet.class);
 
             while (rsCorr.next()){
                 corr.add(Json.createObjectBuilder()
@@ -230,6 +267,10 @@ public class WebapiResource {
                         .add("corr", rsCorr.getString("CORR")).build()
                 );
             }
+        } catch (Exception e){
+            return Json.createObjectBuilder()
+                    .add("error", "неизвестная ошибка")
+                    .build();
         }
 
         return Json.createObjectBuilder()
@@ -269,8 +310,18 @@ public class WebapiResource {
 
             cs.execute();
 
-            if (cs.getInt(1) != 1){
-                return Json.createObjectBuilder().add("error_code", cs.getInt(1)).build();
+            int resultCode = cs.getInt(1);
+
+            if (resultCode == 0){
+                return Json.createObjectBuilder()
+                        .add("error_code", 0)
+                        .add("error", "л/с не найден")
+                        .build();
+            }else if (resultCode == -10){
+                return Json.createObjectBuilder()
+                        .add("error_code", -10)
+                        .add("error", "Неопознанная ошибка")
+                        .build();
             }
 
             ResultSet rs = cs.getObject(5, ResultSet.class);
@@ -287,6 +338,10 @@ public class WebapiResource {
                         .build()
                 );
             }
+        } catch (Exception e){
+            return Json.createObjectBuilder()
+                    .add("error", "неизвестная ошибка")
+                    .build();
         }
 
         return Json.createObjectBuilder()
