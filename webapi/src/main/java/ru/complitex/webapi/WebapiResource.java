@@ -17,7 +17,9 @@ import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,9 +66,10 @@ public class WebapiResource {
         }
     }
 
+    @SuppressWarnings("SqlResolve")
     public AccDebtToday getAccDebtToday(String account)  throws SQLException{
         try (Connection connection = this.dataSource.getConnection()) {
-            @SuppressWarnings("SqlResolve") CallableStatement cs = connection.prepareCall(
+            CallableStatement cs = connection.prepareCall(
                     "{? = call COMP.z$runtime_sz_utl.getAccDebtToday(?, ?, ?)}"
             );
 
@@ -337,8 +340,8 @@ public class WebapiResource {
                     privs.add(Json.createObjectBuilder()
                             .add("code", rs.getString("CC"))
                             .add("quantity", rs.getString("UC"))
-                            .add("date_in", rs.getString("DATE_IN"))
-                            .add("date_out", rs.getString("DATE_OUT"))
+                            .add("date_in", getString(rs.getDate("DATE_IN")))
+                            .add("date_out", getString(rs.getDate("DATE_OUT")))
                             .build()
                     );
                 }
@@ -428,15 +431,35 @@ public class WebapiResource {
 
         return Json.createObjectBuilder()
                 .add("acc", account)
-                .add("date-begin", dateBegin)
-                .add("date-end", dateEnd)
+                .add("date-begin", getString(localDateBegin))
+                .add("date-end", getString(localDateEnd))
                 .add("prov", prov.build())
                 .build();
     }
 
-    public String getString(BigDecimal number){
+    private String getString(BigDecimal number){
         if (number != null){
             return number.toPlainString();
+        }
+
+        return null;
+    }
+
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    private String getString(Date date){
+        if (date != null){
+            return dateFormat.format(date);
+        }
+
+        return null;
+    }
+
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    private String getString(LocalDate localDate){
+        if (localDate != null){
+            return dateFormatter.format(localDate);
         }
 
         return null;
