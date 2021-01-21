@@ -275,7 +275,7 @@ public class WebapiResource {
                 while (rs.next()) {
                     corr.add(Json.createObjectBuilder()
                             .add("srv", rs.getString("SRV"))
-                            .add("corr", rs.getString("CORR"))
+                            .add("corr", getString(rs.getBigDecimal("CORR").setScale(2, HALF_EVEN)))
                             .build()
                     );
                 }
