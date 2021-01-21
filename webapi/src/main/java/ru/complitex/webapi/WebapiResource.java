@@ -229,12 +229,12 @@ public class WebapiResource {
                             .add("street", rs.getString("STREET"))
                             .add("house", rs.getString("HOUSE"))
                             .add("flat", rs.getString("FLAT"))
-                            .add("tarif", rs.getBigDecimal("TARIF"))
-                            .add("saldo", rs.getBigDecimal("SALDO"))
-                            .add("charge", rs.getBigDecimal("CHARGE"))
-                            .add("corr", rs.getBigDecimal("CORR"))
-                            .add("pays", rs.getBigDecimal("PAYS"))
-                            .add("to_pay", rs.getBigDecimal("TOPAY"))
+                            .add("tarif", getString(rs.getBigDecimal("TARIF")))
+                            .add("saldo", getString(rs.getBigDecimal("SALDO")))
+                            .add("charge", getString(rs.getBigDecimal("CHARGE")))
+                            .add("corr", getString(rs.getBigDecimal("CORR")))
+                            .add("pays", getString(rs.getBigDecimal("PAYS")))
+                            .add("to_pay", getString(rs.getBigDecimal("TOPAY")))
                             .add("fio", rs.getString("FIO"))
                             .build()
                     );
@@ -409,12 +409,12 @@ public class WebapiResource {
             while (rs.next()){
                 prov.add(Json.createObjectBuilder()
                         .add("om", rs.getString("OM"))
-                        .add("saldo", rs.getBigDecimal("SALDO"))
-                        .add("charge", rs.getBigDecimal("CHARGE"))
-                        .add("corr", rs.getBigDecimal("CORR"))
-                        .add("pays", rs.getBigDecimal("PAYS"))
-                        .add("priv", rs.getBigDecimal("PRIV"))
-                        .add("subs", rs.getBigDecimal("SUBS"))
+                        .add("saldo", getString(rs.getBigDecimal("SALDO")))
+                        .add("charge", getString(rs.getBigDecimal("CHARGE")))
+                        .add("corr", getString(rs.getBigDecimal("CORR")))
+                        .add("pays", getString(rs.getBigDecimal("PAYS")))
+                        .add("priv", getString(rs.getBigDecimal("PRIV")))
+                        .add("subs", getString(rs.getBigDecimal("SUBS")))
                         .build()
                 );
             }
@@ -432,5 +432,13 @@ public class WebapiResource {
                 .add("date-end", dateEnd)
                 .add("prov", prov.build())
                 .build();
+    }
+
+    public String getString(BigDecimal number){
+        if (number != null){
+            return number.toPlainString();
+        }
+
+        return null;
     }
 }
