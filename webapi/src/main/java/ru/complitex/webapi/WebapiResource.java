@@ -235,11 +235,11 @@ public class WebapiResource {
                             .add("house", rs.getString("HOUSE"))
                             .add("flat", rs.getString("FLAT"))
                             .add("tarif", getString(rs.getBigDecimal("TARIF")))
-                            .add("saldo", getString(rs.getBigDecimal("SALDO").setScale(2, HALF_EVEN)))
-                            .add("charge", getString(rs.getBigDecimal("CHARGE").setScale(2, HALF_EVEN)))
-                            .add("corr", getString(rs.getBigDecimal("CORR").setScale(2, HALF_EVEN)))
-                            .add("pays", getString(rs.getBigDecimal("PAYS").setScale(2, HALF_EVEN)))
-                            .add("to_pay", getString(rs.getBigDecimal("TOPAY").setScale(2, HALF_EVEN)))
+                            .add("saldo", getString(rs.getBigDecimal("SALDO"), 2))
+                            .add("charge", getString(rs.getBigDecimal("CHARGE"), 2))
+                            .add("corr", getString(rs.getBigDecimal("CORR"), 2))
+                            .add("pays", getString(rs.getBigDecimal("PAYS"), 2))
+                            .add("to_pay", getString(rs.getBigDecimal("TOPAY"), 2))
                             .add("fio", rs.getString("FIO"))
                             .build()
                     );
@@ -309,7 +309,7 @@ public class WebapiResource {
                 while (rs.next()) {
                     charge.add(Json.createObjectBuilder()
                             .add("srv", rs.getString("SRV"))
-                            .add("charge", rs.getString("CHARGE"))
+                            .add("charge", getString(rs.getBigDecimal("CHARGE"), 2))
                             .build()
                     );
                 }
@@ -417,12 +417,12 @@ public class WebapiResource {
             while (rs.next()){
                 prov.add(Json.createObjectBuilder()
                         .add("om", rs.getString("OM"))
-                        .add("saldo", getString(rs.getBigDecimal("SALDO").setScale(2, HALF_EVEN)))
-                        .add("charge", getString(rs.getBigDecimal("CHARGE").setScale(2, HALF_EVEN)))
-                        .add("corr", getString(rs.getBigDecimal("CORR").setScale(2, HALF_EVEN)))
-                        .add("pays", getString(rs.getBigDecimal("PAYS").setScale(2, HALF_EVEN)))
-                        .add("priv", getString(rs.getBigDecimal("PRIV").setScale(2, HALF_EVEN)))
-                        .add("subs", getString(rs.getBigDecimal("SUBS").setScale(2, HALF_EVEN)))
+                        .add("saldo", getString(rs.getBigDecimal("SALDO"), 2))
+                        .add("charge", getString(rs.getBigDecimal("CHARGE"), 2))
+                        .add("corr", getString(rs.getBigDecimal("CORR"), 2))
+                        .add("pays", getString(rs.getBigDecimal("PAYS"), 2))
+                        .add("priv", getString(rs.getBigDecimal("PRIV"), 2))
+                        .add("subs", getString(rs.getBigDecimal("SUBS"), 2))
                         .build()
                 );
             }
@@ -445,6 +445,14 @@ public class WebapiResource {
     private String getString(BigDecimal number){
         if (number != null){
             return number.toPlainString();
+        }
+
+        return null;
+    }
+
+    private String getString(BigDecimal number, int scale){
+        if (number != null){
+            return number.setScale(2, HALF_EVEN).toPlainString();
         }
 
         return null;
