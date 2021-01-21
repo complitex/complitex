@@ -23,6 +23,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.math.RoundingMode.HALF_EVEN;
+
 /**
  * @author Anatoly A. Ivanov
  * 05.12.2019 7:10 PM
@@ -233,11 +235,11 @@ public class WebapiResource {
                             .add("house", rs.getString("HOUSE"))
                             .add("flat", rs.getString("FLAT"))
                             .add("tarif", getString(rs.getBigDecimal("TARIF")))
-                            .add("saldo", getString(rs.getBigDecimal("SALDO")))
-                            .add("charge", getString(rs.getBigDecimal("CHARGE")))
-                            .add("corr", getString(rs.getBigDecimal("CORR")))
-                            .add("pays", getString(rs.getBigDecimal("PAYS")))
-                            .add("to_pay", getString(rs.getBigDecimal("TOPAY")))
+                            .add("saldo", getString(rs.getBigDecimal("SALDO").setScale(2, HALF_EVEN)))
+                            .add("charge", getString(rs.getBigDecimal("CHARGE").setScale(2, HALF_EVEN)))
+                            .add("corr", getString(rs.getBigDecimal("CORR").setScale(2, HALF_EVEN)))
+                            .add("pays", getString(rs.getBigDecimal("PAYS").setScale(2, HALF_EVEN)))
+                            .add("to_pay", getString(rs.getBigDecimal("TOPAY").setScale(2, HALF_EVEN)))
                             .add("fio", rs.getString("FIO"))
                             .build()
                     );
@@ -317,7 +319,7 @@ public class WebapiResource {
 
             {
                 CallableStatement cs = connection.prepareCall(
-                        "{? = call COMP.z$runtime_sz_utl.getPrivs(?, ?, ?)}"
+                        "{? = call COMP.z$runtime_sz_utl.getPrivs(?, ?, ?, ?)}"
                 );
 
                 cs.registerOutParameter(1, Types.INTEGER);
@@ -325,6 +327,8 @@ public class WebapiResource {
                 cs.setDate(3, Date.valueOf(localDate));
 
                 cs.registerOutParameter(4, Types.REF_CURSOR);
+
+                cs.setString(5, locale);
 
                 cs.execute();
 
@@ -342,6 +346,7 @@ public class WebapiResource {
                             .add("quantity", rs.getString("UC"))
                             .add("date_in", getString(rs.getDate("DATE_IN")))
                             .add("date_out", getString(rs.getDate("DATE_OUT")))
+                            .add("cat", rs.getString("CAT"))
                             .build()
                     );
                 }
@@ -412,12 +417,12 @@ public class WebapiResource {
             while (rs.next()){
                 prov.add(Json.createObjectBuilder()
                         .add("om", rs.getString("OM"))
-                        .add("saldo", getString(rs.getBigDecimal("SALDO")))
-                        .add("charge", getString(rs.getBigDecimal("CHARGE")))
-                        .add("corr", getString(rs.getBigDecimal("CORR")))
-                        .add("pays", getString(rs.getBigDecimal("PAYS")))
-                        .add("priv", getString(rs.getBigDecimal("PRIV")))
-                        .add("subs", getString(rs.getBigDecimal("SUBS")))
+                        .add("saldo", getString(rs.getBigDecimal("SALDO").setScale(2, HALF_EVEN)))
+                        .add("charge", getString(rs.getBigDecimal("CHARGE").setScale(2, HALF_EVEN)))
+                        .add("corr", getString(rs.getBigDecimal("CORR").setScale(2, HALF_EVEN)))
+                        .add("pays", getString(rs.getBigDecimal("PAYS").setScale(2, HALF_EVEN)))
+                        .add("priv", getString(rs.getBigDecimal("PRIV").setScale(2, HALF_EVEN)))
+                        .add("subs", getString(rs.getBigDecimal("SUBS").setScale(2, HALF_EVEN)))
                         .build()
                 );
             }
