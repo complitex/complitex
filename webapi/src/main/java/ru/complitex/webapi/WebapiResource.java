@@ -18,6 +18,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Anatoly A. Ivanov
@@ -26,6 +28,8 @@ import java.time.LocalDate;
 @Path("/webapi")
 @RequestScoped
 public class WebapiResource {
+    private final static Logger log = Logger.getLogger(WebapiResource.class.getName());
+
     @Inject
     @Named("webapi")
     private DataSource dataSource;
@@ -141,6 +145,8 @@ public class WebapiResource {
                 json.add("result", "1");
             }
         } catch (Exception e) {
+            log.log(Level.WARNING, "getZerro error", e);
+
             json.add("result", "0");
 
             json.add("error", "неизвестная ошибка");
@@ -159,9 +165,31 @@ public class WebapiResource {
                 .build();
     }
 
+    private JsonObject getResultObject(int resultCodeInfo){
+        if (resultCodeInfo == 0){
+            return Json.createObjectBuilder()
+                    .add("error_code", 0)
+                    .add("error", "л/с не найден")
+                    .build();
+        } else if (resultCodeInfo == -10){
+            return Json.createObjectBuilder()
+                    .add("error_code", -10)
+                    .add("error", "Неопознанная ошибка")
+                    .build();
+        } else if (resultCodeInfo == -26){
+            return Json.createObjectBuilder()
+                    .add("error_code", -26)
+                    .add("error", "Неизвестная локаль")
+                    .build();
+        }
+
+        return null;
+    }
+
     @Path("/getAccountInfo")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @SuppressWarnings("SqlResolve")
     public JsonObject getAccountInfo(@QueryParam("acc") String account, @QueryParam("date") String date,
                                      @QueryParam("locale") String locale) throws SQLException {
         if (account == null || account.isEmpty() || date == null || date.isEmpty()){
@@ -170,113 +198,165 @@ public class WebapiResource {
 
         LocalDate localDate = LocalDate.parse(date);
 
-        JsonArrayBuilder info = Json.createArrayBuilder();
-        JsonArrayBuilder corr = Json.createArrayBuilder();
-
         try (Connection connection = this.dataSource.getConnection()) {
-            @SuppressWarnings("SqlResolve") CallableStatement csInfo = connection.prepareCall(
-                    "{? = call COMP.z$runtime_sz_utl.getAccInfo(?, ?, ?, ?)}"
-            );
+            JsonArrayBuilder info = Json.createArrayBuilder();
 
-            csInfo.registerOutParameter(1, Types.INTEGER);
-            csInfo.setString(2, account);
-            csInfo.setDate(3, Date.valueOf(localDate));
-
-            csInfo.registerOutParameter(4, Types.REF_CURSOR);
-
-            csInfo.setString(5, locale);
-
-            csInfo.execute();
-
-            int resultCodeInfo = csInfo.getInt(1);
-
-            if (resultCodeInfo == 0){
-                return Json.createObjectBuilder()
-                        .add("error_code", 0)
-                        .add("error", "л/с не найден")
-                        .build();
-            } else if (resultCodeInfo == -10){
-                return Json.createObjectBuilder()
-                        .add("error_code", -10)
-                        .add("error", "Неопознанная ошибка")
-                        .build();
-            } else if (resultCodeInfo == -26){
-                return Json.createObjectBuilder()
-                        .add("error_code", -26)
-                        .add("error", "Неизвестная локаль")
-                        .build();
-            }
-
-            ResultSet rsInfo = csInfo.getObject(4, ResultSet.class);
-
-            while (rsInfo.next()){
-                info.add(Json.createObjectBuilder()
-                        .add("street", rsInfo.getString("STREET"))
-                        .add("house", rsInfo.getString("HOUSE"))
-                        .add("flat", rsInfo.getString("FLAT"))
-                        .add("tarif", rsInfo.getBigDecimal("TARIF"))
-                        .add("saldo", rsInfo.getBigDecimal("SALDO"))
-                        .add("charge", rsInfo.getBigDecimal("CHARGE"))
-                        .add("corr", rsInfo.getBigDecimal("CORR"))
-                        .add("pays", rsInfo.getBigDecimal("PAYS"))
-                        .add("to_pay", rsInfo.getBigDecimal("TOPAY"))
-                        .add("fio", rsInfo.getString("FIO"))
-                        .build()
+            {
+                CallableStatement cs = connection.prepareCall(
+                        "{? = call COMP.z$runtime_sz_utl.getAccInfo(?, ?, ?, ?)}"
                 );
+
+                cs.registerOutParameter(1, Types.INTEGER);
+                cs.setString(2, account);
+                cs.setDate(3, Date.valueOf(localDate));
+
+                cs.registerOutParameter(4, Types.REF_CURSOR);
+
+                cs.setString(5, locale);
+
+                cs.execute();
+
+                JsonObject ro = getResultObject(cs.getInt(1));
+
+                if (ro != null) {
+                    return ro;
+                }
+
+                ResultSet rs = cs.getObject(4, ResultSet.class);
+
+                while (rs.next()) {
+                    info.add(Json.createObjectBuilder()
+                            .add("street", rs.getString("STREET"))
+                            .add("house", rs.getString("HOUSE"))
+                            .add("flat", rs.getString("FLAT"))
+                            .add("tarif", rs.getBigDecimal("TARIF"))
+                            .add("saldo", rs.getBigDecimal("SALDO"))
+                            .add("charge", rs.getBigDecimal("CHARGE"))
+                            .add("corr", rs.getBigDecimal("CORR"))
+                            .add("pays", rs.getBigDecimal("PAYS"))
+                            .add("to_pay", rs.getBigDecimal("TOPAY"))
+                            .add("fio", rs.getString("FIO"))
+                            .build()
+                    );
+                }
             }
 
 
-            @SuppressWarnings("SqlResolve") CallableStatement csCorr = connection.prepareCall(
-                    "{? = call COMP.z$runtime_sz_utl.getAccSrvCorr(?, ?, ?, ?)}"
-            );
+            JsonArrayBuilder corr = Json.createArrayBuilder();
 
-            csCorr.registerOutParameter(1, Types.INTEGER);
-            csCorr.setString(2, account);
-            csCorr.setDate(3, Date.valueOf(localDate));
-
-            csCorr.registerOutParameter(4, Types.REF_CURSOR);
-
-            csCorr.setString(5, locale);
-
-            csCorr.execute();
-
-            int resultCodeCorr = csCorr.getInt(1);
-
-            if (resultCodeCorr == 0){
-                return Json.createObjectBuilder()
-                        .add("error_code", 0)
-                        .add("error", "л/с не найден")
-                        .build();
-            } else if (resultCodeCorr == -10){
-                return Json.createObjectBuilder()
-                        .add("error_code", -10)
-                        .add("error", "Неопознанная ошибка")
-                        .build();
-            } else if (resultCodeCorr == -26){
-                return Json.createObjectBuilder()
-                        .add("error_code", -26)
-                        .add("error", "Неизвестная локаль")
-                        .build();
-            }
-
-            ResultSet rsCorr = csCorr.getObject(4, ResultSet.class);
-
-            while (rsCorr.next()){
-                corr.add(Json.createObjectBuilder()
-                        .add("srv", rsCorr.getString("SRV"))
-                        .add("corr", rsCorr.getString("CORR")).build()
+            {
+                CallableStatement cs = connection.prepareCall(
+                        "{? = call COMP.z$runtime_sz_utl.getAccSrvCorr(?, ?, ?, ?)}"
                 );
+
+                cs.registerOutParameter(1, Types.INTEGER);
+                cs.setString(2, account);
+                cs.setDate(3, Date.valueOf(localDate));
+
+                cs.registerOutParameter(4, Types.REF_CURSOR);
+
+                cs.setString(5, locale);
+
+                cs.execute();
+
+                JsonObject ro = getResultObject(cs.getInt(1));
+
+                if (ro != null) {
+                    return ro;
+                }
+
+                ResultSet rs = cs.getObject(4, ResultSet.class);
+
+                while (rs.next()) {
+                    corr.add(Json.createObjectBuilder()
+                            .add("srv", rs.getString("SRV"))
+                            .add("corr", rs.getString("CORR"))
+                            .build()
+                    );
+                }
             }
+
+            JsonArrayBuilder charge = Json.createArrayBuilder();
+
+            {
+                CallableStatement cs = connection.prepareCall(
+                        "{? = call COMP.z$runtime_sz_utl.getAccSrvCharge(?, ?, ?, ?)}"
+                );
+
+                cs.registerOutParameter(1, Types.INTEGER);
+                cs.setString(2, account);
+                cs.setDate(3, Date.valueOf(localDate));
+
+                cs.registerOutParameter(4, Types.REF_CURSOR);
+
+                cs.setString(5, locale);
+
+                cs.execute();
+
+                JsonObject ro = getResultObject(cs.getInt(1));
+
+                if (ro != null) {
+                    return ro;
+                }
+
+                ResultSet rs = cs.getObject(4, ResultSet.class);
+
+                while (rs.next()) {
+                    charge.add(Json.createObjectBuilder()
+                            .add("srv", rs.getString("SRV"))
+                            .add("charge", rs.getString("CHARGE"))
+                            .build()
+                    );
+                }
+            }
+
+            JsonArrayBuilder privs = Json.createArrayBuilder();
+
+            {
+                CallableStatement cs = connection.prepareCall(
+                        "{? = call COMP.z$runtime_sz_utl.getPrivs(?, ?, ?)}"
+                );
+
+                cs.registerOutParameter(1, Types.INTEGER);
+                cs.setString(2, account);
+                cs.setDate(3, Date.valueOf(localDate));
+
+                cs.registerOutParameter(4, Types.REF_CURSOR);
+
+                cs.execute();
+
+                JsonObject ro = getResultObject(cs.getInt(1));
+
+                if (ro != null) {
+                    return ro;
+                }
+
+                ResultSet rs = cs.getObject(4, ResultSet.class);
+
+                while (rs.next()) {
+                    privs.add(Json.createObjectBuilder()
+                            .add("code", rs.getString("CC"))
+                            .add("quantity", rs.getString("UC"))
+                            .add("date_in", rs.getString("DATE_IN"))
+                            .add("date_out", rs.getString("DATE_OUT"))
+                            .build()
+                    );
+                }
+            }
+
+            return Json.createObjectBuilder()
+                    .add("acc_info", info.build())
+                    .add("acc_srv_corr", corr.build())
+                    .add("acc_srv_charge", charge.build())
+                    .add("privs", privs.build())
+                    .build();
         } catch (Exception e){
+            log.log(Level.WARNING, "getAccountInfo error", e);
+
             return Json.createObjectBuilder()
                     .add("error", "неизвестная ошибка")
                     .build();
         }
-
-        return Json.createObjectBuilder()
-                .add("acc_info", info.build())
-                .add("acc_srv_corr", corr.build())
-                .build();
     }
 
     @Path("/getAccountProv")
@@ -339,6 +419,8 @@ public class WebapiResource {
                 );
             }
         } catch (Exception e){
+            log.log(Level.WARNING, "getAccountProv error", e);
+
             return Json.createObjectBuilder()
                     .add("error", "неизвестная ошибка")
                     .build();
