@@ -4,10 +4,7 @@ package ru.complitex.webapi;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.sql.DataSource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -234,13 +231,15 @@ public class WebapiResource {
                             .add("street", rs.getString("STREET"))
                             .add("house", rs.getString("HOUSE"))
                             .add("flat", rs.getString("FLAT"))
-                            .add("tarif", getString(rs.getBigDecimal("TARIF")))
-                            .add("saldo", getString(rs.getBigDecimal("SALDO"), 2))
-                            .add("charge", getString(rs.getBigDecimal("CHARGE"), 2))
-                            .add("corr", getString(rs.getBigDecimal("CORR"), 2))
-                            .add("pays", getString(rs.getBigDecimal("PAYS"), 2))
-                            .add("to_pay", getString(rs.getBigDecimal("TOPAY"), 2))
+                            .add("tarif", getValue(rs.getBigDecimal("TARIF")))
+                            .add("saldo", getValue(rs.getBigDecimal("SALDO"), 2))
+                            .add("charge", getValue(rs.getBigDecimal("CHARGE"), 2))
+                            .add("corr", getValue(rs.getBigDecimal("CORR"), 2))
+                            .add("pays", getValue(rs.getBigDecimal("PAYS"), 2))
+                            .add("to_pay", getValue(rs.getBigDecimal("TOPAY"), 2))
                             .add("fio", rs.getString("FIO"))
+                            .add("priv", getValue(rs.getBigDecimal("PRIV"), 2))
+                            .add("subs", getValue(rs.getBigDecimal("SUBS"), 2))
                             .build()
                     );
                 }
@@ -275,7 +274,7 @@ public class WebapiResource {
                 while (rs.next()) {
                     corr.add(Json.createObjectBuilder()
                             .add("srv", rs.getString("SRV"))
-                            .add("corr", getString(rs.getBigDecimal("CORR").setScale(2, HALF_EVEN)))
+                            .add("corr", getValue(rs.getBigDecimal("CORR").setScale(2, HALF_EVEN)))
                             .build()
                     );
                 }
@@ -309,7 +308,7 @@ public class WebapiResource {
                 while (rs.next()) {
                     charge.add(Json.createObjectBuilder()
                             .add("srv", rs.getString("SRV"))
-                            .add("charge", getString(rs.getBigDecimal("CHARGE"), 2))
+                            .add("charge", getValue(rs.getBigDecimal("CHARGE"), 2))
                             .build()
                     );
                 }
@@ -344,8 +343,8 @@ public class WebapiResource {
                     privs.add(Json.createObjectBuilder()
                             .add("code", rs.getString("CC"))
                             .add("quantity", rs.getString("UC"))
-                            .add("date_in", getString(rs.getDate("DATE_IN")))
-                            .add("date_out", getString(rs.getDate("DATE_OUT")))
+                            .add("date_in", getValue(rs.getDate("DATE_IN")))
+                            .add("date_out", getValue(rs.getDate("DATE_OUT")))
                             .add("cat", rs.getString("CAT"))
                             .build()
                     );
@@ -417,12 +416,12 @@ public class WebapiResource {
             while (rs.next()){
                 prov.add(Json.createObjectBuilder()
                         .add("om", rs.getString("OM"))
-                        .add("saldo", getString(rs.getBigDecimal("SALDO"), 2))
-                        .add("charge", getString(rs.getBigDecimal("CHARGE"), 2))
-                        .add("corr", getString(rs.getBigDecimal("CORR"), 2))
-                        .add("pays", getString(rs.getBigDecimal("PAYS"), 2))
-                        .add("priv", getString(rs.getBigDecimal("PRIV"), 2))
-                        .add("subs", getString(rs.getBigDecimal("SUBS"), 2))
+                        .add("saldo", getValue(rs.getBigDecimal("SALDO"), 2))
+                        .add("charge", getValue(rs.getBigDecimal("CHARGE"), 2))
+                        .add("corr", getValue(rs.getBigDecimal("CORR"), 2))
+                        .add("pays", getValue(rs.getBigDecimal("PAYS"), 2))
+                        .add("priv", getValue(rs.getBigDecimal("PRIV"), 2))
+                        .add("subs", getValue(rs.getBigDecimal("SUBS"), 2))
                         .build()
                 );
             }
@@ -436,45 +435,45 @@ public class WebapiResource {
 
         return Json.createObjectBuilder()
                 .add("acc", account)
-                .add("date-begin", getString(localDateBegin))
-                .add("date-end", getString(localDateEnd))
+                .add("date-begin", getValue(localDateBegin))
+                .add("date-end", getValue(localDateEnd))
                 .add("prov", prov.build())
                 .build();
     }
 
-    private String getString(BigDecimal number){
+    private JsonValue getValue(BigDecimal number, int scale){
         if (number != null){
-            return number.toPlainString();
+            return Json.createValue(number.setScale(scale, HALF_EVEN).toPlainString());
         }
 
-        return null;
+        return JsonValue.NULL;
     }
 
-    private String getString(BigDecimal number, int scale){
+    private JsonValue getValue(BigDecimal number){
         if (number != null){
-            return number.setScale(2, HALF_EVEN).toPlainString();
+            return Json.createValue(number.toPlainString());
         }
 
-        return null;
+        return JsonValue.NULL;
     }
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    private String getString(Date date){
+    private JsonValue getValue(Date date){
         if (date != null){
-            return dateFormat.format(date);
+            return Json.createValue(dateFormat.format(date));
         }
 
-        return null;
+        return JsonValue.NULL;
     }
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    private String getString(LocalDate localDate){
+    private JsonValue getValue(LocalDate localDate){
         if (localDate != null){
-            return dateFormatter.format(localDate);
+            return Json.createValue(dateFormatter.format(localDate));
         }
 
-        return null;
+        return JsonValue.NULL;
     }
 }
