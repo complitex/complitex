@@ -193,28 +193,45 @@ public class WebapiResource {
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("SqlResolve")
     public JsonObject getAccountInfo(@QueryParam("acc") String account, @QueryParam("date") String date,
-                                     @QueryParam("locale") String locale) throws SQLException {
+                                     @QueryParam("locale") String locale, Boolean lastOm) {
         if (account == null || account.isEmpty() || date == null || date.isEmpty()){
             return null;
         }
-
-        LocalDate localDate = LocalDate.parse(date);
+        
+        if (lastOm == null){
+            lastOm = false;            
+        }
 
         try (Connection connection = this.dataSource.getConnection()) {
             JsonArrayBuilder info = Json.createArrayBuilder();
 
+            Date om = Date.valueOf(LocalDate.parse(date));
+
             {
-                CallableStatement cs = connection.prepareCall(
-                        "{? = call COMP.z$runtime_sz_utl.getAccInfo(?, ?, ?, ?)}"
-                );
+                CallableStatement cs;
+                ResultSet rs;
 
-                cs.registerOutParameter(1, Types.INTEGER);
-                cs.setString(2, account);
-                cs.setDate(3, Date.valueOf(localDate));
+                if (!lastOm) {
+                    cs = connection.prepareCall(
+                            "{? = call COMP.z$runtime_sz_utl.getAccInfo(?, ?, ?, ?)}"
+                    );
 
-                cs.registerOutParameter(4, Types.REF_CURSOR);
+                    cs.registerOutParameter(1, Types.INTEGER);
+                    cs.setString(2, account);
+                    cs.setDate(3, om);
+                    cs.registerOutParameter(4, Types.REF_CURSOR);
+                    cs.setString(5, locale);
+                    
+                } else {
+                    cs = connection.prepareCall(
+                            "{? = call COMP.z$runtime_sz_utl.getLastAccInfo(?, ?, ?)}"
+                    );
 
-                cs.setString(5, locale);
+                    cs.registerOutParameter(1, Types.INTEGER);
+                    cs.setString(2, account);
+                    cs.registerOutParameter(3, Types.REF_CURSOR);
+                    cs.setString(4, locale);
+                }
 
                 cs.execute();
 
@@ -224,10 +241,14 @@ public class WebapiResource {
                     return ro;
                 }
 
-                ResultSet rs = cs.getObject(4, ResultSet.class);
+                if (!lastOm) {
+                    rs = cs.getObject(4, ResultSet.class);
+                } else {
+                    rs = cs.getObject(3, ResultSet.class);
+                }
 
                 while (rs.next()) {
-                    info.add(Json.createObjectBuilder()
+                    JsonObjectBuilder infoBuilder = Json.createObjectBuilder()
                             .add("street", rs.getString("STREET"))
                             .add("house", rs.getString("HOUSE"))
                             .add("flat", rs.getString("FLAT"))
@@ -239,9 +260,17 @@ public class WebapiResource {
                             .add("to_pay", getValue(rs.getBigDecimal("TOPAY"), 2))
                             .add("fio", rs.getString("FIO"))
                             .add("priv", getValue(rs.getBigDecimal("PRIV"), 2))
-                            .add("subs", getValue(rs.getBigDecimal("SUBS"), 2))
-                            .build()
-                    );
+                            .add("subs", getValue(rs.getBigDecimal("SUBS"), 2));
+                    
+                    if (lastOm){
+                        infoBuilder.add("om", rs.getString("OM"));
+
+                        om = Date.valueOf(LocalDate.parse(rs.getString("OM"), dateTimeFormatter));
+                    }
+
+                    infoBuilder.add("ts", getValue(rs.getBigDecimal("TS"), 2));
+                    
+                    info.add(infoBuilder.build());
                 }
             }
 
@@ -255,7 +284,7 @@ public class WebapiResource {
 
                 cs.registerOutParameter(1, Types.INTEGER);
                 cs.setString(2, account);
-                cs.setDate(3, Date.valueOf(localDate));
+                cs.setDate(3, om);
 
                 cs.registerOutParameter(4, Types.REF_CURSOR);
 
@@ -289,7 +318,7 @@ public class WebapiResource {
 
                 cs.registerOutParameter(1, Types.INTEGER);
                 cs.setString(2, account);
-                cs.setDate(3, Date.valueOf(localDate));
+                cs.setDate(3, om);
 
                 cs.registerOutParameter(4, Types.REF_CURSOR);
 
@@ -323,7 +352,7 @@ public class WebapiResource {
 
                 cs.registerOutParameter(1, Types.INTEGER);
                 cs.setString(2, account);
-                cs.setDate(3, Date.valueOf(localDate));
+                cs.setDate(3, om);
 
                 cs.registerOutParameter(4, Types.REF_CURSOR);
 
@@ -366,12 +395,21 @@ public class WebapiResource {
         }
     }
 
+    @Path("/getLastAccountInfo")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @SuppressWarnings("SqlResolve")
+    public JsonObject getLastAccountInfo(@QueryParam("acc") String account, @QueryParam("date") String date,
+                                     @QueryParam("locale") String locale) {
+        return getAccountInfo(account, date, locale, true);
+    }
+
     @Path("/getAccountProv")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject getAccountProv(@QueryParam("acc") String account,
                                      @QueryParam("date-begin") String dateBegin,
-                                     @QueryParam("date-end") String dateEnd) throws SQLException {
+                                     @QueryParam("date-end") String dateEnd) {
         if (account == null || account.isEmpty() || dateBegin == null || dateBegin.isEmpty() ||
                 dateEnd == null || dateEnd.isEmpty()){
             return null;
@@ -467,11 +505,11 @@ public class WebapiResource {
         return JsonValue.NULL;
     }
 
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private JsonValue getValue(LocalDate localDate){
         if (localDate != null){
-            return Json.createValue(dateFormatter.format(localDate));
+            return Json.createValue(dateTimeFormatter.format(localDate));
         }
 
         return JsonValue.NULL;
