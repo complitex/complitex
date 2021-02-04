@@ -194,7 +194,7 @@ public class WebapiResource {
     @SuppressWarnings("SqlResolve")
     public JsonObject getAccountInfo(@QueryParam("acc") String account, @QueryParam("date") String date,
                                      @QueryParam("locale") String locale, Boolean lastOm) {
-        if (account == null || account.isEmpty() || date == null || date.isEmpty()){
+        if (account == null || account.isEmpty()){
             return null;
         }
         
@@ -202,10 +202,14 @@ public class WebapiResource {
             lastOm = false;            
         }
 
+        if (!lastOm && (date == null || date.isEmpty())){
+            return null;
+        }
+
         try (Connection connection = this.dataSource.getConnection()) {
             JsonArrayBuilder info = Json.createArrayBuilder();
 
-            Date om = Date.valueOf(LocalDate.parse(date));
+            Date om = !lastOm ? Date.valueOf(LocalDate.parse(date)) : null;
 
             {
                 CallableStatement cs;
@@ -399,9 +403,8 @@ public class WebapiResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressWarnings("SqlResolve")
-    public JsonObject getLastAccountInfo(@QueryParam("acc") String account, @QueryParam("date") String date,
-                                     @QueryParam("locale") String locale) {
-        return getAccountInfo(account, date, locale, true);
+    public JsonObject getLastAccountInfo(@QueryParam("acc") String account, @QueryParam("locale") String locale) {
+        return getAccountInfo(account, null, locale, true);
     }
 
     @Path("/getAccountProv")
