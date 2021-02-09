@@ -2,7 +2,7 @@ package org.complitex.common.test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl;
+//import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl;
 import org.apache.ibatis.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,22 +59,22 @@ public final class EjbTestBeanLocator {
                     Object propertyValue;
                     if (valueAttribute != null) {
                         propertyValue = valueAttribute.getNodeValue();
-                    } else if (propertyNode.hasChildNodes() && ((DeferredElementImpl) propertyNode).getElementsByTagName("collection").getLength() == 1) {
-                        Node collectionNode = ((DeferredElementImpl) propertyNode).getElementsByTagName("collection").item(0);
-                        Node itemsTypeAttribute = collectionNode.getAttributes().getNamedItem("itemsType");
-                        NodeList itemNodes = ((DeferredElementImpl) collectionNode).getElementsByTagName("item");
-                        if (itemsTypeAttribute != null) {
-                            Class<?> itemClass = Class.forName(itemsTypeAttribute.getNodeValue());
-                            propertyValue = Array.newInstance(itemClass, itemNodes.getLength());
-                            for (int j = 0; j < itemNodes.getLength(); j++) {
-                                ((Object[]) propertyValue)[j] = itemClass.getConstructor(String.class).newInstance(itemNodes.item(j).getTextContent());
-                            }
-                        } else {
-                            propertyValue = new String[itemNodes.getLength()];
-                            for (int j = 0; j < itemNodes.getLength(); j++) {
-                                ((String[]) propertyValue)[j] = itemNodes.item(j).getNodeValue();
-                            }
-                        }
+//                    } else if (propertyNode.hasChildNodes() && ((DeferredElementImpl) propertyNode).getElementsByTagName("collection").getLength() == 1) {
+//                        Node collectionNode = ((DeferredElementImpl) propertyNode).getElementsByTagName("collection").item(0);
+//                        Node itemsTypeAttribute = collectionNode.getAttributes().getNamedItem("itemsType");
+//                        NodeList itemNodes = ((DeferredElementImpl) collectionNode).getElementsByTagName("item");
+//                        if (itemsTypeAttribute != null) {
+//                            Class<?> itemClass = Class.forName(itemsTypeAttribute.getNodeValue());
+//                            propertyValue = Array.newInstance(itemClass, itemNodes.getLength());
+//                            for (int j = 0; j < itemNodes.getLength(); j++) {
+//                                ((Object[]) propertyValue)[j] = itemClass.getConstructor(String.class).newInstance(itemNodes.item(j).getTextContent());
+//                            }
+//                        } else {
+//                            propertyValue = new String[itemNodes.getLength()];
+//                            for (int j = 0; j < itemNodes.getLength(); j++) {
+//                                ((String[]) propertyValue)[j] = itemNodes.item(j).getNodeValue();
+//                            }
+//                        }
                     } else {
                         throw new ParserConfigurationException("Failed property node: not found value");
                     }

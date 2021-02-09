@@ -22,12 +22,13 @@ import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class DomainObjectStrategy extends AbstractBean implements IStrategy {
+public abstract class DomainObjectStrategy extends AbstractBean implements IStrategy, Serializable {
     public final static String NS = DomainObjectStrategy.class.getName();
 
     private static final String RESOURCE_BUNDLE = DomainObjectStrategy.class.getName();
