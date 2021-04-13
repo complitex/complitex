@@ -8,6 +8,7 @@ import org.complitex.common.entity.DomainObject;
 import org.complitex.common.service.AbstractBean;
 import org.complitex.common.service.ConfigBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import org.complitex.common.util.Locales;
 import org.complitex.sync.entity.DomainSync;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,7 @@ public class DomainSyncAdapter extends AbstractBean {
     private Cursor<DomainSync> getDomainSyncCursor(String statement, Date date, Map<String, Object> param) throws RemoteCallException{
         param.put("date", date);
         param.put("okCode", 0);
+        param.put("locale", Locales.getSystemLocale().getLanguage().equals("ru") ? "RU" : "UA");
 
         try {
             sqlSession(getDataSource()).selectOne(NS + "." + statement, param);
