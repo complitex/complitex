@@ -142,7 +142,7 @@ public class FacilityForm2LoadTaskBean extends AbstractRequestTaskBean<RequestFi
                     requestFileBean.save(r);
                 } catch (Exception e) {
                     r.setStatus(RequestFileStatus.LOAD_ERROR);
-                    requestFileBean.save(r);
+                    requestFileBean.delete(r);
 
                     throw new LoadException(ExceptionUtil.getCauseMessage(e));
                 }

@@ -127,7 +127,7 @@ public class OschadbankRequestLoadTaskBean extends AbstractRequestTaskBean<Reque
         } catch (Exception e) {
             requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
 
-            requestFileBean.save(requestFile);
+            requestFileBean.delete(requestFile);
 
             throw new LoadException(e, requestFile, row != null ? row.getRowNum() : -1, "");
         }

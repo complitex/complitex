@@ -69,7 +69,7 @@ public class FacilityStreetTypeLoadTaskBean extends AbstractRequestTaskBean<Requ
             return true;
         } catch (Exception e) {
             requestFile.setStatus(RequestFileStatus.LOAD_ERROR);
-            requestFileBean.save(requestFile);
+            requestFileBean.delete(requestFile);
 
             throw e;
         }

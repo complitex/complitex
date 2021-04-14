@@ -197,9 +197,9 @@
             <field length="3" type="java.lang.Integer" name="T11_MARK"/>
             <field length="6" type="java.lang.Integer" name="T11_TARN"/>
             <field length="3" type="java.lang.Integer" name="T11_CODE1"/>
-            <field length="6" type="java.lang.Integer" name="T11_CODE2"/>
+            <field length="10" type="java.lang.Integer" name="T11_CODE2"/>
             <field length="40" type="java.lang.String" name="T11_COD_NA"/>
-            <field length="6" type="java.lang.Integer" name="T11_CODE3"/>
+            <field length="10" type="java.lang.Integer" name="T11_CODE3"/>
             <field scale="10" length="19" type="java.math.BigDecimal" name="T11_NORM_U"/>
             <field scale="10" length="19" type="java.math.BigDecimal" name="T11_NOR_US"/>
             <field length="3" type="java.lang.Integer" name="T11_CODE_N"/>
