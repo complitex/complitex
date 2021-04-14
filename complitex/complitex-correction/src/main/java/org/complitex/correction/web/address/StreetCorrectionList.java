@@ -1,5 +1,6 @@
 package org.complitex.correction.web.address;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.strategy.city.CityStrategy;
@@ -12,12 +13,13 @@ import org.complitex.common.strategy.IStrategy;
 import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.service.CorrectionBean;
+import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Locale;
 
-
+@AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class StreetCorrectionList extends AddressCorrectionList {
 
     @EJB

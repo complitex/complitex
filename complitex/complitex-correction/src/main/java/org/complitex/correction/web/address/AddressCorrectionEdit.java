@@ -15,7 +15,7 @@ import java.util.List;
  * Страница для редактирования коррекций адресов.
  * @author Artem
  */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class AddressCorrectionEdit extends FormTemplatePage {
     public static final String CORRECTED_ENTITY = "entity";
     public static final String CORRECTION_ID = "correction_id";

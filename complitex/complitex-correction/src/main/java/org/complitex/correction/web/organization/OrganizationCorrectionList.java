@@ -17,7 +17,7 @@ import javax.ejb.EJB;
  * @author Anatoly A. Ivanov java@inheaven.ru
  *         Date: 28.11.13 15:36
  */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class OrganizationCorrectionList extends AbstractCorrectionList {
 
     @EJB(name = IOrganizationStrategy.BEAN_NAME, beanInterface = IOrganizationStrategy.class)

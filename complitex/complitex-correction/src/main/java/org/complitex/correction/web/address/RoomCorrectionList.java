@@ -1,5 +1,6 @@
 package org.complitex.correction.web.address;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.complitex.address.util.AddressRenderer;
@@ -11,14 +12,13 @@ import org.complitex.common.strategy.StrategyFactory;
 import org.complitex.common.web.component.search.SearchComponentState;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.service.CorrectionBean;
+import org.complitex.template.web.security.SecurityRole;
 
 import javax.ejb.EJB;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * @author Pavel Sknar
- */
+@AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class RoomCorrectionList extends AddressCorrectionList {
     @EJB
     private StrategyFactory strategyFactory;
@@ -103,4 +103,3 @@ public class RoomCorrectionList extends AddressCorrectionList {
         return AddressRenderer.displayAddress(null, city, null, street, building, null, apartment, correction.getCorrection(), getLocale());
     }
 }
-

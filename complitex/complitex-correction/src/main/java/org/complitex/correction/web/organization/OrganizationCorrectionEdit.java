@@ -19,7 +19,7 @@ import java.util.Locale;
  * @author Anatoly Ivanov java@inheaven.ru
  *         Date: 29.11.13 18:44
  */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class OrganizationCorrectionEdit extends FormTemplatePage {
     public static final String CORRECTION_ID = "correction_id";
 

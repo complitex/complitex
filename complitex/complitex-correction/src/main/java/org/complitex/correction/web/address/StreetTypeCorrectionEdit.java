@@ -22,11 +22,7 @@ import java.util.Locale;
 
 import static org.complitex.address.entity.AddressEntity.STREET_TYPE;
 
-/**
- *
- * @author Artem
- */
-@AuthorizeInstantiation(SecurityRole.AUTHORIZED)
+@AuthorizeInstantiation(SecurityRole.ADMIN_MODULE_EDIT)
 public class StreetTypeCorrectionEdit extends FormTemplatePage {
 
     public static final String CORRECTION_ID = "correction_id";
