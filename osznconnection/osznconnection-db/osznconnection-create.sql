@@ -319,7 +319,7 @@ CREATE TABLE `benefit` (
   `M_NAM` VARCHAR(20) COMMENT 'Отчество',
   `IND_COD` VARCHAR(10) COMMENT 'Идентификационный номер',
   `PSP_SER` VARCHAR(6) COMMENT 'Серия паспорта',
-  `PSP_NUM` VARCHAR(6) COMMENT 'Номер паспорта',
+  `PSP_NUM` VARCHAR(10) COMMENT 'Номер паспорта',
   `OZN` INTEGER(1) COMMENT 'Признак владельца',
   `CM_AREA` DECIMAL(10,2) COMMENT 'Общая площадь',
   `HEAT_AREA` DECIMAL(10,2) COMMENT 'Обогреваемая площадь',
