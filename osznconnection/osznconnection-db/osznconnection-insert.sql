@@ -21,9 +21,9 @@ INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (3, 'admin', 'EMPLO
 -- --------------------------------
 
 INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_FILENAME_PREFIX','A');
-INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_FILENAME_MASK','A(\\d{8}|\\d{10}){MM}{YY}\\d\d\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_FILENAME_MASK','a(\\d{8}|\d\{10}){MM}{YY}[0-3][0-9]\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('BENEFIT_FILENAME_PREFIX','AF');
-INSERT INTO `config` (`name`,`value`) VALUES ('BENEFIT_FILENAME_MASK','AF(\\d{8}|\\d{10}){MM}{YY}\\d\d\\.DBF');
+INSERT INTO `config` (`name`,`value`) VALUES ('BENEFIT_FILENAME_MASK','af(\\d{8}|\\d{10}){MM}{YY}[0-3][0-9]\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_BENEFIT_FILENAME_SUFFIX','(\\d{8}|\\d{10}){MM}{YY}\\d\\d\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('ACTUAL_PAYMENT_FILENAME_MASK','.*{MM}{YY}\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('SUBSIDY_FILENAME_MASK','.*{MM}{YY}\\.DBF');
@@ -37,8 +37,8 @@ INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_STREET_REFERENCE_FILENAM
 INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_TARIF_REFERENCE_FILENAME_MASK','TARIF\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_S_FILENAME_MASK','(\\d{8}|\\d{10})\\.s\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_P_FILENAME_MASK','(\\d{8}|\\d{10})\\.p\\d{2}');
-INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_REQUEST_FILENAME_MASK','\\d*_{YYYY}{MM}\\d*\\.xlsx');
-INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_RESPONSE_FILENAME_MASK','(L|R)K\\d{17}\\.xlsx');
+INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_REQUEST_FILENAME_MASK','(R|L)K\\d{8}_{YYYY}{MM}\\d{8}\\.xlsx');
+INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_RESPONSE_FILENAME_MASK','(R|L)K\\d{17}\\.xlsx');
 INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_FILENAME_MASK','(\\d{8}|\\d{10})\.m\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_OUTPUT_FILE_EXTENSION_PREFIX','n');
 INSERT INTO `config` (`name`,`value`) VALUES ('LOAD_THREAD_SIZE','2');
