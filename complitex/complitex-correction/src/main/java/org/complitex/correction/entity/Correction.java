@@ -23,6 +23,7 @@ public class Correction implements Serializable {
     private Date endDate;
     private Long organizationId;
     private Long userOrganizationId;
+    private Long moduleId;
 
     private String internalObject;
     private String displayObject;
@@ -204,6 +205,15 @@ public class Correction implements Serializable {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+
+    public Long getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(Long moduleId) {
+        this.moduleId = moduleId;
     }
 
     protected MoreObjects.ToStringHelper getToStringHelper(){
