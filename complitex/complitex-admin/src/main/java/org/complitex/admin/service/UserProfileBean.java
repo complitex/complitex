@@ -42,13 +42,13 @@ public class UserProfileBean extends AbstractBean implements IUserProfileBean {
     public void updatePassword(String currentPassword, final String password) throws WrongCurrentPasswordException {
         final String login = sessionContext.getCallerPrincipal().getName();
 
-        String currentPasswordMD5 = (String) sqlSession().selectOne(NS + ".selectPassword", login);
+        String currentPasswordSha256 = sqlSession().selectOne(NS + ".selectPassword", login);
 
-        if (!currentPasswordMD5.equals(DigestUtils.md5Hex(currentPassword))) {
+        if (!currentPasswordSha256.equals(DigestUtils.sha256Hex(currentPassword))) {
             throw new WrongCurrentPasswordException();
         }
 
-        final String md5Password = DigestUtils.md5Hex(password);
+        final String md5Password = DigestUtils.sha256Hex(password);
         sqlSession().update(NS + ".updatePassword", ImmutableMap.of("login", login, "password", md5Password));
     }
 

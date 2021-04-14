@@ -1260,7 +1260,7 @@ CREATE TABLE `oschadbank_response_file` (
   `REGISTRY_ID` VARCHAR(32) COMMENT 'ID реестра',
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
-  CONSTRAINT `fk_oschadbank_request_file__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_oschadbank_responce_file__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Файл ответа от ощадбанка';
 
 -- ------------------------------
@@ -1283,7 +1283,7 @@ CREATE TABLE `oschadbank_response` (
   `DESCRIPTION` VARCHAR(1024) COMMENT 'Описание ошибок',
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
-  CONSTRAINT `fk_oschadbank_request__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_oschadbank_responce__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Ответы от ощадбанка';
 
 -- ------------------------------

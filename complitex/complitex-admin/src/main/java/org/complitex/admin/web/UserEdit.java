@@ -390,7 +390,7 @@ public class UserEdit extends FormTemplatePage {
         //пароль
         if (newUser.getNewPassword() != null) {
             logChanges.add(new LogChange(getString("password"), oldUser.getPassword(),
-                    DigestUtils.md5Hex(newUser.getNewPassword())));
+                    DigestUtils.sha256Hex(newUser.getNewPassword())));
         }
 
         //информация о пользователе

@@ -40,25 +40,25 @@ public class RequestFileDescriptionBean extends AbstractBean {
     private final Logger log = LoggerFactory.getLogger(RequestFileDescriptionBean.class);
     private static final String NS = RequestFileDescriptionBean.class.getName();
     private static final String RESOURCE_BUNDLE = RequestFileDescriptionBean.class.getName();
-    private final static Map<RequestFileType, RequestFileDescription> cache = new ConcurrentHashMap<>(
-            new EnumMap<RequestFileType, RequestFileDescription>(RequestFileType.class));
+    private final static Map<RequestFileType, RequestFileDescription> cache = new ConcurrentHashMap<>(new EnumMap<>(RequestFileType.class));
 
     private final static Map<RequestFileType, Class<? extends Enum<?>>> REQUEST_FILE_TYPE_MAP =
-            ImmutableMap.<RequestFileType, Class<? extends Enum<?>>>builder().
-                    put(RequestFileType.ACTUAL_PAYMENT, ActualPaymentDBF.class).
-                    put(RequestFileType.PAYMENT, PaymentDBF.class).
-                    put(RequestFileType.BENEFIT, BenefitDBF.class).
-                    put(RequestFileType.SUBSIDY, SubsidyDBF.class).
-                    put(RequestFileType.SUBSIDY_TARIF, SubsidyTarifDBF.class).
-                    put(RequestFileType.DWELLING_CHARACTERISTICS, DwellingCharacteristicsDBF.class).
-                    put(RequestFileType.FACILITY_STREET_TYPE_REFERENCE, FacilityStreetTypeDBF.class).
-                    put(RequestFileType.FACILITY_STREET_REFERENCE, FacilityStreetDBF.class).
-                    put(RequestFileType.FACILITY_SERVICE_TYPE, FacilityServiceTypeDBF.class).
-                    put(RequestFileType.FACILITY_TARIF_REFERENCE, FacilityTarifDBF.class).
-                    put(RequestFileType.FACILITY_FORM2, FacilityForm2DBF.class).
-                    put(RequestFileType.FACILITY_LOCAL, FacilityLocalDBF.class).
-                    put(RequestFileType.PRIVILEGE_PROLONGATION, PrivilegeProlongationDBF.class).
-                    build();
+            ImmutableMap.<RequestFileType, Class<? extends Enum<?>>>builder()
+                    .put(RequestFileType.ACTUAL_PAYMENT, ActualPaymentDBF.class)
+                    .put(RequestFileType.PAYMENT, PaymentDBF.class)
+                    .put(RequestFileType.BENEFIT, BenefitDBF.class)
+                    .put(RequestFileType.SUBSIDY, SubsidyDBF.class)
+                    .put(RequestFileType.SUBSIDY_TARIF, SubsidyTarifDBF.class)
+                    .put(RequestFileType.DWELLING_CHARACTERISTICS, DwellingCharacteristicsDBF.class)
+                    .put(RequestFileType.FACILITY_STREET_TYPE_REFERENCE, FacilityStreetTypeDBF.class)
+                    .put(RequestFileType.FACILITY_STREET_REFERENCE, FacilityStreetDBF.class)
+                    .put(RequestFileType.FACILITY_SERVICE_TYPE, FacilityServiceTypeDBF.class)
+                    .put(RequestFileType.FACILITY_TARIF_REFERENCE, FacilityTarifDBF.class)
+                    .put(RequestFileType.FACILITY_FORM2, FacilityForm2DBF.class)
+                    .put(RequestFileType.FACILITY_LOCAL, FacilityLocalDBF.class)
+                    .put(RequestFileType.PRIVILEGE_PROLONGATION, PrivilegeProlongationDBF.class)
+                    .put(RequestFileType.DEBT, DebtDBF.class)
+                    .build();
 
     private final static String DATE_PATTERN = "dd.MM.yyyy";
 

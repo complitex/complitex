@@ -85,7 +85,7 @@ public class UserBean extends AbstractBean {
             userInfoStrategy.insert(user.getUserInfo(), DateUtil.getCurrentDate());
             user.setUserInfoObjectId(user.getUserInfo().getObjectId());
 
-            user.setPassword(DigestUtils.md5Hex(user.getLogin())); //md5 password
+            user.setPassword(DigestUtils.sha256Hex(user.getLogin()));
 
             sqlSession().insert(NS + ".insertUser", user);
 
@@ -189,7 +189,7 @@ public class UserBean extends AbstractBean {
 
             //изменение пароля
             if (user.getNewPassword() != null) {
-                user.setPassword(DigestUtils.md5Hex(user.getNewPassword())); //md5 password
+                user.setPassword(DigestUtils.sha256Hex(user.getNewPassword()));
                 sqlSession().update(NS + ".updateUser", user);
             } else {
                 user.setPassword(null); //не обновлять пароль

@@ -11,7 +11,7 @@ INSERT INTO `middle_name`(`id`, `name`) VALUES (1,'admin');
 INSERT INTO `last_name`(`id`, `name`) VALUES (1,'admin');
 INSERT INTO `user_info_attribute` (`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`)
   VALUES (1,1,1000,1), (1,1,1001,1), (1,1,1002,1);
-INSERT INTO `user` (`id`, `login`, `password`, `user_info_object_id`) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1);
+INSERT INTO `user` (`id`, `login`, `password`, `user_info_object_id`) VALUES (1, 'admin', sha2('admin', 256), 1);
 INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (1, 'admin', 'ADMINISTRATORS');
 INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (2, 'admin', 'EMPLOYEES');
 INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (3, 'admin', 'EMPLOYEES_CHILD_VIEW');
@@ -21,13 +21,15 @@ INSERT INTO `usergroup` (`id`, `login`, `group_name`) VALUES (3, 'admin', 'EMPLO
 -- --------------------------------
 
 INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_FILENAME_PREFIX','A');
+INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_FILENAME_MASK','A(\\d{8}|\\d{10}){MM}{YY}\\d\d\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('BENEFIT_FILENAME_PREFIX','AF');
+INSERT INTO `config` (`name`,`value`) VALUES ('BENEFIT_FILENAME_MASK','AF(\\d{8}|\\d{10}){MM}{YY}\\d\d\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('PAYMENT_BENEFIT_FILENAME_SUFFIX','(\\d{8}|\\d{10}){MM}{YY}\\d\\d\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('ACTUAL_PAYMENT_FILENAME_MASK','.*{MM}{YY}\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('SUBSIDY_FILENAME_MASK','.*{MM}{YY}\\.DBF');
-INSERT INTO `config` (`name`,`value`) VALUES ('DWELLING_CHARACTERISTICS_INPUT_FILENAME_MASK','\\d{8}\\.a\\d{2}');
+INSERT INTO `config` (`name`,`value`) VALUES ('DWELLING_CHARACTERISTICS_INPUT_FILENAME_MASK','(\\d{8}|\\d{10})\.a\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('DWELLING_CHARACTERISTICS_OUTPUT_FILE_EXTENSION_PREFIX','c');
-INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_SERVICE_TYPE_INPUT_FILENAME_MASK','\\d{8}\\.b\\d{2}');
+INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_SERVICE_TYPE_INPUT_FILENAME_MASK','(\\d{8}|\\d{10})\\.b\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_SERVICE_TYPE_OUTPUT_FILE_EXTENSION_PREFIX','d');
 INSERT INTO `config` (`name`,`value`) VALUES ('SUBSIDY_TARIF_FILENAME_MASK','TARIF12\\.DBF');
 INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_STREET_TYPE_REFERENCE_FILENAME_MASK','KLKATUL\\.DBF');
@@ -36,7 +38,9 @@ INSERT INTO `config` (`name`,`value`) VALUES ('FACILITY_TARIF_REFERENCE_FILENAME
 INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_S_FILENAME_MASK','(\\d{8}|\\d{10})\\.s\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('PRIVILEGE_PROLONGATION_P_FILENAME_MASK','(\\d{8}|\\d{10})\\.p\\d{2}');
 INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_REQUEST_FILENAME_MASK','\\d*_{YYYY}{MM}\\d*\\.xlsx');
-INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_FILENAME_MASK','\\d{8}\\.m\\d{2}');
+INSERT INTO `config` (`name`,`value`) VALUES ('OSCHADBANK_RESPONSE_FILENAME_MASK','(L|R)K\\d{17}\\.xlsx');
+INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_FILENAME_MASK','(\\d{8}|\\d{10})\.m\\d{2}');
+INSERT INTO `config` (`name`,`value`) VALUES ('DEBT_OUTPUT_FILE_EXTENSION_PREFIX','n');
 INSERT INTO `config` (`name`,`value`) VALUES ('LOAD_THREAD_SIZE','2');
 INSERT INTO `config` (`name`,`value`) VALUES ('BIND_THREAD_SIZE','4');
 INSERT INTO `config` (`name`,`value`) VALUES ('FILL_THREAD_SIZE','4');
@@ -221,7 +225,7 @@ INSERT INTO `ownership_string_value`(`id`, `locale_id`, `value`) VALUES (1, 1, U
 (2, 1, UPPER('кооперативна')), (2, 2, UPPER('кооперативна')), (3, 1, UPPER('вiдомча')), (3, 2, UPPER('вiдомча')),
 (4, 1, UPPER('громадська')), (4, 2, UPPER('громадська')), (5, 1, UPPER('приватна')), (5, 2, UPPER('приватна')),
 (6, 1, UPPER('приватизована')), (6, 2, UPPER('приватизована'));
-INSERT INTO `ownership_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) 
+INSERT INTO `ownership_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`)
   VALUES (1,1,1100,1),(1,2,1100,2),(1,3,1100,3),(1,4,1100,4),(1,5,1100,5),(1,6,1100,6);
 
 -- --------------------------------
@@ -495,4 +499,3 @@ INSERT INTO `organization_string_value`(`id`, `locale_id`, `value`) VALUES
 (1, 1, UPPER('Модуль №1')), (1,2,UPPER('Модуль №1')), (2, (SELECT `id` FROM `locale` WHERE `system` = 1), UPPER('0'));
 INSERT INTO `organization_attribute`(`attribute_id`, `object_id`, `entity_attribute_id`, `value_id`) VALUES
 (1,0,900,1), (1,0,901,2);
-
