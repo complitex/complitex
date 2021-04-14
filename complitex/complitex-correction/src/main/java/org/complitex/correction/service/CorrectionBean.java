@@ -20,10 +20,13 @@ import java.util.Set;
 public class CorrectionBean extends AbstractBean{
     public static final String CORRECTION_NS = CorrectionBean.class.getName();
 
-    public void save(Correction correction){ //todo check duplicate
+    public void save(Correction correction){
         if (correction.getId() == null){
             if (correction.getStartDate() == null){
                 correction.setStartDate(DateUtil.getCurrentDate());
+            }
+            if (correction.getEndDate() == null){
+                correction.setEndDate(DateUtil.MAX_END_DATE);
             }
 
             sqlSession().insert(CORRECTION_NS + ".insertCorrection", correction);
