@@ -346,10 +346,10 @@ public class AddressService extends AbstractBean {
                 request.getStreetId(), buildingNumber, buildingCorp, osznId, userOrganizationId);
 
         if (buildingCorrections.size() == 1) {
-            Correction correction = buildingCorrections.get(0);
+            Long buildingId = buildingCorrections.get(0).getObjectId();
 
-            request.setStreetId(correction.getParentId());
-            request.setBuildingId(correction.getObjectId());
+            request.setBuildingId(buildingId);
+            request.setStreetId(buildingStrategy.getDomainObject(buildingId).getParentId());
         } else if (buildingCorrections.size() > 1) {
             request.setStatus(RequestStatus.MORE_ONE_LOCAL_BUILDING_CORRECTION);
         } else {
@@ -360,7 +360,7 @@ public class AddressService extends AbstractBean {
                 request.setBuildingId(buildingIds.get(0));
             }else if (buildingIds.size() > 1) {
                 request.setStatus(RequestStatus.MORE_ONE_LOCAL_BUILDING);
-            } else if (buildingIds.isEmpty()){
+            } else {
                 request.setBuildingId(null);
                 request.setStatus(RequestStatus.BUILDING_UNRESOLVED_LOCALLY);
             }
