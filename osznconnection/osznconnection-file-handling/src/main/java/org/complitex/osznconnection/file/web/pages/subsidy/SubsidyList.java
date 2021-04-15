@@ -106,8 +106,6 @@ public final class SubsidyList extends TemplatePage {
 
     private void init() {
         RequestFile requestFile = requestFileBean.getRequestFile(fileId);
-        String serviceProviderCode = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
-                requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
 
         //Проверка доступа к данным
         if (!sessionBean.isAuthorized(requestFile.getUserOrganizationId())) {
@@ -403,6 +401,9 @@ public final class SubsidyList extends TemplatePage {
                 for (Subsidy subsidy : subsidies){
                     //noinspection Duplicates
                     try {
+                        String serviceProviderCode  = organizationStrategy.getServiceProviderCode(requestFile.getEdrpou(),
+                                    requestFile.getOrganizationId(), requestFile.getUserOrganizationId());
+
                         subsidyService.bind(serviceProviderCode, billingId, subsidy);
 
                         if (subsidy.getStatus().equals(RequestStatus.ACCOUNT_NUMBER_RESOLVED)){

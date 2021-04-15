@@ -37,68 +37,68 @@ import static org.complitex.osznconnection.organization_type.strategy.OsznOrgani
 @Stateless(name = IOrganizationStrategy.BEAN_NAME)
 public class OsznOrganizationStrategy extends OrganizationStrategy {
     /**
-     * Load payments/benefits directory. 
+     * Load payments/benefits directory.
      */
     public final static long LOAD_PAYMENT_BENEFIT_FILES_DIR = 915;
 
     /**
-     * Save payments/benefits directory. 
+     * Save payments/benefits directory.
      */
     public final static long SAVE_PAYMENT_BENEFIT_FILES_DIR = 916;
 
     /**
-     * Load actual payments directory. 
+     * Load actual payments directory.
      */
     public final static long LOAD_ACTUAL_PAYMENT_DIR = 917;
 
     /**
-     * Save actual payments directory. 
+     * Save actual payments directory.
      */
     public final static long SAVE_ACTUAL_PAYMENT_DIR = 918;
 
     /**
-     * Load subsidies directory. 
+     * Load subsidies directory.
      */
     public final static long LOAD_SUBSIDY_DIR = 919;
 
     /**
-     * Save subsidies directory. 
+     * Save subsidies directory.
      */
     public final static long SAVE_SUBSIDY_DIR = 920;
 
     /**
-     * Load dwelling characteristics directory. 
+     * Load dwelling characteristics directory.
      */
     public final static long LOAD_DWELLING_CHARACTERISTICS_DIR = 921;
 
     /**
-     * Save dwelling characteristics directory. 
+     * Save dwelling characteristics directory.
      */
     public final static long SAVE_DWELLING_CHARACTERISTICS_DIR = 922;
 
     /**
-     * Load facility service type directory. 
+     * Load facility service type directory.
      */
     public final static long LOAD_FACILITY_SERVICE_TYPE_DIR = 923;
 
     /**
-     * Save facility service type directory. 
+     * Save facility service type directory.
      */
     public final static long SAVE_FACILITY_SERVICE_TYPE_DIR = 924;
 
     /**
-     * References directory. 
+     * References directory.
      */
     public final static long REFERENCES_DIR = 925;
 
 
     /**
-     * Root directory for loading and saving request files. 
+     * Root directory for loading and saving request files.
      */
     public final static long ROOT_REQUEST_FILE_DIRECTORY = 927;
 
     /**
-     * Save facility form2 directory. 
+     * Save facility form2 directory.
      */
     public final static long SAVE_FACILITY_FORM2_DIR = 928;
 
@@ -294,7 +294,7 @@ public class OsznOrganizationStrategy extends OrganizationStrategy {
         if (serviceProviderId != null){
             return getDomainObject(serviceProviderId).getStringValue(OsznOrganizationStrategy.CODE);
         }else {
-            throw new ServiceRuntimeException("ПУ не найден по ЕДРПОУ {0}", edrpou); //todo handle ui exception
+            throw new ServiceRuntimeException("ПУ не найден по ЕДРПОУ {0}", edrpou);
         }
     }
 
