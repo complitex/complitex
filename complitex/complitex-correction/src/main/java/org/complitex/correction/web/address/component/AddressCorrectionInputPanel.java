@@ -223,11 +223,11 @@ public class AddressCorrectionInputPanel extends Panel {
         buildingContainer.add(new TextField<>("building", new PropertyModel<>(correction, "correction")));
 
         //Building corp
-        buildingCorpContainer.add(new TextField<>("buildingCorp", new PropertyModel<>(correction, "correctionCorp")));
+        buildingCorpContainer.add(new TextField<>("buildingCorp", new PropertyModel<>(correction, "additionalCorrection")));
 
         //Apartment
         apartmentContainer.add(new TextField<>("apartment", new PropertyModel<>(correction, "correction")));
-    
+
         //Room
         roomContainer.add(new TextField<>("room", new PropertyModel<>(correction, "correction")));
     }

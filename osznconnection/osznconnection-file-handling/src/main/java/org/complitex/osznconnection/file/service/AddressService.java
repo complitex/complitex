@@ -346,7 +346,10 @@ public class AddressService extends AbstractBean {
                 request.getStreetId(), buildingNumber, buildingCorp, osznId, userOrganizationId);
 
         if (buildingCorrections.size() == 1) {
-            request.setBuildingId(buildingCorrections.get(0).getObjectId());
+            Correction correction = buildingCorrections.get(0);
+
+            request.setStreetId(correction.getParentId());
+            request.setBuildingId(correction.getObjectId());
         } else if (buildingCorrections.size() > 1) {
             request.setStatus(RequestStatus.MORE_ONE_LOCAL_BUILDING_CORRECTION);
         } else {
