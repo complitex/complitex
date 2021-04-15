@@ -326,7 +326,8 @@ public final class DwellingCharacteristicsList extends TemplatePage {
                                 : getString("streetTypeNotFound"));
 
                         addressCorrectionDialog.open(target, item.getModel(), dwellingCharacteristics.getPersonalName(),
-                                dwellingCharacteristics.getExternalAddress(), dwellingCharacteristics.getLocalAddress());
+                                dwellingCharacteristics.getExternalAddress(), dwellingCharacteristics.getLocalAddress(),
+                                dwellingCharacteristics.getStreetId() != null);
                     }
                 };
                 addressCorrectionLink.setVisible(dwellingCharacteristics.getStatus().isAddressCorrectable());

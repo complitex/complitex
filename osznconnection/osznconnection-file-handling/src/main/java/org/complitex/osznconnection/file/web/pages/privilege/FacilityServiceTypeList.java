@@ -331,7 +331,8 @@ public final class FacilityServiceTypeList extends TemplatePage {
 
 
                         addressCorrectionDialog.open(target, item.getModel(), facilityServiceType.getPersonalName(),
-                                facilityServiceType.getExternalAddress(), facilityServiceType.getLocalAddress());
+                                facilityServiceType.getExternalAddress(), facilityServiceType.getLocalAddress(),
+                                facilityServiceType.getStreetId() != null);
                     }
                 };
                 addressCorrectionLink.setVisible(facilityServiceType.getStatus().isAddressCorrectable());
