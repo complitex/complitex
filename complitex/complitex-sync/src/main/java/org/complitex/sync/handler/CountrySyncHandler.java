@@ -65,6 +65,7 @@ public class CountrySyncHandler implements IDomainSyncHandler{
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
         return countryStrategy.getList(new DomainObjectFilter()
                 .setStatus(Status.ACTIVE.name())
+                .setNullValue(true)
                 .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                 .addAttribute(CountryStrategy.NAME, domainSync.getName())
                 .addAttribute(CountryStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));

@@ -72,6 +72,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
         return organizationStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
+                        .setNullValue(true)
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("organization")
                         .setParentId(getParentObjectId(domainSync, organizationId))

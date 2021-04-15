@@ -203,7 +203,7 @@ public class DomainSyncPanel extends Panel {
 
                     DomainSync domainSync = (DomainSync) payload;
 
-                    String parent = domainSync.getParentId() + "";
+                    String parent = StringUtil.emptyOnNull(domainSync.getParentId());
 
                     if (domainSync.getParentId() != null){
                         DomainSync filter = new DomainSync();
@@ -213,7 +213,7 @@ public class DomainSyncPanel extends Panel {
                         List<DomainSync> domainSyncs = domainSyncBean.getList(FilterWrapper.of(filter));
 
                         if (!domainSyncs.isEmpty()){
-                            parent = domainSyncs.get(0).getName() + " " + StringUtil.valueOf(domainSyncs.get(0).getAdditionalName());
+                            parent = StringUtil.emptyOnNull(domainSyncs.get(0).getName()) + " " + StringUtil.emptyOnNull(domainSyncs.get(0).getAdditionalName());
                         }
                     }
 

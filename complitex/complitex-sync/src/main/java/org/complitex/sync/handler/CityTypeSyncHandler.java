@@ -70,6 +70,7 @@ public class CityTypeSyncHandler implements IDomainSyncHandler{
         return cityTypeStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
+                        .setNullValue(true)
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .addAttribute(CityTypeStrategy.NAME, domainSync.getName())
                         .addAttribute(CityTypeStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));

@@ -87,6 +87,7 @@ public class RegionSyncHandler implements IDomainSyncHandler{
     public List<? extends DomainObject> getDomainObjects(DomainSync domainSync, Long organizationId) {
         return regionStrategy.getList(
                 new DomainObjectFilter()
+                        .setNullValue(true)
                         .setStatus(ShowMode.ACTIVE.name())
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("country")

@@ -70,6 +70,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
         return streetTypeStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
+                        .setNullValue(true)
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .addAttribute(StreetTypeStrategy.NAME, domainSync.getName())
                         .addAttribute(StreetTypeStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId())

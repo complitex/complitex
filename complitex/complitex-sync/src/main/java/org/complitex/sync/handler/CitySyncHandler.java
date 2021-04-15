@@ -100,6 +100,7 @@ public class CitySyncHandler implements IDomainSyncHandler{
         return cityStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
+                        .setNullValue(true)
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("region")
                         .setParentId(getParentObjectId(domainSync, organizationId))

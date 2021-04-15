@@ -108,6 +108,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         return buildingStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
+                        .setNullValue(true)
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("street")
                         .setParentId(getParentObjectId(domainSync, organizationId))

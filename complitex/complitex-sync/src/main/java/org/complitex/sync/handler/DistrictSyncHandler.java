@@ -107,6 +107,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
         return districtStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
+                        .setNullValue(true)
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("city")
                         .setParentId(getParentObjectId(domainSync, organizationId))

@@ -41,6 +41,8 @@ public class DomainObjectFilter implements Serializable {
 
     private String externalId;
 
+    private boolean nullValue = false;
+
     public DomainObjectFilter() {
     }
 
@@ -288,5 +290,15 @@ public class DomainObjectFilter implements Serializable {
 
     public void setExternalId(String externalId) {
         this.externalId = externalId;
+    }
+
+    public boolean isNullValue() {
+        return nullValue;
+    }
+
+    public DomainObjectFilter setNullValue(boolean nullValue) {
+        this.nullValue = nullValue;
+
+        return this;
     }
 }

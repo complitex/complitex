@@ -146,9 +146,9 @@
             AND e.`externalId` = #{externalId}
         </if>
         <foreach item="attributeFilter" collection="attributeFilters">
-            <if test="attributeFilter.value != null or attributeFilter.localeId != null">
+            <if test="attributeFilter.value != null or nullValue or attributeFilter.localeId != null">
                 <choose>
-                    <when test="attributeFilter.value != null">
+                    <when test="attributeFilter.value != null or nullValue ">
                         AND EXISTS (SELECT 1 FROM `${entityName}_attribute` attr WHERE attr.`object_id` = e.`object_id`
                             AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
                             AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc
@@ -158,7 +158,12 @@
                                         LIKE CONCAT('%', #{attributeFilter.value}, '%')
                                     </when>
                                     <when test="comparisonType == 'EQUALITY'">
-                                        = #{attributeFilter.value}
+                                        <if test="attributeFilter.value != null">
+                                            = #{attributeFilter.value}
+                                        </if>
+                                        <if test="attributeFilter.value == null">
+                                            is null
+                                        </if>
                                     </when>
                                 </choose>
                             <if test="attributeFilter.localeId != null">AND sc.`locale_id` = #{attributeFilter.localeId}</if>
