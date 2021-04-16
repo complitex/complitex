@@ -105,8 +105,7 @@ public class CitySyncHandler implements IDomainSyncHandler{
                         .setParentEntity("region")
                         .setParentId(getParentObjectId(domainSync, organizationId))
                         .addAttribute(CityStrategy.CITY_TYPE, getAdditionalParentObjectId(domainSync, organizationId))
-                        .addAttribute(CityStrategy.NAME, domainSync.getName())
-                        .addAttribute(CityStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(CityStrategy.NAME, domainSync.getName()));
     }
 
     @Override

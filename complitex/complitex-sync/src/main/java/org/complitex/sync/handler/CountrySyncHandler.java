@@ -67,8 +67,7 @@ public class CountrySyncHandler implements IDomainSyncHandler{
                 .setStatus(Status.ACTIVE.name())
                 .setNullValue(true)
                 .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
-                .addAttribute(CountryStrategy.NAME, domainSync.getName())
-                .addAttribute(CountryStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                .addAttribute(CountryStrategy.NAME, domainSync.getName()));
     }
 
     @Override

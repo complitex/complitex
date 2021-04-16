@@ -114,13 +114,11 @@ public class StreetSyncHandler implements IDomainSyncHandler {
            return streetStrategy.getList(
                 new DomainObjectFilter()
                         .setStatus(ShowMode.ACTIVE.name())
-                        .setNullValue(true)
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("city")
                         .setParentId(getParentObjectId(domainSync, organizationId))
                         .addAttribute(StreetStrategy.STREET_TYPE, getAdditionalParentObjectId(domainSync, organizationId))
-                        .addAttribute(StreetStrategy.NAME, domainSync.getName())
-                        .addAttribute(StreetStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(StreetStrategy.NAME, domainSync.getName()));
     }
 
     @Override

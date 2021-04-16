@@ -111,8 +111,7 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("city")
                         .setParentId(getParentObjectId(domainSync, organizationId))
-                        .addAttribute(DistrictStrategy.NAME, domainSync.getName())
-                        .addAttribute(DistrictStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(DistrictStrategy.NAME, domainSync.getName()));
     }
 
     @Override

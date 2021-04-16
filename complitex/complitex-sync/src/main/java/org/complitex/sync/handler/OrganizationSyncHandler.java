@@ -77,9 +77,7 @@ public class OrganizationSyncHandler implements IDomainSyncHandler {
                         .setParentEntity("organization")
                         .setParentId(getParentObjectId(domainSync, organizationId))
                         .addAttribute(IOrganizationStrategy.NAME, domainSync.getName())
-                        .addAttribute(IOrganizationStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId())
-                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAdditionalName())
-                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(IOrganizationStrategy.SHORT_NAME, domainSync.getAdditionalName()));
     }
 
     private Long getParentObjectId(DomainSync domainSync, Long organizationId) {

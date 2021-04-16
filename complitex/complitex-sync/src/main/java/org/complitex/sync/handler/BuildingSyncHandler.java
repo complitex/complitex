@@ -113,9 +113,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
                         .setParentEntity("street")
                         .setParentId(getParentObjectId(domainSync, organizationId))
                         .addAttribute(BuildingStrategy.NUMBER, domainSync.getName())
-                        .addAttribute(BuildingStrategy.NUMBER, domainSync.getAltName(), Locales.getAlternativeLocaleId())
-                        .addAttribute(BuildingStrategy.CORP, domainSync.getAdditionalName())
-                        .addAttribute(BuildingStrategy.CORP, domainSync.getAltAdditionalName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(BuildingStrategy.CORP, domainSync.getAdditionalName()));
     }
 
     @Override

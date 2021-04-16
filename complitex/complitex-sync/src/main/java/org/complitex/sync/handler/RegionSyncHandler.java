@@ -92,8 +92,7 @@ public class RegionSyncHandler implements IDomainSyncHandler{
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .setParentEntity("country")
                         .setParentId(getParentObjectId(domainSync, organizationId))
-                        .addAttribute(RegionStrategy.NAME, domainSync.getName())
-                        .addAttribute(RegionStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(RegionStrategy.NAME, domainSync.getName()));
     }
 
     @Override

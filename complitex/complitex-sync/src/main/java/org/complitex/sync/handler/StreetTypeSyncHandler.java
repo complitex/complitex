@@ -73,9 +73,7 @@ public class StreetTypeSyncHandler implements IDomainSyncHandler {
                         .setNullValue(true)
                         .setComparisonType(DomainObjectFilter.ComparisonType.EQUALITY.name())
                         .addAttribute(StreetTypeStrategy.NAME, domainSync.getName())
-                        .addAttribute(StreetTypeStrategy.NAME, domainSync.getAltName(), Locales.getAlternativeLocaleId())
-                        .addAttribute(StreetTypeStrategy.SHORT_NAME, domainSync.getAdditionalName())
-                        .addAttribute(StreetTypeStrategy.SHORT_NAME, domainSync.getAltAdditionalName(), Locales.getAlternativeLocaleId()));
+                        .addAttribute(StreetTypeStrategy.SHORT_NAME, domainSync.getAdditionalName()));
     }
 
     @Override
