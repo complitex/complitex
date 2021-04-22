@@ -242,6 +242,15 @@ public class DomainSyncService {
                                 domainSyncBean.updateStatus(ds);
                             }
                         }
+
+                        handler.getDomainObjects(ds, organizationId).stream()
+                                .filter(o -> ds.getStatus().equals(SYNCHRONIZED))
+                                .filter(o -> !o.getObjectId().equals(domainObject.getObjectId()))
+                                .forEach(o -> {
+                                    handler.getStrategy().disable(o);
+
+                                    log.info("sync: disable duplicate domain object {}", o);
+                                });
                     }else {
                         List<? extends DomainObject> domainObjects = handler.getDomainObjects(ds, organizationId);
 

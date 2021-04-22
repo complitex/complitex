@@ -403,6 +403,14 @@ public class WiQuerySearchComponent extends Panel {
         return showMode;
     }
 
+    public ShowMode getShowMode() {
+        return showMode;
+    }
+
+    public void setShowMode(ShowMode showMode) {
+        this.showMode = showMode;
+    }
+
     protected final boolean getEnabledSetting() {
         return enabled;
     }

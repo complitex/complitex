@@ -162,7 +162,7 @@
                                             = #{attributeFilter.value}
                                         </if>
                                         <if test="attributeFilter.value == null">
-                                            is null
+                                            IS NULL OR sc.`value` = ''
                                         </if>
                                     </when>
                                 </choose>

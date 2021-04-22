@@ -31,8 +31,8 @@ ALTER TABLE `oschadbank_request_file` ADD CONSTRAINT `fk_oschadbank_request_file
 ALTER TABLE `oschadbank_request` DROP CONSTRAINT `fk_oschadbank_request__request_file`;
 ALTER TABLE `oschadbank_request` ADD CONSTRAINT `fk_oschadbank_request__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`) ON DELETE CASCADE;
 
-ALTER TABLE `oschadbank_response` DROP CONSTRAINT `fk_oschadbank_responce_file__request_file`;
-ALTER TABLE `oschadbank_response` ADD CONSTRAINT `fk_oschadbank_responce_file__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`) ON DELETE CASCADE;
+ALTER TABLE `oschadbank_response` DROP CONSTRAINT `fk_oschadbank_responce__request_file`;
+ALTER TABLE `oschadbank_response` ADD CONSTRAINT `fk_oschadbank_responce__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `oschadbank_response_file` DROP CONSTRAINT `fk_oschadbank_responce_file__request_file`;
 ALTER TABLE `oschadbank_response_file` ADD CONSTRAINT `fk_oschadbank_responce_file__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`) ON DELETE CASCADE;

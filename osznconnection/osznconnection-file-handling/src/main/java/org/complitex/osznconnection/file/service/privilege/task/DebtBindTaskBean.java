@@ -107,12 +107,10 @@ public class DebtBindTaskBean extends AbstractRequestTaskBean<RequestFile> {
         debt.setCity(configBean.getString(FileHandlingConfig.DEFAULT_REQUEST_FILE_CITY, true));
 
         //resolve local account number
-        personAccountService.localResolveAccountNumber(debt, puAccountNumber, billingId, true
-        );
+        personAccountService.localResolveAccountNumber(debt, puAccountNumber, billingId, true);
 
         if (debt.getStatus().isNot(ACCOUNT_NUMBER_RESOLVED, MORE_ONE_ACCOUNTS_LOCALLY)){
-            personAccountService.localResolveAccountNumber(debt, debt.getInn(),
-                    billingId, true);
+            personAccountService.localResolveAccountNumber(debt, debt.getInn(), billingId, true);
         }
 
         boolean checkLodgerPerson = true;

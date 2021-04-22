@@ -120,7 +120,7 @@ public class DomainObjectListPanel extends Panel {
 
         final IModel<ShowMode> showModeModel = new Model<>(ShowMode.ACTIVE);
         searchPanel = new CollapsibleSearchPanel("searchPanel", getSession().getGlobalSearchComponentState(),
-                searchFilters, getStrategy().getSearchCallback(), ShowMode.ALL, true, showModeModel);
+                searchFilters, getStrategy().getSearchCallback(), ShowMode.ACTIVE, true, showModeModel);
         add(searchPanel);
         searchPanel.initialize();
 

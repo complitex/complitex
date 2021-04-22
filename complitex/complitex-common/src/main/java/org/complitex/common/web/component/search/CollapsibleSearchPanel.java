@@ -35,8 +35,7 @@ public class CollapsibleSearchPanel extends Panel {
         showModePanel = new ShowModePanel("showModePanel", showModelModel){
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                //todo update
-
+                collapsibleSearchComponent.setShowMode(showModelModel.getObject());
             }
         };
         showModePanel.setOutputMarkupPlaceholderTag(true);
