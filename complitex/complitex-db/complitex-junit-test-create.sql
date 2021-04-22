@@ -17,6 +17,6 @@ CREATE TABLE `test` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Автоинкремент',
   `value` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Используется для тестирования';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Используется для тестирования';
 
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

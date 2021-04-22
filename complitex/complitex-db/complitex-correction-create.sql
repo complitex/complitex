@@ -26,7 +26,7 @@ CREATE TABLE `country_correction` (
   CONSTRAINT `fk_country_correction__country` FOREIGN KEY (`object_id`) REFERENCES `country` (`object_id`),
   CONSTRAINT `fk_country_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_country_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция страны';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция страны';
 
 DROP TABLE IF EXISTS `region_correction`;
 CREATE TABLE `region_correction` (
@@ -53,7 +53,7 @@ CREATE TABLE `region_correction` (
   CONSTRAINT `fk_region_correction__region` FOREIGN KEY (`object_id`) REFERENCES `region` (`object_id`),
   CONSTRAINT `fk_region_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_region_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция региона';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция региона';
 
 DROP TABLE IF EXISTS `city_type_correction`;
 CREATE TABLE `city_type_correction` (
@@ -77,7 +77,7 @@ CREATE TABLE `city_type_correction` (
   CONSTRAINT `fk_city_type__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_city_type_correction__city_type` FOREIGN KEY (`object_id`) REFERENCES `city_type` (`object_id`),
   CONSTRAINT `fk_city_type_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция типа населенного пункта';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция типа населенного пункта';
 
 
 DROP TABLE IF EXISTS `city_correction`;
@@ -105,7 +105,7 @@ CREATE TABLE `city_correction` (
   CONSTRAINT `fk_city_correction__city` FOREIGN KEY (`object_id`) REFERENCES `city` (`object_id`),
   CONSTRAINT `fk_city_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_city_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция населенного пункта';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция населенного пункта';
 
 DROP TABLE IF EXISTS `district_correction`;
 
@@ -133,7 +133,7 @@ CREATE TABLE `district_correction` (
   CONSTRAINT `fk_district_correction__district` FOREIGN KEY (`object_id`) REFERENCES `district` (`object_id`),
   CONSTRAINT `fk_district_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_district_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция района';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция района';
 
 DROP TABLE IF EXISTS `street_type_correction`;
 CREATE TABLE `street_type_correction` (
@@ -157,7 +157,7 @@ CREATE TABLE `street_type_correction` (
   CONSTRAINT `fk_street_type__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_street_type_correction__street_type` FOREIGN KEY (`object_id`) REFERENCES `street_type` (`object_id`),
   CONSTRAINT `fk_street_type_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция типа улицы';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция типа улицы';
 
 
 DROP TABLE IF EXISTS `street_correction`;
@@ -189,7 +189,7 @@ CREATE TABLE `street_correction` (
   CONSTRAINT `fk_street_correction__street` FOREIGN KEY (`object_id`) REFERENCES `street` (`object_id`),
   CONSTRAINT `fk_street_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_street_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция улицы';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция улицы';
 
 DROP TABLE IF EXISTS `building_correction`;
 CREATE TABLE `building_correction` (
@@ -217,7 +217,7 @@ CREATE TABLE `building_correction` (
   CONSTRAINT `fk_building_correction__building` FOREIGN KEY (`object_id`) REFERENCES `building` (`object_id`),
   CONSTRAINT `fk_building_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_building_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция дома';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция дома';
 
 -- ------------------------------
 -- Organization Correction
@@ -248,7 +248,7 @@ CREATE TABLE `organization_correction` (
   CONSTRAINT `fk_organization_correction__organization_p` FOREIGN KEY (`parent_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_organization_correction__organization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_organization_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция организации';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция организации';
 
 
 -- ------------------------------
@@ -278,6 +278,6 @@ CREATE TABLE `service_correction` (
   CONSTRAINT `fk_service_correction__service_object` FOREIGN KEY (`object_id`) REFERENCES `service` (`object_id`),
   CONSTRAINT `fk_service_correction__service` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`object_id`),
   CONSTRAINT `fk_service_correction__user_organization` FOREIGN KEY (`user_organization_id`) REFERENCES `organization` (`object_id`)
-) ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT 'Коррекция услуги';
+) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Коррекция услуги';
 
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
