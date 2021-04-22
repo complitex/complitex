@@ -291,7 +291,7 @@ CREATE TABLE `payment` (
   KEY `key_BLD_NUM` (`BLD_NUM`),
   KEY `key_FLAT` (`FLAT`),
   KEY `key_OWN_NUM_SR` (`OWN_NUM_SR`),
-  CONSTRAINT `fk_payment__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`),
+  CONSTRAINT `fk_payment__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_payment__city` FOREIGN KEY (`internal_city_id`) REFERENCES `city` (`object_id`),
   CONSTRAINT `fk_payment__street` FOREIGN KEY (`internal_street_id`) REFERENCES `street` (`object_id`),
   CONSTRAINT `fk_payment__street_type` FOREIGN KEY (`internal_street_type_id`) REFERENCES `street_type` (`object_id`),
@@ -339,7 +339,7 @@ CREATE TABLE `benefit` (
   KEY `key_M_NAM` (`M_NAM`),
   KEY `key_SUR_NAM` (`SUR_NAM`),
   KEY `key_OWN_NUM_SR` (`OWN_NUM_SR`),
-  CONSTRAINT `fk_benefit__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_benefit__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Льготы';
 
 -- ------------------------------
@@ -454,7 +454,7 @@ CREATE TABLE `actual_payment` (
   KEY `key_VUL_NAME` (`VUL_NAME`),
   KEY `key_BLD_NUM` (`BLD_NUM`),
   KEY `key_FLAT` (`FLAT`),
-  CONSTRAINT `fk_actual_payment__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`),
+  CONSTRAINT `fk_actual_payment__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_actual_payment__city` FOREIGN KEY (`internal_city_id`) REFERENCES `city` (`object_id`),
   CONSTRAINT `fk_actual_payment__street` FOREIGN KEY (`internal_street_id`) REFERENCES `street` (`object_id`),
   CONSTRAINT `fk_actual_payment__street_type` FOREIGN KEY (`internal_street_type_id`) REFERENCES `street_type` (`object_id`),
@@ -564,7 +564,7 @@ CREATE TABLE `subsidy` (
   KEY `key_BLD` (`BLD`),
   KEY `key_CORP` (`CORP`),
   KEY `key_FLAT` (`FLAT`),
-  CONSTRAINT `fk_subsidy__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`),
+  CONSTRAINT `fk_subsidy__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_subsidy__city` FOREIGN KEY (`internal_city_id`) REFERENCES `city` (`object_id`),
   CONSTRAINT `fk_subsidy__street` FOREIGN KEY (`internal_street_id`) REFERENCES `street` (`object_id`),
   CONSTRAINT `fk_subsidy__street_type` FOREIGN KEY (`internal_street_type_id`) REFERENCES `street_type` (`object_id`),
@@ -664,7 +664,7 @@ CREATE TABLE `dwelling_characteristics` (
   KEY `key_HOUSE` (`HOUSE`),
   KEY `key_BUILD` (`BUILD`),
   KEY `key_APT` (`APT`),
-  CONSTRAINT `fk_dwelling_characteristics__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`),
+  CONSTRAINT `fk_dwelling_characteristics__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_dwelling_characteristics__city` FOREIGN KEY (`internal_city_id`) REFERENCES `city` (`object_id`),
   CONSTRAINT `fk_dwelling_characteristics__street` FOREIGN KEY (`internal_street_id`) REFERENCES `street` (`object_id`),
   CONSTRAINT `fk_dwelling_characteristics__street_type` FOREIGN KEY (`internal_street_type_id`) REFERENCES `street_type` (`object_id`),
@@ -742,7 +742,7 @@ CREATE TABLE `facility_service_type` (
   KEY `key_HOUSE` (`HOUSE`),
   KEY `key_BUILD` (`BUILD`),
   KEY `key_APT` (`APT`),
-  CONSTRAINT `fk_facility_service_type__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`),
+  CONSTRAINT `fk_facility_service_type__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_facility_service_type__city` FOREIGN KEY (`internal_city_id`) REFERENCES `city` (`object_id`),
   CONSTRAINT `fk_facility_service_type__street` FOREIGN KEY (`internal_street_id`) REFERENCES `street` (`object_id`),
   CONSTRAINT `fk_facility_service_type__street_type` FOREIGN KEY (`internal_street_type_id`) REFERENCES `street_type` (`object_id`),
@@ -786,7 +786,7 @@ CREATE TABLE `facility_form2` (
   KEY `key_request_file_id` (`request_file_id`),
   KEY `key_account_number` (`account_number`),
   KEY `key_status` (`status`),
-  CONSTRAINT `fk_facility_form2__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_facility_form2__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Файлы форма-2 льгота';
 
 -- ------------------------------
@@ -845,7 +845,7 @@ CREATE TABLE `facility_local` (
   KEY `key_request_file_id` (`request_file_id`),
   KEY `key_account_number` (`account_number`),
   KEY `key_status` (`status`),
-  CONSTRAINT `fk_facility_local__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_facility_local__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Записи местной льготы';
 
 -- ------------------------------
@@ -1133,7 +1133,7 @@ CREATE TABLE `request_file_history` (
   KEY `key_request_file_id` (`request_file_id`),
   KEY `status` (`status`),
   KEY `date` (`date`),
-  CONSTRAINT `fk_request_file_history__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_request_file_history__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
     ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'История файла запроса';
 
@@ -1191,7 +1191,7 @@ CREATE TABLE `privilege_prolongation` (
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
   KEY `key_account_number` (`account_number`),
-  CONSTRAINT `fk_privilege_prolongation__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_privilege_prolongation__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 )ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Файлы продления льгот';
 
 -- ------------------------------
@@ -1211,7 +1211,7 @@ CREATE TABLE `oschadbank_request_file` (
   `PROVIDER_IBAN` VARCHAR(64) COMMENT 'IBAN Поставщика',
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
-  CONSTRAINT `fk_oschadbank_request_file__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_oschadbank_request_file__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Файл запроса от ощадбанка';
 
 -- ------------------------------
@@ -1232,7 +1232,7 @@ CREATE TABLE `oschadbank_request` (
   `SUM` DECIMAL(13,2) COMMENT 'Общая сумма к оплате, включающая задолженность / переплату за предыдущие периоды (грн.)',
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
-  CONSTRAINT `fk_oschadbank_request__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_oschadbank_request__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Запросы от ощадбанка';
 
 -- ------------------------------
@@ -1260,7 +1260,7 @@ CREATE TABLE `oschadbank_response_file` (
   `REGISTRY_ID` VARCHAR(32) COMMENT 'ID реестра',
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
-  CONSTRAINT `fk_oschadbank_responce_file__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_oschadbank_responce_file__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Файл ответа от ощадбанка';
 
 -- ------------------------------
@@ -1283,7 +1283,7 @@ CREATE TABLE `oschadbank_response` (
   `DESCRIPTION` VARCHAR(1024) COMMENT 'Описание ошибок',
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
-  CONSTRAINT `fk_oschadbank_responce__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_oschadbank_responce__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARSET = utf8 COLLATE = utf8_unicode_ci COMMENT 'Ответы от ощадбанка';
 
 -- ------------------------------
@@ -1319,8 +1319,8 @@ CREATE TABLE `debt` (
   `city` VARCHAR(100) NOT NULL COMMENT 'Населенный пункт',
 
   `COD` INTEGER(4),
-  `CDPR` INTEGER(12),
-  `NCARD` INTEGER(7),
+  `CDPR` BIGINT(12),
+  `NCARD` BIGINT(7),
   `IDPIL` VARCHAR(10),
   `PASPPIL` VARCHAR(14),
   `FIOPIL` VARCHAR(50),
@@ -1343,7 +1343,7 @@ CREATE TABLE `debt` (
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
   KEY `key_account_number` (`account_number`),
-  CONSTRAINT `fk_debt__request_file` FOREIGN KEY (`request_file_id`) REFERENCES `request_file` (`id`)
+  CONSTRAINT `fk_debt__request_file` FOREIGN KEY (`request_file_id`)  REFERENCES `request_file` (`id`) ON DELETE CASCADE
 )ENGINE=InnoDB CHARSET=ut8mb4 COLLATE=ut8mb4_unicode_ci COMMENT 'Задолженность';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
