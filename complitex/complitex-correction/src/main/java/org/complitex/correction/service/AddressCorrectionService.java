@@ -453,7 +453,7 @@ public class AddressCorrectionService {
 
                         Correction streetCorrection = new Correction(AddressEntity.STREET.getEntityName(),
                                 localAddress.getCityId(), street.getValueId(StreetStrategy.STREET_TYPE),
-                                externalId, localAddress.getStreetId(), street.getStringValue(StreetStrategy.NAME),
+                                externalId, localAddress.getStreetId(), "",
                                 externalAddress.getOrganizationId(), externalAddress.getUserOrganizationId());
 
                         correctionBean.save(streetCorrection);
