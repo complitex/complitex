@@ -54,9 +54,6 @@ public class AddressCorrectionService {
     @EJB
     private StreetTypeStrategy streetTypeStrategy;
 
-    @EJB
-    private ModuleBean moduleBean;
-
     public LocalAddress resolveLocalAddress(ExternalAddress externalAddress) throws ResolveAddressException {
         LocalAddress localAddress = new LocalAddress();
 
@@ -405,8 +402,6 @@ public class AddressCorrectionService {
 
     public void correctLocalAddress(AddressEntity addressEntity, ExternalAddress externalAddress, LocalAddress localAddress)
             throws CorrectionException {
-        Long moduleId = moduleBean.getModuleId();
-
         if (externalAddress.getOrganizationId() == null){
             throw new CorrectionException("`organizationId` for correct local address required");
         }

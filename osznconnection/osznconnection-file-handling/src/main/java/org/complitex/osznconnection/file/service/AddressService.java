@@ -179,7 +179,15 @@ public class AddressService extends AbstractBean {
                         Long.valueOf(request.getStreetCode()), osznId, userOrganizationId);
 
                 if (streetCorrections.size() == 1){
-                    request.setStreet(streetCorrections.get(0).getCorrection());
+                    Correction streetCorrection = streetCorrections.get(0);
+
+                    DomainObject street = streetStrategy.getDomainObject(streetCorrection.getObjectId());
+
+                    request.setStreetId(streetCorrection.getObjectId());
+                    request.setStreetTypeId(streetStrategy.getStreetType(street));
+                    request.setCityId(street.getParentId());
+
+                    request.setStreet(street.getStringValue(StreetStrategy.NAME));
                 }
             } catch (NumberFormatException e) {
                 log.error("error get street correction {}", request, e);
@@ -192,149 +200,151 @@ public class AddressService extends AbstractBean {
             return;
         }
 
-        List<Correction> streetCorrections = correctionBean.getCorrections(AddressEntity.STREET,
-                request.getCityId(), request.getStreetTypeId(), request.getStreet(), osznId, userOrganizationId);
+        if (request.getStreetId() == null) {
+            List<Correction> streetCorrections = correctionBean.getCorrections(AddressEntity.STREET,
+                    request.getCityId(), request.getStreetTypeId(), request.getStreet(), osznId, userOrganizationId);
 
-        if (streetCorrections.size() == 1){
-            Correction streetCorrection = streetCorrections.get(0);
+            if (streetCorrections.size() == 1){
+                Correction streetCorrection = streetCorrections.get(0);
 
-            DomainObject street = streetStrategy.getDomainObject(streetCorrection.getObjectId());
+                DomainObject street = streetStrategy.getDomainObject(streetCorrection.getObjectId());
 
-            request.setStreetId(streetCorrection.getObjectId());
-            request.setStreetTypeId(streetStrategy.getStreetType(street));
-            request.setCityId(street.getParentId());
-        }else if (streetCorrections.size() > 1) {
-            //сформируем множество названий
-            Set<String> streetNames = Sets.newHashSet();
+                request.setStreetId(streetCorrection.getObjectId());
+                request.setStreetTypeId(streetStrategy.getStreetType(street));
+                request.setCityId(street.getParentId());
+            }else if (streetCorrections.size() > 1) {
+                //сформируем множество названий
+                Set<String> streetNames = Sets.newHashSet();
 
-            for (Correction sc : streetCorrections) {
-                String streetName = streetStrategy.getName(sc.getObjectId());
+                for (Correction sc : streetCorrections) {
+                    String streetName = streetStrategy.getName(sc.getObjectId());
 
-                if (!Strings.isEmpty(streetName)) {
-                    streetNames.add(streetName);
+                    if (!Strings.isEmpty(streetName)) {
+                        streetNames.add(streetName);
+                    }
                 }
-            }
 
-            if (streetNames.size() == 1) { //нашли внутренее название улицы
-                String streetName = streetNames.iterator().next();
+                if (streetNames.size() == 1) { //нашли внутренее название улицы
+                    String streetName = streetNames.iterator().next();
 
-                //находим ids улиц по внутреннему названию
-                List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), streetName);
+                    //находим ids улиц по внутреннему названию
+                    List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), streetName);
 
-                if (streetIds.size() == 1) { //нашли ровно одну улицу
-                    Long streetObjectId = streetIds.get(0);
-                    request.setStreetId(streetObjectId);
-
-                    DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
-                    request.setStreetTypeId(streetStrategy.getStreetType(streetObject));
-
-                    //перейти к обработке дома
-                } else if (streetIds.size() > 1) { // нашли больше одной улицы
-                    //пытаемся найти по району
-                    streetIds = streetStrategy.getStreetIdsByDistrict(request.getCityId(), request.getStreet(), osznId);
-
-                    if (streetIds.size() == 1) { //нашли ровно одну улицу по району
+                    if (streetIds.size() == 1) { //нашли ровно одну улицу
                         Long streetObjectId = streetIds.get(0);
-
                         request.setStreetId(streetObjectId);
-                        request.setStreetTypeId(streetStrategy.getStreetType(streetObjectId));
+
+                        DomainObject streetObject = streetStrategy.getDomainObject(streetObjectId, true);
+                        request.setStreetTypeId(streetStrategy.getStreetType(streetObject));
 
                         //перейти к обработке дома
-                    } else {
-                        // пытаемся искать дополнительно по номеру и корпусу дома
-                        streetIds = streetStrategy.getStreetObjectIdsByBuilding(request.getCityId(), streetName,
-                                request.getBuildingNumber(), request.getBuildingCorp());
+                    } else if (streetIds.size() > 1) { // нашли больше одной улицы
+                        //пытаемся найти по району
+                        streetIds = streetStrategy.getStreetIdsByDistrict(request.getCityId(), request.getStreet(), osznId);
 
-                        if (streetIds.size() == 1) { //нашли ровно одну улицу с заданным номером и корпусом дома
+                        if (streetIds.size() == 1) { //нашли ровно одну улицу по району
                             Long streetObjectId = streetIds.get(0);
 
                             request.setStreetId(streetObjectId);
                             request.setStreetTypeId(streetStrategy.getStreetType(streetObjectId));
 
+                            //перейти к обработке дома
+                        } else {
+                            // пытаемся искать дополнительно по номеру и корпусу дома
+                            streetIds = streetStrategy.getStreetObjectIdsByBuilding(request.getCityId(), streetName,
+                                    request.getBuildingNumber(), request.getBuildingCorp());
+
+                            if (streetIds.size() == 1) { //нашли ровно одну улицу с заданным номером и корпусом дома
+                                Long streetObjectId = streetIds.get(0);
+
+                                request.setStreetId(streetObjectId);
+                                request.setStreetTypeId(streetStrategy.getStreetType(streetObjectId));
+
+                                //проставить дом для payment и выйти
+                                List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(),
+                                        streetObjectId,request.getBuildingNumber(),request.getBuildingCorp());
+
+                                if (buildingIds.size() == 1) {
+                                    request.setBuildingId(buildingIds.get(0));
+                                } else {
+                                    throw new IllegalStateException("Building id was not found.");
+                                }
+
+                                request.setStatus(RequestStatus.CITY_UNRESOLVED);
+
+                                return;
+                            } else { // по доп. информации, состоящей из номера и корпуса дома, не смогли однозначно определить улицу
+
+                                request.setStreetId(null);
+                                request.setBuildingId(null);
+                                request.setStatus(RequestStatus.MORE_ONE_LOCAL_STREET);
+                                return;
+                            }
+                        }
+                    } else {
+                        throw new IllegalStateException("Street name `" + streetName + "` was not found.");
+                    }
+                } else {
+                    throw new IllegalStateException("Street `" + request.getStreet() +
+                            "` is mapped to more one internal street objects: " + streetNames);
+                }
+            } else { // в коррекциях не нашли ни одного соответствия на внутренние объекты улиц
+                // ищем по внутреннему справочнику улиц
+                List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), request.getStreet());
+
+                if (streetIds.size() == 1) { // нашли ровно одну улицу
+                    Long streetId = streetIds.get(0);
+                    request.setStreetId(streetId);
+
+                    DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
+                    request.setStreetTypeId(streetStrategy.getStreetType(streetObject));
+
+                    // перейти к обработке дома
+                } else if (streetIds.size() > 1) { // нашли более одной улицы
+                    //пытаемся найти по району
+                    streetIds = streetStrategy.getStreetIdsByDistrict(request.getCityId(), request.getStreet(), osznId);
+
+                    if (streetIds.size() == 1) { //нашли ровно одну улицу по району
+                        Long streetId = streetIds.get(0);
+                        request.setStreetId(streetId);
+                        request.setStreetTypeId(streetStrategy.getStreetType(streetId));
+                        // перейти к обработке дома
+                    } else {
+                        // пытаемся искать дополнительно по номеру и корпусу дома
+                        streetIds = streetStrategy.getStreetObjectIdsByBuilding(request.getCityId(), request.getStreet(),
+                                request.getBuildingNumber(), request.getBuildingCorp());
+
+                        if (streetIds.size() == 1) {
+                            Long streetId = streetIds.get(0);
+
                             //проставить дом для payment и выйти
-                            List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(),
-                                    streetObjectId,request.getBuildingNumber(),request.getBuildingCorp());
+                            List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(), streetId,
+                                    request.getBuildingNumber(), request.getBuildingCorp());
 
                             if (buildingIds.size() == 1) {
                                 request.setBuildingId(buildingIds.get(0));
+                                request.setStreetId(streetId);
+                                request.setStreetTypeId(streetStrategy.getStreetType(streetStrategy.getDomainObject(streetId)));
                             } else {
                                 throw new IllegalStateException("Building id was not found.");
                             }
-
                             request.setStatus(RequestStatus.CITY_UNRESOLVED);
 
                             return;
                         } else { // по доп. информации, состоящей из номера и корпуса дома, не смогли однозначно определить улицу
-
                             request.setStreetId(null);
                             request.setBuildingId(null);
                             request.setStatus(RequestStatus.MORE_ONE_LOCAL_STREET);
+
                             return;
                         }
                     }
-                } else {
-                    throw new IllegalStateException("Street name `" + streetName + "` was not found.");
+                } else { // не нашли ни одной улицы
+                    request.setStreetId(null);
+                    request.setStatus(RequestStatus.STREET_UNRESOLVED_LOCALLY);
+
+                    return;
                 }
-            } else {
-                throw new IllegalStateException("Street `" + request.getStreet() +
-                        "` is mapped to more one internal street objects: " + streetNames);
-            }
-        } else { // в коррекциях не нашли ни одного соответствия на внутренние объекты улиц
-            // ищем по внутреннему справочнику улиц
-            List<Long> streetIds = streetStrategy.getStreetIds(request.getCityId(), request.getStreetTypeId(), request.getStreet());
-
-            if (streetIds.size() == 1) { // нашли ровно одну улицу
-                Long streetId = streetIds.get(0);
-                request.setStreetId(streetId);
-
-                DomainObject streetObject = streetStrategy.getDomainObject(streetId, true);
-                request.setStreetTypeId(streetStrategy.getStreetType(streetObject));
-
-                // перейти к обработке дома
-            } else if (streetIds.size() > 1) { // нашли более одной улицы
-                //пытаемся найти по району
-                streetIds = streetStrategy.getStreetIdsByDistrict(request.getCityId(), request.getStreet(), osznId);
-
-                if (streetIds.size() == 1) { //нашли ровно одну улицу по району
-                    Long streetId = streetIds.get(0);
-                    request.setStreetId(streetId);
-                    request.setStreetTypeId(streetStrategy.getStreetType(streetId));
-                    // перейти к обработке дома
-                } else {
-                    // пытаемся искать дополнительно по номеру и корпусу дома
-                    streetIds = streetStrategy.getStreetObjectIdsByBuilding(request.getCityId(), request.getStreet(),
-                            request.getBuildingNumber(), request.getBuildingCorp());
-
-                    if (streetIds.size() == 1) {
-                        Long streetId = streetIds.get(0);
-
-                        //проставить дом для payment и выйти
-                        List<Long> buildingIds = buildingStrategy.getBuildingObjectIds(request.getCityId(), streetId,
-                                request.getBuildingNumber(), request.getBuildingCorp());
-
-                        if (buildingIds.size() == 1) {
-                            request.setBuildingId(buildingIds.get(0));
-                            request.setStreetId(streetId);
-                            request.setStreetTypeId(streetStrategy.getStreetType(streetStrategy.getDomainObject(streetId)));
-                        } else {
-                            throw new IllegalStateException("Building id was not found.");
-                        }
-                        request.setStatus(RequestStatus.CITY_UNRESOLVED);
-
-                        return;
-                    } else { // по доп. информации, состоящей из номера и корпуса дома, не смогли однозначно определить улицу
-                        request.setStreetId(null);
-                        request.setBuildingId(null);
-                        request.setStatus(RequestStatus.MORE_ONE_LOCAL_STREET);
-
-                        return;
-                    }
-                }
-            } else { // не нашли ни одной улицы
-                request.setStreetId(null);
-                request.setStatus(RequestStatus.STREET_UNRESOLVED_LOCALLY);
-
-                return;
             }
         }
 
