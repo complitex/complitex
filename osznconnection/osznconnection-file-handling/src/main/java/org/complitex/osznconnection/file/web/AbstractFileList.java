@@ -71,6 +71,11 @@ public abstract class AbstractFileList extends TemplatePage {
             }
 
             @Override
+            protected void download(AjaxRequestTarget target, List<Long> selectedFileIds) {
+                AbstractFileList.this.download(target, selectedFileIds);
+            }
+
+            @Override
             protected void delete(RequestFile requestFile) {
                 AbstractFileList.this.delete(requestFile);
             }
@@ -99,6 +104,11 @@ public abstract class AbstractFileList extends TemplatePage {
             protected boolean isExportVisible() {
                 return AbstractFileList.this.isExportVisible();
             }
+
+            @Override
+            protected boolean isDownloadVisible() {
+                return AbstractFileList.this.isDownloadVisible();
+            }
         });
     }
 
@@ -115,6 +125,10 @@ public abstract class AbstractFileList extends TemplatePage {
     }
 
     protected boolean isExportVisible(){
+        return false;
+    }
+
+    protected boolean isDownloadVisible(){
         return false;
     }
 
@@ -138,6 +152,9 @@ public abstract class AbstractFileList extends TemplatePage {
     }
 
     protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
+    }
+
+    protected void download(AjaxRequestTarget target, List<Long> selectedFileIds) {
     }
 
     protected void delete(RequestFile requestFile){

@@ -150,6 +150,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
         //override me
     }
 
+    protected void download(AjaxRequestTarget target, List<Long> selectedFileIds){
+
+    }
+
     protected boolean isBindVisible(){
         return true;
     }
@@ -163,6 +167,10 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
     }
 
     protected boolean isExportVisible(){
+        return false;
+    }
+
+    protected boolean isDownloadVisible(){
         return false;
     }
 
@@ -638,6 +646,22 @@ public abstract class AbstractProcessableListPanel<R extends AbstractRequestFile
             @Override
             public boolean isVisible() {
                 return isExportVisible();
+            }
+        });
+
+        buttons.add(new AjaxSubmitLink("download") {
+
+            @Override
+            public void onSubmit(AjaxRequestTarget target, Form form) {
+                download(target, selectManager.getSelectedFileIds());
+                selectManager.clearSelection();
+
+                target.add(messages, form);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return isDownloadVisible();
             }
         });
 

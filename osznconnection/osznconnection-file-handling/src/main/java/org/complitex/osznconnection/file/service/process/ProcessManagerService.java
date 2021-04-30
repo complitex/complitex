@@ -468,6 +468,12 @@ public class ProcessManagerService {
                 requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
     }
 
+    public void downloadSubsidy(List<Long> ids) {
+        execute(DOWNLOAD_SUBSIDY, SubsidyDownloadTaskBean.class, updateAndGetRequestFiles(SAVE_WAIT, ids),
+                requestFileListener, SAVE_THREAD_SIZE, SAVE_MAX_ERROR_COUNT, null);
+    }
+
+
     /*SubsidyTarif*/
 
     public void loadSubsidyTarif(Long userOrganizationId, Long organizationId, int year, int month) {

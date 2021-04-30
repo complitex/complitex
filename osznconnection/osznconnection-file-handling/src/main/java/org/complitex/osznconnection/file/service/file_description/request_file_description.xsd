@@ -16,7 +16,7 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    
+
     <xsd:complexType name="FileDescription">
         <xsd:sequence>
             <xsd:element name="formatters" minOccurs="0" maxOccurs="1" type="Formatters"/>
@@ -24,17 +24,17 @@
         </xsd:sequence>
         <xsd:attribute name="type" type="NonEmptyString" use="required"/>
     </xsd:complexType>
-    
+
     <xsd:complexType name="Formatters">
         <xsd:sequence>
             <xsd:element name="date-pattern" minOccurs="1" maxOccurs="1" type="DatePattern"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="DatePattern">
         <xsd:attribute name="pattern" type="NonEmptyString" use="required"/>
     </xsd:complexType>
-    
+
     <xsd:complexType name="Fields">
         <xsd:sequence>
             <xsd:element name="field" type="Field" maxOccurs="unbounded">
@@ -46,14 +46,14 @@
             </xsd:element>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="Field">
         <xsd:attribute name="name" type="NonEmptyString" use="required"/>
         <xsd:attribute name="type" type="FieldType" use="required"/>
         <xsd:attribute name="length" type="SimpleInt" use="required"/>
         <xsd:attribute name="scale" type="SimpleInt" use="optional"/>
     </xsd:complexType>
-    
+
     <xsd:simpleType name="FieldType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="java.lang.String">
@@ -63,7 +63,7 @@
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:enumeration>
-            
+
             <xsd:enumeration value="java.lang.Integer">
                 <xsd:annotation>
                     <xsd:appinfo>
@@ -79,7 +79,7 @@
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:enumeration>
-            
+
             <xsd:enumeration value="java.math.BigDecimal">
                 <xsd:annotation>
                     <xsd:appinfo>
@@ -87,7 +87,7 @@
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:enumeration>
-            
+
             <xsd:enumeration value="java.util.Date">
                 <xsd:annotation>
                     <xsd:appinfo>
@@ -97,19 +97,19 @@
             </xsd:enumeration>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <xsd:simpleType name="SimpleInt">
         <xsd:restriction base="xsd:int">
             <xsd:minExclusive value="0"/>
             <xsd:maxExclusive value="100"/>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <xsd:simpleType name="NonEmptyString">
         <xsd:restriction base="xsd:string">
             <xsd:whiteSpace value="collapse"/>
             <xsd:minLength value="1"/>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
 </xsd:schema>

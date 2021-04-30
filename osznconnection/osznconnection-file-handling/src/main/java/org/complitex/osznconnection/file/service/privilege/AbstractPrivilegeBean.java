@@ -21,7 +21,7 @@ public abstract class AbstractPrivilegeBean extends AbstractRequestBean {
     @EJB
     private FacilityReferenceBookBean facilityReferenceBookBean;
 
-    protected void loadFacilityStreet(List<? extends AbstractAccountRequest> list){
+    public void loadFacilityStreet(List<? extends AbstractAccountRequest> list){
         try {
             for (AbstractAccountRequest request : list){
                 if (request.getStreetCode() != null) {

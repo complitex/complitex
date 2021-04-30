@@ -12,7 +12,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.complitex.common.converter.BigDecimalConverter;
 import org.complitex.common.web.component.datatable.ArrowOrderByBorder;
 import org.complitex.osznconnection.file.entity.RequestFile;
-import org.complitex.osznconnection.file.service.RequestFileBean;
 import org.complitex.osznconnection.file.service.process.ProcessManagerService;
 import org.complitex.osznconnection.file.service.process.ProcessType;
 import org.complitex.osznconnection.file.web.AbstractFileListPanel;
@@ -30,13 +29,10 @@ import static org.complitex.osznconnection.file.service.process.ProcessType.*;
  *         Date: 03.12.13 18:51
  */
 public class SubsidyFileListPanel extends AbstractFileListPanel {
-    private BigDecimalConverter bigDecimalConverter = new BigDecimalConverter(2);
+    private final BigDecimalConverter bigDecimalConverter = new BigDecimalConverter(2);
 
     @EJB
     private ProcessManagerService processManagerService;
-
-    @EJB
-    private RequestFileBean requestFileBean;
 
     public SubsidyFileListPanel(String id) {
         super(id, SUBSIDY, LOAD_SUBSIDY, BIND_SUBSIDY, FILL_SUBSIDY, SAVE_SUBSIDY,
@@ -104,12 +100,22 @@ public class SubsidyFileListPanel extends AbstractFileListPanel {
     }
 
     @Override
+    protected boolean isExportVisible() {
+        return true;
+    }
+
+    @Override
     protected void export(AjaxRequestTarget target, List<Long> selectedFileIds) {
         processManagerService.exportSubsidy(selectedFileIds);
     }
 
     @Override
-    protected boolean isExportVisible() {
+    protected boolean isDownloadVisible() {
         return true;
+    }
+
+    @Override
+    protected void download(AjaxRequestTarget target, List<Long> selectedFileIds) {
+        processManagerService.downloadSubsidy(selectedFileIds);
     }
 }
