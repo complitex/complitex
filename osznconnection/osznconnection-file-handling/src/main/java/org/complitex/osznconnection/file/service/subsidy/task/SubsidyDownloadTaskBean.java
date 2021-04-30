@@ -64,8 +64,9 @@ public class SubsidyDownloadTaskBean extends AbstractRequestTaskBean<RequestFile
                 BigDecimal debtHope = serviceProviderAdapter.getDebtHope(requestFile.getUserOrganizationId(), subsidy.getAccountNumber(),
                         DateUtil.getCurrentDate(), 3);
 
-                bufferedWriter.write(String.join(",", i + "", subsidy.getStringField(NUMB), subsidy.getStringField(FIO),
-                        subsidy.getStringField(CAT_V), subsidy.getStringField(NAME_V), subsidy.getStringField(BLD), subsidy.getStringField(CORP), subsidy.getStringField(FLAT),
+                bufferedWriter.write(String.join(";", i + "", subsidy.getStringField(NUMB), getString(subsidy.getStringField(FIO)),
+                        getString(subsidy.getStringField(CAT_V)), getString(subsidy.getStringField(NAME_V)), getString(subsidy.getStringField(BLD)),
+                        getString(subsidy.getStringField(CORP)), getString(subsidy.getStringField(FLAT)),
                         StringUtil.emptyOnNull(subsidy.getAccountNumber()), debtHope.compareTo(BigDecimal.ZERO) > 0 ? debtHope.toPlainString() : "0"));
                 bufferedWriter.newLine();
 
@@ -84,5 +85,13 @@ public class SubsidyDownloadTaskBean extends AbstractRequestTaskBean<RequestFile
         }
 
         return true;
+    }
+
+    private String getString(String s) {
+        if (s != null && !s.isEmpty()) {
+            return "\"" + s.replace("\"", "\\\"") + "\"";
+        }
+
+        return s;
     }
 }
