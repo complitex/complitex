@@ -167,7 +167,7 @@
         }
         ]]>
     </select>
-    
+
     <!--privilege export-->
 
     <select id="createPrivHeader" statementType="CALLABLE" parameterType="map">
@@ -198,7 +198,7 @@
             )
         </foreach>
     </insert>
-    
+
     <!--lodgers-->
 
     <resultMap id="lodgerResultMap" type="org.complitex.osznconnection.file.entity.Lodger">
@@ -217,7 +217,7 @@
           #{data, mode=OUT, jdbcType=CURSOR, resultMap=lodgerResultMap}
         )}
     </select>
-    
+
     <!--subsidy export-->
 
     <select id="createSubsHeader" statementType="CALLABLE" parameterType="map">
@@ -235,7 +235,7 @@
         (
           ID, COLLECTION_ID, C_LAST_NAME, C_FIRST_NAME, C_MIDDLE_NAME, C_DISTRICT, C_STREET, C_HOUSE, C_FLAT,
           C_STATUS, C_ACC_CODE, C_PART, C_EXT_STREET_NAME, C_EXT_ID, C_EXT_STREET_SORT, C_DATE_B, C_DATE_E,
-          C_SUMMA, C_SUBS, C_NM_PAY, C_OBS, C_NUMM, C_MON, C_EBK
+          C_SUMMA, C_SUBS, C_NM_PAY, C_OBS, C_NUMM, C_MON, C_EBK, C_NUMB
         )
         values
         (
@@ -243,12 +243,12 @@
           #{dbfFields.ID_RAJ}, #{dbfFields.VULCOD}, #{dbfFields.BLD_CYR}, #{dbfFields.FLAT_CYR}, 0,
           #{accountNumber}, #{dbfFields.CORP_CYR}, #{dbfFields.NAME_V_CYR}, #{dbfFields.NUMB}, #{dbfFields.CAT_V_CYR},
           #{dbfFields.DAT1}, #{dbfFields.DAT2}, #{dbfFields.C_SUMMA}, #{dbfFields.C_SUBS}, #{dbfFields.C_NM_PAY},
-          #{dbfFields.C_OBS}, #{dbfFields.NUMM}, #{dbfFields.MON}, #{dbfFields.EBK}
+          #{dbfFields.C_OBS}, #{dbfFields.NUMM}, #{dbfFields.MON}, #{dbfFields.EBK}, #{dbfFields.NUMB}
         )
     </insert>
-    
+
     <!--facility form 2-->
-    
+
     <resultMap id="privsFResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityForm2">
         <association property="dbfFields" javaType="map">
             <result property="DEPART" column="DEPART"/>
@@ -280,9 +280,9 @@
           #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsFResultMap}
         )}
     </select>
-    
+
     <!--facility local-->
-    
+
     <resultMap id="privsMResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityLocal">
         <association property="dbfFields" javaType="map">
             <result property="COD" column="COD"/>
@@ -350,7 +350,7 @@
         #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsMResultMap}
         )}
     </select>
-    
+
     <resultMap id="subsidyDataResultMap" type="org.complitex.osznconnection.file.entity.subsidy.SubsidyData">
         <result column="SM1" property="sm1"/>
         <result column="SM2" property="sm2"/>
