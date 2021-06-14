@@ -12,7 +12,6 @@ import org.complitex.address.strategy.district.DistrictStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.address.strategy.street_type.StreetTypeStrategy;
 import org.complitex.common.entity.DomainObject;
-import org.complitex.common.service.ModuleBean;
 import org.complitex.common.strategy.organization.IOrganizationStrategy;
 import org.complitex.correction.entity.Correction;
 import org.complitex.correction.exception.ResolveAddressException;
@@ -441,7 +440,7 @@ public class AddressCorrectionService {
             break;
 
             case STREET:
-                if (externalAddress.getStreet() == null && externalAddress.getStreetCode() != null) {
+                if (externalAddress.getStreetCode() != null) {
                     Long externalId = Long.valueOf(externalAddress.getStreetCode());
 
                     List<Correction> streetCorrections =
