@@ -429,23 +429,6 @@ public class ServiceProviderAdapter extends AbstractBean {
 
         String dataSource = organizationStrategy.getDataSource(billingId);
 
-        /* Set OPP field */
-        char[] opp = new char[8];
-
-        for (int i = 0; i < 8; i++){
-            opp[i] = '0';
-
-        }
-
-        for (long spt : serviceIds) {
-            if (spt >= 1 && spt <= 8) {
-                int i = 8 - (int) spt;
-                opp[i] = '1';
-            }
-        }
-        payment.putField(PaymentDBF.OPP, String.valueOf(opp));
-//        payment.putField(PaymentDBF.OPP_SERV, String.valueOf(opp));
-
         Map<String, Object> params = newHashMap();
         params.put("accountNumber", payment.getAccountNumber());
         params.put("dat1", payment.getField(PaymentDBF.DAT1));
@@ -459,6 +442,7 @@ public class ServiceProviderAdapter extends AbstractBean {
         }
 
         Integer resultCode = (Integer) params.get("resultCode");
+
         if (resultCode == null) {
             payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
 
@@ -493,6 +477,17 @@ public class ServiceProviderAdapter extends AbstractBean {
                     log.error("processPaymentAndBenefit. Unexpected result code: {}. Payment id: {}, calculation center: {}",
                             resultCode, payment.getId(), dataSource);
             }
+        }
+
+
+        BigDecimal debt = getDebtHope(payment.getUserOrganizationId(), payment.getAccountNumber(), payment.getDate(), 3);
+
+        if (!debt.equals(BigDecimal.valueOf(-10))) {
+            payment.putField(PaymentDBF.DEBT, debt);
+        } else {
+            log.error("getDebtHope. Result code is null. Payment id: {}", payment.getId());
+
+            payment.setStatus(RequestStatus.PROCESSING_INVALID_FORMAT);
         }
     }
 

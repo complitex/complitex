@@ -53,6 +53,19 @@
             <result column="CODE2_6" property="CODE2_6"/>
             <result column="CODE2_7" property="CODE2_7"/>
             <result column="CODE2_8" property="CODE2_8"/>
+            <result column="CODE2_17" property="CODE2_17"/>
+            <result column="CODE2_18" property="CODE2_18"/>
+            <result column="CODE2_19" property="CODE2_19"/>
+            <result column="CODE2_20" property="CODE2_20"/>
+            <result column="CODE2_21" property="CODE2_21"/>
+            <result column="CODE2_22" property="CODE2_22"/>
+            <result column="CODE2_23" property="CODE2_23"/>
+            <result column="CODE2_24" property="CODE2_24"/>
+            <result column="CODE2_25" property="CODE2_25"/>
+            <result column="CODE2_26" property="CODE2_26"/>
+            <result column="CODE2_50" property="CODE2_50"/>
+            <result column="CODE2_60" property="CODE2_60"/>
+            <result column="CODE2_70" property="CODE2_70"/>
             <result column="NORM_F_1" property="NORM_F_1"/>
             <result column="NORM_F_2" property="NORM_F_2"/>
             <result column="NORM_F_3" property="NORM_F_3"/>
@@ -88,6 +101,19 @@
             <result column="CODE3_6" property="CODE3_6"/>
             <result column="CODE3_7" property="CODE3_7"/>
             <result column="CODE3_8" property="CODE3_8"/>
+            <result column="CODE3_17" property="CODE3_17"/>
+            <result column="CODE3_18" property="CODE3_18"/>
+            <result column="CODE3_19" property="CODE3_19"/>
+            <result column="CODE3_20" property="CODE3_20"/>
+            <result column="CODE3_21" property="CODE3_21"/>
+            <result column="CODE3_22" property="CODE3_22"/>
+            <result column="CODE3_23" property="CODE3_23"/>
+            <result column="CODE3_24" property="CODE3_24"/>
+            <result column="CODE3_25" property="CODE3_25"/>
+            <result column="CODE3_26" property="CODE3_26"/>
+            <result column="CODE3_50" property="CODE3_50"/>
+            <result column="CODE3_60" property="CODE3_60"/>
+            <result column="CODE3_70" property="CODE3_70"/>
             <result column="OPP_SERV" property="OPP_SERV"/>
             <result column="RESERV1" property="RESERV1"/>
             <result column="RESERV2" property="RESERV2"/>
