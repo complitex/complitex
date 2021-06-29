@@ -29,6 +29,19 @@ public enum PaymentDBF {
     CODE2_6, //17	CODE2_6	    NUMERIC	    6	0	Электроэнергия
     CODE2_7, //18	CODE2_7	    NUMERIC	    6	0	Вывоз мусора
     CODE2_8, //19	CODE2_8	    NUMERIC	    6	0	Водоотведение
+    CODE2_17,
+    CODE2_18,
+    CODE2_19,
+    CODE2_20,
+    CODE2_21,
+    CODE2_22,
+    CODE2_23,
+    CODE2_24,
+    CODE2_25,
+    CODE2_26,
+    CODE2_50,
+    CODE2_60,
+    CODE2_70,
     NORM_F_1,//20	NORM_F_1    NUMERIC	    10	4	Общая площадь (оплата жилья)
     NORM_F_2,//21	NORM_F_2	NUMERIC	    10	4	Объемы потребления (отопление)
     NORM_F_3,//22	NORM_F_3	NUMERIC	    10	4	Объемы потребления (горячего водо.)
@@ -37,6 +50,19 @@ public enum PaymentDBF {
     NORM_F_6,//25	NORM_F_6	NUMERIC	    10	4	Объемы потребления (электроэнергия)
     NORM_F_7,//26	NORM_F_7	NUMERIC	    10	4	Объемы потребления (вывоз мусора)
     NORM_F_8,//27	NORM_F_8	NUMERIC	    10	4	Объемы потребления (водоотведение)
+    CODE3_17,
+    CODE3_18,
+    CODE3_19,
+    CODE3_20,
+    CODE3_21,
+    CODE3_22,
+    CODE3_23,
+    CODE3_24,
+    CODE3_25,
+    CODE3_26,
+    CODE3_50,
+    CODE3_60,
+    CODE3_70,
     OWN_NUM_SR, //28	OWN_NUM_SR	CHARACTER	15	    Лицевой счет в обслуж. организации
     DAT1, //29	DAT1	    DATE	    8		Дата начала действия субсидии
     DAT2, //30	DAT2	    DATE	    8		Дата формирования запроса
