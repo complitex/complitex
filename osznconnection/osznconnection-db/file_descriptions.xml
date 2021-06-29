@@ -85,7 +85,7 @@
             <field scale="4" length="10" type="java.math.BigDecimal" name="NORM_F_6"/>
             <field scale="4" length="10" type="java.math.BigDecimal" name="NORM_F_7"/>
             <field scale="4" length="10" type="java.math.BigDecimal" name="NORM_F_8"/>
-            <field length="15" type="java.lang.String" name="OWN_NUM_SR"/>
+            <field length="30" type="java.lang.String" name="OWN_NUM_SR"/>
             <field length="8" type="java.util.Date" name="DAT1"/>
             <field length="8" type="java.util.Date" name="DAT2"/>
             <field length="1" type="java.lang.Integer" name="OZN_PRZ"/>
@@ -104,27 +104,27 @@
             <field length="7" type="java.lang.String" name="BLD_NUM"/>
             <field length="2" type="java.lang.String" name="CORP_NUM"/>
             <field length="9" type="java.lang.String" name="FLAT"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_1"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_2"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_3"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_4"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_5"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_6"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_7"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_8"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_17"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_18"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_19"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_20"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_21"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_22"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_23"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_24"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_25"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_26"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_50"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_60"/>
-            <field length="6" type="java.lang.Integer" name="CODE3_70"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_1"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_2"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_3"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_4"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_5"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_6"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_7"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_8"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_17"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_18"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_19"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_20"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_21"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_22"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_23"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_24"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_25"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_26"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_50"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_60"/>
+            <field length="10" type="java.lang.Integer" name="CODE3_70"/>
             <field length="8" type="java.lang.String" name="OPP_SERV"/>
             <field length="10" type="java.lang.Long" name="RESERV1"/>
             <field length="10" type="java.lang.String" name="RESERV2"/>
