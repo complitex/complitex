@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="pspoffice-address.properties">
+        <property name="db.driver" value="org.postgresql.Driver"/>
+        <property name="db.url" value="jdbc:postgresql://localhost/pspoffice"/>
+        <property name="db.username" value="pspoffice"/>
+        <property name="db.password" value="pspoffice"/>
+
+        <property name="sync.driver" value="oracle.jdbc.OracleDriver"/>
+        <property name="sync.url" value="jdbc:oracle:thin:@10.50.4.15:1521:cnreal"/>
+        <property name="sync.username" value="export"/>
+        <property name="sync.password" value="export"/>
+    </properties>
+
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <environments default="catalog">
+        <environment id="catalog">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${db.driver}"/>
+                <property name="url" value="${db.url}"/>
+                <property name="username" value="${db.username}"/>
+                <property name="password" value="${db.password}"/>
+            </dataSource>
+        </environment>
+
+        <environment id="synchronization">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${sync.driver}"/>
+                <property name="url" value="${sync.url}"/>
+                <property name="username" value="${sync.username}"/>
+                <property name="password" value="${sync.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+
+    <mappers>
+        <mapper class="ru.complitex.pspoffice.address.user.mapper.UserMapper"/>
+
+        <mapper class="ru.complitex.catalog.mapper.CatalogMapper"/>
+        <mapper class="ru.complitex.catalog.mapper.ValueMapper"/>
+        <mapper class="ru.complitex.catalog.mapper.ItemMapper"/>
+        <mapper class="ru.complitex.catalog.mapper.DataMapper"/>
+
+        <mapper class="ru.complitex.pspoffice.address.sync.mapper.SyncMapper"/>
+    </mappers>
+</configuration>

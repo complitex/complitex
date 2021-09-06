@@ -38,6 +38,7 @@
         <module>pspoffice-api</module>
         <module>pspoffice-backend</module>
         <module>pspoffice-frontend</module>
+        <module>pspoffice-address</module>
 
         <module>../complitex/complitex-common</module>
         <module>../complitex/complitex-template</module>

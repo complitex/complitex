@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <title></title>
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-light bg-light border-bottom">
+    <a class="navbar-brand"><h4>PSPOffice Address</h4></a>
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+        </ul>
+        <div class="navbar-nav">
+            <a wicket:id="logout" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="menu">
+            <ul>
+                <li>
+                    <b>Справочник</b>
+                    <ul wicket:id="catalog">
+                        <li><a wicket:id="country">Страна</a></li>
+                        <li><a wicket:id="region">Регион</a></li>
+                        <li><a wicket:id="cityType">Тип населённого пункта</a></li>
+                        <li><a wicket:id="city">Населённый пункт</a></li>
+                        <li><a wicket:id="district">Район</a></li>
+                        <li><a wicket:id="streetType">Тип улицы</a></li>
+                        <li><a wicket:id="street">Улица</a></li>
+                        <li><a wicket:id="house">Дом</a></li>
+                        <li><a wicket:id="flat">Квартира</a></li>
+                        <li><a wicket:id="organizationType">Тип организации</a></li>
+                        <li><a wicket:id="organization">Огранизация</a></li>
+                    </ul>
+                </li>
+               <li>
+                    <b>Соответствие</b>
+                    <ul wicket:id="correction">
+                        <li><a wicket:id="country">Страна</a></li>
+                        <li><a wicket:id="region">Регион</a></li>
+                        <li><a wicket:id="cityType">Тип населённого пункта</a></li>
+                        <li><a wicket:id="city">Населённый пункт</a></li>
+                        <li><a wicket:id="district">Район</a></li>
+                        <li><a wicket:id="streetType">Тип улицы</a></li>
+                        <li><a wicket:id="street">Улица</a></li>
+                        <li><a wicket:id="house">Дом</a></li>
+                        <li><a wicket:id="flat">Квартира</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Настройка</b>
+                    <ul wicket:id="setting">
+                        <li><a wicket:id="synchronization">Синхронизация</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col w-100">
+            <wicket:child/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

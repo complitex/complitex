@@ -1,0 +1,48 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
+    <div wicket:id="notification"></div>
+
+    <div class="table-responsive-sm">
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th></th>
+                <th colspan="3">Справочник</th>
+                <th colspan="4">Соответствие</th>
+                <th>Синхронизация</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Всего</th>
+                <th>Добавлено</th>
+                <th>Обновлено</th>
+                <th>Всего</th>
+                <th>Добавлено</th>
+                <th>Обновлено</th>
+                <th>Синхронизировано</th>
+                <th>Загружено</th>
+                <th>Ошибок</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr wicket:id="country"></tr>
+            <tr wicket:id="region"></tr>
+            <tr wicket:id="cityType"></tr>
+            <tr wicket:id="city"></tr>
+            <tr wicket:id="district"></tr>
+            <tr wicket:id="streetType"></tr>
+            <tr wicket:id="street"></tr>
+            <tr wicket:id="house"></tr>
+            <tr wicket:id="flat"></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form wicket:id="form">
+        <div wicket:id="modal"></div>
+
+        <div wicket:id="buttons">
+            <button wicket:id="sync" class="btn btn-outline-primary"><wicket:message key="sync"/></button>
+            <button wicket:id="cancel" class="btn btn-outline-secondary"><wicket:message key="cancel"/></button>
+        </div>
+    </form>
+</wicket:extend>

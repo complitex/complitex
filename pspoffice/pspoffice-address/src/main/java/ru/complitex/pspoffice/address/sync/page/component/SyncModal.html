@@ -1,0 +1,25 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
+    <div wicket:id="container">
+        <div class="form-group">
+            <label><wicket:message key="catalog"/></label>
+            <div wicket:id="choices">
+                <ul>
+                    <li><input wicket:id="all" type="checkbox" class="form-check-input"/> <wicket:message key="all"/></li>
+                    <li><input wicket:id="country" type="checkbox" class="form-check-input"> <wicket:message key="country"/></li>
+                    <li><input wicket:id="region" type="checkbox" class="form-check-input"> <wicket:message key="region"/></li>
+                    <li><input wicket:id="cityType" type="checkbox" class="form-check-input"> <wicket:message key="cityType"/></li>
+                    <li><input wicket:id="city" type="checkbox" class="form-check-input"> <wicket:message key="city"/></li>
+                    <li><input wicket:id="district" type="checkbox" class="form-check-input"> <wicket:message key="district"/></li>
+                    <li><input wicket:id="streetType" type="checkbox" class="form-check-input"> <wicket:message key="streetType"/></li>
+                    <li><input wicket:id="street" type="checkbox" class="form-check-input"> <wicket:message key="street"/></li>
+                    <li><input wicket:id="house" type="checkbox" class="form-check-input"> <wicket:message key="house"/></li>
+                    <li><input wicket:id="flat" type="checkbox" class="form-check-input"> <wicket:message key="flat"/></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label><wicket:message key="date"/></label>
+            <input wicket:id="date" class="form-control"/>
+        </div>
+    </div>
+</wicket:extend>

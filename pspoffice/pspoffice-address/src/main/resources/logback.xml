@@ -1,0 +1,17 @@
+<configuration scan="true">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%msg\n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="ru.complitex" level="INFO" additivity="false" >
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
