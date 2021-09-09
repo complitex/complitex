@@ -6,6 +6,7 @@ import ru.complitex.catalog.service.CatalogService;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * @author Ivanov Anatoliy
@@ -17,9 +18,10 @@ public class ReferenceModel implements IModel<Long> {
     private final int catalog;
     private final IModel<Long> model;
     private final int value;
-    private LocalDate date;
+    private final LocalDate date;
 
-    private Long referenceId;
+    private Long itemId = null;
+    private Long referenceId = null;
 
     public ReferenceModel(int catalog, IModel<Long> model, int value, LocalDate date) {
         this.catalog = catalog;
@@ -30,16 +32,16 @@ public class ReferenceModel implements IModel<Long> {
 
     @Override
     public Long getObject() {
-        if (referenceId == null) {
-            Long itemId = model.getObject();
+        Long itemId = model.getObject();
 
-            if (itemId != null) {
-                if (catalogService == null) {
-                    NonContextual.of(this).inject(this);
-                }
+        if (!Objects.equals(this.itemId, itemId)) {
+            this.itemId = itemId;
 
-                referenceId = catalogService.getReferenceId(catalog, itemId, value, date);
+            if (catalogService == null) {
+                NonContextual.of(this).inject(this);
             }
+
+            referenceId = catalogService.getReferenceId(catalog, itemId, value, date);
         }
 
         return referenceId;
