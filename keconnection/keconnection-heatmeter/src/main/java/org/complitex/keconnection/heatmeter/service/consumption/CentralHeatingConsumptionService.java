@@ -1,7 +1,6 @@
 package org.complitex.keconnection.heatmeter.service.consumption;
 
 import com.google.common.base.Strings;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -151,10 +150,10 @@ public class CentralHeatingConsumptionService {
         if (cell == null){
             return null;
         }
-
-        if (cell.getCellType() == Cell.CELL_TYPE_FORMULA){
-            return toString(evaluator.evaluate(cell).getNumberValue());
-        }
+//
+//        if (cell.getCellType() == Cell.CELL_TYPE_FORMULA){
+//            return toString(evaluator.evaluate(cell).getNumberValue());
+//        }
 
         return getStringValue(cell);
     }
@@ -164,13 +163,13 @@ public class CentralHeatingConsumptionService {
             return null;
         }
 
-        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
-            if (HSSFDateUtil.isCellDateFormatted(cell)){
-                return DateUtil.getDateFormat().format(cell.getDateCellValue());
-            }
-
-            return toString(cell.getNumericCellValue());
-        }
+//        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC){
+//            if (HSSFDateUtil.isCellDateFormatted(cell)){
+//                return DateUtil.getDateFormat().format(cell.getDateCellValue());
+//            }
+//
+//            return toString(cell.getNumericCellValue());
+//        }
 
         return Strings.emptyToNull(StringUtil.toCyrillic(cell.getStringCellValue().trim()));
     }

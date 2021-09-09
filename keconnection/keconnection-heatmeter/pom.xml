@@ -42,7 +42,7 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
         </dependency>
-        
+
         <!-- Test dependencies -->
         <!--<dependency>
             <groupId>ch.qos.logback</groupId>

@@ -164,7 +164,7 @@ public class HeatmeterList extends TemplatePage {
                 target.add(filterForm);
                 target.add(messages);
 
-                getTemplateSession().putPreferenceFilter(HeatmeterList.class.getName(), filterModel.getObject());
+//                getTemplateSession().putPreferenceFilter(HeatmeterList.class.getName(), filterModel.getObject());
             }
 
             @Override
@@ -253,7 +253,7 @@ public class HeatmeterList extends TemplatePage {
                 buildingSearch.reinitialize(target);
 
                 heatmeterBean.storeSearchState(getTemplateSession(), searchComponentState);
-                getTemplateSession().putPreferenceFilter(HeatmeterList.class.getName(), filterModel.getObject());
+//                getTemplateSession().putPreferenceFilter(HeatmeterList.class.getName(), filterModel.getObject());
 
                 target.add(filterForm);
             }

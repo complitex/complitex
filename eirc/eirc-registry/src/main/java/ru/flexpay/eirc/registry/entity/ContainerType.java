@@ -14,7 +14,7 @@ import static ru.flexpay.eirc.registry.entity.RegistryType.*;
  * @author Pavel Sknar
  */
 public enum ContainerType implements IFixedIdType {
-    UNDEFINED(0, null),
+    UNDEFINED(0),
     OPEN_ACCOUNT(1, INFO, SALDO_SIMPLE),
     CLOSE_ACCOUNT(2, CLOSED_ACCOUNTS),
     SET_RESPONSIBLE_PERSON(3, INFO, SALDO_SIMPLE),
@@ -41,18 +41,17 @@ public enum ContainerType implements IFixedIdType {
     ADDRESS_CORRECTION(150, CORRECTIONS),
 
 
-    SETUP_PAYMENT_POINT(500, null),
-    REGISTRY_ANNOTATION(501, null),
-    SYNC_IDENTIFIER(502, null),
-    OBJECT_IDENTIFIER(503, null),
+    SETUP_PAYMENT_POINT(500),
+    REGISTRY_ANNOTATION(501),
+    SYNC_IDENTIFIER(502),
+    OBJECT_IDENTIFIER(503),
     DETAILS_PAYMENTS_DOCUMENT(504, PAYMENTS),
 
     SET_CALCULATION_NUMBER_TENANTS(600, INFO),
     SET_CALCULATION_NUMBER_REGISTERED(601, INFO),
     SET_CALCULATION_TOTAL_SQUARE(602, INFO),
     SET_CALCULATION_LIVE_SQUARE(603, INFO),
-    SET_CALCULATION_HEATING_SQUARE(604, INFO)
-    ;
+    SET_CALCULATION_HEATING_SQUARE(604, INFO);
 
     private static final Map<Integer, ContainerType> CONTAINER_TYPE_MAP;
 
@@ -66,12 +65,17 @@ public enum ContainerType implements IFixedIdType {
         CONTAINER_TYPE_MAP = builder.build();
     }
 
-    private Integer id;
-    private Set<RegistryType> registryTypes;
+    private final Integer id;
+    private final Set<RegistryType> registryTypes;
 
-    private ContainerType(Integer id, RegistryType... registryTypes) {
+    ContainerType(Integer id, RegistryType... registryTypes) {
         this.id = id;
-        this.registryTypes = registryTypes == null? Collections.<RegistryType>emptySet(): Sets.newHashSet(registryTypes);
+        this.registryTypes = registryTypes == null? Collections.emptySet(): Sets.newHashSet(registryTypes);
+    }
+
+    ContainerType(Integer id) {
+        this.id = id;
+        this.registryTypes =  Collections.emptySet();
     }
 
     @Override
