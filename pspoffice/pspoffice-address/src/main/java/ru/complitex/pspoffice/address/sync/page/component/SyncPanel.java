@@ -3,22 +3,63 @@ package ru.complitex.pspoffice.address.sync.page.component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Ivanov Anatoliy
  */
 public abstract class SyncPanel extends Panel {
-    private final IModel<AtomicInteger> added = new Model<>(new AtomicInteger(0));
-    private final IModel<AtomicInteger> updated = new Model<>(new AtomicInteger(0));
-    private final IModel<AtomicInteger> addedCorrection = new Model<>(new AtomicInteger(0));
-    private final IModel<AtomicInteger> updatedCorrection = new Model<>(new AtomicInteger(0));
-    private final IModel<AtomicInteger> loaded = new Model<>(new AtomicInteger(0));
-    private final IModel<AtomicInteger> errors = new Model<>(new AtomicInteger(0));
+    private final IModel<Integer> addedModel = new Model<>(0);
+    private final IModel<Integer> updatedModel = new Model<>(0);
+    private final IModel<Integer> addedCorrectionModel = new Model<>(0);
+    private final IModel<Integer> updatedCorrectionModel = new Model<>(0);
+    private final IModel<Integer> loadedModel = new Model<>(0);
+    private final IModel<Integer> errorsModel = new Model<>(0);
+
+    private static abstract class SizeModel implements IModel<Integer> {
+        private Integer size = null;
+
+        protected abstract Integer get();
+
+        @Override
+        public Integer getObject() {
+            if (size == null) {
+                size = get();
+            }
+
+            return size;
+        }
+
+        public void init() {
+            size = get();
+        }
+
+        public void add() {
+            size++;
+        }
+    }
+
+    private final SizeModel sizeModel = new SizeModel() {
+        @Override
+        protected Integer get() {
+            return getSize();
+        }
+    };
+
+    private final SizeModel correctionSizeModel = new SizeModel() {
+        @Override
+        protected Integer get() {
+            return getCorrectionSize();
+        }
+    };
+
+    private final SizeModel syncedCorrectionModel = new SizeModel() {
+        @Override
+        protected Integer get() {
+            return getSyncedCorrection();
+        }
+    };
 
     public SyncPanel(String id) {
         super(id);
@@ -26,54 +67,64 @@ public abstract class SyncPanel extends Panel {
         setOutputMarkupId(true);
 
         add(new Label("catalog", new ResourceModel(id)));
-        add(new Label("size", LoadableDetachableModel.of(this::getSize)));
-        add(new Label("added", added));
-        add(new Label("updated", updated));
-        add(new Label("correctionSize", LoadableDetachableModel.of(this::getCorrectionSize)));
-        add(new Label("addedCorrection", addedCorrection));
-        add(new Label("updatedCorrection", updatedCorrection));
-        add(new Label("syncedCorrection", LoadableDetachableModel.of(this::getSyncedCorrection)));
-        add(new Label("loaded", loaded));
-        add(new Label("errors", errors));
+        add(new Label("size", sizeModel));
+        add(new Label("added", addedModel));
+        add(new Label("updated", updatedModel));
+        add(new Label("correctionSize", correctionSizeModel));
+        add(new Label("addedCorrection", addedCorrectionModel));
+        add(new Label("updatedCorrection", updatedCorrectionModel));
+        add(new Label("syncedCorrection", syncedCorrectionModel));
+        add(new Label("loaded", loadedModel));
+        add(new Label("errors", errorsModel));
     }
 
     public void init() {
-        added.getObject().set(0);
-        updated.getObject().set(0);
-        addedCorrection.getObject().set(0);
-        updatedCorrection.getObject().set(0);
-        loaded.getObject().set(0);
-        errors.getObject().set(0);
+        addedModel.setObject(0);
+        updatedModel.setObject(0);
+        addedCorrectionModel.setObject(0);
+        updatedCorrectionModel.setObject(0);
+        loadedModel.setObject(0);
+        errorsModel.setObject(0);
+
+        sizeModel.init();
+        correctionSizeModel.init();
+        syncedCorrectionModel.init();
     }
 
     public void onAdd() {
-        added.getObject().incrementAndGet();
+        addedModel.setObject(addedModel.getObject() + 1);
+
+        sizeModel.add();
     }
 
     public void onUpdate() {
-        updated.getObject().incrementAndGet();
+        updatedModel.setObject(updatedModel.getObject() + 1);
     }
 
     public void onAddCorrection() {
-        addedCorrection.getObject().incrementAndGet();
+        addedCorrectionModel.setObject(addedCorrectionModel.getObject() + 1);
+
+        correctionSizeModel.add();
+
+        syncedCorrectionModel.add();
     }
 
     public void onUpdateCorrection() {
-        updatedCorrection.getObject().incrementAndGet();
+        updatedCorrectionModel.setObject(updatedCorrectionModel.getObject() + 1);
     }
 
     public void onLoad() {
-        loaded.getObject().incrementAndGet();
+        loadedModel.setObject(loadedModel.getObject() + 1);
     }
 
     public void onError() {
-        errors.getObject().incrementAndGet();
+        errorsModel.setObject(errorsModel.getObject() + 1);
     }
 
-    protected abstract Long getSize();
+    protected abstract Integer getSize();
 
-    protected abstract Long getCorrectionSize();
+    protected abstract Integer getCorrectionSize();
 
-    protected abstract Long getSyncedCorrection();
+    protected abstract Integer getSyncedCorrection();
 }
 

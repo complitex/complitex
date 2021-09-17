@@ -19,7 +19,7 @@ import java.util.Iterator;
  * @author Ivanov Anatoliy
  */
 @ApplicationScoped
-public class StreetTypeSyncService implements ISyncService {
+public class StreetTypeSyncService extends SyncService {
     @Inject
     @SyncProducer
     private SyncMapper syncMapper;

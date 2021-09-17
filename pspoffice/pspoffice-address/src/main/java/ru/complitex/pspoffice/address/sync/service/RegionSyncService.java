@@ -19,7 +19,7 @@ import java.util.Iterator;
  * @author Ivanov Anatoliy
  */
 @ApplicationScoped
-public class RegionSyncService implements ISyncService {
+public class RegionSyncService extends SyncService {
     @Inject
     @SyncProducer
     private SyncMapper syncMapper;

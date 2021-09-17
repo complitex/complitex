@@ -31,7 +31,7 @@ public class WebServer {
         try {
             properties.load(new FileInputStream("pspoffice-address.properties"));
         } catch (IOException e) {
-            System.out.println("pspoffice-address.conf not found");
+            System.out.println("pspoffice-address.properties not found");
         }
 
         String host = properties.getProperty("host", "localhost");

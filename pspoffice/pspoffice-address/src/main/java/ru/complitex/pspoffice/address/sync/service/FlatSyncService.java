@@ -13,12 +13,15 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Ivanov Anatoliy
  */
 @ApplicationScoped
-public class FlatSyncService implements ISyncService {
+public class FlatSyncService extends SyncService {
     @Inject
     @SyncProducer
     private SyncMapper syncMapper;
@@ -79,7 +82,6 @@ public class FlatSyncService implements ISyncService {
                             return syncCatalog;
                         }))
                 .iterator();
-
     }
 
     @Override
@@ -91,20 +93,28 @@ public class FlatSyncService implements ISyncService {
                 .get();
     }
 
+    private final Map<Long, Map<LocalDate, Long>> houseCache = new ConcurrentHashMap<>();
+
     public Long getHouseId(Long correctionHouseId, LocalDate date) {
-        return catalogService.getReferenceId(HouseCorrection.CATALOG, HouseCorrection.HOUSE, date)
-                .withReferenceId(HouseCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
-                .withReferenceId(HouseCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
-                .withLong(HouseCorrection.HOUSE_ID, correctionHouseId)
-                .get();
+        return houseCache
+                .computeIfAbsent(correctionHouseId, c -> new ConcurrentHashMap<>())
+                .computeIfAbsent(date, d -> catalogService.getReferenceId(HouseCorrection.CATALOG, HouseCorrection.HOUSE, d)
+                        .withReferenceId(HouseCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
+                        .withReferenceId(HouseCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
+                        .withLong(HouseCorrection.HOUSE_ID, correctionHouseId)
+                        .get());
     }
 
+    private final Map<Long, Map<LocalDate, Long>> streetCache = new ConcurrentHashMap<>();
+
     public Long getStreetId(Long correctionStreetId, LocalDate date) {
-        return catalogService.getReferenceId(StreetCorrection.CATALOG, StreetCorrection.STREET, date)
-                .withReferenceId(StreetCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
-                .withReferenceId(StreetCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
-                .withLong(StreetCorrection.STREET_ID, correctionStreetId)
-                .get();
+        return streetCache
+                .computeIfAbsent(correctionStreetId, c -> new ConcurrentHashMap<>())
+                .computeIfAbsent(date, d -> catalogService.getReferenceId(StreetCorrection.CATALOG, StreetCorrection.STREET, d)
+                        .withReferenceId(StreetCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
+                        .withReferenceId(StreetCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
+                        .withLong(StreetCorrection.STREET_ID, correctionStreetId)
+                        .get());
     }
 
     @Override
@@ -173,5 +183,13 @@ public class FlatSyncService implements ISyncService {
         item.setText(Flat.FLAT_NUMBER, getAltLocale(locale), correction.getText(FlatCorrection.FLAT_NUMBER, getAltLocale(locale)));
 
         return catalogService.update(item, date);
+    }
+
+    @Override
+    public void sync(int catalog, LocalDate date, int locale, ISyncListener<SyncCatalog> listener, AtomicBoolean status) {
+        super.sync(catalog, date, locale, listener, status);
+
+        streetCache.clear();
+        houseCache.clear();
     }
 }

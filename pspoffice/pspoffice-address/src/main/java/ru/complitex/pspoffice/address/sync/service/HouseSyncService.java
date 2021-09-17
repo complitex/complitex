@@ -18,7 +18,7 @@ import java.util.Iterator;
  * @author Ivanov Anatoliy
  */
 @ApplicationScoped
-public class HouseSyncService implements ISyncService {
+public class HouseSyncService extends SyncService {
     @Inject
     @SyncProducer
     private SyncMapper syncMapper;

@@ -59,7 +59,7 @@ public class ItemProvider {
                     sql.AND();
 
                     sql.WHERE("NOT EXISTS (SELECT id FROM " + table + "_data data " +
-                            "WHERE " + table + ".id = " + table + "_id AND data.value_id = " + value.getId() + " " +
+                            "WHERE " + table + ".id = " + table + "_id AND data.value_id = #{filter.object.data[" + i + "].value.id} " +
                             "AND data.\"end\" IS NULL " +
                             "AND (data.start_date IS NULL OR data.start_date <= #{filter.date}) " +
                             "AND (data.end_date IS NULL OR data.end_date > #{filter.date}))");
@@ -85,7 +85,7 @@ public class ItemProvider {
                         "AND (" + relevance + ".end_date IS NULL OR " + relevance + ".end_date > #{filter.date})");
             }
 
-            sql.WHERE(relevance + ".value_id = " + value.getId());
+            sql.WHERE(relevance + ".value_id = #{filter.object.data[" + i + "].value.id}");
 
             if (filter.isAnd()) {
                 sql.AND();

@@ -20,7 +20,7 @@ import java.util.Iterator;
  * @author Ivanov Anatoliy
  */
 @ApplicationScoped
-public class CitySyncService implements ISyncService {
+public class CitySyncService extends SyncService {
     @Inject
     @SyncProducer
     private SyncMapper syncMapper;

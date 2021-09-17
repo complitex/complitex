@@ -31,22 +31,22 @@ public class CatalogPanel extends SyncPanel {
         this.date = date;
     }
 
-    protected Long getSize() {
-        return catalogService.getItemsCount(catalog, date).get();
+    protected Integer getSize() {
+        return catalogService.getItemsCount(catalog, date).get().intValue();
     }
 
-    protected Long getCorrectionSize() {
+    protected Integer getCorrectionSize() {
         return catalogService.getItemsCount(correctionCatalog, date)
                 .withReferenceId(catalogOrganization, ISyncService.CATALOG_ORGANIZATION)
                 .withReferenceId(correctionOrganization, ISyncService.CORRECTION_ORGANIZATION)
-                .get();
+                .get().intValue();
     }
 
-    protected Long getSyncedCorrection() {
+    protected Integer getSyncedCorrection() {
         return catalogService.getItemsCount(correctionCatalog, date)
                 .withNotNull(item)
                 .withReferenceId(catalogOrganization, ISyncService.CATALOG_ORGANIZATION)
                 .withReferenceId(correctionOrganization, ISyncService.CORRECTION_ORGANIZATION)
-                .get();
+                .get().intValue();
     }
 }

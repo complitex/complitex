@@ -21,7 +21,7 @@ import java.util.Iterator;
  * @author Ivanov Anatoliy
  */
 @ApplicationScoped
-public class StreetSyncService implements ISyncService {
+public class StreetSyncService extends SyncService {
     @Inject
     @SyncProducer
     private SyncMapper syncMapper;
