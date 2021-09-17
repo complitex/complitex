@@ -9,7 +9,6 @@ import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
 
 import java.time.LocalDate;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Ivanov Anatoliy
@@ -41,54 +40,4 @@ public interface ISyncService {
     boolean updateCorrection(Item correction, Sync sync, LocalDate date, int locale);
 
     boolean updateItem(Item correction, LocalDate date, int locale);
-
-    default void sync(int catalog, LocalDate date, int locale, ISyncListener<SyncCatalog> listener, AtomicBoolean status, SyncCatalog syncCatalog) {
-        if (syncCatalog.getCode() == 1) {
-            syncCatalog.getSyncs().forEach(sync -> {
-                listener.onSync(catalog, sync);
-
-                Item correction = getCorrection(sync, date);
-
-                if (correction == null) {
-                    Item item = getItem(sync, date, locale);
-
-                    if (item == null) {
-                        item = addItem(sync, date, locale);
-
-                        listener.onAdd(catalog, item, sync);
-                    }
-
-                    correction = addCorrection(item, sync, date, locale);
-
-                    listener.onAddCorrection(catalog, correction, sync);
-                } else {
-                    if (updateCorrection(correction, sync, date, locale)) {
-                        listener.onUpdateCorrection(catalog, correction, sync);
-                    }
-
-                    if (updateItem(correction, date, locale)) {
-                        listener.onUpdate(catalog, correction, sync);
-                    }
-                }
-            });
-        } else {
-            syncCatalog.setSyncs(null);
-
-            log.error("error code {}", syncCatalog);
-
-            listener.onError(catalog, syncCatalog, null, null, null, new RuntimeException("error code"));
-        }
-    }
-
-    default void sync(int catalog, LocalDate date, int locale, ISyncListener<SyncCatalog> listener, AtomicBoolean status) {
-        getSyncCatalogs(date, locale).forEachRemaining(syncCatalog -> {
-            if (status.get()) {
-                sync(catalog, date, locale, listener, status, syncCatalog);
-            } else {
-                throw new RuntimeException("canceled");
-            }
-        });
-
-        listener.onSynced(catalog);
-    }
 }
