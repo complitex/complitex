@@ -192,6 +192,9 @@ public class PrivilegeGroupFillTaskBean extends AbstractRequestTaskBean<Privileg
             facilityServiceType.setStatus(SERVICE_NOT_FOUND);
             facilityServiceTypeBean.update(facilityServiceType);
 
+            dwellingCharacteristics.setStatus(SERVICE_NOT_FOUND);
+            dwellingCharacteristicsBean.update(dwellingCharacteristics);
+
             return;
         }
 
