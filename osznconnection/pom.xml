@@ -5,27 +5,20 @@
     <parent>
         <groupId>org.complitex</groupId>
         <artifactId>complitex</artifactId>
-        <version>7.0.0-SNAPSHOT</version>
+        <version>8.0.0-SNAPSHOT</version>
         <relativePath>../complitex/pom.xml</relativePath>
     </parent>
 
     <properties>
-        <complitex.version>7.0.0-SNAPSHOT</complitex.version>
+        <complitex.version>8.0.0-SNAPSHOT</complitex.version>
     </properties>
 
     <groupId>org.complitex.osznconnection</groupId>
     <artifactId>osznconnection</artifactId>
-    <version>7.0.0-SNAPSHOT</version>
+    <version>8.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Osznconnection</name>
-
-<!--test-->
-    <scm>
-        <connection>scm:svn:https://osznconnection.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://osznconnection.googlecode.com/svn/trunk</developerConnection>
-        <url>http://code.google.com/p/osznconnection/source/browse</url>
-    </scm>
 
     <modules>
         <module>osznconnection-organization-type</module>
@@ -45,17 +38,6 @@
         <module>../complitex/complitex-organization-type</module>
         <module>../complitex/complitex-organization</module>
   </modules>
-
-    <distributionManagement>
-        <repository>
-            <id>osznconnection-repository</id>
-            <url>svn:https://osznconnection.googlecode.com/svn/repo</url>
-        </repository>
-        <snapshotRepository>
-            <id>osznconnection-repository</id>
-            <url>svn:https://osznconnection.googlecode.com/svn/repo-snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.osznconnection.file.service.subsidy.OschadbankRequestFileBean">
     <resultMap id="oschadbankRequestFileResultMap" type="org.complitex.osznconnection.file.entity.subsidy.OschadbankRequestFile">
         <id column="id" property="id"/>
@@ -17,16 +18,16 @@
     </resultMap>
 
     <insert id="insertOschadbankRequestFile" parameterType="org.complitex.osznconnection.file.entity.subsidy.OschadbankRequestFile">
-        INSERT INTO `oschadbank_request_file`
+        INSERT INTO "oschadbank_request_file"
         (
         <trim suffixOverrides=",">
-            `request_file_id`,
+            "request_file_id",
             <foreach collection="dbfFields.keys" item="key">
-                `${key}`,
+                "${key}",
             </foreach>
         </trim>
         )
-        VALUE
+        VALUES
         (
         <trim suffixOverrides=",">
             #{requestFileId},
@@ -38,10 +39,10 @@
     </insert>
 
     <select id="selectOschadbankRequestFile" parameterType="long" resultMap="oschadbankRequestFileResultMap">
-        select * from oschadbank_request_file where request_file_id = #{object.requestFileId}
+        SELECT * FROM oschadbank_request_file WHERE request_file_id = #{object.requestFileId}
     </select>
 
     <delete id="deleteOschadbankRequestFile" parameterType="long">
-        delete from oschadbank_request_file where `request_file_id` = #{requestFileId}
+        DELETE FROM oschadbank_request_file WHERE "request_file_id" = #{requestFileId}
     </delete>
 </mapper>

@@ -27,45 +27,46 @@
 
     <sql id="logFilterWhere">
         <where>
-            <if test="date != null">YEAR(`date`) = YEAR(#{date}) and DAY(`date`) = DAY(#{date})</if>
-            <if test="login != null">and `login` like CONCAT('%',#{login},'%')</if>
-            <if test="module != null">and `module` = #{module}</if>
-            <if test="controller != null">and `controller` = #{controller}</if>
-            <if test="model != null">and `model` = #{model}</if>
-            <if test="objectId != null">and `object_id` = #{objectId}</if>
-            <if test="event != null">and `event` = #{event}</if>
-            <if test="status != null">and `status` = #{status}</if>
-            <if test="description != null">and `description` like CONCAT('%',#{description},'%')</if>
+            <if test="date != null">YEAR("date") = YEAR(#{date}) and DAY("date") = DAY(#{date})</if>
+            <if test="login != null">and "login" like CONCAT('%',#{login},'%')</if>
+            <if test="module != null">and "module" = #{module}</if>
+            <if test="controller != null">and "controller" = #{controller}</if>
+            <if test="model != null">and "model" = #{model}</if>
+            <if test="objectId != null">and "object_id" = #{objectId}</if>
+            <if test="event != null">and "event" = #{event}</if>
+            <if test="status != null">and "status" = #{status}</if>
+            <if test="description != null">and "description" like CONCAT('%',#{description},'%')</if>
         </where>
     </sql>
 
+    <!--suppress SqlResolve -->
     <select id="selectLogs" resultMap="logResultMap" parameterType="org.complitex.logging.service.LogFilter">
-        select
-            l.`id`, `date`, `login`, `module`, `controller`, `model`, `object_id`, `event`, `status`, `description`,
-            lc.`id` as lc_id, `log_id`, `attribute_id`, `collection`, `property`, `old_value`, `new_value`, `locale`
-        from
-            (select * from `log` <include refid="logFilterWhere"/>
+        SELECT
+            l."id", "date", "login", "module", "controller", "model", "object_id", "event", "status", "description",
+            lc."id" as lc_id, "log_id", "attribute_id", "collection", "property", "old_value", "new_value", "locale"
+        FROM
+            (SELECT * FROM "log" <include refid="logFilterWhere"/>
             <if test="sortProperty != null">
-              order by `${sortProperty}` <choose><when test="ascending">asc</when><otherwise>desc</otherwise></choose>
+              ORDER BY "${sortProperty}" <choose><when test="ascending">ASC</when><otherwise>DESC</otherwise></choose>
             </if>
-            limit #{first}, #{count}
+            OFFSET #{first} LIMIT #{count}
             ) as l
-        left join `log_change` as lc on l.id = lc.log_id
+        LEFT JOIN "log_change" AS lc ON l.id = lc.log_id
     </select>
 
     <select id="selectLogsCount" resultType="long">
-        select count(1) from `log` <include refid="logFilterWhere"/>
+        SELECT count(1) FROM "log" <include refid="logFilterWhere"/>
     </select>
 
     <select id="selectModules" resultType="string">
-        select `module` from `log` where `module` is not null group by `module` order by `module`
+        SELECT "module" FROM "log" WHERE "module" IS NOT NULL GROUP BY "module" ORDER BY "module"
     </select>
 
     <select id="selectControllers" resultType="string">
-        select `controller` from `log` where `controller` is not null group by `controller` order by `controller`
+        SELECT "controller" FROM "log" WHERE "controller" IS NOT NULL GROUP BY "controller" ORDER BY "controller"
     </select>
 
     <select id="selectModels" resultType="string">
-        select `model` from `log` where `model` is not null group by `model` order by `model`
+        SELECT "model" FROM "log" WHERE "model" IS NOT NULL GROUP BY "model" ORDER BY "model"
     </select>
 </mapper>

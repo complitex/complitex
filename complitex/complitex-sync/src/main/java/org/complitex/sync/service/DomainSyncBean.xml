@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.sync.service.DomainSyncBean">
     <resultMap id="domainSyncResultMap" type="org.complitex.sync.entity.DomainSync">
         <id column="id" property="id"/>
@@ -19,62 +20,62 @@
         <result column="date" property="date"/>
     </resultMap>
 
-    <insert id="insertDomainSync" parameterType="org.complitex.sync.entity.DomainSync"
-            useGeneratedKeys="true" keyProperty="id">
-        insert into `domain_sync` (`parent_id`, `additional_parent_id`, `external_id`,
-                                    `additional_external_id`, `name`, `additional_name`, `alt_name`, `alt_additional_name`,
-                                    `servicing_organization`, `balance_holder`, `type`, `status`, `status_detail`, `date`)
-        values (#{parentId}, #{additionalParentId}, #{externalId}, #{additionalExternalId},
+    <insert id="insertDomainSync" parameterType="org.complitex.sync.entity.DomainSync" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO "domain_sync" ("parent_id", "additional_parent_id", "external_id",
+            "additional_external_id", "name", "additional_name", "alt_name", "alt_additional_name",
+            "servicing_organization", "balance_holder", "type", "status", "status_detail", "date")
+        VALUES (#{parentId}, #{additionalParentId}, #{externalId}, #{additionalExternalId},
                 #{name}, #{additionalName}, #{altName}, #{altAdditionalName}, #{servicingOrganization}, #{balanceHolder},
                 #{type}, #{status}, #{statusDetail}, #{date})
     </insert>
 
     <update id="updateDomainSyncStatus" parameterType="org.complitex.sync.entity.DomainSync">
-        update domain_sync set `status` = #{status}, status_detail = #{statusDetail} where id = #{id}
+        UPDATE domain_sync SET "status" = #{status}, status_detail = #{statusDetail} WHERE id = #{id}
     </update>
 
     <delete id="deleteDomainSync" parameterType="long">
-        delete from `domain_sync` where `id` = #{id}
+        DELETE FROM "domain_sync" WHERE "id" = #{id}
     </delete>
 
     <delete id="deleteDomainSyncBySyncEntity" parameterType="org.complitex.sync.entity.SyncEntity">
-        delete from `domain_sync` where `type` = #{type}
+        DELETE FROM "domain_sync" WHERE "type" = #{type}
     </delete>
 
     <select id="selectDomainSync" parameterType="long" resultMap="domainSyncResultMap">
-        select * from `domain_sync` where `id` = #{id}
+        SELECT * FROM "domain_sync" WHERE "id" = #{id}
     </select>
 
     <sql id="selectDomainSyncWhere">
         <where>
-            <if test="object.parentId != null">and `parent_id` = #{object.parentId}</if>
-            <if test="object.additionalParentId != null">and `additional_parent_id` = #{object.additionalParentId}</if>
-            <if test="object.externalId != null">and `external_id` = #{object.externalId}</if>
-            <if test="object.additionalExternalId != null">and `additional_external_id` = #{object.additionalExternalId}</if>
-            <if test="object.name != null">and `name` like concat('%', #{object.name}, '%')</if>
-            <if test="object.additionalName != null">and `additional_name` = #{object.additionalName}</if>
-            <if test="object.altName != null">and `alt_name` like concat('%', #{object.altName}, '%')</if>
-            <if test="object.altAdditionalName != null">and `alt_additional_name` = #{object.altAdditionalName}</if>
-            <if test="object.servicingOrganization != null">and `servicing_organization` = #{object.servicingOrganization}</if>
-            <if test="object.balanceHolder != null">and `balance_holder` = #{object.balanceHolder}</if>
-            <if test="object.type != null">and `type` = #{object.type}</if>
-            <if test="object.status != null">and `status` = #{object.status}</if>
-            <if test="object.statusDetail != null">and `status_detail` = #{object.statusDetail}</if>
+            <if test="object.parentId != null">AND "parent_id" = #{object.parentId}</if>
+            <if test="object.additionalParentId != null">AND "additional_parent_id" = #{object.additionalParentId}</if>
+            <if test="object.externalId != null">AND "external_id" = #{object.externalId}</if>
+            <if test="object.additionalExternalId != null">AND "additional_external_id" = #{object.additionalExternalId}</if>
+            <if test="object.name != null">AND "name" like concat('%', #{object.name}, '%')</if>
+            <if test="object.additionalName != null">AND "additional_name" = #{object.additionalName}</if>
+            <if test="object.altName != null">AND "alt_name" like concat('%', #{object.altName}, '%')</if>
+            <if test="object.altAdditionalName != null">AND "alt_additional_name" = #{object.altAdditionalName}</if>
+            <if test="object.servicingOrganization != null">AND "servicing_organization" = #{object.servicingOrganization}</if>
+            <if test="object.balanceHolder != null">AND "balance_holder" = #{object.balanceHolder}</if>
+            <if test="object.type != null">AND "type" = #{object.type}</if>
+            <if test="object.status != null">AND "status" = #{object.status}</if>
+            <if test="object.statusDetail != null">AND "status_detail" = #{object.statusDetail}</if>
         </where>
     </sql>
 
-    <select id="selectDomainSyncList" parameterType="org.complitex.common.entity.FilterWrapper"
-            resultMap="domainSyncResultMap">
-        select * from `domain_sync` <include refid="selectDomainSyncWhere"/> ${orderLimit}
+    <select id="selectDomainSyncList" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="domainSyncResultMap">
+        SELECT * FROM "domain_sync"
+        <include refid="selectDomainSyncWhere"/>
+        ${orderLimit}
     </select>
 
     <select id="selectDomainSyncCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
-        select count(*) from `domain_sync` <include refid="selectDomainSyncWhere"/>
+        SELECT count(*) FROM "domain_sync"
+        <include refid="selectDomainSyncWhere"/>
     </select>
 
     <select id="selectDomainSyncFilters" parameterType="org.complitex.sync.entity.SyncEntity"
             resultType="org.complitex.sync.entity.DomainSyncFilter">
-        select `status`, count(*) as `count` from domain_sync where type = #{syncEntity} group by `status`
+        SELECT "status", count(*) as "count" FROM domain_sync WHERE type = #{syncEntity} GROUP BY "status"
     </select>
 </mapper>
-

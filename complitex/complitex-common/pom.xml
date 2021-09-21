@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.complitex</groupId>
         <artifactId>complitex</artifactId>
-        <version>7.0.0-SNAPSHOT</version>
+        <version>8.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>complitex-common</artifactId>
@@ -123,11 +123,13 @@
             <artifactId>logback-classic</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.glassfish.main.extras</groupId>
             <artifactId>glassfish-embedded-all</artifactId>
             <scope>test</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

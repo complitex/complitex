@@ -3,10 +3,9 @@
 
 <mapper namespace="org.complitex.address.strategy.apartment.ApartmentStrategy">
     <select id="selectApartmentObjectIds" parameterType="map" resultType="long">
-        select distinct a.`object_id` from `apartment` a
-          join `apartment_attribute` num on (num.`object_id` = a.`object_id` and num.`status` = 1
-          and num.`entity_attribute_id` = 100)
-          join `apartment_string_value` num_sc on (num_sc.`id` = num.`value_id`)
-        where a.`status` = 1 and num_sc.`value` = #{number} and a.`parent_id` = #{buildingId}
+        SELECT distinct a."object_id" FROM "apartment" a
+          JOIN "apartment_attribute" num ON (num."object_id" = a."object_id" AND num."status" = 1 AND num."entity_attribute_id" = 100)
+          JOIN "apartment_string_value" num_sc ON (num_sc."id" = num."value_id")
+        WHERE a."status" = 1 AND num_sc."value" = #{number} AND a."parent_id" = #{buildingId}
     </select>
 </mapper>

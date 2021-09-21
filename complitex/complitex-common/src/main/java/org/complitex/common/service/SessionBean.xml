@@ -3,58 +3,60 @@
 
 <mapper namespace="org.complitex.common.service.SessionBean">
     <select id="selectUserId" parameterType="string" resultType="long">
-        select `id` from `user` where `login` = #{login}
+        SELECT "id" FROM "user" WHERE "login" = #{login}
     </select>
 
     <select id="selectUserOrganizationObjectIds" parameterType="string" resultType="long">
-        select uo.`organization_object_id` from `user_organization` uo left join `user` u on uo.`user_id` = u.`id`
-            where u.`login` = #{login}
+        SELECT uo."organization_object_id" FROM "user_organization" uo
+            LEFT JOIN "user" u ON uo."user_id" = u."id"
+        WHERE u."login" = #{login}
     </select>
 
     <select id="selectMainOrganizationObjectId" parameterType="string" resultType="long">
-        select uo.`organization_object_id` from `user_organization` uo left join `user` u on uo.`user_id` = u.`id`
-            where u.`login` = #{login} and uo.`main` = true limit 1
+        SELECT uo."organization_object_id" FROM "user_organization" uo
+            LEFT JOIN "user" u ON uo."user_id" = u."id"
+        WHERE u."login" = #{login} AND uo."main" = true LIMIT 1
     </select>
 
     <select id="selectUserOrganizationPermissionIds" parameterType="map" resultType="long">
-        select p.`permission_id` from `user` u
-            left join `user_organization` uo on uo.`user_id` = u.`id`
-            left join `permission` p on (p.`object_id` = uo.`organization_object_id` and p.`entity` = 'organization')
-            <where>
-                <if test="table != null">p.`table` = #{table, javaType=string}</if>
-                and u.`login` = #{login}
-            </where>
+        SELECT p."permission_id" FROM "user" u
+            LEFT JOIN "user_organization" uo ON uo."user_id" = u."id"
+            LEFT JOIN "permission" p ON (p."object_id" = uo."organization_object_id" AND p."entity" = 'organization')
+        <where>
+            <if test="table != null">p."table" = #{table, javaType=string}</if>
+            AND u."login" = #{login}
+        </where>
     </select>
 
     <select id="selectUserOrganizationTreePermissionIds" parameterType="map" resultType="long">
         <choose>
             <when test="organizations != null">
-                select p.`permission_id` from `permission` p where p.`entity` = 'organization'
-                    and p.`object_id` in ${organizations} and p.`table` = #{table, javaType=string}
+                SELECT "permission_id" FROM "permission" WHERE "entity" = 'organization'
+                    AND "object_id" IN ${organizations} AND "table" = #{table, javaType=string}
             </when>
             <otherwise>
-                select null
+                SELECT NULL
             </otherwise>
         </choose>
     </select>
 
     <select id="selectUserOrganizationChildrenObjectIds" parameterType="long" resultType="long">
-        select o.`object_id` from `organization` o
-          left join organization_attribute oa on oa.`object_id` = o.`object_id` and oa.`entity_attribute_id` = 903
-          left join organization_attribute oat on oat.`object_id` = o.`object_id` and oat.`entity_attribute_id` = 904
-            where oa.`value_id` = #{parentObjectId} and oat.`value_id` = 1
+        SELECT o."object_id" FROM "organization" o
+          LEFT JOIN organization_attribute oa ON oa."object_id" = o."object_id" AND oa."entity_attribute_id" = 903
+          LEFT JOIN organization_attribute oat ON oat."object_id" = o."object_id" AND oat."entity_attribute_id" = 904
+        WHERE oa."value_id" = #{parentObjectId} AND oat."value_id" = 1
     </select>
 
     <select id="hasPermission" parameterType="map" resultType="boolean">
-        select count(1) > 0 from `permission` p where p.`permission_id` = #{permissionId} and p.`entity` = 'organization'
-            and  p.`object_id` in ${organizations}
+        SELECT count(1) > 0 FROM "permission" WHERE "permission_id" = #{permissionId}
+            AND "entity" = 'organization' AND  "object_id" in ${organizations}
     </select>
 
     <select id="getUserGroupCount" parameterType="string" resultType="int">
-        SELECT COUNT(1) FROM `usergroup` WHERE `login` = #{login}
+        SELECT COUNT(1) FROM "usergroup" WHERE "login" = #{login}
     </select>
-    
+
     <select id="getUserGroups" parameterType="string" resultType="string">
-        SELECT `group_name` FROM `usergroup` WHERE `login` = #{login}
+        SELECT "group_name" FROM "usergroup" WHERE "login" = #{login}
     </select>
 </mapper>

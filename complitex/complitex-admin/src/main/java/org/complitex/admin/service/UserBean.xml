@@ -5,7 +5,7 @@
     <resultMap id="userResultMap" type="org.complitex.common.entity.User">
         <id column="user_id" property="id"/>
         <result column="login" property="login"/>
-        <result column="password" property="password"/>        
+        <result column="password" property="password"/>
         <result column="user_info_object_id" property="userInfoObjectId"/>
         <collection property="userGroups" ofType="org.complitex.common.entity.UserGroup">
             <id column="user_group_id" property="id"/>
@@ -19,144 +19,142 @@
         </collection>
     </resultMap>
 
-    <!--User-->
-
     <select id="isUniqueLogin" resultType="boolean" parameterType="string">
-        select count(1) = 0 from `user` u where u.`login` = #{login}
+        SELECT count(1) = 0 FROM "user" u WHERE u."login" = #{login}
     </select>
 
     <select id="selectUser" resultMap="userResultMap" parameterType="long">
-        select
-            distinct u.id as user_id,
-            u.login as login,
-            u.password as password,
-            u.user_info_object_id as user_info_object_id,
-            g.id as user_group_id,
-            g.login as user_group_login,
-            g.group_name as group_name,
-            o.id as user_organization_id,
-            o.organization_object_id as organization_object_id,
-            o.main as main
-        from `user` u
-            left join `usergroup` g on u.`login` = g.`login`
-            left join `user_organization` o on u.`id` = o.`user_id`
-        where u.id = #{id}
+        SELECT DISTINCT u.id AS user_id,
+            u.login AS login,
+            u.password AS password,
+            u.user_info_object_id AS user_info_object_id,
+            g.id AS user_group_id,
+            g.login AS user_group_login,
+            g.group_name AS group_name,
+            o.id AS user_organization_id,
+            o.organization_object_id AS organization_object_id,
+            o.main AS main
+        FROM "user" u
+            LEFT JOIN "usergroup" g ON u."login" = g."login"
+            LEFT JOIN "user_organization" o ON u."id" = o."user_id"
+        WHERE u.id = #{id}
     </select>
 
     <sql id="userFilter">
-        from `user` u
-            left join `usergroup` g on u.`login` = g.`login`
-            left join `user_info` ui on u.`user_info_object_id` = ui.`object_id`
-            left join `user_organization` o on u.`id` = o.`user_id`
+        FROM "user" u
+            LEFT JOIN "usergroup" g ON u."login" = g."login"
+            LEFT JOIN "user_info" ui ON u."user_info_object_id" = ui."object_id"
+            LEFT JOIN "user_organization" o ON u."id" = o."user_id"
 
-            left join `user_info_attribute` uia_ln on (ui.`object_id` = uia_ln.`object_id`
-                and uia_ln.`entity_attribute_id` = 1000)
-            left join `last_name` ln on uia_ln.`value_id` = ln.`id`
+            LEFT JOIN "user_info_attribute" uia_ln ON (ui."object_id" = uia_ln."object_id"
+                AND uia_ln."entity_attribute_id" = 1000)
+            LEFT JOIN "last_name" ln ON uia_ln."value_id" = ln."id"
 
-            left join `user_info_attribute` uia_fn on (ui.`object_id` = uia_fn.`object_id`
-                and uia_fn.`entity_attribute_id` = 1001)
-            left join `first_name` fn on uia_fn.`value_id` = fn.`id`
+            LEFT JOIN "user_info_attribute" uia_fn ON (ui."object_id" = uia_fn."object_id"
+                AND uia_fn."entity_attribute_id" = 1001)
+            LEFT JOIN "first_name" fn ON uia_fn."value_id" = fn."id"
 
-            left join `user_info_attribute` uia_mn on (ui.`object_id` = uia_mn.`object_id`
-                and uia_mn.`entity_attribute_id` = 1002)
-            left join `middle_name` mn on uia_mn.`value_id` = mn.`id`
+            LEFT JOIN "user_info_attribute" uia_mn ON (ui."object_id" = uia_mn."object_id"
+                AND uia_mn."entity_attribute_id" = 1002)
+            LEFT JOIN "middle_name" mn ON uia_mn."value_id" = mn."id"
 
         <where>
-            <if test="login != null">u.login like concat('%', #{login}, '%')</if>
-            <if test="groupName != null">and g.`group_name` = #{groupName}</if>
-            <if test="organizationObjectId != null">and o.`organization_object_id` = #{organizationObjectId}</if>
+            <if test="login != null">u.login LIKE concat('%', #{login}, '%')</if>
+            <if test="groupName != null">AND g."group_name" = #{groupName}</if>
+            <if test="organizationObjectId != null">AND o."organization_object_id" = #{organizationObjectId}</if>
             <foreach collection="attributeFilters" item="item" index="index">
                 <if test="item.value != null">
                     <choose>
                         <when test="item.entityAttributeId == '1000'">
-                            and ln.`name` like concat('%', #{item.value}, '%')
+                            AND ln."name" LIKE concat('%', #{item.value}, '%')
                         </when>
                         <when test="item.entityAttributeId == '1001'">
-                            and fn.`name` like concat('%', #{item.value}, '%')
+                            AND fn."name" LIKE concat('%', #{item.value}, '%')
                         </when>
                         <when test="item.entityAttributeId == '1002'">
-                            and mn.`name` like concat('%', #{item.value}, '%')
+                            AND mn."name" LIKE concat('%', #{item.value}, '%')
                         </when>
                     </choose>
                 </if>
             </foreach>
         </where>
 
+        GROUP BY  u."id", u."login", ln."name", fn."name", mn."name"
+
+        <if test="sortProperty == 'login'">
+            ORDER BY u."login" <choose><when test="ascending">ASC</when><otherwise>DESC</otherwise></choose>
+        </if>
+
         <if test="sortAttributeTypeId != null">
             <choose>
                 <when test="sortAttributeTypeId== '1000'">
-                    order by ln.`name`
+                    ORDER BY ln."name"
                 </when>
                 <when test="sortAttributeTypeId == '1001'">
-                    order by fn.`name`
+                    ORDER BY fn."name"
                 </when>
                 <when test="sortAttributeTypeId == '1002'">
-                    order by mn.`name`
+                    ORDER BY mn."name"
                 </when>
             </choose>
-            <choose><when test="ascending">asc</when><otherwise>desc</otherwise></choose>
+            <choose><when test="ascending">ASC</when><otherwise>DESC</otherwise></choose>
         </if>
-        <if test="sortProperty == 'login'">
-            order by u.`login` <choose><when test="ascending">asc</when><otherwise>desc</otherwise></choose>
-        </if>        
     </sql>
 
     <select id="selectUsers" resultMap="userResultMap" parameterType="org.complitex.admin.service.UserFilter">
-        select
+        SELECT
             uc.*,
-            gc.id as user_group_id, gc.login as user_group_login, gc.group_name as group_name,
-            o.id as user_organization_id, o.organization_object_id as organization_object_id, o.main as main
-        from
-        (select
-            distinct u.id as user_id,
-            u.login as login,
-            u.password as password,
-            u.user_info_object_id as user_info_object_id
+            gc.id AS user_group_id, gc.login AS user_group_login, gc.group_name AS group_name,
+            o.id AS user_organization_id, o.organization_object_id AS organization_object_id, o.main AS main
+        FROM
+        (SELECT
+            distinct u.id AS user_id,
+            u.login AS login,
+            u.password AS password,
+            u.user_info_object_id AS user_info_object_id
         <include refid="userFilter"/>
-        limit #{first}, #{count}
-        ) as uc
-        left join `usergroup` gc on uc.`login` = gc.`login`
-        left join `user_organization` o on uc.`user_id` = o.`user_id`
+        OFFSET #{first} LIMIT #{count}
+        ) AS uc
+        LEFT JOIN "usergroup" gc ON uc."login" = gc."login"
+        LEFT JOIN "user_organization" o ON uc."user_id" = o."user_id"
     </select>
 
     <select id="selectUsersCount" resultType="long" parameterType="org.complitex.admin.service.UserFilter">
-        select count(distinct u.id)
+        SELECT count(distinct u.id)
         <include refid="userFilter"/>
     </select>
 
     <insert id="insertUser" parameterType="org.complitex.common.entity.User" keyProperty="id" useGeneratedKeys="true">
-        insert into `user` (`login`, `password`, `user_info_object_id`) values (#{login}, #{password}, #{userInfoObjectId})
+        INSERT INTO "user" ("login", "password", "user_info_object_id") VALUES (#{login}, #{password}, #{userInfoObjectId})
     </insert>
 
     <update id="updateUser" parameterType="org.complitex.common.entity.User">
-        update `user`
+        UPDATE "user"
         <set>
-            <if test="password != null"> `password` = #{password},</if>
-            <if test="userInfoObjectId != null"> `user_info_object_id` = #{userInfoObjectId}</if>
+            <if test="password != null"> "password" = #{password},</if>
+            <if test="userInfoObjectId != null"> "user_info_object_id" = #{userInfoObjectId}</if>
         </set>
-        where id = #{id}
+        WHERE id = #{id}
     </update>
 
-    <!--User Group-->
     <insert id="insertUserGroup" parameterType="org.complitex.common.entity.UserGroup">
-        insert into `usergroup` (`login`, `group_name`) values (#{login}, #{groupName})
+        INSERT INTO "usergroup" ("login", "group_name") VALUES (#{login}, #{groupName})
     </insert>
 
     <delete id="deleteUserGroup" parameterType="long">
-        delete from `usergroup` where id = #{id}
+        DELETE FROM "usergroup" WHERE id = #{id}
     </delete>
 
-    <!--User Organization-->
     <insert id="insertUserOrganization" parameterType="org.complitex.common.entity.UserOrganization">
-        insert into `user_organization` (`user_id`, `organization_object_id`, `main`)
+        INSERT INTO "user_organization" ("user_id", "organization_object_id", "main")
             values (#{userId}, #{organizationObjectId}, #{main})
     </insert>
 
     <delete id="deleteUserOrganization" parameterType="long">
-        delete from `user_organization` where id = #{id}
+        DELETE FROM "user_organization" WHERE id = #{id}
     </delete>
 
     <update id="updateUserOrganization" parameterType="org.complitex.common.entity.UserOrganization">
-        update `user_organization` set main = #{main} where id = #{id}
+        UPDATE "user_organization" SET main = #{main} WHERE id = #{id}
     </update>
 </mapper>

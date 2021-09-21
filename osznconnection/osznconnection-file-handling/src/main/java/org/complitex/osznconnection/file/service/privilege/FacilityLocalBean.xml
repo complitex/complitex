@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.osznconnection.file.service.privilege.FacilityLocalBean">
     <resultMap id="facilityLocalResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityLocal"
                extends="org.complitex.osznconnection.file.service.AbstractRequestBean.abstractRequest">
@@ -46,12 +47,12 @@
     </resultMap>
 
     <insert id="insertFacilityLocalList" parameterType="list">
-        INSERT INTO `facility_local`
+        INSERT INTO "facility_local"
         (
         <trim suffixOverrides=",">
-            `request_file_id`,
+            "request_file_id",
             <foreach collection="list[0].dbfFields.keys" item="key">
-                `${key}`,
+                "${key}",
             </foreach>
         </trim>
         )
@@ -69,18 +70,18 @@
     </insert>
 
     <select id="selectFacilityLocal" resultMap="facilityLocalResultMap" parameterType="long">
-        select * from `facility_local` where `request_file_id` = #{id}
+        SELECT * FROM "facility_local" WHERE "request_file_id" = #{id}
     </select>
 
     <select id="selectFacilityLocalList" resultMap="facilityLocalResultMap" parameterType="org.complitex.common.entity.FilterWrapper">
-        select * from `facility_local` where `request_file_id` = #{object.requestFileId} ${limit}
+        SELECT * FROM "facility_local" WHERE "request_file_id" = #{object.requestFileId} ${limit}
     </select>
 
     <select id="selectFacilityLocalListCount" resultType="long" parameterType="org.complitex.common.entity.FilterWrapper">
-        select count(id) from `facility_local` where `request_file_id` = #{object.requestFileId}
+        SELECT count(id) FROM "facility_local" WHERE "request_file_id" = #{object.requestFileId}
     </select>
 
     <delete id="deleteFacilityLocal" parameterType="long">
-        delete from `facility_local` where `request_file_id` = #{id}
+        DELETE FROM "facility_local" WHERE "request_file_id" = #{id}
     </delete>
 </mapper>

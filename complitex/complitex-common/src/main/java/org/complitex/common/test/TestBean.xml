@@ -3,30 +3,30 @@
 
 <mapper namespace="org.complitex.common.test.TestBean">
     <insert id="insertTest" parameterType="map" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into `test` (`value`) values (#{value})
+        insert into "test" ("value") values (#{value})
     </insert>
 
     <update id="updateTest" parameterType="map">
-        update `test` set `value` = #{value} where `id` = #{id}
+        update "test" set "value" = #{value} where "id" = #{id}
     </update>
 
     <delete id="deleteTest" parameterType="long">
-        delete from `test` where `id` = #{id}
+        delete from "test" where "id" = #{id}
     </delete>
 
     <delete id="deleteTestAll" parameterType="long">
-        delete from `test`
+        delete from "test"
     </delete>
 
     <select id="isExistTest" parameterType="string" resultType="boolean">
-        select count(1) > 0 from `test` where `value` = #{value}
+        select count(1) > 0 from "test" where "value" = #{value}
     </select>
 
     <select id="selectTestValue" parameterType="long" resultType="string">
-        select `value` from `test` where `id` = #{id}
+        select "value" from "test" where "id" = #{id}
     </select>
 
     <select id="selectTestId" parameterType="string" resultType="long">
-        select `id` from `test` where `value` = #{value}
+        select "id" from "test" where "value" = #{value}
     </select>
 </mapper>

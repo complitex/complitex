@@ -1,64 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--suppress SqlResolve -->
 <mapper namespace="org.complitex.address.strategy.district.DistrictStrategy">
-    <!-- permission -->
-    
     <select id="selectChildrenPermissionInfo" parameterType="map"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
-        SELECT e.`object_id`, e.`permission_id` FROM `street` e
-                JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
-                JOIN `building` b ON (b.`parent_id` = addr.`object_id` AND b.`status` IN (1, 0))
-                JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id` AND district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
-                    AND district_attr.`value_id` = #{parentId})
-            WHERE e.`status` IN (1, 0)
+        SELECT e."object_id", e."permission_id" FROM "street" e
+            JOIN "building_address" addr ON (addr."parent_id" = e."object_id" AND addr."status" IN (1, 0) AND addr."parent_entity_id" = 300)
+            JOIN "building" b ON (b."parent_id" = addr."object_id" AND b."status" IN (1, 0))
+            JOIN "building_attribute" district_attr ON (b."object_id" = district_attr."object_id" AND district_attr."status" = 1 AND district_attr."entity_attribute_id" = 500
+                AND district_attr."value_id" = #{parentId})
+        WHERE e."status" IN (1, 0)
         UNION
-        SELECT e.`object_id`, e.`permission_id` FROM `street` e
-                JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
-                JOIN `building_attribute` district_attr ON (district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
-                    AND district_attr.`value_id` = #{parentId})
-                JOIN `building_attribute` ref_attr ON (ref_attr.`status` = 1 AND ref_attr.`entity_attribute_id` = 501
-                    AND ref_attr.`value_id` = addr.`object_id`)
-                JOIN `building` b ON (b.`status` IN (1, 0) AND b.`object_id` = district_attr.`object_id` AND b.`object_id` = ref_attr.`object_id`)
-            WHERE e.`status` IN (1, 0)
-        
+        SELECT e."object_id", e."permission_id" FROM "street" e
+            JOIN "building_address" addr ON (addr."parent_id" = e."object_id" AND addr."status" IN (1, 0) AND addr."parent_entity_id" = 300)
+            JOIN "building_attribute" district_attr ON (district_attr."status" = 1 AND district_attr."entity_attribute_id" = 500
+                AND district_attr."value_id" = #{parentId})
+            JOIN "building_attribute" ref_attr ON (ref_attr."status" = 1 AND ref_attr."entity_attribute_id" = 501
+                AND ref_attr."value_id" = addr."object_id")
+            JOIN "building" b ON (b."status" IN (1, 0) AND b."object_id" = district_attr."object_id" AND b."object_id" = ref_attr."object_id")
+        WHERE e."status" IN (1, 0)
+
         ORDER BY 1
+
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
     </select>
 
-    <!-- disable/enable functionality -->
     <select id="selectChildrenActivityInfo" parameterType="map" resultType="long">
-        SELECT e.`object_id` FROM `street` e
-                JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
-                JOIN `building` b ON (b.`parent_id` = addr.`object_id` AND b.`status` IN (1, 0))
-                JOIN `building_attribute` district_attr ON (b.`object_id` = district_attr.`object_id` AND district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
-                    AND district_attr.`value_id` = #{districtId})
-            WHERE e.`status` IN (1, 0)
+        SELECT e."object_id" FROM "street" e
+            JOIN "building_address" addr ON (addr."parent_id" = e."object_id" AND addr."status" IN (1, 0) AND addr."parent_entity_id" = 300)
+            JOIN "building" b ON (b."parent_id" = addr."object_id" AND b."status" IN (1, 0))
+            JOIN "building_attribute" district_attr ON (b."object_id" = district_attr."object_id" AND district_attr."status" = 1 AND district_attr."entity_attribute_id" = 500
+                AND district_attr."value_id" = #{districtId})
+        WHERE e."status" IN (1, 0)
         UNION
-        SELECT e.`object_id` FROM `street` e
-                JOIN `building_address` addr ON (addr.`parent_id` = e.`object_id` AND addr.`status` IN (1, 0) AND addr.`parent_entity_id` = 300)
-                JOIN `building_attribute` district_attr ON (district_attr.`status` = 1 AND district_attr.`entity_attribute_id` = 500
-                    AND district_attr.`value_id` = #{districtId})
-                JOIN `building_attribute` ref_attr ON (ref_attr.`status` = 1 AND ref_attr.`entity_attribute_id` = 501
-                    AND ref_attr.`value_id` = addr.`object_id`)
-                JOIN `building` b ON (b.`status` IN (1, 0) AND b.`object_id` = district_attr.`object_id` AND b.`object_id` = ref_attr.`object_id`)
-            WHERE e.`status` IN (1, 0)
+        SELECT e."object_id" FROM "street" e
+            JOIN "building_address" addr ON (addr."parent_id" = e."object_id" AND addr."status" IN (1, 0) AND addr."parent_entity_id" = 300)
+            JOIN "building_attribute" district_attr ON (district_attr."status" = 1 AND district_attr."entity_attribute_id" = 500
+                AND district_attr."value_id" = #{districtId})
+            JOIN "building_attribute" ref_attr ON (ref_attr."status" = 1 AND ref_attr."entity_attribute_id" = 501
+                AND ref_attr."value_id" = addr."object_id")
+            JOIN "building" b ON (b."status" IN (1, 0) AND b."object_id" = district_attr."object_id" AND b."object_id" = ref_attr."object_id")
+        WHERE e."status" IN (1, 0)
     </select>
 
     <update id="updateChildrenActivity" parameterType="map">
-        UPDATE `street` e SET e.`status` = #{status} WHERE e.`object_id` IN
-                <foreach open="(" close=")" separator="," collection="streetIds" item="id">
-                    #{id}
-                </foreach>
-                AND
-                <choose>
-                    <when test="enabled">
-                        e.`status` = 1
-                    </when>
-                    <otherwise>
-                        e.`status` = 0
-                    </otherwise>
-                </choose>
+        UPDATE "street" e SET "status" = #{status} WHERE e."object_id" IN
+            <foreach open="(" close=")" separator="," collection="streetIds" item="id">
+                #{id}
+            </foreach>
+            AND
+            <choose>
+                <when test="enabled">
+                    e."status" = 1
+                </when>
+                <otherwise>
+                    e."status" = 0
+                </otherwise>
+            </choose>
     </update>
-
 </mapper>

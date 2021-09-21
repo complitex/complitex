@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.osznconnection.file.service.subsidy.OschadbankResponseFileBean">
     <resultMap id="oschadbankResponseFileResultMap" type="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponseFile">
         <id column="id" property="id"/>
@@ -25,12 +26,12 @@
     </resultMap>
 
     <insert id="insertOschadbankResponseFile" parameterType="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponseFile">
-        INSERT INTO `oschadbank_response_file`
+        INSERT INTO "oschadbank_response_file"
         (
         <trim suffixOverrides=",">
-            `request_file_id`,
+            "request_file_id",
             <foreach collection="dbfFields.keys" item="key">
-                `${key}`,
+                "${key}",
             </foreach>
         </trim>
         )
@@ -50,6 +51,6 @@
     </select>
 
     <delete id="deleteOschadbankResponseFile" parameterType="long">
-        delete from oschadbank_response_file where `request_file_id` = #{requestFileId}
+        delete from oschadbank_response_file where "request_file_id" = #{requestFileId}
     </delete>
 </mapper>

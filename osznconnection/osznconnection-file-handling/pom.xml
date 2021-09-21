@@ -6,7 +6,7 @@
     <parent>
         <artifactId>osznconnection</artifactId>
         <groupId>org.complitex.osznconnection</groupId>
-        <version>7.0.0-SNAPSHOT</version>
+        <version>8.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>osznconnection-file-handling</artifactId>
@@ -49,7 +49,7 @@
             <artifactId>logback-core</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

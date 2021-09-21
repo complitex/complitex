@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.osznconnection.file.service.AbstractRequestBean">
     <resultMap id="abstractRequest" type="org.complitex.osznconnection.file.entity.AbstractRequest">
         <id column="id" property="id"/>
@@ -11,7 +12,5 @@
 
         <collection property="warnings" ofType="org.complitex.osznconnection.file.entity.RequestWarning"
                 resultMap="org.complitex.osznconnection.file.service.warning.RequestWarningBean.requestWarning"/>
-
     </resultMap>
-
 </mapper>

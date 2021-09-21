@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.complitex.osznconnection.file.service.subsidy.BenefitBean">
 
+<mapper namespace="org.complitex.osznconnection.file.service.subsidy.BenefitBean">
     <resultMap id="benefitResultMap" type="org.complitex.osznconnection.file.entity.subsidy.Benefit"
                 extends="org.complitex.osznconnection.file.service.AbstractRequestBean.abstractRequest">
 
@@ -39,26 +39,26 @@
             <result column="OZN_ABS" property="OZN_ABS"/>
             <result column="RESERV1" property="RESERV1"/>
             <result column="RESERV2" property="RESERV2"/>
-        </association>      
+        </association>
     </resultMap>
 
     <select id="selectBenefits" resultMap="benefitResultMap" parameterType="long">
         SELECT b.*,
-            w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
-            p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
-        FROM `benefit` b 
-            LEFT JOIN `request_warning` w ON (w.`request_id` = b.`id` AND w.`request_file_type` = 1)
-            LEFT JOIN `request_warning_parameter` p ON w.`id` = p.`request_warning_id`
-        WHERE b.`request_file_id` = #{id}
+            w."id" warning_id, w."request_id" warning_reqiest_id, w."request_file_type" warning_request_file_type, w."status" warning_status,
+            p."request_warning_id" param_request_warning_id, p."order" param_order, p."type" param_type, p."value" param_value
+        FROM "benefit" b
+            LEFT JOIN "request_warning" w ON (w."request_id" = b."id" AND w."request_file_type" = 1)
+            LEFT JOIN "request_warning_parameter" p ON w."id" = p."request_warning_id"
+        WHERE b."request_file_id" = #{id}
     </select>
 
     <insert id="insertBenefit" parameterType="org.complitex.osznconnection.file.entity.subsidy.Benefit">
-        insert into `benefit`
+        INSERT INTO "benefit"
         (
         <trim suffixOverrides=",">
-            `request_file_id`, `account_number`, `status`,
+            "request_file_id", "account_number", "status",
             <foreach collection="dbfFields.keys" item="key">
-                `${key}`,
+                "${key}",
             </foreach>
         </trim>
         )
@@ -74,16 +74,16 @@
     </insert>
 
     <insert id="insertBenefitList" parameterType="list">
-        insert into `benefit`
+        INSERT INTO "benefit"
         (
         <trim suffixOverrides=",">
-            `request_file_id`, `account_number`, `status`,
+            "request_file_id", "account_number", "status",
             <foreach collection="list[0].dbfFields.keys" item="key">
-                `${key}`,
+                "${key}",
             </foreach>
         </trim>
         )
-        values
+        VALUES
         <foreach collection="list" separator="," item="item">
             (
             <trim suffixOverrides=",">
@@ -97,112 +97,113 @@
     </insert>
 
     <update id="updateBenefit" parameterType="org.complitex.osznconnection.file.entity.subsidy.Benefit">
-        update `benefit`
+        UPDATE "benefit"
         <set>
-            `request_file_id` = #{requestFileId}, `account_number` = #{accountNumber}, `status` = #{status},
+            "request_file_id" = #{requestFileId}, "account_number" = #{accountNumber}, "status" = #{status},
             <foreach collection="dbfFields.keys" item="key">
-                `${key}` = #{dbfFields[key]},
+                "${key}" = #{dbfFields[key]},
             </foreach>
         </set>
-        where
-        `id` = #{id}
+        WHERE
+        "id" = #{id}
     </update>
 
     <delete id="deleteBenefits" parameterType="long">
-        delete from `benefit` where `request_file_id` = #{id};
+        DELETE FROM "benefit" WHERE "request_file_id" = #{id};
     </delete>
-    
+
     <sql id="filter">
         <if test="account != null">
-            AND b.`OWN_NUM_SR` LIKE CONCAT('%',#{account},'%')
+            AND b."OWN_NUM_SR" LIKE CONCAT('%',#{account},'%')
         </if>
         <if test="puAccount != null">
-            AND b.`account_number` LIKE CONCAT('%',#{puAccount},'%')
+            AND b."account_number" LIKE CONCAT('%',#{puAccount},'%')
         </if>
         <if test="firstName != null">
-            AND TO_CYRILLIC(b.`F_NAM`) LIKE CONCAT('%',#{firstName},'%')
+            AND TO_CYRILLIC(b."F_NAM") LIKE CONCAT('%',#{firstName},'%')
         </if>
         <if test="middleName != null">
-            AND TO_CYRILLIC(b.`M_NAM`) LIKE CONCAT('%',#{middleName},'%')
+            AND TO_CYRILLIC(b."M_NAM") LIKE CONCAT('%',#{middleName},'%')
         </if>
         <if test="lastName != null">
-            AND TO_CYRILLIC(b.`SUR_NAM`) LIKE CONCAT('%',#{lastName},'%')
+            AND TO_CYRILLIC(b."SUR_NAM") LIKE CONCAT('%',#{lastName},'%')
         </if>
         <if test="city != null">
-            AND TO_CYRILLIC(p.`N_NAME`) LIKE CONCAT('%', #{city}, '%')
+            AND TO_CYRILLIC(p."N_NAME") LIKE CONCAT('%', #{city}, '%')
         </if>
         <if test="street != null">
-            AND TO_CYRILLIC(p.`VUL_NAME`) LIKE CONCAT('%', #{street}, '%')
+            AND TO_CYRILLIC(p."VUL_NAME") LIKE CONCAT('%', #{street}, '%')
         </if>
         <if test="building != null">
-            AND TO_CYRILLIC(p.`BLD_NUM`) LIKE CONCAT('%', #{building}, '%')
+            AND TO_CYRILLIC(p."BLD_NUM") LIKE CONCAT('%', #{building}, '%')
         </if>
         <if test="corp != null">
-            AND TO_CYRILLIC(p.`CORP_NUM`) LIKE CONCAT('%', #{corp}, '%')
+            AND TO_CYRILLIC(p."CORP_NUM") LIKE CONCAT('%', #{corp}, '%')
         </if>
         <if test="apartment != null">
-            AND TO_CYRILLIC(p.`FLAT`) LIKE CONCAT('%', #{apartment}, '%')
+            AND TO_CYRILLIC(p."FLAT") LIKE CONCAT('%', #{apartment}, '%')
         </if>
         <if test="privilege != null">
-            AND b.`PRIV_CAT` = #{privilege}
+            AND b."PRIV_CAT" = #{privilege}
         </if>
         <if test="status != null">
-            AND b.`status` = #{status}
+            AND b."status" = #{status}
         </if>
     </sql>
 
     <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.BenefitExample">
         SELECT
-            COUNT(DISTINCT b.`id`)
+            COUNT(DISTINCT b."id")
         FROM
-            `benefit` b
-            JOIN `request_file` bf ON b.`request_file_id` = bf.`id`
-            JOIN `request_file` pf ON (pf.`group_id` = bf.`group_id` AND pf.`type` = 2)
-            LEFT JOIN `payment` p ON (b.`OWN_NUM_SR` = p.`OWN_NUM_SR` AND p.`request_file_id` = pf.`id`)
+            "benefit" b
+            JOIN "request_file" bf ON b."request_file_id" = bf."id"
+            JOIN "request_file" pf ON (pf."group_id" = bf."group_id" AND pf."type" = 2)
+            LEFT JOIN "payment" p ON (b."OWN_NUM_SR" = p."OWN_NUM_SR" AND p."request_file_id" = pf."id")
         WHERE
-            b.`request_file_id` = #{requestFileId}
+            b."request_file_id" = #{requestFileId}
             <include refid="org.complitex.osznconnection.file.service.subsidy.BenefitBean.filter"/>
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="find" resultMap="benefitResultMap"
             parameterType="org.complitex.osznconnection.file.entity.example.BenefitExample">
         SELECT s.*,
-        w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
-        p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
+        w."id" warning_id, w."request_id" warning_reqiest_id, w."request_file_type" warning_request_file_type, w."status" warning_status,
+        p."request_warning_id" param_request_warning_id, p."order" param_order, p."type" param_type, p."value" param_value
         FROM (
             SELECT
-                DISTINCT b.`id`, b.`request_file_id`, b.`OWN_NUM_SR`, b.`F_NAM`, b.`M_NAM`, b.`SUR_NAM`, b.`status`,
+                DISTINCT b."id", b."request_file_id", b."OWN_NUM_SR", b."F_NAM", b."M_NAM", b."SUR_NAM", b."status",
 
-                TO_CYRILLIC(b.`F_NAM`) F_NAM_CYR,
-                TO_CYRILLIC(b.`M_NAM`) M_NAM_CYR,
-                TO_CYRILLIC(b.`SUR_NAM`) SUR_NAM_CYR,
-                TO_CYRILLIC(p.`N_NAME`) city,
-                TO_CYRILLIC(p.`VUL_NAME`) street,
-                TO_CYRILLIC(p.`BLD_NUM`) building_number,
-                TO_CYRILLIC(p.`CORP_NUM`) building_corp,
-                TO_CYRILLIC(p.`FLAT`) apartment,
+                TO_CYRILLIC(b."F_NAM") F_NAM_CYR,
+                TO_CYRILLIC(b."M_NAM") M_NAM_CYR,
+                TO_CYRILLIC(b."SUR_NAM") SUR_NAM_CYR,
+                TO_CYRILLIC(p."N_NAME") city,
+                TO_CYRILLIC(p."VUL_NAME") street,
+                TO_CYRILLIC(p."BLD_NUM") building_number,
+                TO_CYRILLIC(p."CORP_NUM") building_corp,
+                TO_CYRILLIC(p."FLAT") apartment,
 
-                bf.`organization_id`, bf.`user_organization_id`, bf.`group_id`,
-                b.`account_number`, b.`IND_COD`, b.`PSP_SER`, b.`PSP_NUM`, b.`PRIV_CAT`
+                bf."organization_id", bf."user_organization_id", bf."group_id",
+                b."account_number", b."IND_COD", b."PSP_SER", b."PSP_NUM", b."PRIV_CAT"
             FROM
-                `benefit` b
-                    JOIN `request_file` bf ON b.`request_file_id` = bf.`id`
-                    JOIN `request_file` pf ON (pf.`group_id` = bf.`group_id` AND pf.`type` = 2)
-                    LEFT JOIN `payment` p ON (b.`OWN_NUM_SR` = p.`OWN_NUM_SR` AND p.`request_file_id` = pf.`id`)
+                "benefit" b
+                    JOIN "request_file" bf ON b."request_file_id" = bf."id"
+                    JOIN "request_file" pf ON (pf."group_id" = bf."group_id" AND pf."type" = 2)
+                    LEFT JOIN "payment" p ON (b."OWN_NUM_SR" = p."OWN_NUM_SR" AND p."request_file_id" = pf."id")
                 WHERE
-                    b.`request_file_id` = #{requestFileId}
+                    b."request_file_id" = #{requestFileId}
                     <include refid="org.complitex.osznconnection.file.service.subsidy.BenefitBean.filter"/>
                     <if test="orderByClause != null">
                         <choose>
                             <when test="orderByClause == 'building_number' or orderByClause == 'building_corp'
                                   or orderByClause == 'apartment'">
-                                ORDER BY `${orderByClause}`+0
+                                ORDER BY "${orderByClause}"+0
                             </when>
                             <when test="orderByClause == 'OWN_NUM_SR'">
-                                ORDER BY b.`${orderByClause}`+0
+                                ORDER BY b."${orderByClause}"+0
                             </when>
                             <otherwise>
-                                ORDER BY `${orderByClause}`
+                                ORDER BY "${orderByClause}"
                             </otherwise>
                         </choose>
                         <choose>
@@ -215,27 +216,27 @@
                         </choose>
                     </if>
                     <if test="count != 0">
-                        limit #{first},#{count}
+                        OFFSET #{first} LIMIT #{count}
                     </if>
         ) s
-        LEFT JOIN `request_warning` w ON (w.`request_id` = s.`id` AND w.`request_file_type` = 1)
-        LEFT JOIN `request_warning_parameter` p ON w.`id` = p.`request_warning_id`
+        LEFT JOIN "request_warning" w ON (w."request_id" = s."id" AND w."request_file_type" = 1)
+        LEFT JOIN "request_warning_parameter" p ON w."id" = p."request_warning_id"
     </select>
 
     <select id="countByFile" resultType="int" parameterType="map">
-        SELECT COUNT(1) FROM `benefit` b
-        WHERE b.`request_file_id` = #{requestFileId} AND b.`status` IN
+        SELECT COUNT(1) FROM "benefit" b
+        WHERE b."request_file_id" = #{requestFileId} AND b."status" IN
         <foreach collection="statuses" item="status" open="(" close=")" separator=",">
             #{status}
         </foreach>
     </select>
 
     <update id="updateBindingStatus" parameterType="map">
-        UPDATE `benefit` b SET b.`status` =
-        CASE IFNULL(
-            (SELECT DISTINCT p.`status` FROM `payment` p, `request_file` bf, `request_file` pf
-                WHERE b.`OWN_NUM_SR` = p.`OWN_NUM_SR` AND bf.`id` = b.request_file_id AND pf.`id` = p.`request_file_id`
-                    AND bf.`group_id` = pf.`group_id`),
+        UPDATE "benefit" b SET "status" =
+        CASE NULLIF(
+            (SELECT DISTINCT p."status" FROM "payment" p, "request_file" bf, "request_file" pf
+                WHERE b."OWN_NUM_SR" = p."OWN_NUM_SR" AND bf."id" = b.request_file_id AND pf."id" = p."request_file_id"
+                    AND bf."group_id" = pf."group_id"),
                '-1')
             WHEN '-1' THEN 220
             <foreach collection="statuses" item="status">
@@ -243,107 +244,107 @@
             </foreach>
             ELSE 214
         END
-        WHERE b.`request_file_id` = #{fileId}
+        WHERE b."request_file_id" = #{fileId}
     </update>
 
+    <!--suppress SqlResolve -->
     <sql id="updateByOWN_NUM_SR">
-        WHERE b.`OWN_NUM_SR` = (SELECT DISTINCT p.`OWN_NUM_SR` FROM `payment` p, `request_file` pf, `request_file` bf
-            WHERE p.`request_file_id` = pf.`id` AND b.`request_file_id` = bf.`id` AND p.`id` = #{paymentId}
-                AND bf.`group_id` = pf.`group_id`)
+        WHERE b."OWN_NUM_SR" = (SELECT DISTINCT p."OWN_NUM_SR" FROM "payment" p, "request_file" pf, "request_file" bf
+            WHERE p."request_file_id" = pf."id" AND b."request_file_id" = bf."id" AND p."id" = #{paymentId}
+                AND bf."group_id" = pf."group_id")
     </sql>
 
     <update id="markCorrected" parameterType="long">
-        UPDATE `benefit` b 
-                JOIN `request_file` bf ON (b.`request_file_id` = bf.`id` AND bf.`type` = 1)
-                JOIN `request_file_group` g ON g.`id` = bf.`group_id`
-                JOIN `request_file` pf ON (pf.`group_id` = g.`id` AND pf.`type` = 2 AND pf.`id` = #{paymentFileId})
-                JOIN `payment` p ON (p.`request_file_id` = pf.`id` AND p.`status` = 204 AND p.`OWN_NUM_SR` = b.`OWN_NUM_SR`)
-        SET b.`status` = 204
+        UPDATE "benefit" b SET "status" = 204
+            FROM "request_file" bf
+                JOIN "request_file_group" g ON g."id" = bf."group_id"
+                JOIN "request_file" pf ON (pf."group_id" = g."id" AND pf."type" = 2 AND pf."id" = #{paymentFileId})
+                JOIN "payment" p ON (p."request_file_id" = pf."id" AND p."status" = 204 AND p."OWN_NUM_SR" = b."OWN_NUM_SR")
+            WHERE b."request_file_id" = bf."id" AND bf."type" = 1
     </update>
 
     <update id="updateAccountNumber" parameterType="map">
-        UPDATE `benefit` b SET b.`account_number` = #{accountNumber}, b.`status` = #{status}
+        UPDATE "benefit" b SET "account_number" = #{accountNumber}, "status" = #{status}
         <include refid="org.complitex.osznconnection.file.service.subsidy.BenefitBean.updateByOWN_NUM_SR"/>
     </update>
 
     <update id="populateBenefit" parameterType="org.complitex.osznconnection.file.entity.subsidy.Benefit">
-        UPDATE `benefit` SET
-        `CM_AREA` = #{dbfFields.CM_AREA}, `OWN_FRM` = #{dbfFields.OWN_FRM}, `HOSTEL` = #{dbfFields.HOSTEL}
-        WHERE `id` = #{id}
+        UPDATE "benefit" SET
+        "CM_AREA" = #{dbfFields.CM_AREA}::numeric, "OWN_FRM" = #{dbfFields.OWN_FRM}, "HOSTEL" = #{dbfFields.HOSTEL}
+        WHERE "id" = #{id}
     </update>
 
     <select id="findByOZN" parameterType="org.complitex.osznconnection.file.entity.subsidy.Payment" resultMap="benefitResultMap">
-        SELECT b.`id`, b.`status`, b.`account_number`, b.`request_file_id`, bf.`organization_id`, bf.`user_organization_id`
-            FROM `benefit` b
-            JOIN `request_file` bf ON b.`request_file_id` = bf.`id`
-            JOIN `request_file` pf ON (pf.`id` = #{requestFileId} AND pf.`type` = 2 AND pf.`group_id` = bf.`group_id`)
-            WHERE b.`account_number` = #{accountNumber} AND b.`OZN` = '1'
+        SELECT b."id", b."status", b."account_number", b."request_file_id", bf."organization_id", bf."user_organization_id"
+            FROM "benefit" b
+            JOIN "request_file" bf ON b."request_file_id" = bf."id"
+            JOIN "request_file" pf ON (pf."id" = #{requestFileId} AND pf."type" = 2 AND pf."group_id" = bf."group_id")
+            WHERE b."account_number" = #{accountNumber} AND b."OZN" = '1'
     </select>
 
     <select id="allAccountNumbers" parameterType="map" resultType="string">
-        SELECT DISTINCT b.`account_number` FROM `benefit` b
-        WHERE b.`request_file_id` = #{fileId}
-        AND b.`account_number` IS NOT NULL
+        SELECT DISTINCT b."account_number" FROM "benefit" b
+        WHERE b."request_file_id" = #{fileId}
+        AND b."account_number" IS NOT NULL
     </select>
 
     <select id="findByAccountNumber" parameterType="map" resultMap="benefitResultMap">
-        SELECT b.`id`, b.`status`, b.`account_number`, bf.`organization_id`,  bf.`user_organization_id`,
-        b.`request_file_id`,
-        b.`IND_COD`,
-        b.`PSP_NUM`,
-        b.`ORD_FAM`,
-        b.`PRIV_CAT`,
-	    b.`OZN_ABS`
-        FROM `benefit` b
-        JOIN `request_file` bf ON b.`request_file_id` = bf.`id`
-        WHERE b.`account_number` = #{accountNumber} AND bf.`id` = #{fileId}
+        SELECT b."id", b."status", b."account_number", bf."organization_id",  bf."user_organization_id",
+            b."request_file_id",
+            b."IND_COD",
+            b."PSP_NUM",
+            b."ORD_FAM",
+            b."PRIV_CAT",
+            b."OZN_ABS"
+        FROM "benefit" b
+            JOIN "request_file" bf ON b."request_file_id" = bf."id"
+        WHERE b."account_number" = #{accountNumber} AND bf."id" = #{fileId}
     </select>
 
     <update id="update" parameterType="org.complitex.osznconnection.file.entity.subsidy.Benefit">
-        UPDATE `benefit` SET
-        `status` = #{status},
-        `ORD_FAM` = #{dbfFields.ORD_FAM},
-        `PRIV_CAT` = #{dbfFields.PRIV_CAT},
-	    `OZN_ABS` = #{dbfFields.OZN_ABS}
+        UPDATE "benefit" SET
+            "status" = #{status},
+            "ORD_FAM" = #{dbfFields.ORD_FAM},
+            "PRIV_CAT" = #{dbfFields.PRIV_CAT},
+            "OZN_ABS" = #{dbfFields.OZN_ABS}
         WHERE
-        `id` = #{id}
+            "id" = #{id}
     </update>
 
     <update id="clearBeforeBinding" parameterType="map">
-        UPDATE `benefit` SET
-        `status` = #{status},
-        `ORD_FAM` = NULL,
-        `PRIV_CAT` = NULL,
-        `CM_AREA` = NULL,
-        `OWN_FRM` = NULL,
-        `HOSTEL` = NULL,
-	    `OZN_ABS` = NULL,
-        `account_number` = NULL
+        UPDATE "benefit" SET
+            "status" = #{status},
+            "ORD_FAM" = NULL,
+            "PRIV_CAT" = NULL,
+            "CM_AREA" = NULL,
+            "OWN_FRM" = NULL,
+            "HOSTEL" = NULL,
+            "OZN_ABS" = NULL,
+            "account_number" = NULL
         WHERE
-        `request_file_id` = #{fileId}
+            "request_file_id" = #{fileId}
     </update>
 
     <update id="clearBeforeProcessing" parameterType="map">
-        UPDATE `benefit` SET
-        `ORD_FAM` = NULL,
-        `PRIV_CAT` = NULL,
-        `CM_AREA` = NULL,
-        `OWN_FRM` = NULL,
-        `HOSTEL` = NULL,
-	    `OZN_ABS` = NULL,
-        `status` = CASE `status`
-                        <foreach collection="statuses" item="status">
-                            WHEN #{status} THEN #{status}
-                        </foreach>
-                        ELSE 214
-                     END
+        UPDATE "benefit" SET
+            "ORD_FAM" = NULL,
+            "PRIV_CAT" = NULL,
+            "CM_AREA" = NULL,
+            "OWN_FRM" = NULL,
+            "HOSTEL" = NULL,
+            "OZN_ABS" = NULL,
+            "status" = CASE "status"
+                            <foreach collection="statuses" item="status">
+                                WHEN #{status} THEN #{status}
+                            </foreach>
+                            ELSE 214
+                         END
         WHERE
-        `request_file_id` = #{fileId}
+            "request_file_id" = #{fileId}
     </update>
 
     <update id="updateStatusByAccountNumber" parameterType="map">
-        UPDATE `benefit` SET `status` = #{status}
-            WHERE `request_file_id` = #{fileId} AND `account_number` = #{accountNumber}
+        UPDATE "benefit" SET "status" = #{status}
+            WHERE "request_file_id" = #{fileId} AND "account_number" = #{accountNumber}
     </update>
-
 </mapper>

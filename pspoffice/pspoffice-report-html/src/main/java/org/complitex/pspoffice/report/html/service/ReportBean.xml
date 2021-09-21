@@ -35,7 +35,7 @@
             <when test="sortProperty == 'updated'">order by `updated` ${asc}</when>
             <otherwise>order by `id` ${asc}</otherwise>
         </choose>
-        limit #{first}, #{count}
+        offset #{first} limit #{count}
     </select>
 
     <select id="selectReportListCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">

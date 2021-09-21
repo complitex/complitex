@@ -42,7 +42,7 @@ public class EircAccountBean extends AbstractBean {
 
     public String generateEircAccountNumber(String prefix) throws NumberFormatException, CheckDigitException {
         long lPrefix = Long.parseLong(prefix);
-        long id = sequenceBean.nextIdOrInit(prefix);
+        long id = sequenceBean.nextId(prefix);
         String accountNumber = String.valueOf(lPrefix*100000000 + id);
 
         return accountNumber + CHECK_DIGIT.calculate(accountNumber);

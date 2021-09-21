@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.osznconnection.file.service_provider.ServiceProviderAdapter">
     <resultMap id="accountDetailMap" type="org.complitex.osznconnection.file.entity.AccountDetail">
         <result column="mn_code" property="accCode"/>
@@ -10,6 +11,8 @@
         <result column="zheu" property="zheu"/>
     </resultMap>
 
+
+    <!--suppress SqlResolve -->
     <select id="getAccAttrs" statementType="CALLABLE" parameterType="map">
         <![CDATA[
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.getAccAttrs(
@@ -42,6 +45,7 @@
         <result column="zheu" property="zheu"/>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <select id="getAttrsByAccCode" statementType="CALLABLE" parameterType="map">
         <![CDATA[
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetAttrsByAccCode(
@@ -55,8 +59,7 @@
         ]]>
     </select>
 
-     <!-- getAttrsByPerson-->
-
+    <!--suppress SqlResolve -->
     <select id="getAttrsByPerson" statementType="CALLABLE" parameterType="map">
         <![CDATA[
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetAttrsByPerson(
@@ -100,6 +103,7 @@
         <result property="chargeDrainage" column="charge_gvo"/>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <select id="getChargeAndParams" statementType="CALLABLE" parameterType="map">
         <![CDATA[
          {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.getChargeAndParams(
@@ -125,6 +129,7 @@
         <result property="dateOut" column="date_out"/>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <sql id="getPrivs">
         <![CDATA[
          {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.GetPrivs(
@@ -158,6 +163,7 @@
         <result property="drainageTarif" column="fact_tarif_gvo"/>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <select id="getFactChargeAndTarif" statementType="CALLABLE" parameterType="map">
         <![CDATA[
          {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.getFactChargeAndTarif(
@@ -168,8 +174,7 @@
         ]]>
     </select>
 
-    <!--privilege export-->
-
+    <!--suppress SqlResolve -->
     <select id="createPrivHeader" statementType="CALLABLE" parameterType="map">
         {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreatePrivHeader(
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -181,6 +186,7 @@
         )}
     </select>
 
+    <!--suppress SqlResolve -->
     <insert id="insertPriv" parameterType="list" useGeneratedKeys="false">
         insert into COMP.Z#K_PRIV_REC
         (
@@ -199,8 +205,6 @@
         </foreach>
     </insert>
 
-    <!--lodgers-->
-
     <resultMap id="lodgerResultMap" type="org.complitex.osznconnection.file.entity.Lodger">
         <result property="fio" column="FIO"/>
         <result property="birthDate" column="BIRTH_DATE"/>
@@ -210,6 +214,7 @@
         <result property="dateOut" column="DATE_OUT"/>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <select id="getLodgers" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.getLodgers(
           #{pAccCode, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -218,8 +223,7 @@
         )}
     </select>
 
-    <!--subsidy export-->
-
+    <!--suppress SqlResolve -->
     <select id="createSubsHeader" statementType="CALLABLE" parameterType="map">
         {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateSubsHeader(
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -230,14 +234,15 @@
           )}
     </select>
 
+    <!--suppress SqlResolve -->
     <insert id="insertBuffSubs" parameterType="org.complitex.osznconnection.file.entity.subsidy.Subsidy" useGeneratedKeys="false">
-        insert into COMP.Z#BUFF_SUBS
+        INSERT INTO COMP.Z#BUFF_SUBS
         (
           ID, COLLECTION_ID, C_LAST_NAME, C_FIRST_NAME, C_MIDDLE_NAME, C_DISTRICT, C_STREET, C_HOUSE, C_FLAT,
           C_STATUS, C_ACC_CODE, C_PART, C_EXT_STREET_NAME, C_EXT_ID, C_EXT_STREET_SORT, C_DATE_B, C_DATE_E,
           C_SUMMA, C_SUBS, C_NM_PAY, C_OBS, C_NUMM, C_MON, C_EBK, C_NUMB
         )
-        values
+        VALUES
         (
           COMP.SEQ_ID.NEXTVAL, #{dbfFields.COLLECTION_ID}, #{lastName}, #{firstName}, #{middleName},
           #{dbfFields.ID_RAJ}, #{dbfFields.VULCOD}, #{dbfFields.BLD_CYR}, #{dbfFields.FLAT_CYR}, 0,
@@ -246,8 +251,6 @@
           #{dbfFields.C_OBS}, #{dbfFields.NUMM}, #{dbfFields.MON}, #{dbfFields.EBK}, #{dbfFields.NUMB}
         )
     </insert>
-
-    <!--facility form 2-->
 
     <resultMap id="privsFResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityForm2">
         <association property="dbfFields" javaType="map">
@@ -272,6 +275,7 @@
         </association>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <select id="getPrivsF" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsF(
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -280,8 +284,6 @@
           #{data, mode=OUT, jdbcType=CURSOR, resultMap=privsFResultMap}
         )}
     </select>
-
-    <!--facility local-->
 
     <resultMap id="privsMResultMap" type="org.complitex.osznconnection.file.entity.privilege.FacilityLocal">
         <association property="dbfFields" javaType="map">
@@ -324,6 +326,7 @@
         </association>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <select id="getPrivsM" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsM(
           #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -333,6 +336,7 @@
         )}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="getPrivsD" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsD(
         #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -342,6 +346,7 @@
         )}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="getPrivsK" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.GetPrivsK(
         #{pDistrName, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -364,6 +369,7 @@
         <result column="SUBSMONTH" property="subsMonth"/>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <select id="getSubsidy" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.getSubsidy(
         #{pAcc, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -374,6 +380,7 @@
         )}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="getChargeToPay" statementType="CALLABLE" parameterType="org.complitex.osznconnection.file.service_provider.entity.ChargeToPay">
         {#{resultCode, mode=OUT, javaType=int, jdbcType=NUMERIC} = call COMP.z$runtime_sz_utl.getChargeToPay(
         #{pAcc, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -383,6 +390,7 @@
         )}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="createProvHeader" statementType="CALLABLE" parameterType="map">
         {#{collectionId, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateProvHeader(
                 #{pZheuCode, mode=IN, javaType=string, jdbcType=VARCHAR},
@@ -393,6 +401,7 @@
             )}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="createProvRec" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, javaType=long, jdbcType=NUMERIC} = call COMP.Z$RUNTIME_SZ_UTL.CreateProvRec(
                 #{pColl, mode=IN, javaType=long, jdbcType=NUMERIC},
@@ -406,6 +415,7 @@
             )}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="getDebtHope" statementType="CALLABLE" parameterType="map">
         {#{data, mode=OUT, javaType=bigdecimal, jdbcType=DECIMAL} = call COMP.z$runtime_sz_utl.getDebtHope(
                 #{pAcc, mode=IN, javaType=string, jdbcType=VARCHAR},

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.osznconnection.file.service.subsidy.OschadbankResponseBean">
     <resultMap id="oschadbankResponseResultMap" type="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponse">
         <id column="id" property="id"/>
@@ -21,13 +22,13 @@
         INSERT INTO oschadbank_response
         (
         <trim suffixOverrides=",">
-            `request_file_id`,
+            "request_file_id",
             <foreach collection="dbfFields.keys" item="key">
-                `${key}`,
+                "${key}",
             </foreach>
         </trim>
         )
-        VALUE
+        VALUES
         (
         <trim suffixOverrides=",">
             #{requestFileId},
@@ -39,22 +40,22 @@
     </insert>
 
     <update id="updateOschadbankResponse" parameterType="org.complitex.osznconnection.file.entity.subsidy.OschadbankResponse">
-        update oschadbank_response set `status` = #{status}
-        <if test="dbfFields.MONTH_SUM != null">, MONTH_SUM = #{dbfFields.MONTH_SUM}</if>
-        <if test="dbfFields.SUM != null">, SUM = #{dbfFields.SUM}</if>
-        where id = #{id}
+        UPDATE oschadbank_response SET "status" = #{status}
+        <if test="dbfFields.MONTH_SUM != null">, "MONTH_SUM" = #{dbfFields.MONTH_SUM}</if>
+        <if test="dbfFields.SUM != null">, "SUM" = #{dbfFields.SUM}</if>
+        WHERE id = #{id}
     </update>
 
     <sql id="selectOschadbankResponsesWhere">
-        <if test="object.dbfFields.UTSZN != null">and UTSZN like concat('%', #{object.dbfFields.UTSZN}, '%')</if>
-        <if test="object.dbfFields.OSCHADBANK_ACCOUNT != null">and OSCHADBANK_ACCOUNT like concat('%', #{object.dbfFields.OSCHADBANK_ACCOUNT}, '%')</if>
-        <if test="object.dbfFields.FIO != null">and FIO like concat('%', #{object.dbfFields.FIO}, '%')</if>
-        <if test="object.dbfFields.SERVICE_ACCOUNT != null">and SERVICE_ACCOUNT like concat('%', #{object.dbfFields.SERVICE_ACCOUNT}, '%')</if>
-        <if test="object.dbfFields.MONTH_SUM != null">and MONTH_SUM like concat('%', #{object.dbfFields.MONTH_SUM}, '%')</if>
-        <if test="object.dbfFields.SUM != null">and SUM like concat('%', #{object.dbfFields.SUM}, '%')</if>
-        <if test="object.dbfFields.SUBSIDY_SUM != null">and SUBSIDY_SUM like concat('%', #{object.dbfFields.SUBSIDY_SUM}, '%')</if>
-        <if test="object.dbfFields.DESCRIPTION != null">and DESCRIPTION like concat('%', #{object.dbfFields.DESCRIPTION}, '%')</if>
-        <if test="object.status != null">and status = #{object.status}</if>
+        <if test="object.dbfFields.UTSZN != null">AND "UTSZN" LIKE concat('%', #{object.dbfFields.UTSZN}, '%')</if>
+        <if test="object.dbfFields.OSCHADBANK_ACCOUNT != null">AND "OSCHADBANK_ACCOUNT" LIKE concat('%', #{object.dbfFields.OSCHADBANK_ACCOUNT}, '%')</if>
+        <if test="object.dbfFields.FIO != null">AND "FIO" LIKE concat('%', #{object.dbfFields.FIO}, '%')</if>
+        <if test="object.dbfFields.SERVICE_ACCOUNT != null">AND "SERVICE_ACCOUNT" LIKE concat('%', #{object.dbfFields.SERVICE_ACCOUNT}, '%')</if>
+        <if test="object.dbfFields.MONTH_SUM != null">AND "MONTH_SUM" LIKE concat('%', #{object.dbfFields.MONTH_SUM}, '%')</if>
+        <if test="object.dbfFields.SUM != null">AND "SUM" LIKE concat('%', #{object.dbfFields.SUM}, '%')</if>
+        <if test="object.dbfFields.SUBSIDY_SUM != null">AND "SUBSIDY_SUM" LIKE concat('%', #{object.dbfFields.SUBSIDY_SUM}, '%')</if>
+        <if test="object.dbfFields.DESCRIPTION != null">AND "DESCRIPTION" LIKE concat('%', #{object.dbfFields.DESCRIPTION}, '%')</if>
+        <if test="object.status != null">AND status = #{object.status}</if>
     </sql>
 
     <sql id="selectOschadbankResponsesOrderBy">
@@ -63,22 +64,22 @@
 
     <select id="selectOschadbankResponses" parameterType="org.complitex.common.entity.FilterWrapper"
             resultMap="oschadbankResponseResultMap">
-        select * from oschadbank_response where request_file_id = #{object.requestFileId}
+        SELECT * FROM oschadbank_response WHERE request_file_id = #{object.requestFileId}
         <include refid="selectOschadbankResponsesWhere"/>
         <include refid="selectOschadbankResponsesOrderBy"/>
         <if test="count > 0">${limit}</if>
     </select>
 
     <select id="selectOschadbankResponsesCount" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
-        select count(id) from oschadbank_response where `request_file_id` = #{object.requestFileId}
+        SELECT count(id) FROM oschadbank_response WHERE "request_file_id" = #{object.requestFileId}
         <include refid="selectOschadbankResponsesWhere"/>
     </select>
 
     <delete id="deleteOschadbankResponses" parameterType="long">
-        delete from oschadbank_response where `request_file_id` = #{requestFileId}
+        DELETE FROM oschadbank_response WHERE "request_file_id" = #{requestFileId}
     </delete>
 
     <select id="selectOschadbankResponseFileFilled" parameterType="long" resultType="boolean">
-        select count(id) = 0 from oschadbank_response where `status` != 215
+        SELECT count(id) = 0 FROM oschadbank_response WHERE "status" != 215
     </select>
 </mapper>

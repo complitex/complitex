@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.sync.service.DomainSyncAdapter">
     <resultMap id="domainSyncCursorResultMap" type="org.complitex.sync.entity.DomainSync">
         <result column="parent_id" property="parentId"/>
@@ -14,47 +15,56 @@
         <result column="balance_holder" property="balanceHolder"/>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <select id="selectCountrySyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCountries(#{date},
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap}, #{locale})}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="selectRegionSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getRegions(#{countryName}, #{date},
          #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap}, #{locale})}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="selectCityTypeSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCityTypes(#{date},
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap}, #{locale})}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="selectCitySyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCities(#{regionName}, #{date},
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap}, #{locale})}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="selectDistrictSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getDistricts(#{cityName}, #{cityTypeName},
           #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap}, #{locale})}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="selectStreetTypeSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getStreetTypes(#{date},
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap}, #{locale})}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="selectStreetSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getStreets(#{cityName}, #{cityTypeName},
           #{date}, #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap}, #{locale})}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="selectBuildingSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getBuildings(#{cityName}, #{cityTypeName},
           #{districtName}, #{streetName}, #{streetTypeName}, #{date},
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap}, #{locale})}
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="selectOrganizationSyncs" statementType="CALLABLE" parameterType="map">
         {#{resultCode, mode=OUT, jdbcType=INTEGER} = call comp.z$runtime_sz_utl.getCompanies(#{date},
           #{out, mode=OUT, jdbcType=CURSOR, resultMap=domainSyncCursorResultMap})}

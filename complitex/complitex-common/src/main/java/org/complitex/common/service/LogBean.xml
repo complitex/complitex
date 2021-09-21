@@ -3,19 +3,18 @@
 
 <mapper namespace="org.complitex.common.service.LogBean">
     <insert id="insertLog" parameterType="org.complitex.common.entity.Log" keyProperty="id" useGeneratedKeys="true">
-        insert into `log`
-            (`id`, `date`, `login`, `module`, `controller`, `model`, `object_id`, `event`, `status`, `description`)
-        values
-            (#{id}, #{date}, #{login}, #{module}, #{controller}, #{model}, #{objectId}, #{event}, #{status}, #{description});
+        INSERT INTO "log"
+            ("date", "login", "module", "controller", "model", "object_id", "event", "status", "description")
+        VALUES
+            (#{date}, #{login}, #{module}, #{controller}, #{model}, #{objectId}, #{event}, #{status}, #{description});
     </insert>
 
     <insert id="insertLogChanges" parameterType="list">
-        insert into `log_change`
-            (`id`, `log_id`, `attribute_id`, `collection`, `property`, `old_value`, `new_value`, `locale`)
-        values
+        INSERT INTO "log_change"
+            ("log_id", "attribute_id", "collection", "property", "old_value", "new_value", "locale")
+        VALUES
             <foreach collection="list" separator="," item="lc">
-                (#{lc.id}, #{lc.logId}, #{lc.attributeId}, #{lc.collection}, #{lc.property}, #{lc.oldValue},
-                    #{lc.newValue}, #{lc.locale})
+                (#{lc.logId}, #{lc.attributeId}, #{lc.collection}, #{lc.property}, #{lc.oldValue}, #{lc.newValue}, #{lc.locale})
             </foreach>
     </insert>
 </mapper>

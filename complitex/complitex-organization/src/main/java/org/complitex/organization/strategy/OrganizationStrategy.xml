@@ -4,7 +4,7 @@
 <mapper namespace="org.complitex.organization.strategy.OrganizationStrategy">
     <select id="selectOrganizations" resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap"
             parameterType="org.complitex.common.entity.DomainObjectFilter">
-        SELECT e.* FROM `organization` e WHERE
+        SELECT e.* FROM "organization" e WHERE
 
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
@@ -15,20 +15,20 @@
 
     <sql id="sqlFilter">
         <if test="objectId != null">
-            AND e.`object_id` = #{objectId}
+            AND e."object_id" = #{objectId}
         </if>
         <foreach item="attributeFilter" collection="attributeFilters">
             <choose>
                 <when test="attributeFilter.entityAttributeId == 903 and attributeFilter.value != null">
-                    AND EXISTS(SELECT 1 FROM `organization_attribute` parent_attr WHERE parent_attr.`object_id` = e.`object_id`
-                            AND parent_attr.`status` = 1 AND parent_attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
-                            AND parent_attr.`value_id` = #{attributeFilter.value})
+                    AND EXISTS(SELECT 1 FROM "organization_attribute" parent_attr WHERE parent_attr."object_id" = e."object_id"
+                        AND parent_attr."status" = 1 AND parent_attr."entity_attribute_id" = #{attributeFilter.entityAttributeId}
+                        AND parent_attr."value_id" = #{attributeFilter.value})
                 </when>
                 <otherwise>
                     <if test="attributeFilter.value != null">
-                        AND EXISTS(SELECT 1 FROM `organization_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                            AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attributeFilter.entityAttributeId}
-                            AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
+                        AND EXISTS(SELECT 1 FROM "organization_attribute" attr WHERE attr."object_id" = e."object_id"
+                            AND attr."status" = 1 AND attr."entity_attribute_id" = #{attributeFilter.entityAttributeId}
+                            AND attr."value_id" IN (SELECT sc."id" FROM "${entityName}_string_value" sc WHERE sc."value"
                                 <choose>
                                     <when test="comparisonType == 'LIKE'">
                                         LIKE CONCAT('%', #{attributeFilter.value}, '%')
@@ -44,98 +44,95 @@
             </choose>
         </foreach>
         <if test="additionalParams != null and additionalParams['organizationTypeIds'] != null">
-            AND EXISTS(SELECT 1 FROM `organization_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                        AND attr.`status` = 1 AND attr.`entity_attribute_id` = 904
-                        AND attr.`value_id` IN
+            AND EXISTS(SELECT 1 FROM "organization_attribute" attr WHERE attr."object_id" = e."object_id"
+                        AND attr."status" = 1 AND attr."entity_attribute_id" = 904
+                        AND attr."value_id" IN
                             <foreach open="(" close=")" separator="," item="id" collection="additionalParams['organizationTypeIds']">
                                 #{id}
                             </foreach>
                       )
         </if>
         <if test="additionalParams != null and additionalParams['balanceHolder'] != null">
-            AND NOT EXISTS(SELECT 1 FROM `organization_attribute` attr WHERE attr.`object_id` = e.`object_id`
-                AND attr.`status` = 1 AND attr.`entity_attribute_id` = 903
-                AND attr.`value_id` IS NOT NULL)
+            AND NOT EXISTS(SELECT 1 FROM "organization_attribute" attr WHERE attr."object_id" = e."object_id"
+                AND attr."status" = 1 AND attr."entity_attribute_id" = 903
+                AND attr."value_id" IS NOT NULL)
         </if>
 
        <!-- <if test="userOrganizationsString != null">
-            and e.`object_id` in ${userOrganizationsString}
+            and e."object_id" in ${userOrganizationsString}
         </if>-->
     </sql>
 
     <select id="selectOrganizationCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
-        SELECT COUNT(1) FROM `organization` e WHERE
+        SELECT COUNT(1) FROM "organization" e WHERE
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
         <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
         <include refid="sqlFilter"/>
     </select>
 
-    <!-- Validation -->
-
     <select id="validateCode" resultType="long" parameterType="string">
-        SELECT DISTINCT o.`object_id` FROM `organization` o
-                                    JOIN `organization_attribute` a ON (o.`object_id` = a.`object_id` AND a.`status` = 1
-                                        AND a.`entity_attribute_id` = 901)
-                                    JOIN `organization_string_value` sc ON (a.`value_id` = sc.`id` AND sc.`value` = #{code} AND
-                                        sc.`locale_id` = (SELECT l.`id` FROM `locale` l WHERE l.`system` = 1))
-            WHERE o.`status` IN (1, 0)
+        SELECT DISTINCT o."object_id" FROM "organization" o
+            JOIN "organization_attribute" a ON (o."object_id" = a."object_id" AND a."status" = 1
+                AND a."entity_attribute_id" = 901)
+            JOIN "organization_string_value" sc ON (a."value_id" = sc."id" AND sc."value" = #{code} AND
+                sc."locale_id" = (SELECT l."id" FROM "locale" l WHERE l."system" = true))
+            WHERE o."status" IN (1, 0)
     </select>
 
     <select id="validateName" resultType="long" parameterType="map">
-        SELECT DISTINCT o.`object_id` FROM `organization` o
-                                    JOIN `organization_attribute` a ON (o.`object_id` = a.`object_id` AND a.`status` = 1 AND
-                                        a.`entity_attribute_id` = 900)
-                                    JOIN `organization_string_value` sc ON (a.`value_id` = sc.`id` AND sc.`locale_id` = #{localeId}
-                                        AND sc.`value` = #{name})
-            WHERE o.`status` IN (1, 0)
+        SELECT DISTINCT o."object_id" FROM "organization" o
+            JOIN "organization_attribute" a ON (o."object_id" = a."object_id" AND a."status" = 1 AND
+                a."entity_attribute_id" = 900)
+            JOIN "organization_string_value" sc ON (a."value_id" = sc."id" AND sc."locale_id" = #{localeId}
+                AND sc."value" = #{name})
+            WHERE o."status" IN (1, 0)
     </select>
 
     <select id="selectOrganizationChildrenObjectIds" parameterType="long" resultType="long">
-        SELECT o.`object_id` FROM `organization` o
-            LEFT JOIN `organization_attribute` oa ON (oa.`status` = 1 AND oa.`object_id` = o.`object_id` AND oa.`entity_attribute_id` = 903)
-            WHERE oa.`value_id` = #{parentId} AND o.`status` IN (1, 0)
+        SELECT o."object_id" FROM "organization" o
+            LEFT JOIN "organization_attribute" oa ON (oa."status" = 1 AND oa."object_id" = o."object_id" AND oa."entity_attribute_id" = 903)
+            WHERE oa."value_id" = #{parentId} AND o."status" IN (1, 0)
     </select>
 
     <select id="selectOrganizationChildrenPermissionInfo" parameterType="long"
             resultMap="org.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
-        SELECT DISTINCT o.`object_id`, o.`permission_id` FROM `organization` o
-            LEFT JOIN `organization_attribute` oa ON (oa.`status` = 1 AND oa.`object_id` = o.`object_id` AND oa.`entity_attribute_id` = 903)
-            WHERE oa.`value_id` = #{parentId} AND o.`status` IN (1, 0)
+        SELECT DISTINCT o."object_id", o."permission_id" FROM "organization" o
+            LEFT JOIN "organization_attribute" oa ON (oa."status" = 1 AND oa."object_id" = o."object_id" AND oa."entity_attribute_id" = 903)
+            WHERE oa."value_id" = #{parentId} AND o."status" IN (1, 0)
     </select>
 
-    <!-- disable/enable functionality -->
     <update id="updateChildrenActivity" parameterType="map">
-        UPDATE `organization` e SET e.`status` = #{status} WHERE e.`object_id` IN
+        UPDATE "organization" e SET "status" = #{status} WHERE e."object_id" IN
                 <foreach open="(" close=")" separator="," collection="childrenIds" item="id">
                     #{id}
                 </foreach>
                 AND
                 <choose>
                     <when test="enabled">
-                        e.`status` = 1
+                        e."status" = 1
                     </when>
                     <otherwise>
-                        e.`status` = 0
+                        e."status" = 0
                     </otherwise>
                 </choose>
     </update>
 
     <select id="selectOrganizationObjectIdByCode" parameterType="string" resultType="long">
-        SELECT oa.`object_id` FROM `organization_attribute` oa LEFT JOIN `organization_string_value` osc
-            ON (oa.`value_id` = osc.`id`) WHERE oa.`entity_attribute_id` = 901 AND oa.`status` = 1
-                AND osc.`value` = #{code};
+        SELECT oa."object_id" FROM "organization_attribute" oa LEFT JOIN "organization_string_value" osc
+            ON (oa."value_id" = osc."id") WHERE oa."entity_attribute_id" = 901 AND oa."status" = 1
+                AND osc."value" = #{code};
     </select>
 
     <select id="selectOrganizationObjectIdByEdrpou" parameterType="string" resultType="long">
-        SELECT oa.`object_id` FROM `organization_attribute` oa LEFT JOIN `organization_string_value` osc
-        ON (oa.`value_id` = osc.`id`) WHERE oa.`entity_attribute_id` = 926 AND oa.`status` = 1
-        AND osc.`value` = #{code};
+        SELECT oa."object_id" FROM "organization_attribute" oa
+            LEFT JOIN "organization_string_value" osc ON (oa."value_id" = osc."id")
+        WHERE oa."entity_attribute_id" = 926 AND oa."status" = 1 AND osc."value" = #{code};
     </select>
 
     <select id="selectOrganizationName" parameterType="long" resultType="string">
-        select osc.`value` from `organization_attribute` oa
-            left join `organization_string_value` osc on (oa.`value_id` = osc.`id` and oa.`entity_attribute_id` = 900)
-        where oa.`object_id` = #{id} and osc.`locale_id` = (select l.id from locale l where l.system is true)
-          and oa.`status` = 1
+        SELECT osc."value" FROM "organization_attribute" oa
+            LEFT JOIN "organization_string_value" osc ON (oa."value_id" = osc."id" AND oa."entity_attribute_id" = 900)
+        WHERE oa."object_id" = #{id} AND osc."locale_id" = (select l.id FROM locale l WHERE l.system IS TRUE)
+          AND oa."status" = 1
     </select>
 </mapper>

@@ -234,8 +234,6 @@ public class DomainObjectInputPanel extends Panel {
             if (parentId != null && !Strings.isEmpty(parentEntity)) {
                 if (parentId > 0) {
                     componentState = getStrategy().getSearchComponentStateForParent(parentId, parentEntity, null);
-                } else {
-                    componentState = new SearchComponentState();
                 }
             }
         } else {
@@ -244,6 +242,11 @@ public class DomainObjectInputPanel extends Panel {
                 componentState = getStrategy().getSearchComponentStateForParent(info.getId(), info.getEntityName(), date);
             }
         }
+
+        if (componentState == null) {
+            componentState = new SearchComponentState();
+        }
+
         return componentState;
     }
 

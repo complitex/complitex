@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.osznconnection.file.service.subsidy.SubsidySplitBean">
     <resultMap id="subsidySplitRequestMap" type="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit">
         <id property="id" column="id"/>
@@ -31,11 +32,12 @@
         </association>
     </resultMap>
 
+    <!--suppress SqlResolve -->
     <insert id="insertSubsidySplit" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit"
             keyProperty="id" useGeneratedKeys="true">
-        insert into `subsidy_split` (subsidy_id,
+        INSERT INTO "subsidy_split" (subsidy_id,
         <foreach collection="dbfFields.keys" item="key" separator=",">
-            `${key}`
+            "${key}"
         </foreach>)
         values
         (#{subsidyId},
@@ -44,24 +46,26 @@
         </foreach>)
     </insert>
 
+    <!--suppress SqlResolve -->
     <update id="updateSubsidySplit" parameterType="org.complitex.osznconnection.file.entity.subsidy.SubsidySplit">
-        update `subsidy_split` set
+        UPDATE "subsidy_split" SET
         <foreach collection="dbfFields.entrySet()" item="item" index="key" separator=",">
-            `${key}` = #{item}
+            "${key}" = #{item}
         </foreach>
-        where `id` = #{id}
+        where "id" = #{id}
     </update>
 
+
     <select id="selectSubsidySplits" resultMap="subsidySplitRequestMap" parameterType="long">
-        select * from `subsidy_split` where `subsidy_id` = #{subsidyId}
+        SELECT * FROM "subsidy_split" WHERE "subsidy_id" = #{subsidyId}
     </select>
 
     <delete id="deleteSubsidySplits" parameterType="long">
-        delete from `subsidy_split` where `subsidy_id` = #{subsidyId}
+        DELETE FROM "subsidy_split" WHERE "subsidy_id" = #{subsidyId}
     </delete>
 
     <delete id="deleteSubsidySplitsByRequestFileId" parameterType="long">
-        delete subsidy_split from subsidy_split left join subsidy on subsidy_id = subsidy.id
-          where request_file_id = #{requestFileId}
+        DELETE FROM subsidy_split WHERE EXISTS(SELECT * FROM subsidy
+            WHERE subsidy_id = subsidy.id AND  request_file_id = #{requestFileId})
     </delete>
 </mapper>

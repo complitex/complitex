@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//E504840N" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
@@ -57,7 +57,6 @@
         <mapper resource="org/complitex/common/service/ConfigBean.xml"/>
 
         <mapper resource="org/complitex/address/strategy/building/BuildingStrategy.xml"/>
-        <mapper resource="org/complitex/address/strategy/building_address/BuildingAddressStrategy.xml"/>
         <mapper resource="org/complitex/address/strategy/street/StreetStrategy.xml"/>
         <mapper resource="org/complitex/address/strategy/city/CityStrategy.xml"/>
         <mapper resource="org/complitex/address/strategy/district/DistrictStrategy.xml"/>

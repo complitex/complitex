@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean">
 
     <resultMap id="actualPaymentResultMap" type="org.complitex.osznconnection.file.entity.subsidy.ActualPayment"
@@ -62,28 +63,28 @@
 
     <select id="selectActualPayments" resultMap="actualPaymentResultMap" parameterType="long">
         SELECT pay.*,
-            w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
-            p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
-        FROM `actual_payment` pay
-            LEFT JOIN `request_warning` w ON (w.`request_id` = pay.`id` AND w.`request_file_type` = 4)
-            LEFT JOIN `request_warning_parameter` p ON w.`id` = p.`request_warning_id`
-        WHERE pay.`request_file_id` = #{id}
+            w."id" warning_id, w."request_id" warning_reqiest_id, w."request_file_type" warning_request_file_type, w."status" warning_status,
+            p."request_warning_id" param_request_warning_id, p."order" param_order, p."type" param_type, p."value" param_value
+        FROM "actual_payment" pay
+            LEFT JOIN "request_warning" w ON (w."request_id" = pay."id" AND w."request_file_type" = 4)
+            LEFT JOIN "request_warning_parameter" p ON w."id" = p."request_warning_id"
+        WHERE pay."request_file_id" = #{id}
     </select>
 
     <insert id="insertActualPayment" parameterType="org.complitex.osznconnection.file.entity.subsidy.ActualPayment">
-        insert into `actual_payment`
+        INSERT INTO "actual_payment"
         (
         <trim suffixOverrides=",">
-            `request_file_id`, `account_number`,
-            `internal_city_id`, `internal_street_id`, `internal_street_type_id`, `internal_building_id`, 
-            `outgoing_city`, `outgoing_street`, `outgoing_street_type`, `outgoing_building_number`, `outgoing_building_corp`, `outgoing_apartment`,
-            `status`,
+            "request_file_id", "account_number",
+            "internal_city_id", "internal_street_id", "internal_street_type_id", "internal_building_id",
+            "outgoing_city", "outgoing_street", "outgoing_street_type", "outgoing_building_number", "outgoing_building_corp", "outgoing_apartment",
+            "status",
             <foreach collection="dbfFields.keys" item="key">
-                `${key}`,
+                "${key}",
             </foreach>
         </trim>
         )
-        values
+        VALUES
         (
         <trim suffixOverrides=",">
             #{requestFileId}, #{accountNumber},
@@ -98,19 +99,19 @@
     </insert>
 
     <insert id="insertActualPaymentList" parameterType="list">
-        insert into `actual_payment`
+        INSERT INTO "actual_payment"
         (
         <trim suffixOverrides=",">
-            `request_file_id`, `account_number`,
-            `internal_city_id`, `internal_street_id`, `internal_street_type_id`, `internal_building_id`,
-            `outgoing_city`, `outgoing_street`, `outgoing_street_type`, `outgoing_building_number`, `outgoing_building_corp`, `outgoing_apartment`,
-            `status`,
+            "request_file_id", "account_number",
+            "internal_city_id", "internal_street_id", "internal_street_type_id", "internal_building_id",
+            "outgoing_city", "outgoing_street", "outgoing_street_type", "outgoing_building_number", "outgoing_building_corp", "outgoing_apartment",
+            "status",
             <foreach collection="list[0].dbfFields.keys" item="key">
-                `${key}`,
+                "${key}",
             </foreach>
         </trim>
         )
-        values
+        VALUES
         <foreach collection="list" separator="," item="item">
             (
             <trim suffixOverrides=",">
@@ -128,89 +129,90 @@
     </insert>
 
     <update id="updateActualPayment" parameterType="org.complitex.osznconnection.file.entity.subsidy.ActualPayment">
-        update `actual_payment`
+        UPDATE "actual_payment"
         <set>
-            `request_file_id` = #{requestFileId}, `account_number` = #{accountNumber},
-            `internal_city_id` = #{cityId},
-            `internal_street_id` = #{streetId}, `internal_street_type_id` = #{streetTypeId},
-            `internal_building_id` = #{buildingId}, `internal_apartment_id` = #{apartmentId},
-            `outgoing_city` = #{outgoingCity}, `outgoing_district` = #{outgoingDistrict},
-            `outgoing_street` = #{outgoingStreet}, `outgoing_street_type` = #{outgoingStreetType},
-            `outgoing_building_number` = #{outgoingBuildingNumber}, `outgoing_building_corp` = #{outgoingBuildingCorp},
-            `outgoing_apartment` = #{outgoingApartment},
-            `status` = #{status},
+            "request_file_id" = #{requestFileId}, "account_number" = #{accountNumber},
+            "internal_city_id" = #{cityId},
+            "internal_street_id" = #{streetId}, "internal_street_type_id" = #{streetTypeId},
+            "internal_building_id" = #{buildingId}, "internal_apartment_id" = #{apartmentId},
+            "outgoing_city" = #{outgoingCity}, "outgoing_district" = #{outgoingDistrict},
+            "outgoing_street" = #{outgoingStreet}, "outgoing_street_type" = #{outgoingStreetType},
+            "outgoing_building_number" = #{outgoingBuildingNumber}, "outgoing_building_corp" = #{outgoingBuildingCorp},
+            "outgoing_apartment" = #{outgoingApartment},
+            "status" = #{status},
             <foreach collection="dbfFields.keys" item="key" separator=",">
-                `${key}` = #{dbfFields[key]}
+                "${key}" = #{dbfFields[key]}
             </foreach>
         </set>
-        where
-        `id` = #{id}
+        WHERE
+        "id" = #{id}
     </update>
-    
+
     <sql id="filter">
         <if test="ownNum != null">
-            AND ap.`OWN_NUM` LIKE CONCAT('%',#{ownNum},'%')
+            AND ap."OWN_NUM" LIKE CONCAT('%',#{ownNum},'%')
         </if>
         <if test="firstName != null">
-            AND ap.`F_NAM` LIKE CONCAT('%',#{firstName},'%')
+            AND ap."F_NAM" LIKE CONCAT('%',#{firstName},'%')
         </if>
         <if test="middleName != null">
-            AND ap.`M_NAM` LIKE CONCAT('%',#{middleName},'%')
+            AND ap."M_NAM" LIKE CONCAT('%',#{middleName},'%')
         </if>
         <if test="lastName != null">
-            AND ap.`SUR_NAM` LIKE CONCAT('%',#{lastName},'%')
+            AND ap."SUR_NAM" LIKE CONCAT('%',#{lastName},'%')
         </if>
 
         <if test="city != null">
-            AND ap.`N_NAME` LIKE CONCAT('%', #{city}, '%')
+            AND ap."N_NAME" LIKE CONCAT('%', #{city}, '%')
         </if>
         <if test="street != null">
-            AND ap.`VUL_NAME` LIKE CONCAT('%', #{street}, '%')
+            AND ap."VUL_NAME" LIKE CONCAT('%', #{street}, '%')
         </if>
         <if test="building != null">
-            AND ap.`BLD_NUM` LIKE CONCAT('%', #{building}, '%')
+            AND ap."BLD_NUM" LIKE CONCAT('%', #{building}, '%')
         </if>
         <if test="corp != null">
-            AND ap.`CORP_NUM` LIKE CONCAT('%', #{corp}, '%')
+            AND ap."CORP_NUM" LIKE CONCAT('%', #{corp}, '%')
         </if>
         <if test="apartment != null">
-            AND ap.`FLAT` LIKE CONCAT('%', #{apartment}, '%')
+            AND ap."FLAT" LIKE CONCAT('%', #{apartment}, '%')
         </if>
 
         <if test="status != null">
-            AND ap.`status` = #{status}
+            AND ap."status" = #{status}
         </if>
     </sql>
 
     <select id="count" resultType="long" parameterType="org.complitex.osznconnection.file.entity.example.ActualPaymentExample">
-        SELECT COUNT(1) FROM `actual_payment` ap WHERE ap.`request_file_id` = #{requestFileId}
+        SELECT COUNT(1) FROM "actual_payment" ap WHERE ap."request_file_id" = #{requestFileId}
         <include refid="org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean.filter"/>
     </select>
 
+    <!--suppress SqlResolve -->
     <select id="find" parameterType="org.complitex.osznconnection.file.entity.example.ActualPaymentExample"
             resultMap="actualPaymentResultMap">
-        SELECT s.*,  
-        w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
-        p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
+        SELECT s.*,
+        w."id" warning_id, w."request_id" warning_reqiest_id, w."request_file_type" warning_request_file_type, w."status" warning_status,
+        p."request_warning_id" param_request_warning_id, p."order" param_order, p."type" param_type, p."value" param_value
         FROM (
-            SELECT ap.`id`, ap.`status`, ap.`request_file_id`, ap.`OWN_NUM`, ap.`F_NAM`, ap.`M_NAM`, ap.`SUR_NAM`,
-                ap.`N_NAME`, ap.`VUL_CAT`, ap.`VUL_NAME`, ap.`VUL_CODE`, ap.`BLD_NUM`, ap.`CORP_NUM`, ap.`FLAT`, ap.`DAT_BEG`,
-                f.`organization_id`,
-                ap.`internal_city_id`, ap.`internal_street_id`, ap.`internal_street_type_id`, ap.`internal_building_id`,
-                ap.`outgoing_city`, ap.`outgoing_district`, ap.`outgoing_street`, ap.`outgoing_street_type`, ap.`outgoing_building_number`,
-                ap.`outgoing_building_corp`, ap.`outgoing_apartment`
-            FROM `actual_payment` ap
-            JOIN `request_file` f ON f.`id` = ap.`request_file_id`
-                WHERE ap.`request_file_id` = #{requestFileId}
+            SELECT ap."id", ap."status", ap."request_file_id", ap."OWN_NUM", ap."F_NAM", ap."M_NAM", ap."SUR_NAM",
+                ap."N_NAME", ap."VUL_CAT", ap."VUL_NAME", ap."VUL_CODE", ap."BLD_NUM", ap."CORP_NUM", ap."FLAT", ap."DAT_BEG",
+                f."organization_id",
+                ap."internal_city_id", ap."internal_street_id", ap."internal_street_type_id", ap."internal_building_id",
+                ap."outgoing_city", ap."outgoing_district", ap."outgoing_street", ap."outgoing_street_type", ap."outgoing_building_number",
+                ap."outgoing_building_corp", ap."outgoing_apartment"
+            FROM "actual_payment" ap
+            JOIN "request_file" f ON f."id" = ap."request_file_id"
+                WHERE ap."request_file_id" = #{requestFileId}
                 <include refid="org.complitex.osznconnection.file.service.subsidy.ActualPaymentBean.filter"/>
                 <if test="orderByClause != null">
                     <choose>
                         <when test="orderByClause == 'OWN_NUM' or orderByClause == 'BLD_NUM' or orderByClause == 'CORP_NUM'
                                 or orderByClause == 'FLAT'">
-                            ORDER BY `${orderByClause}`+0
+                            ORDER BY "${orderByClause}"+0
                         </when>
                         <otherwise>
-                            ORDER BY `${orderByClause}`
+                            ORDER BY "${orderByClause}"
                         </otherwise>
                     </choose>
                     <choose>
@@ -223,122 +225,124 @@
                     </choose>
                 </if>
                 <if test="count != 0">
-                    limit #{first},#{count}
+                    OFFSET #{first} LIMIT #{count}
                 </if>
         ) s
-        LEFT JOIN `request_warning` w ON (w.`request_id` = s.`id` AND w.`request_file_type` = 4)
-        LEFT JOIN `request_warning_parameter` p ON w.`id` = p.`request_warning_id`
+        LEFT JOIN "request_warning" w ON (w."request_id" = s."id" AND w."request_file_type" = 4)
+        LEFT JOIN "request_warning_parameter" p ON w."id" = p."request_warning_id"
     </select>
 
+    <!--suppress SqlResolve -->
     <update id="update" parameterType="org.complitex.osznconnection.file.entity.subsidy.ActualPayment">
-        UPDATE `actual_payment` SET
-        `account_number` = #{accountNumber},
-        `internal_city_id` = #{cityId},
-        `internal_street_id` = #{streetId}, `internal_street_type_id` = #{streetTypeId},
-        `internal_building_id` = #{buildingId},
-        `outgoing_city` = #{outgoingCity}, `outgoing_district` = #{outgoingDistrict},
-        `outgoing_street` = #{outgoingStreet}, `outgoing_street_type` = #{outgoingStreetType},
-        `outgoing_building_number` = #{outgoingBuildingNumber}, `outgoing_building_corp` = #{outgoingBuildingCorp},
-        `outgoing_apartment` = #{outgoingApartment},
-        `status` = #{status}
+        UPDATE "actual_payment" SET
+        "account_number" = #{accountNumber},
+        "internal_city_id" = #{cityId},
+        "internal_street_id" = #{streetId}, "internal_street_type_id" = #{streetTypeId},
+        "internal_building_id" = #{buildingId},
+        "outgoing_city" = #{outgoingCity}, "outgoing_district" = #{outgoingDistrict},
+        "outgoing_street" = #{outgoingStreet}, "outgoing_street_type" = #{outgoingStreetType},
+        "outgoing_building_number" = #{outgoingBuildingNumber}, "outgoing_building_corp" = #{outgoingBuildingCorp},
+        "outgoing_apartment" = #{outgoingApartment},
+        "status" = #{status}
         <if test="updateFieldMap != null">
             <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
-                ,`${key}` = #{item}
+                ,"${key}" = #{item}
             </foreach>
         </if>
-        WHERE `id` = #{id}
+        WHERE "id" = #{id}
     </update>
 
     <select id="countByFile" resultType="int" parameterType="map">
-        SELECT COUNT(1) FROM `actual_payment` ap
-        WHERE ap.`request_file_id` = #{requestFileId} AND ap.`status` IN
+        SELECT COUNT(1) FROM "actual_payment" ap
+        WHERE ap."request_file_id" = #{requestFileId} AND ap."status" IN
         <foreach collection="statuses" item="status" open="(" close=")" separator=",">
             #{status}
         </foreach>
     </select>
 
     <select id="findForOperation" parameterType="map" resultMap="actualPaymentResultMap">
-        SELECT ap.`id`, ap.`status`, ap.`request_file_id`, ap.`F_NAM`, ap.`M_NAM`, ap.`SUR_NAM`,
-        ap.`N_NAME`, ap.`VUL_CAT`, ap.`VUL_NAME`, ap.`VUL_CODE`, ap.`BLD_NUM`, ap.`CORP_NUM`, ap.`FLAT`, ap.`DAT_BEG`,
-        ap.`OWN_NUM`,
-        f.`organization_id`,
-        ap.`internal_city_id`, ap.`internal_street_id`, ap.`internal_street_type_id`, ap.`internal_building_id`,
-        ap.`outgoing_city`, ap.`outgoing_district`, ap.`outgoing_street`, ap.`outgoing_street_type`, ap.`outgoing_building_number`,
-        ap.`outgoing_building_corp`, ap.`outgoing_apartment`,
-        ap.`account_number`
-        FROM `actual_payment` ap
-        JOIN `request_file` f ON ap.`request_file_id` = f.`id`
-        WHERE ap.`request_file_id` = #{requestFileId} AND ap.`id` IN
+        SELECT ap."id", ap."status", ap."request_file_id", ap."F_NAM", ap."M_NAM", ap."SUR_NAM",
+        ap."N_NAME", ap."VUL_CAT", ap."VUL_NAME", ap."VUL_CODE", ap."BLD_NUM", ap."CORP_NUM", ap."FLAT", ap."DAT_BEG",
+        ap."OWN_NUM",
+        f."organization_id",
+        ap."internal_city_id", ap."internal_street_id", ap."internal_street_type_id", ap."internal_building_id",
+        ap."outgoing_city", ap."outgoing_district", ap."outgoing_street", ap."outgoing_street_type", ap."outgoing_building_number",
+        ap."outgoing_building_corp", ap."outgoing_apartment",
+        ap."account_number"
+        FROM "actual_payment" ap
+        JOIN "request_file" f ON ap."request_file_id" = f."id"
+        WHERE ap."request_file_id" = #{requestFileId} AND ap."id" IN
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
     </select>
 
     <select id="findIdsForOperation" parameterType="long" resultType="long">
-        SELECT ap.`id` FROM `actual_payment` ap WHERE ap.`request_file_id` = #{requestFileId}
+        SELECT ap."id" FROM "actual_payment" ap WHERE ap."request_file_id" = #{requestFileId}
     </select>
 
     <update id="markCorrected" parameterType="map">
-        UPDATE `actual_payment`
-        SET `status` = 204
+        UPDATE "actual_payment"
+        SET "status" = 204
             WHERE
-                `request_file_id` = #{fileId}
+                "request_file_id" = #{fileId}
                 <if test="city != null">
-                    AND TO_CYRILLIC(`N_NAME`) = TO_CYRILLIC(#{city})
+                    AND TO_CYRILLIC("N_NAME") = TO_CYRILLIC(#{city})
                 </if>
                 <if test="streetCode != null">
-                    AND `VUL_CODE` = #{streetCode}
+                    AND "VUL_CODE" = #{streetCode}
                 </if>
                 <if test="streetType != null">
-                    AND TO_CYRILLIC(`VUL_CAT`) = TO_CYRILLIC(#{streetType})
+                    AND TO_CYRILLIC("VUL_CAT") = TO_CYRILLIC(#{streetType})
                 </if>
                 <if test="buildingNumber != null">
-                    AND TO_CYRILLIC(`BLD_NUM`) = TO_CYRILLIC(#{buildingNumber})
+                    AND TO_CYRILLIC("BLD_NUM") = TO_CYRILLIC(#{buildingNumber})
                 </if>
                 <if test="buildingCorp != null">
-                    AND TO_CYRILLIC(`CORP_NUM`) = TO_CYRILLIC(#{buildingCorp})
+                    AND TO_CYRILLIC("CORP_NUM") = TO_CYRILLIC(#{buildingCorp})
                 </if>
     </update>
 
     <update id="updateAccountNumber" parameterType="org.complitex.osznconnection.file.entity.subsidy.ActualPayment">
-        UPDATE `actual_payment` SET `account_number` = #{accountNumber}, `status` = #{status}
-        WHERE `id` = #{id}
+        UPDATE "actual_payment" SET "account_number" = #{accountNumber}, "status" = #{status}
+        WHERE "id" = #{id}
     </update>
 
+    <!--suppress SqlResolve -->
     <update id="clearBeforeBinding" parameterType="map">
-        UPDATE `actual_payment` SET
-        `account_number` = NULL,
-        `internal_city_id` = NULL, `internal_street_id` = NULL, `internal_street_type_id` = NULL, `internal_building_id` = NULL,
-        `outgoing_city` = NULL, `outgoing_district` = NULL, `outgoing_street` = NULL, `outgoing_street_type` = NULL,
-        `outgoing_building_number` = NULL, `outgoing_building_corp` = NULL, `outgoing_apartment` = NULL,
-        `status` = #{status}
+        UPDATE "actual_payment" SET
+        "account_number" = NULL,
+        "internal_city_id" = NULL, "internal_street_id" = NULL, "internal_street_type_id" = NULL, "internal_building_id" = NULL,
+        "outgoing_city" = NULL, "outgoing_district" = NULL, "outgoing_street" = NULL, "outgoing_street_type" = NULL,
+        "outgoing_building_number" = NULL, "outgoing_building_corp" = NULL, "outgoing_apartment" = NULL,
+        "status" = #{status}
         <if test="updateFieldMap != null">
             <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
-                ,`${key}` = #{item}
+                ,"${key}" = #{item}
             </foreach>
         </if>
-        WHERE `request_file_id` = #{fileId}
+        WHERE "request_file_id" = #{fileId}
     </update>
 
+    <!--suppress SqlResolve -->
     <update id="clearBeforeProcessing" parameterType="map">
-        UPDATE `actual_payment` SET
-        `status` = CASE `status`
+        UPDATE "actual_payment" SET
+        "status" = CASE "status"
                         <foreach collection="statuses" item="status">
                             WHEN #{status} THEN #{status}
                         </foreach>
                         ELSE 214
                      END
-                     
+
          <if test="updateFieldMap != null">
             <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
-                ,`${key}` = #{item}
+                ,"${key}" = #{item}
             </foreach>
          </if>
-        WHERE `request_file_id` = #{fileId}
+        WHERE "request_file_id" = #{fileId}
     </update>
 
     <delete id="deleteActualPayments" parameterType="long">
-        delete from `actual_payment` where `request_file_id` = #{id};
+        DELETE FROM "actual_payment" WHERE "request_file_id" = #{id};
     </delete>
-
 </mapper>

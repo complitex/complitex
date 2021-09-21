@@ -4,7 +4,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import org.complitex.address.Module;
 import org.complitex.address.entity.AddressImportFile;
 import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.city.CityStrategy;
 import org.complitex.address.strategy.city_type.CityTypeStrategy;
 import org.complitex.address.strategy.country.CountryStrategy;
@@ -71,9 +70,6 @@ public class AddressImportService extends AbstractImportService {
 
     @EJB
     private BuildingStrategy buildingStrategy;
-
-    @EJB
-    private BuildingAddressStrategy buildingAddressStrategy;
 
     @EJB
     private ConfigBean configBean;

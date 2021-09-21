@@ -3,18 +3,18 @@
 
 <mapper namespace="org.complitex.common.service.ConfigBean">
     <insert id="insertConfig" parameterType="map">
-        insert into `config` (`name`, `value`) values (#{name}, #{value})
+        INSERT INTO "config" ("name", "value") VALUES (#{name}, #{value})
     </insert>
 
     <update id="updateConfig" parameterType="map">
-        update `config` set `value` = #{value} where `name` = #{name}
+        UPDATE "config" SET "value" = #{value} WHERE "name" = #{name}
     </update>
 
     <select id="isExistConfig" parameterType="string" resultType="boolean">
-        select count(1) > 0 from `config` where `name` = #{name}
+        SELECT count(1) > 0 FROM "config" WHERE "name" = #{name}
     </select>
 
     <select id="selectConfigValue" parameterType="string" resultType="string">
-        select `value` from `config` where `name` = #{name}
+        SELECT "value" FROM "config" WHERE "name" = #{name}
     </select>
 </mapper>
