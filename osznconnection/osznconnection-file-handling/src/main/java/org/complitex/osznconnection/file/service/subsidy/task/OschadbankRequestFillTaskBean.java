@@ -26,6 +26,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,7 +82,12 @@ public class OschadbankRequestFillTaskBean extends AbstractRequestTaskBean<Reque
 
                 if (chargeToPay.getResultCode() == 1){
                     request.putField(OschadbankRequestField.MONTH_SUM, chargeToPay.getpCharge());
-                    request.putField(OschadbankRequestField.SUM, chargeToPay.getpToPay());
+
+                    if (chargeToPay.getpToPay() .compareTo(BigDecimal.ZERO) > 0) {
+                        request.putField(OschadbankRequestField.SUM, chargeToPay.getpToPay());
+                    } else {
+                        request.putField(OschadbankRequestField.SUM, BigDecimal.ZERO);
+                    }
 
                     request.setStatus(RequestStatus.PROCESSED);
                     oschadbankRequestBean.save(request);
