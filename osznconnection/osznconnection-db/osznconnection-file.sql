@@ -1269,9 +1269,9 @@ INSERT INTO "type_description"("code", "name") VALUES
 INSERT INTO "organization"("object_id") VALUES (0);
 SELECT nextval('organization_object_id_sequence');
 INSERT INTO "organization_string_value"("id", "locale_id", "value") VALUES
-    (1, (SELECT "id" FROM "locale" WHERE "system" = true), UPPER('Модуль обработки файлов запросов от отделов социальной защиты населения')),
-    (2, (SELECT "id" FROM "locale" WHERE "system" = true), UPPER('OSZN')),
-    (3, (SELECT "id" FROM "locale" WHERE "system" = true), UPPER('СЗ'));
+    (1, (SELECT "id" FROM "locale" WHERE "system" = true), UPPER('Модуль №1')),
+    (2, (SELECT "id" FROM "locale" WHERE "system" = true), UPPER('Модуль №1')),
+    (3, (SELECT "id" FROM "locale" WHERE "system" = true), UPPER('ОСЗН'));
 SELECT nextval('organization_string_value_id_sequence');
 SELECT nextval('organization_string_value_id_sequence');
 SELECT nextval('organization_string_value_id_sequence');
