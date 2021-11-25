@@ -48,8 +48,8 @@
             <result column="APT" property="APT"/>
             <result column="KAT" property="KAT"/>
             <result column="LGCODE" property="LGCODE"/>
-            <result column="DATEIN" property="DATEIN"/>
-            <result column="DATEOUT" property="DATEOUT"/>
+            <result column="DATEIN" property="DATEIN_DATE"/>
+            <result column="DATEOUT" property="DATEOUT_DATE"/>
             <result column="RAH" property="RAH"/>
             <result column="MONEY" property="MONEY"/>
             <result column="EBK" property="EBK"/>
@@ -124,7 +124,7 @@
 
     <select id="selectPrivilegeProlongations" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample"
             resultMap="privilegeProlongationResultMap">
-        SELECT t.*,
+        SELECT t.*, str_to_date(`DATEIN`, '%Y-%m-%d') DATEIN_DATE, str_to_date(`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE
         w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
