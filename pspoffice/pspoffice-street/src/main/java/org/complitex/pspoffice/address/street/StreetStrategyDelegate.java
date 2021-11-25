@@ -4,7 +4,6 @@
  */
 package org.complitex.pspoffice.address.street;
 
-import org.complitex.address.strategy.building_address.BuildingAddressStrategy;
 import org.complitex.address.strategy.street.StreetStrategy;
 import org.complitex.common.entity.DomainObject;
 import org.complitex.common.entity.DomainObjectFilter;
@@ -19,7 +18,7 @@ import java.util.List;
  * Street strategy delegate.
  * <p>Implements custom logic for "found" and "count" street strategy operations.
  * Custom requirements: for not admins filters out the streets that have no one visible building.</p>
- * 
+ *
  * @see StreetStrategyInterceptor
  * @see StreetStrategy
  *
@@ -29,8 +28,7 @@ import java.util.List;
 public class StreetStrategyDelegate extends StreetStrategy {
 
     private static final String PSP_STREET_NS = StreetStrategyDelegate.class.getPackage().getName() + ".Street";
-    @EJB
-    private BuildingAddressStrategy buildingAddressStrategy;
+
     @EJB
     private SessionBean sessionBean;
 

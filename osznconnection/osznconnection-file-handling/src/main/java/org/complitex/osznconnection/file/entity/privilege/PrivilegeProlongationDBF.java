@@ -21,5 +21,8 @@ public enum PrivilegeProlongationDBF {
     DATEOUT, //Дата окончания действия льготы
     RAH, //Номер л/с ПУ
     MONEY,
-    EBK
+    EBK,
+    DATEFORM,
+    CODORG,
+    TARIF
 }

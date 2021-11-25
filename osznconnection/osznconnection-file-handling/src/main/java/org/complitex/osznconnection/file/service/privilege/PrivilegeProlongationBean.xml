@@ -53,6 +53,9 @@
             <result column="RAH" property="RAH"/>
             <result column="MONEY" property="MONEY"/>
             <result column="EBK" property="EBK"/>
+            <result column="DATEFORM" property="DATEFORM"/>
+            <result column="CODORG" property="CODORG"/>
+            <result column="TARIF" property="TARIF"/>
         </association>
     </resultMap>
 
@@ -62,7 +65,7 @@
         </include>
     </insert>
 
-    <sql id="filter"> 
+    <sql id="filter">
         <where>
             <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.filterPrivilege"/>
 
@@ -137,7 +140,7 @@
     <update id="updatePrivilegeProlongation" parameterType="org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation">
         <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.updatePrivilege">
             <property name="table" value="privilege_prolongation"/>
-        </include>       
+        </include>
     </update>
 
     <update id="updatePrivilegeProlongationAccountNumber" parameterType="org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation">
