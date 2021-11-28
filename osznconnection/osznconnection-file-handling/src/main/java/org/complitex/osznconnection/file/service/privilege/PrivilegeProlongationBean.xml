@@ -176,7 +176,7 @@
     </select>
 
     <update id="updatePrivilegeProlongation" parameterType="org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation">
-        UPDATE `${table}` SET
+        UPDATE `privilege_prolongation` SET
             `account_number` = #{accountNumber},
             `internal_city_id` = #{cityId},
             `internal_street_id` = #{streetId}, `internal_street_type_id` = #{streetTypeId},
