@@ -412,7 +412,7 @@
             <field length="10" type="java.lang.String" name="EBK"/>
             <field length="8" type="java.lang.String" name="DATEFORM"/>
             <field length="10" type="java.lang.Long" name="CODORG"/>
-            <field length="10" type="java.lang.Long" name="TARIF"/>
+            <field length="10" scale="4" type="java.math.BigDecimal" name="TARIF"/>
         </fields>
     </file-description>
 

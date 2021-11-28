@@ -1215,7 +1215,7 @@ CREATE TABLE `privilege_prolongation` (
   `EBK` VARCHAR(10),
   `DATEFORM` VARCHAR(8),
   `CODORG` BIGINT(10),
-  `TARIF` BIGINT(10),
+  `TARIF` DECIMAL(14, 4) ,
 
   PRIMARY KEY (`id`),
   KEY `key_request_file_id` (`request_file_id`),
