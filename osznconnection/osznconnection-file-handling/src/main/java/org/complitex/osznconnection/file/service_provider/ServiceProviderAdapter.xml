@@ -192,7 +192,7 @@
             (
               COMP.SEQ_ID.NEXTVAL, #{p.dbfFields.COLLECTION_ID}, #{p.dbfFields.COD}, #{p.dbfFields.INDEX},
               #{p.dbfFields.CDUL}, #{p.dbfFields.KAT}, #{p.dbfFields.LGCODE}, 0, #{p.dbfFields.CDPR},
-              #{p.dbfFields.NCARD}, #{p.dbfFields.IDPIL}, #{p.dbfFields.DATEIN}, #{p.dbfFields.DATEOUT},
+              #{p.dbfFields.NCARD}, #{p.dbfFields.IDPIL}, #{p.dbfFields.DATEIN_STR}, #{p.dbfFields.DATEOUT_STR},
               #{p.dbfFields.PASPPIL}, #{p.dbfFields.FIOPIL}, #{p.dbfFields.HOUSE}, #{p.dbfFields.BUILD},
               #{p.dbfFields.APT}, #{p.accountNumber}, #{p.dbfFields.MONEY}, #{p.dbfFields.EBK}
             )

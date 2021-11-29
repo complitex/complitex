@@ -404,12 +404,15 @@
             <field length="2" type="java.lang.String" name="BUILD"/>
             <field length="4" type="java.lang.String" name="APT"/>
             <field length="4" type="java.lang.Integer" name="KAT"/>
-            <field length="4" type="java.lang.Integer" name="LGCODE"/>
-            <field length="10" type="java.lang.String" name="DATEIN"/>
-            <field length="10" type="java.lang.String" name="DATEOUT"/>
+            <field length="6" type="java.lang.Integer" name="LGCODE"/>
+            <field length="8" type="java.util.Date" name="DATEIN"/>
+            <field length="8" type="java.util.Date" name="DATEOUT"/>
             <field length="25" type="java.lang.String" name="RAH"/>
             <field length="1" type="java.lang.Integer" name="MONEY"/>
             <field length="10" type="java.lang.String" name="EBK"/>
+            <field length="8" type="java.lang.String" name="DATEFORM"/>
+            <field length="10" type="java.lang.Long" name="CODORG"/>
+            <field length="10" scale="4" type="java.math.BigDecimal" name="TARIF"/>
         </fields>
     </file-description>
 

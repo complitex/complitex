@@ -48,21 +48,64 @@
             <result column="APT" property="APT"/>
             <result column="KAT" property="KAT"/>
             <result column="LGCODE" property="LGCODE"/>
-            <result column="DATEIN" property="DATEIN"/>
-            <result column="DATEOUT" property="DATEOUT"/>
+            <result column="DATEIN" property="DATEIN_DATE"/>
+            <result column="DATEOUT" property="DATEOUT_DATE"/>
+            <result column="DATEIN_STR" property="DATEIN_STR"/>
+            <result column="DATEOUT_STR" property="DATEOUT_STR"/>
             <result column="RAH" property="RAH"/>
             <result column="MONEY" property="MONEY"/>
             <result column="EBK" property="EBK"/>
+            <result column="DATEFORM" property="DATEFORM"/>
+            <result column="CODORG" property="CODORG"/>
+            <result column="TARIF" property="TARIF"/>
         </association>
     </resultMap>
 
     <insert id="insertPrivilegeProlongationList" parameterType="list">
-        <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.insertPrivilege">
-            <property name="table" value="privilege_prolongation"/>
-        </include>
+        INSERT INTO `privilege_prolongation`
+        (
+        <trim suffixOverrides=",">
+            `request_file_id`, `account_number`,
+            `internal_city_id`, `internal_street_id`, `internal_street_type_id`, `internal_building_id`,
+            `outgoing_city`, `outgoing_street`, `outgoing_street_type`, `outgoing_building_number`,
+            `outgoing_building_corp`, `outgoing_apartment`, `status`, `date`,
+            `last_name`, `first_name`, `middle_name`,
+            `city`,
+            <foreach collection="list[0].dbfFields.keys" item="key">
+                `${key}`,
+            </foreach>
+        </trim>
+        )
+        values
+        <foreach collection="list" separator="," item="item">
+            (
+            <trim suffixOverrides=",">
+                #{item.requestFileId}, #{item.accountNumber},
+                #{item.cityId}, #{item.streetId}, #{item.streetTypeId}, #{item.buildingId},
+                #{item.outgoingCity}, #{item.outgoingStreet}, #{item.outgoingStreetType},
+                #{item.outgoingBuildingNumber}, #{item.outgoingBuildingCorp},
+                #{item.outgoingApartment}, #{item.status}, #{item.date},
+                #{item.lastName}, #{item.firstName}, #{item.middleName},
+                #{item.city},
+                <foreach collection="item.dbfFields.keys" item="key">
+                    <choose>
+                        <when test="key == 'DATEIN'">
+                            date_format( #{item.dbfFields.DATEIN}, '%d.%m.%Y'),
+                        </when>
+                        <when test="key == 'DATEOUT'">
+                            date_format( #{item.dbfFields.DATEOUT}, '%d.%m.%Y'),
+                        </when>
+                        <otherwise>
+                            #{item.dbfFields.${key}},
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </trim>
+            )
+        </foreach>
     </insert>
 
-    <sql id="filter"> 
+    <sql id="filter">
         <where>
             <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.filterPrivilege"/>
 
@@ -102,6 +145,12 @@
         TO_CYRILLIC(r.`BUILD`) BUILD_CYR,
         TO_CYRILLIC(r.`APT`) APT_CYR,
 
+        r.`DATEIN` DATEIN_STR,
+        r.`DATEOUT` DATEOUT_STR,
+
+        str_to_date(r.`DATEIN`, '%d.%m.%Y') DATEIN_DATE,
+        str_to_date(r.`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
+
         f.`organization_id`, f.`user_organization_id`, f.`group_id`,
         r.`internal_city_id`, r.`internal_street_id`, r.`internal_street_type_id`, r.`internal_building_id`,
         r.`outgoing_city`, r.`outgoing_district`, r.`outgoing_street`, r.`outgoing_street_type`, r.`outgoing_building_number`,
@@ -135,9 +184,31 @@
     </select>
 
     <update id="updatePrivilegeProlongation" parameterType="org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation">
-        <include refid="org.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.updatePrivilege">
-            <property name="table" value="privilege_prolongation"/>
-        </include>       
+        UPDATE `privilege_prolongation` SET
+            `account_number` = #{accountNumber},
+            `internal_city_id` = #{cityId},
+            `internal_street_id` = #{streetId}, `internal_street_type_id` = #{streetTypeId},
+            `internal_building_id` = #{buildingId},
+            `outgoing_city` = #{outgoingCity}, `outgoing_district` = #{outgoingDistrict},
+            `outgoing_street` = #{outgoingStreet}, `outgoing_street_type` = #{outgoingStreetType},
+            `outgoing_building_number` = #{outgoingBuildingNumber}, `outgoing_building_corp` = #{outgoingBuildingCorp},
+            `outgoing_apartment` = #{outgoingApartment}, `status` = #{status}
+        <if test="updateFieldMap != null">
+            <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
+                <choose>
+                    <when test="key == 'DATEIN'">
+                        ,`${key}` = date_format(`DATEIN`, '%d.%m.%Y')
+                    </when>
+                    <when test="key == 'DATEOUT'">
+                        ,`${key}` = date_format(`DATEOUT`, '%d.%m.%Y')
+                    </when>
+                    <otherwise>
+                        ,`${key}` = #{item}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </if>
+        WHERE `id` = #{id}
     </update>
 
     <update id="updatePrivilegeProlongationAccountNumber" parameterType="org.complitex.osznconnection.file.entity.privilege.PrivilegeProlongation">
@@ -163,6 +234,9 @@
         TO_CYRILLIC(r.`first_name`) first_name_cyr,
         TO_CYRILLIC(r.`middle_name`) middle_name_cyr,
         TO_CYRILLIC(r.`last_name`) last_name_cyr,
+
+        r.`DATEIN` DATEIN_STR,
+        r.`DATEOUT` DATEOUT_STR,
 
         r.*
         FROM `privilege_prolongation` r
