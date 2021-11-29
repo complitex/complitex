@@ -124,7 +124,7 @@
 
     <select id="selectPrivilegeProlongations" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample"
             resultMap="privilegeProlongationResultMap">
-        SELECT t.*, str_to_date(`DATEIN`, '%Y-%m-%d') DATEIN_DATE, str_to_date(`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
+        SELECT t.*, str_to_date(`DATEIN`, '%d.%m.%Y') DATEIN_DATE, str_to_date(`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
         w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
@@ -189,7 +189,7 @@
             <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
                 <choose>
                     <when test="key == 'DATEIN'">
-                        ,`${key}` = date_format(`DATEIN`, '%Y-%m-%d')
+                        ,`${key}` = date_format(`DATEIN`, '%d.%m.%Y')
                     </when>
                     <when test="key == 'DATEOUT'">
                         ,`${key}` = date_format(`DATEOUT`, '%d.%m.%Y')
@@ -227,7 +227,7 @@
         TO_CYRILLIC(r.`middle_name`) middle_name_cyr,
         TO_CYRILLIC(r.`last_name`) last_name_cyr,
 
-        str_to_date(r.`DATEIN`, '%Y-%m-%d') DATEIN_DATE,
+        str_to_date(r.`DATEIN`, '%d.%m.%Y') DATEIN_DATE,
         str_to_date(r.`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
 
         r.*
