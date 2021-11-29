@@ -238,9 +238,6 @@
         r.`DATEIN` DATEIN_STR,
         r.`DATEOUT` DATEOUT_STR,
 
-        str_to_date(r.`DATEIN`, '%d.%m.%Y') DATEIN_DATE,
-        str_to_date(r.`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
-
         r.*
         FROM `privilege_prolongation` r
         JOIN `request_file` f ON r.`request_file_id` = f.`id`
