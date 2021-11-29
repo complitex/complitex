@@ -50,6 +50,8 @@
             <result column="LGCODE" property="LGCODE"/>
             <result column="DATEIN" property="DATEIN_DATE"/>
             <result column="DATEOUT" property="DATEOUT_DATE"/>
+            <result column="DATEIN_STR" property="DATEIN_STR"/>
+            <result column="DATEOUT_STR" property="DATEOUT_STR"/>
             <result column="RAH" property="RAH"/>
             <result column="MONEY" property="MONEY"/>
             <result column="EBK" property="EBK"/>
@@ -129,7 +131,7 @@
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
         SELECT DISTINCT r.`id`, r.`status`, r.`request_file_id`, r.`FIOPIL`, r.`IDPIL`, r.`PASPPIL`,
-        r.`CDUL`, r.`HOUSE`, r.`BUILD`, r.`APT`, r.`date`, r.`RAH`, r.`DATEIN`, r.`DATEOUT`,
+        r.`CDUL`, r.`HOUSE`, r.`BUILD`, r.`APT`, r.`date`, r.`RAH`,
 
         TO_CYRILLIC(r.`IDPIL`) IDPIL_CYR,
         TO_CYRILLIC(r.`PASPPIL`) PASPPIL_CYR,
@@ -142,6 +144,9 @@
         TO_CYRILLIC(r.`HOUSE`) HOUSE_CYR,
         TO_CYRILLIC(r.`BUILD`) BUILD_CYR,
         TO_CYRILLIC(r.`APT`) APT_CYR,
+
+        r.`DATEIN` DATEIN_STR,
+        r.`DATEOUT` DATEOUT_STR,
 
         str_to_date(r.`DATEIN`, '%d.%m.%Y') DATEIN_DATE,
         str_to_date(r.`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
@@ -230,7 +235,7 @@
         TO_CYRILLIC(r.`middle_name`) middle_name_cyr,
         TO_CYRILLIC(r.`last_name`) last_name_cyr,
 
-        r.`DATEIN DATEIN_STR,
+        r.`DATEIN` DATEIN_STR,
         r.`DATEOUT` DATEOUT_STR,
 
         str_to_date(r.`DATEIN`, '%d.%m.%Y') DATEIN_DATE,
