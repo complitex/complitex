@@ -124,7 +124,7 @@
 
     <select id="selectPrivilegeProlongations" parameterType="org.complitex.osznconnection.file.entity.example.PrivilegeExample"
             resultMap="privilegeProlongationResultMap">
-        SELECT t.*, str_to_date(`DATEIN`, '%d.%m.%Y') DATEIN_DATE, str_to_date(`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
+        SELECT t.*,
         w.`id` warning_id, w.`request_id` warning_reqiest_id, w.`request_file_type` warning_request_file_type, w.`status` warning_status,
         p.`request_warning_id` param_request_warning_id, p.`order` param_order, p.`type` param_type, p.`value` param_value
         FROM (
@@ -142,6 +142,9 @@
         TO_CYRILLIC(r.`HOUSE`) HOUSE_CYR,
         TO_CYRILLIC(r.`BUILD`) BUILD_CYR,
         TO_CYRILLIC(r.`APT`) APT_CYR,
+
+        str_to_date(r.`DATEIN`, '%d.%m.%Y') DATEIN_DATE,
+        str_to_date(r.`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
 
         f.`organization_id`, f.`user_organization_id`, f.`group_id`,
         r.`internal_city_id`, r.`internal_street_id`, r.`internal_street_type_id`, r.`internal_building_id`,
@@ -226,6 +229,9 @@
         TO_CYRILLIC(r.`first_name`) first_name_cyr,
         TO_CYRILLIC(r.`middle_name`) middle_name_cyr,
         TO_CYRILLIC(r.`last_name`) last_name_cyr,
+
+        r.`DATEIN DATEIN_STR,
+        r.`DATEOUT` DATEOUT_STR,
 
         str_to_date(r.`DATEIN`, '%d.%m.%Y') DATEIN_DATE,
         str_to_date(r.`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
