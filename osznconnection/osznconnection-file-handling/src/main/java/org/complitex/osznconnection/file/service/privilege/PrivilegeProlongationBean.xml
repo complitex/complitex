@@ -227,6 +227,9 @@
         TO_CYRILLIC(r.`middle_name`) middle_name_cyr,
         TO_CYRILLIC(r.`last_name`) last_name_cyr,
 
+        str_to_date(r.`DATEIN`, '%Y-%m-%d') DATEIN_DATE,
+        str_to_date(r.`DATEOUT`, '%d.%m.%Y') DATEOUT_DATE,
+
         r.*
         FROM `privilege_prolongation` r
         JOIN `request_file` f ON r.`request_file_id` = f.`id`
