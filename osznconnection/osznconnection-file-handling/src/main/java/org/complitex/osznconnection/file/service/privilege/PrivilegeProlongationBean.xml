@@ -88,10 +88,10 @@
                 <foreach collection="item.dbfFields.keys" item="key">
                     <choose>
                         <when test="key == 'DATEIN'">
-                            date_format(`DATEIN`, '%Y-%m-%d'),
+                            date_format( #{item.dbfFields.DATEIN}, '%Y-%m-%d'),
                         </when>
                         <when test="key == 'DATEOUT'">
-                            date_format(`DATEOUT`, '%d.%m.%Y'),
+                            date_format( #{item.dbfFields.DATEOUT}, '%d.%m.%Y'),
                         </when>
                         <otherwise>
                             #{item.dbfFields.${key}},
