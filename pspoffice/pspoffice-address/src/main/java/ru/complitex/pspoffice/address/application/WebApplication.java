@@ -7,6 +7,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.cdi.ConversationPropagation;
 import org.apache.wicket.markup.html.WebPage;
+import ru.complitex.pspoffice.address.api.AddressJsonPage;
 import ru.complitex.pspoffice.address.catalog.page.*;
 import ru.complitex.pspoffice.address.correction.page.*;
 import ru.complitex.pspoffice.address.page.HomePage;
@@ -75,5 +76,7 @@ public class WebApplication extends AuthenticatedWebApplication {
         mountPage("flat-correction", FlatCorrectionPage.class);
 
         mountPage("synchronization", SyncPage.class);
+
+        mountPage("api/${address}", AddressJsonPage.class);
     }
 }

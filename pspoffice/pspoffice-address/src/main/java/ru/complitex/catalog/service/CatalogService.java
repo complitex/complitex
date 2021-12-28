@@ -198,9 +198,7 @@ public class CatalogService {
 
         item.getData().stream()
                 .filter(data -> !data.isEmpty())
-                .peek(data -> {
-                    data.setStartDate(date);
-                })
+                .peek(data -> data.setStartDate(date))
                 .forEach(data -> dataMapper.insertData(item, data));
 
         return item;
