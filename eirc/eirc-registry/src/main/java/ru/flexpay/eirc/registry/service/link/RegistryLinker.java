@@ -1,13 +1,13 @@
 package ru.flexpay.eirc.registry.service.link;
 
 import org.apache.commons.lang3.StringUtils;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.exception.ExecuteException;
-import org.complitex.common.service.ConfigBean;
-import org.complitex.common.util.AttributeUtil;
-import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.correction.service.AddressService;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.exception.ExecuteException;
+import ru.complitex.common.service.ConfigBean;
+import ru.complitex.common.util.AttributeUtil;
+import ru.complitex.common.util.EjbBeanLocator;
+import ru.complitex.correction.service.AddressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.cal10n.LocLogger;

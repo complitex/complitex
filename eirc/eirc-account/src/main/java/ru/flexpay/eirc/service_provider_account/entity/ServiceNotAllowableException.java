@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.service_provider_account.entity;
 
-import org.complitex.common.exception.AbstractException;
+import ru.complitex.common.exception.AbstractException;
 
 /**
  * @author Pavel Sknar

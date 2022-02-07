@@ -1,10 +1,10 @@
 package ru.flexpay.eirc.service_provider_account.service;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.AbstractBean;
-import org.complitex.common.strategy.SequenceBean;
-import org.complitex.common.util.DateUtil;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.service.AbstractBean;
+import ru.complitex.common.strategy.SequenceBean;
+import ru.complitex.common.util.DateUtil;
 import ru.flexpay.eirc.service_provider_account.entity.Exemption;
 
 import javax.ejb.EJB;

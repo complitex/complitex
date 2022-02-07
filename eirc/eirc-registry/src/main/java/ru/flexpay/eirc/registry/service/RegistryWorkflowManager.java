@@ -3,7 +3,7 @@ package ru.flexpay.eirc.registry.service;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.complitex.common.strategy.StringLocaleBean;
+import ru.complitex.common.strategy.StringLocaleBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.registry.entity.Registry;

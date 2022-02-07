@@ -143,7 +143,7 @@ public class Animate implements ChainableStatement, Serializable
 	/**
 	 * {@inheritDooc}
 	 * 
-	 * @see org.odlabs.wiquery.core.javascript.ChainableStatement#chainLabel()
+	 * @see ChainableStatement#chainLabel()
 	 */
 	@Override
 	public String chainLabel()

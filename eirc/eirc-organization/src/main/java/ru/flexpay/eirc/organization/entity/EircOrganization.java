@@ -1,9 +1,9 @@
 package ru.flexpay.eirc.organization.entity;
 
 import com.google.common.collect.Lists;
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.strategy.organization.IOrganizationStrategy;
+import ru.complitex.common.entity.Attribute;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.strategy.organization.IOrganizationStrategy;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
 
 import java.util.List;

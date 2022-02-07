@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean">
+    <!--suppress SqlResolve -->
+    <sql id="insertPrivilege">
+        INSERT INTO "${table}"
+        (
+        <trim suffixOverrides=",">
+            "request_file_id", "account_number",
+            "internal_city_id", "internal_street_id", "internal_street_type_id", "internal_building_id",
+            "outgoing_city", "outgoing_street", "outgoing_street_type", "outgoing_building_number",
+            "outgoing_building_corp", "outgoing_apartment", "status", "date",
+            "last_name", "first_name", "middle_name",
+            "city",
+            <foreach collection="list[0].dbfFields.keys" item="key">
+                "${key}",
+            </foreach>
+        </trim>
+        )
+        values
+        <foreach collection="list" separator="," item="item">
+            (
+            <trim suffixOverrides=",">
+                #{item.requestFileId}, #{item.accountNumber},
+                #{item.cityId}, #{item.streetId}, #{item.streetTypeId}, #{item.buildingId},
+                #{item.outgoingCity}, #{item.outgoingStreet}, #{item.outgoingStreetType},
+                #{item.outgoingBuildingNumber}, #{item.outgoingBuildingCorp},
+                #{item.outgoingApartment}, #{item.status}, #{item.date},
+                #{item.lastName}, #{item.firstName}, #{item.middleName},
+                #{item.city},
+                <foreach collection="item.dbfFields.keys" item="key">
+                    #{item.dbfFields.${key}},
+                </foreach>
+            </trim>
+            )
+        </foreach>
+    </sql>
+
+    <sql id="filterPrivilege">
+        <if test="requestFileId != null">
+            r."request_file_id" = #{requestFileId}
+        </if>
+
+        <if test="accountNumber != null">
+            AND r."account_number" = #{accountNumber}
+        </if>
+
+        <if test="firstName != null">
+            AND r."first_name" LIKE CONCAT('%',#{firstName},'%')
+        </if>
+
+        <if test="middleName != null">
+            AND r."middle_name" LIKE CONCAT('%',#{middleName},'%')
+        </if>
+
+        <if test="lastName != null">
+            AND r."last_name" LIKE CONCAT('%',#{lastName},'%')
+        </if>
+
+        <if test="inn != null">
+            AND r."IDPIL" = #{inn}
+        </if>
+
+        <if test="passport != null">
+            AND r."PASPPIL" = #{passport}
+        </if>
+
+        <if test="streetCode != null">
+            AND r."CDUL" =  #{streetCode}
+        </if>
+
+        <if test="building != null">
+            AND r."HOUSE" = #{building}
+        </if>
+        <if test="corp != null">
+            AND r."BUILD" =  #{corp}
+        </if>
+        <if test="apartment != null">
+            AND r."APT" = #{apartment}
+        </if>
+
+        <if test="status != null">
+            AND r."status" = #{status}
+        </if>
+    </sql>
+
+    <!--suppress SqlResolve -->
+    <sql id="updatePrivilege">
+        UPDATE "${table}" SET
+        "account_number" = #{accountNumber},
+        "internal_city_id" = #{cityId},
+        "internal_street_id" = #{streetId}, "internal_street_type_id" = #{streetTypeId},
+        "internal_building_id" = #{buildingId},
+        "outgoing_city" = #{outgoingCity}, "outgoing_district" = #{outgoingDistrict},
+        "outgoing_street" = #{outgoingStreet}, "outgoing_street_type" = #{outgoingStreetType},
+        "outgoing_building_number" = #{outgoingBuildingNumber}, "outgoing_building_corp" = #{outgoingBuildingCorp},
+        "outgoing_apartment" = #{outgoingApartment}, "status" = #{status}
+        <if test="updateFieldMap != null">
+            <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
+                ,"${key}" = #{item}
+            </foreach>
+        </if>
+        WHERE "id" = #{id}
+    </sql>
+
+    <!--suppress SqlResolve -->
+    <sql id="clearPrivilegeBound">
+        UPDATE "${table}" SET
+        "account_number" = NULL,
+        "internal_city_id" = NULL, "internal_street_id" = NULL, "internal_street_type_id" = NULL, "internal_building_id" = NULL,
+        "outgoing_city" = NULL, "outgoing_district" = NULL, "outgoing_street" = NULL, "outgoing_street_type" = NULL,
+        "outgoing_building_number" = NULL, "outgoing_building_corp" = NULL, "outgoing_apartment" = NULL,
+        "status" = #{status}
+        <if test="updateFieldMap != null">
+            <foreach collection="updateFieldMap.entrySet()" item="item" index="key">
+                ,"${key}" = #{item}
+            </foreach>
+        </if>
+        WHERE "request_file_id" = #{fileId}
+
+        <if test="id != null">
+            AND "id" = #{id}
+        </if>
+    </sql>
+
+    <!--suppress SqlResolve -->
+    <sql id="markPrivilegeCorrected">
+        UPDATE "${table}" d SET "status" = 204
+
+        FROM "request_file" d_rf
+            LEFT JOIN "facility_street_reference" r ON d."CDUL" = r."KL_CODEUL"
+            LEFT JOIN "request_file" r_rf ON (r."request_file_id" = r_rf."id" AND d_rf."organization_id" = r_rf."organization_id"
+              AND d_rf."user_organization_id" = r_rf."user_organization_id")
+
+        WHERE d."request_file_id" = #{fileId} AND d."request_file_id" = d_rf."id"
+
+        <if test="streetTypeCode != null and streetCode == null">
+            AND r."KL_CODEKUL" = #{streetTypeCode} AND d."status" = 237
+        </if>
+
+        <if test="streetCode != null and buildingNumber == null">
+            AND d."CDUL" = #{streetCode} AND d."status" = 201
+        </if>
+
+        <if test="buildingNumber != null">
+            AND d."CDUL" = #{streetCode} AND TO_CYRILLIC("HOUSE") = TO_CYRILLIC(#{buildingNumber}) AND d."status" = 202
+        </if>
+
+        <if test="buildingCorp != null">
+            AND d."CDUL" = #{streetCode} AND TO_CYRILLIC("HOUSE") = TO_CYRILLIC(#{buildingNumber})
+            AND TO_CYRILLIC("BUILD") = TO_CYRILLIC(#{buildingCorp}) AND d."status" = 202
+        </if>
+    </sql>
+</mapper>

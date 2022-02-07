@@ -2,14 +2,14 @@
 <template xmlns="http://www.complitex.org/web/template">
 
     <sidebar>
-        <menu class="org.complitex.pspoffice.person.menu.OperationMenu"/>
-        <menu class="org.complitex.pspoffice.person.menu.PersonMenu"/>
-        <menu class="org.complitex.pspoffice.web.admin.AdminMenu"/>
-        <menu class="org.complitex.address.menu.AddressMenu"/>
-        <menu class="org.complitex.pspoffice.web.reference_data.menu.ReferenceDataMenu"/>
-        <menu class="org.complitex.organization.web.OrganizationMenu"/>
-        <menu class="org.complitex.organization_type.menu.OrganizationTypeMenu"/>
-        <menu class="org.complitex.pspoffice.person.menu.PersonDescriptionMenu"/>
-        <menu class="org.complitex.address.menu.AddressDescriptionMenu"/>
+        <menu class="ru.complitex.pspoffice.person.menu.OperationMenu"/>
+        <menu class="ru.complitex.pspoffice.person.menu.PersonMenu"/>
+        <menu class="ru.complitex.pspoffice.web.admin.AdminMenu"/>
+        <menu class="ru.complitex.address.menu.AddressMenu"/>
+        <menu class="ru.complitex.pspoffice.web.reference_data.menu.ReferenceDataMenu"/>
+        <menu class="ru.complitex.organization.web.OrganizationMenu"/>
+        <menu class="ru.complitex.organization_type.menu.OrganizationTypeMenu"/>
+        <menu class="ru.complitex.pspoffice.person.menu.PersonDescriptionMenu"/>
+        <menu class="ru.complitex.address.menu.AddressDescriptionMenu"/>
     </sidebar>
 </template>

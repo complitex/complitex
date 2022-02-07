@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.complitex.pspoffice.report.html.service.ReportBean">
+    <resultMap id="reportResultMap" type="ru.complitex.pspoffice.report.html.entity.Report">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="markup" property="markup"/>
+        <result column="updated" property="updated"/>
+        <collection property="reportSqlList" select="selectReportSql" column="id"/>
+    </resultMap>
+
+    <resultMap id="reportSqlResultMap" type="ru.complitex.pspoffice.report.html.entity.ReportSql">
+        <id column="id" property="id"/>
+        <result column="report_id" property="reportId"/>
+        <result column="sql" property="sql"/>
+    </resultMap>
+
+    <select id="selectReportSql" parameterType="long" resultMap="reportSqlResultMap">
+        select * from `report_sql` where `report_id` = #{reportId}
+    </select>
+
+    <select id="selectReport" parameterType="long" resultMap="reportResultMap">
+        select * from `report` where `id` = #{id}
+    </select>
+
+    <select id="selectReportList" parameterType="ru.complitex.common.entity.FilterWrapper"
+            resultMap="reportResultMap">
+        select * from `report`
+        <where>
+            <if test="object.name != null">`name` like concat('%',#{object.name},'%')</if>
+            <if test="object.updated != null">date(`updated`) = date(#{object.updated})</if>
+        </where>
+        <choose>
+            <when test="sortProperty == 'name'">order by `name` ${asc}</when>
+            <when test="sortProperty == 'updated'">order by `updated` ${asc}</when>
+            <otherwise>order by `id` ${asc}</otherwise>
+        </choose>
+        offset #{first} limit #{count}
+    </select>
+
+    <select id="selectReportListCount" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="long">
+        select count(*) from `report`
+        <where>
+            <if test="object.name != null">`name` like concat('%',#{object.name},'%')</if>
+            <if test="object.updated != null">date(`updated`) = date(#{object.updated})</if>
+        </where>
+    </select>
+
+    <insert id="insertReport" parameterType="ru.complitex.pspoffice.report.html.entity.Report" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into `report` (`name`, `markup`) values (#{name}, #{markup})
+    </insert>
+
+    <insert id="insertReportSql" parameterType="ru.complitex.pspoffice.report.html.entity.ReportSql">
+        insert into `report_sql` (`report_id`, `sql`) values (#{reportId}, #{sql})
+    </insert>
+
+    <update id="updateReport" parameterType="ru.complitex.pspoffice.report.html.entity.Report">
+        update `report`  set `name` = #{name}, `markup` = #{markup} where `id` = #{id}
+    </update>
+
+    <update id="updateReportSql" parameterType="ru.complitex.pspoffice.report.html.entity.ReportSql">
+        update `report_sql` set `sql` = #{sql} where `id` = #{id}
+    </update>
+
+    <delete id="deleteReport" parameterType="long">
+        delete from `report` where `id` = #{id}
+    </delete>
+
+    <delete id="deleteReportSql" parameterType="long">
+        delete from `report_sql` where `id` = #{id}
+    </delete>
+</mapper>

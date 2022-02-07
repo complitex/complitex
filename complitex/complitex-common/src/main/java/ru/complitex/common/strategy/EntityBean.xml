@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.common.strategy.EntityBean">
+    <resultMap id="entityResultMap" type="ru.complitex.common.entity.Entity">
+        <id column="id" property="id"/>
+        <result column="entity" property="entity"/>
+        <collection property="names" column="name_id" select="findNames"/>
+        <collection property="attributes" column="id" select="selectEntityAttributes"/>
+    </resultMap>
+
+    <resultMap id="entityAttributeMap" type="ru.complitex.common.entity.EntityAttribute">
+        <id column="id" property="id"/>
+        <result column="required" property="required"/>
+        <result column="start_date" property="startDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="system" property="system"/>
+        <result column="value_type_id" property="valueType"/>
+        <result column="reference_id" property="referenceId"/>
+        <collection property="names" column="name_id" select="findNames"/>
+    </resultMap>
+
+    <select id="load" parameterType="map" resultMap="entityResultMap">
+        SELECT * FROM "entity" e WHERE e."entity" = #{entity}
+    </select>
+
+    <select id="selectEntityAttributes" parameterType="long" resultMap="entityAttributeMap">
+        select * from "entity_attribute" WHERE "entity_id" = #{id}
+    </select>
+
+    <select id="findNames" parameterType="long" resultMap="ru.complitex.common.strategy.DomainObjectStrategy.stringValueResultMap">
+        SELECT sc.* FROM "entity_string_value" sc WHERE sc."id" = #{value}
+    </select>
+
+    <insert id="insertAttributeType" useGeneratedKeys="true" keyProperty="id" parameterType="ru.complitex.common.entity.EntityAttribute">
+        INSERT INTO "entity_attribute"("entity_id", "required", "name_id", "start_date", "value_type_id", "reference_id")
+          VALUES (#{entityId}, #{required}, #{nameId}, #{startDate}, #{valueTypeId}, #{referenceId})
+    </insert>
+
+    <select id="allEntities" resultType="string">
+        SELECT e."entity" FROM "entity" e
+    </select>
+
+    <update id="removeAttributeTypes" parameterType="map">
+        UPDATE "entity_attribute" SET "end_date" = #{endDate} WHERE "id" IN
+        <foreach item="id" collection="attributeTypeIds" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectEntities" parameterType="ru.complitex.common.entity.FilterWrapper" resultMap="entityResultMap">
+        SELECT * FROM "entity" ${limit}
+    </select>
+
+    <select id="selectEntitiesCount" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="long">
+        SELECT count(id) FROM "entity"
+    </select>
+</mapper>

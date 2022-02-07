@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.service.handle.changing;
 
-import org.complitex.common.service.AbstractBean;
+import ru.complitex.common.service.AbstractBean;
 import ru.flexpay.eirc.registry.entity.changing.ObjectChanging;
 
 import javax.ejb.Stateless;

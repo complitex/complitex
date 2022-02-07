@@ -38,14 +38,14 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.IntegerConverter;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.value.IValueMap;
-import org.complitex.address.strategy.region.RegionStrategy;
-import org.complitex.common.converter.BigDecimalConverter;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.Person;
-import org.complitex.common.web.component.datatable.DataProvider;
-import org.complitex.template.web.template.TemplateWebApplication;
+import ru.complitex.address.strategy.region.RegionStrategy;
+import ru.complitex.common.converter.BigDecimalConverter;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.entity.DomainObjectFilter;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.entity.Person;
+import ru.complitex.common.web.component.datatable.DataProvider;
+import ru.complitex.template.web.template.TemplateWebApplication;
 import org.odlabs.wiquery.ui.dialog.Dialog;
 import org.slf4j.LoggerFactory;
 import ru.complitex.salelog.entity.CallGirl;
@@ -888,7 +888,7 @@ public class OrderEditPanel extends Panel {
     }
 
     private boolean isAdmin() {
-        return ((TemplateWebApplication) getApplication()).hasAnyRole(org.complitex.template.web.security.SecurityRole.ADMIN_MODULE_EDIT);
+        return ((TemplateWebApplication) getApplication()).hasAnyRole(ru.complitex.template.web.security.SecurityRole.ADMIN_MODULE_EDIT);
     }
 
     private class OrderEditPanelBehavior extends AbstractDefaultAjaxBehavior {

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.osznconnection.file.service.PersonAccountBean">
+    <resultMap id="personAccountResultMap" type="ru.complitex.osznconnection.file.entity.PersonAccount">
+        <id property="id" column="id"/>
+
+        <result property="firstName" column="first_name"/>
+        <result property="middleName" column="middle_name"/>
+        <result property="lastName" column="last_name"/>
+
+        <result property="city" column="city"/>
+        <result property="streetType" column="street_type"/>
+        <result property="street" column="street"/>
+        <result property="buildingNumber" column="building_number"/>
+        <result property="buildingCorp" column="building_corp"/>
+        <result property="apartment" column="apartment"/>
+
+        <result property="cityId" column="city_object_id"/>
+        <result property="streetTypeId" column="street_type_object_id"/>
+        <result property="streetId" column="street_object_id"/>
+        <result property="buildingId" column="building_object_id"/>
+        <result property="apartmentId" column="apartment_object_id"/>
+
+        <result property="accountNumber" column="account_number"/>
+        <result property="puAccountNumber" column="pu_account_number"/>
+
+        <result property="organizationId" column="organization_id"/>
+        <result property="userOrganizationId" column="user_organization_id"/>
+        <result property="calculationCenterId" column="calc_center_id"/>
+
+        <result property="organizationName" column="organization_name"/>
+        <result property="calculationCenterName" column="calculation_center_name"/>
+        <result property="userOrganizationName" column="user_organization_name"/>
+    </resultMap>
+
+    <insert id="insertPersonAccount" parameterType="ru.complitex.osznconnection.file.entity.PersonAccount"
+            keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO "person_account" ("first_name", "middle_name", "last_name",
+          "city", "street_type", "street", "building_number", "building_corp", "apartment",
+          "city_object_id", "street_type_object_id", "street_object_id", "building_object_id", "apartment_object_id",
+          "account_number",  "pu_account_number", "organization_id", "user_organization_id", "calc_center_id")
+        VALUES (#{firstName}, #{middleName}, #{lastName},
+            #{city}, #{streetType}, #{street}, #{buildingNumber}, #{buildingCorp}, #{apartment},
+            #{cityId}, #{streetTypeId}, #{streetId}, #{buildingId}, #{apartmentId},
+            #{accountNumber}, #{puAccountNumber}, #{organizationId}, #{userOrganizationId}, #{calculationCenterId})
+    </insert>
+
+    <update id="updatePersonAccount" parameterType="ru.complitex.osznconnection.file.entity.PersonAccount">
+        UPDATE "person_account" SET "account_number" = #{accountNumber} WHERE "id" = #{id}
+    </update>
+
+    <select id="selectPersonAccount" parameterType="long" resultMap="personAccountResultMap">
+        SELECT pa.* FROM "person_account" pa WHERE pa."id" = #{id}
+    </select>
+
+    <delete id="delete" parameterType="ru.complitex.osznconnection.file.entity.PersonAccount">
+        DELETE FROM "person_account" WHERE "id" = #{id}
+    </delete>
+
+    <sql id="selectPersonAccountsWhere">
+        <where>
+            <if test="object.firstName != null">
+                <choose>
+                    <when test="object.firstName.length() == 1">
+                        AND SUBSTRING(pa."first_name", 1, 1) = #{object.firstName}
+                    </when>
+                    <otherwise>AND pa."first_name" = #{object.firstName}</otherwise>
+                </choose>
+            </if>
+            <if test="object.middleName != null">
+                <choose>
+                    <when test="object.middleName.length() == 1">
+                        AND SUBSTRING(pa."middle_name", 1, 1) = #{object.middleName}
+                    </when>
+                    <otherwise>AND pa."middle_name" = #{object.middleName}</otherwise>
+                </choose>
+            </if>
+            <if test="object.lastName != null">AND pa."last_name" = #{object.lastName}</if>
+
+            <if test="object.city != null">AND pa."city" = #{object.city}</if>
+            <if test="object.streetType != null">AND pa."street_type" = #{object.streetType}</if>
+            <if test="object.street != null">AND pa."street" = #{object.street}</if>
+            <if test="object.buildingNumber != null">AND pa."building_number" = #{object.buildingNumber}</if>
+            <if test="object.buildingCorp != null">AND pa."building_corp" = #{object.buildingCorp}</if>
+            <if test="object.apartment != null">AND pa."apartment" = #{object.apartment}</if>
+            <if test="object.cityId != null">AND pa."city_object_id" = #{object.cityId}</if>
+            <if test="object.streetId != null">AND pa."street_object_id" = #{object.streetId}</if>
+            <if test="object.buildingId != null">AND pa."building_object_id" = #{object.buildingId}</if>
+            <!--<if test="object.buildingId == null AND nullable">AND pa."building_object_id" is null</if>-->
+            <if test="object.apartmentId != null">AND pa."apartment_object_id" = #{object.apartmentId}</if>
+            <if test="object.accountNumber != null">AND pa."account_number" = #{object.accountNumber}</if>
+            <if test="object.puAccountNumber != null">AND pa."pu_account_number" = #{object.puAccountNumber}</if>
+            <if test="object.organizationId != null">AND pa."organization_id" = #{object.organizationId}</if>
+            <if test="object.userOrganizationId != null">AND pa."user_organization_id" = #{object.userOrganizationId}</if>
+            <if test="object.calculationCenterId != null">AND pa."calc_center_id" = #{object.calculationCenterId}</if>
+           <!-- <if test="not admin">
+                AND pa."user_organization_id" IN ${object.userOrganizationsString}
+                <if test="outerOrganizationsString != null">AND pa."organization_id" in ${object.outerOrganizationsString}</if>
+            </if>-->
+        </where>
+    </sql>
+
+    <select id="selectPersonAccounts" parameterType="ru.complitex.common.entity.FilterWrapper"
+                resultMap="personAccountResultMap">
+        SELECT pa.*
+        <if test="map.loadOrganizationNames">
+          , NULLIF(oszn_value."value", oszn_sys_value."value") organization_name,
+            NULLIF(user_value."value", user_sys_value."value") user_organization_name,
+            NULLIF(calc_value."value", calc_sys_value."value") calculation_center_name
+        </if>
+
+        FROM "person_account" pa
+
+        <if test="map.loadOrganizationNames">
+            JOIN "organization_attribute" oszn_a ON (oszn_a."object_id" = pa."organization_id" AND oszn_a."status" = 1 AND oszn_a."entity_attribute_id" = 900)
+            LEFT JOIN "organization_string_value" oszn_value ON (oszn_value."id" = oszn_a."value_id" AND oszn_value."locale_id" = #{stringLocale.id})
+            JOIN "organization_string_value" oszn_sys_value ON (oszn_sys_value."id" = oszn_a."value_id" AND oszn_sys_value."locale_id" = (SELECT l."id" FROM "locale" l WHERE l."system" = true))
+
+            JOIN "organization_attribute" calc_a ON (calc_a."object_id" = pa."calc_center_id" AND calc_a."status" = 1 AND calc_a."entity_attribute_id" = 900)
+            LEFT JOIN "organization_string_value" calc_value ON (calc_value."id" = calc_a."value_id" AND calc_value."locale_id" = #{stringLocale.id})
+            JOIN "organization_string_value" calc_sys_value ON (calc_sys_value."id" = calc_a."value_id" AND calc_sys_value."locale_id" = (SELECT l."id" FROM "locale" l WHERE l."system" = true))
+
+            LEFT JOIN "organization_attribute" user_a ON (user_a."object_id" = pa."user_organization_id" AND user_a."status" = 1 AND user_a."entity_attribute_id" = 900)
+            LEFT JOIN "organization_string_value" user_value ON (user_value."id" = user_a."value_id" AND user_value."locale_id" = #{stringLocale.id})
+            JOIN "organization_string_value" user_sys_value ON (user_sys_value."id" = user_a."value_id" AND user_sys_value."locale_id" = (SELECT l."id" FROM "locale" l WHERE l."system" = true))
+        </if>
+
+        <include refid="selectPersonAccountsWhere"/>
+        ${orderLimit}
+    </select>
+
+    <select id="selectPersonAccountsCount" resultType="long" parameterType="ru.complitex.common.entity.FilterWrapper">
+        SELECT count(1) FROM "person_account" pa
+        <include refid="selectPersonAccountsWhere"/>
+    </select>
+</mapper>

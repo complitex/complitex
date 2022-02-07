@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>pspoffice</artifactId>
-        <groupId>org.complitex.pspoffice</groupId>
+        <groupId>ru.complitex.pspoffice</groupId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
 
@@ -13,51 +13,51 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-address</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-report</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-owner-relationship</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-ownership-form</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-registration-type</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-document</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-military-service-relation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-departure-reason</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-housing-rights</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-street</artifactId>
         </dependency>
 

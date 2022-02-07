@@ -3,7 +3,7 @@
 
 <mapper namespace="ru.flexpay.eirc.eirc_account.service.EircAccountBean">
 
-    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
+    <cache type="ru.complitex.common.mybatis.caches.EhcacheCache"/>
     <!--cache-ref namespace="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean"/-->
 
     <resultMap id="EircAccount" type="ru.flexpay.eirc.eirc_account.entity.EircAccount">
@@ -406,7 +406,7 @@
         `eirc_account_room`
     </sql>
 
-    <select id="selectEircAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="EircAccount" >
+    <select id="selectEircAccounts" parameterType="ru.complitex.common.entity.FilterWrapper" resultMap="EircAccount" >
         select
         <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.eircAccountColumns"/>,
         <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.addressColumns"/>
@@ -446,7 +446,7 @@
         </if>
     </select>
 
-    <select id="countEircAccounts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long" >
+    <select id="countEircAccounts" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="long" >
         select count(distinct e.`object_id`) from `eirc_account` e
         <if test="map.inactive == true or map.all == true">
             inner join (select max(pk_id) as max_pk_id from eirc_account group by object_id) e2 on e.pk_id=e2.max_pk_id

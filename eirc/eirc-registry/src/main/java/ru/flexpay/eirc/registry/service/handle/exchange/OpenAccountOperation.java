@@ -2,11 +2,11 @@ package ru.flexpay.eirc.registry.service.handle.exchange;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.checkdigit.CheckDigitException;
-import org.complitex.address.strategy.city.CityStrategy;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.exception.AbstractException;
-import org.complitex.common.util.AttributeUtil;
+import ru.complitex.address.strategy.city.CityStrategy;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.exception.AbstractException;
+import ru.complitex.common.util.AttributeUtil;
 import ru.flexpay.eirc.dictionary.entity.Address;
 import ru.flexpay.eirc.dictionary.entity.Person;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;

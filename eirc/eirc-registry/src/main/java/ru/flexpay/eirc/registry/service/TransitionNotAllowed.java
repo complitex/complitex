@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service;
 
-import org.complitex.common.entity.ILocalizedType;
-import org.complitex.common.exception.AbstractException;
+import ru.complitex.common.entity.ILocalizedType;
+import ru.complitex.common.exception.AbstractException;
 
 /**
  * @author Pavel Sknar

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.osznconnection.file.service.subsidy.RequestFileGroupBean">
+    <resultMap id="requestFileGroupResultMap" type="ru.complitex.osznconnection.file.entity.subsidy.RequestFileGroup">
+        <id column="gid" property="id"/>
+
+        <result column="group_type" property="groupType"/>
+        <result column="status" property="status"/>
+
+        <association property="loadedRecordCount" column="p_id" select="loadedRecordCount"/>
+        <association property="bindedRecordCount" column="p_id" select="bindedRecordCount"/>
+        <association property="filledRecordCount" column="p_id" select="filledRecordCount"/>
+
+        <association property="benefitFile" javaType="ru.complitex.osznconnection.file.entity.RequestFile">
+            <id column="b_id" property="id"/>
+            <result column="gid" property="groupId"/>
+            <result column="b_loaded" property="loaded"/>
+            <result column="b_name" property="name"/>
+            <result column="b_directory" property="directory"/>
+            <result column="b_organization_id" property="organizationId"/>
+            <result column="b_user_organization_id" property="userOrganizationId"/>
+            <result column="b_begin_date" property="beginDate"/>
+            <result column="b_end_date" property="endDate"/>
+            <result column="b_dbf_record_count" property="dbfRecordCount"/>
+            <result column="b_length" property="length"/>
+            <result column="b_check_sum" property="checkSum"/>
+            <result column="b_type" property="type"/>
+        </association>
+        <association property="paymentFile" javaType="ru.complitex.osznconnection.file.entity.RequestFile">
+            <id column="p_id" property="id"/>
+            <result column="gid" property="groupId"/>
+            <result column="p_loaded" property="loaded"/>
+            <result column="p_name" property="name"/>
+            <result column="p_directory" property="directory"/>
+            <result column="p_organization_id" property="organizationId"/>
+            <result column="p_user_organization_id" property="userOrganizationId"/>
+            <result column="p_begin_date" property="beginDate"/>
+            <result column="p_end_date" property="endDate"/>
+            <result column="p_dbf_record_count" property="dbfRecordCount"/>
+            <result column="p_length" property="length"/>
+            <result column="p_check_sum" property="checkSum"/>
+            <result column="p_type" property="type"/>
+            <result column="binded_record_count" property="bindedRecordCount"/>
+            <result column="filled_record_count" property="filledRecordCount"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertRequestFileGroup"  parameterType="ru.complitex.osznconnection.file.entity.subsidy.RequestFileGroup"
+            keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO "request_file_group" ("group_type", "status") VALUES (#{groupType}, #{status})
+    </insert>
+
+    <update id="updateRequestFileGroup"  parameterType="ru.complitex.osznconnection.file.entity.subsidy.RequestFileGroup">
+        UPDATE "request_file_group" SET "status" = #{status} WHERE "id" = #{id}
+    </update>
+
+    <update id="updateStatus" parameterType="map">
+        UPDATE "request_file_group" SET "status" = #{status}
+            WHERE "id" = (SELECT rf."group_id" FROM "request_file" rf WHERE rf."id" = #{fileId})
+    </update>
+
+    <delete id="deleteRequestFileGroup" parameterType="long">
+        DELETE FROM "request_file_group" WHERE "id" = #{id}
+    </delete>
+
+    <delete id="clearEmptyGroup">
+        DELETE FROM "request_file_group" g WHERE NOT EXISTS(SELECT rf."id" FROM "request_file" rf WHERE rf."group_id" = g."id")
+    </delete>
+
+    <!--suppress SqlResolve -->
+    <sql id="requestFileGroupFilterFrom">
+        FROM "request_file_group" g
+            LEFT JOIN "request_file" p ON g."id" = p."group_id" AND p."type" = 2
+            LEFT JOIN "request_file" b ON g."id" = b."group_id" AND b."type" = 1
+    </sql>
+
+    <sql id="permissionFilter">
+        <if test="not admin">
+            AND (
+              (p."user_organization_id" IS NULL OR p."user_organization_id" IN ${userOrganizationsString})
+              AND (b."user_organization_id" IS NULL OR b."user_organization_id" IN ${userOrganizationsString})
+            )
+
+            <if test="outerOrganizationsString != null">
+                AND (p."organization_id" IN ${outerOrganizationsString})
+            </if>
+        </if>
+    </sql>
+
+    <sql id="requestFileGroupFilterWhere">
+        <where>
+            g.group_type = 1
+            AND (p."id" is not null or b."id" is not null)
+            <if test="id != null">AND g."id" = #{id}</if>
+            <if test="loaded != null">AND YEAR(p."loaded") = YEAR(#{loaded}) AND DAYOFYEAR(p."loaded") = DAYOFYEAR(#{loaded})</if>
+            <if test="directory != null">AND p."directory" LIKE CONCAT('%',#{directory},'%')</if>
+            <if test="paymentName != null">AND p."name" LIKE CONCAT('%',#{paymentName},'%')</if>
+            <if test="benefitName != null">AND b."name" LIKE CONCAT('%',#{benefitName},'%')</if>
+            <if test="organizationId != null">AND p."organization_id" = #{organizationId}</if>
+            <if test="userOrganizationId != null">AND p."user_organization_id" = #{userOrganizationId}</if>
+            <if test="year != null">AND YEAR(p."begin_date") = #{year}</if>
+            <if test="month != null">AND MONTH(p."begin_date") = #{month}</if>
+            <if test="status != null">AND g."status" = #{status}</if>
+            <if test="serviceProvider != null">
+                AND p."name" LIKE concat('%', #{edrpou}, '%')
+            </if>
+
+            <include refid="permissionFilter"/>
+        </where>
+    </sql>
+
+    <select id="loadedRecordCount" parameterType="long" resultType="int">
+        SELECT COUNT(1) FROM "payment" WHERE "request_file_id" = #{requestFileId}
+    </select>
+
+    <select id="bindedRecordCount" parameterType="long" resultType="int">
+        SELECT COUNT(1) FROM "payment" WHERE "request_file_id" = #{requestFileId} AND "account_number" IS NOT NULL
+    </select>
+
+    <select id="filledRecordCount" parameterType="long" resultType="int">
+        SELECT COUNT(1) FROM "payment" WHERE "request_file_id" = #{requestFileId} AND "status" = 215
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectRequestFilesGroups" parameterType="ru.complitex.osznconnection.file.entity.subsidy.RequestFileGroupFilter"
+            resultMap="requestFileGroupResultMap">
+        SELECT
+            g.id as gid,
+            g.group_type as group_type,
+            g.status as status,
+
+            b.id as b_id, b.loaded as b_loaded, b.name as b_name, b.directory as b_directory,
+            b.organization_id as b_organization_id, b."user_organization_id" as b_user_organization_id,
+            b.begin_date as b_begin_date, b.end_date as b_end_date, b.dbf_record_count as b_dbf_record_count,
+            b.length as b_length, b.check_sum as b_check_sum, b.type as b_type,
+
+            p.id as p_id, p.loaded as p_loaded, p.name as p_name, p.directory as p_directory,
+            p.organization_id as p_organization_id, p."user_organization_id" as p_user_organization_id,
+            p.begin_date as p_begin_date, p.end_date as p_end_date, p.dbf_record_count as p_dbf_record_count,
+            p.length as p_length, p.check_sum as p_check_sum, p.type as p_type
+        <include refid="requestFileGroupFilterFrom"/>
+        <include refid="requestFileGroupFilterWhere"/>
+        <if test="sortProperty != null">
+            <choose>
+                <when test="sortProperty == 'status'">ORDER BY "status"</when>
+                <when test="sortProperty == 'paymentName'">ORDER BY p."name"</when>
+                <when test="sortProperty == 'benefitName'">ORDER BY b."name"</when>
+                <when test="sortProperty == 'service_provider'">ORDER BY p."name"</when>
+                <when test="sortProperty == 'month'">ORDER BY MONTH(p."begin_date")</when>
+                <when test="sortProperty == 'year'">ORDER BY YEAR(p."begin_date")</when>
+                <otherwise>ORDER BY p."${sortProperty}"</otherwise>
+            </choose>
+            <choose>
+                <when test="ascending">ASC</when>
+                <otherwise>DESC</otherwise>
+            </choose>
+        </if>
+        OFFSET #{first} LIMIT #{count}
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectRequestFilesGroupsCount" parameterType="ru.complitex.osznconnection.file.entity.RequestFileFilter" resultType="long">
+        SELECT COUNT(DISTINCT g."id")
+        <include refid="requestFileGroupFilterFrom"/>
+        <include refid="requestFileGroupFilterWhere"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectRequestFilesGroup" parameterType="long" resultMap="requestFileGroupResultMap">
+         SELECT
+            g.id as gid,
+            g.group_type as group_type,
+            g.status as status,
+
+            b.id as b_id, b.loaded as b_loaded, b.name as b_name, b.directory as b_directory,
+            b.organization_id as b_organization_id,  b."user_organization_id" as b_user_organization_id,
+            b.begin_date as b_begin_date, b.end_date as b_end_date, b.dbf_record_count as b_dbf_record_count,
+            b.length as b_length, b.check_sum as b_check_sum, b.type as b_type,
+
+            p.id as p_id, p.loaded as p_loaded, p.name as p_name, p.directory as p_directory,
+            p.organization_id as p_organization_id, p."user_organization_id" as p_user_organization_id,
+            p.begin_date as p_begin_date, p.end_date as p_end_date, p.dbf_record_count as p_dbf_record_count,
+            p.length as p_length, p.check_sum as p_check_sum, p.type as p_type,
+
+            (SELECT COUNT(1) FROM "payment" WHERE "request_file_id" = p."id") AS loaded_record_count,
+            (SELECT COUNT(1) FROM "payment" WHERE "request_file_id" = p."id" AND "account_number" IS NOT NULL) AS binded_record_count,
+            (SELECT COUNT(1) FROM "payment" WHERE "request_file_id" = p."id" AND "status" = 215) AS filled_record_count
+        <include refid="requestFileGroupFilterFrom"/>
+        WHERE g.id = #{id}
+    </select>
+
+    <select id="getBenefitFileId" parameterType="map" resultType="long">
+        SELECT b."id" FROM "request_file" b
+            JOIN "request_file_group" rfg ON b."group_id" = rfg."id"
+            JOIN "request_file" p ON (p."group_id" = rfg."id" AND p."type" = 2)
+        WHERE b."type" = 1 AND p."id" = #{paymentFileId}
+    </select>
+
+     <select id="getPaymentFileId" parameterType="map" resultType="long">
+        SELECT p."id" FROM "request_file" p
+           JOIN "request_file_group" rfg ON p."group_id" = rfg."id"
+           JOIN "request_file" b ON (b."group_id" = rfg."id" AND b."type" = 1)
+        WHERE p."type" = 2 AND b."id" = #{benefitFileId}
+    </select>
+
+    <select id="selectGroupStatus" resultType="ru.complitex.osznconnection.file.entity.RequestFileStatus" parameterType="long">
+        SELECT "status" FROM "request_file_group" WHERE "id" = #{id}
+    </select>
+
+    <update id="fixLoadingOnInit">
+        UPDATE "request_file_group" SET "status" = 111 WHERE "status" IN (112, 113) ;
+    </update>
+
+    <update id="fixBingingOnInit">
+        UPDATE "request_file_group" SET "status" = 121 WHERE "status" IN (122, 123);
+    </update>
+
+    <update id="fixFillingOnInit">
+        UPDATE "request_file_group" SET "status" = 131 WHERE "status" IN (132, 133);
+    </update>
+
+    <update id="fixSavingOnInit">
+        UPDATE "request_file_group" SET "status" = 141 WHERE "status" IN (142, 143);
+    </update>
+</mapper>

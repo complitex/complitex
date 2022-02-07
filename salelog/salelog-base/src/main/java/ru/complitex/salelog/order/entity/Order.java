@@ -2,8 +2,8 @@ package ru.complitex.salelog.order.entity;
 
 import com.google.common.collect.Lists;
 import ru.complitex.salelog.entity.CallGirl;
-import org.complitex.common.entity.DictionaryTemporalObject;
-import org.complitex.common.entity.Person;
+import ru.complitex.common.entity.DictionaryTemporalObject;
+import ru.complitex.common.entity.Person;
 
 import java.util.Date;
 import java.util.List;

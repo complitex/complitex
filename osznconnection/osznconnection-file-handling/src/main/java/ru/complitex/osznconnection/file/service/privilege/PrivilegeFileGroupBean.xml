@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.osznconnection.file.service.privilege.PrivilegeFileGroupBean">
+    <resultMap id="privilegeFileGroupResultMap" type="ru.complitex.osznconnection.file.entity.privilege.PrivilegeFileGroup">
+        <id column="gid" property="id"/>
+        <result column="loaded_record_count" property="loadedRecordCount"/>
+        <result column="binded_record_count" property="bindedRecordCount"/>
+        <result column="filled_record_count" property="filledRecordCount"/>
+        <result column="status" property="status"/>
+        <association property="firstRequestFile" javaType="ru.complitex.osznconnection.file.entity.RequestFile">
+            <id column="f_id" property="id"/>
+            <result column="f_group_id" property="groupId"/>
+            <result column="f_loaded" property="loaded"/>
+            <result column="f_name" property="name"/>
+            <result column="f_directory" property="directory"/>
+            <result column="f_organization_id" property="organizationId"/>
+            <result column="f_user_organization_id" property="userOrganizationId"/>
+            <result column="f_begin_date" property="beginDate"/>
+            <result column="f_end_date" property="endDate"/>
+            <result column="f_dbf_record_count" property="dbfRecordCount"/>
+            <result column="f_length" property="length"/>
+            <result column="f_check_sum" property="checkSum"/>
+            <result column="f_type" property="type"/>
+            <result column="f_status" property="status"/>
+        </association>
+        <association property="secondRequestFile" javaType="ru.complitex.osznconnection.file.entity.RequestFile">
+            <id column="s_id" property="id"/>
+            <result column="s_group_id" property="groupId"/>
+            <result column="s_loaded" property="loaded"/>
+            <result column="s_name" property="name"/>
+            <result column="s_directory" property="directory"/>
+            <result column="s_organization_id" property="organizationId"/>
+            <result column="s_user_organization_id" property="userOrganizationId"/>
+            <result column="s_begin_date" property="beginDate"/>
+            <result column="s_end_date" property="endDate"/>
+            <result column="s_dbf_record_count" property="dbfRecordCount"/>
+            <result column="s_length" property="length"/>
+            <result column="s_check_sum" property="checkSum"/>
+            <result column="s_type" property="type"/>
+            <result column="s_status" property="status"/>
+        </association>
+    </resultMap>
+
+    <sql id="permissionFilter">
+        <if test="not admin">
+            AND ((f."user_organization_id" IS NULL OR f."user_organization_id" IN ${userOrganizationsString})
+            AND (s."user_organization_id" IS NULL OR s."user_organization_id" IN ${userOrganizationsString}))
+
+            <if test="outerOrganizationsString != null">
+                AND (f."organization_id" IN ${outerOrganizationsString})
+            </if>
+        </if>
+    </sql>
+
+    <sql id="requestFileGroupFilterWhere">
+        <where>
+            <if test="id != null">AND g.group_id = #{id}</if>
+            <if test="loaded != null">
+                AND ((YEAR(f."loaded") = YEAR(#{loaded}) AND DAYOFYEAR(f."loaded") = DAYOFYEAR(#{loaded})) or
+                  (YEAR(s."loaded") = YEAR(#{loaded}) AND DAYOFYEAR(s."loaded") = DAYOFYEAR(#{loaded})))
+            </if>
+            <if test="firstName != null">AND f."name" LIKE CONCAT('%',#{firstName},'%')</if>
+            <if test="secondName != null">AND s."name" LIKE CONCAT('%',#{secondName},'%')</if>
+            <if test="organizationId != null">
+                AND (f."organization_id" = #{organizationId} OR s."organization_id" = #{organizationId})
+            </if>
+            <if test="userOrganizationId != null">
+                AND (f."user_organization_id" = #{userOrganizationId} OR s."user_organization_id" = #{userOrganizationId})
+            </if>
+            <if test="year != null">AND (YEAR(f."begin_date") = #{year} OR YEAR(s."begin_date") = #{year})</if>
+            <if test="month != null">AND (MONTH(f."begin_date") = #{month} OR MONTH(s."begin_date") = #{month})</if>
+            <if test="status != null">AND (f."status" = #{status} OR s."status" = #{status})</if>
+            <if test="edrpou != null">
+                AND (f."name" LIKE concat('%', #{edrpou}, '%') or s."name" LIKE concat('%', #{edrpou}, '%'))
+            </if>
+
+            <include refid="permissionFilter"/>
+        </where>
+    </sql>
+
+    <select id="selectPrivilegeFilesGroups" parameterType="ru.complitex.osznconnection.file.entity.RequestFileFilter"
+            resultMap="privilegeFileGroupResultMap">
+        SELECT
+        g.group_id as gid,
+        f.status as "status",
+
+        f.id as f_id, f.group_id as f_group_id, f.loaded as f_loaded, f.name as f_name, f.directory as f_directory,
+        f.organization_id as f_organization_id, f."user_organization_id" as f_user_organization_id,
+        f.begin_date as f_begin_date, f.end_date as f_end_date, f.dbf_record_count as f_dbf_record_count,
+        f.length as f_length, f.check_sum as f_check_sum, f.type as f_type, f.status as f_status,
+
+        s.id as s_id, s.group_id as s_group_id, s.loaded as s_loaded, s.name as s_name, s.directory as s_directory,
+        s.organization_id as s_organization_id, s."user_organization_id" as s_user_organization_id,
+        s.begin_date as s_begin_date, s.end_date as s_end_date, s.dbf_record_count as s_dbf_record_count,
+        s.length as s_length, s.check_sum as s_check_sum, s.type as s_type, s.status as s_status,
+
+        (SELECT count(1) FROM "dwelling_characteristics" WHERE "request_file_id" = f."id") AS loaded_record_count,
+        (SELECT count(1) FROM "dwelling_characteristics" WHERE "request_file_id" = f."id" AND "account_number" is not null) as binded_record_count,
+        (SELECT count(1) FROM "dwelling_characteristics" WHERE "request_file_id" = f."id" AND "status" = 215) as filled_record_count
+
+        FROM (SELECT group_id FROM request_file WHERE type IN (6, 7) GROUP BY group_id) g
+            LEFT JOIN request_file f ON (f.group_id = g.group_id AND f.type = 6)
+            LEFT JOIN request_file s ON (s.group_id = g.group_id AND s.type = 7)
+
+        <include refid="requestFileGroupFilterWhere"/>
+
+        <if test="sortProperty != null">
+            <choose>
+                <when test="sortProperty == 'id'">ORDER BY  g."group_id"</when>
+                <when test="sortProperty == 'status'">ORDER BY f."status"</when>
+                <when test="sortProperty == 'firstName'">ORDER BY f."name"</when>
+                <when test="sortProperty == 'secondName'">ORDER BY s."name"</when>
+                <when test="sortProperty == 'service_provider'">ORDER BY f."name"</when>
+                <when test="sortProperty == 'month'">ORDER BY MONTH(f."begin_date")</when>
+                <when test="sortProperty == 'year'">ORDER BY YEAR(f."begin_date")</when>
+                <otherwise>ORDER BY f."${sortProperty}"</otherwise>
+            </choose>
+            <choose>
+                <when test="ascending">ASC</when>
+                <otherwise>DESC</otherwise>
+            </choose>
+        </if>
+
+        ${limit}
+    </select>
+
+    <select id="selectPrivilegeFilesGroupsCount" parameterType="ru.complitex.osznconnection.file.entity.RequestFileFilter"
+            resultType="long">
+        SELECT count(distinct g."group_id")
+        FROM (SELECT group_id FROM request_file WHERE type = 6 OR type = 7 GROUP BY group_id) g
+        LEFT JOIN request_file f ON (f.group_id = g.group_id AND f.type = 6)
+        LEFT JOIN request_file s ON (s.group_id = g.group_id AND s.type = 7)
+        <include refid="requestFileGroupFilterWhere"/>
+    </select>
+
+    <select id="selectPrivilegeFileGroup" resultMap="privilegeFileGroupResultMap" parameterType="long">
+        SELECT
+            g.group_id as gid,
+
+            f.id as f_id, f.group_id as f_group_id, f.loaded as f_loaded, f.name as f_name, f.directory as f_directory,
+            f.organization_id as f_organization_id, f."user_organization_id" as f_user_organization_id,
+            f.begin_date as f_begin_date, f.end_date as f_end_date, f.dbf_record_count as f_dbf_record_count,
+            f.length as f_length, f.check_sum as f_check_sum, f.type as f_type, f.status as f_status,
+
+            f.status as "status",
+
+            s.id as s_id, s.group_id as s_group_id, s.loaded as s_loaded, s.name as s_name, s.directory as s_directory,
+            s.organization_id as s_organization_id, s."user_organization_id" as s_user_organization_id,
+            s.begin_date as s_begin_date, s.end_date as   s_end_date, s.dbf_record_count as s_dbf_record_count,
+            s.length as s_length, s.check_sum as s_check_sum, s.type as s_type, s.status as s_status,
+
+            (SELECT count(1) FROM "dwelling_characteristics" WHERE "request_file_id" = f."id") AS loaded_record_count,
+            (SELECT count(1) FROM "dwelling_characteristics" WHERE "request_file_id" = f."id" AND "account_number" IS NOT NULL) AS binded_record_count,
+            (SELECT count(1) FROM "dwelling_characteristics" WHERE "request_file_id" = f."id" AND "status" = 215) AS filled_record_count
+
+        FROM (SELECT group_id FROM request_file WHERE type = 6 OR type = 7 GROUP BY group_id) g
+            LEFT JOIN request_file f ON (f.group_id = g.group_id AND f.type = 6)
+            LEFT JOIN request_file s ON (s.group_id = g.group_id AND s.type = 7)
+        where g.group_id = #{group}
+    </select>
+</mapper>

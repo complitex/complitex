@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.service;
 
-import org.complitex.common.exception.ExecuteException;
+import ru.complitex.common.exception.ExecuteException;
 
 /**
  * @author Pavel Sknar

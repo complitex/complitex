@@ -4,16 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>keconnection</artifactId>
-        <groupId>org.complitex.keconnection</groupId>
+        <groupId>ru.complitex.keconnection</groupId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>keconnection-tarif</artifactId>
-    <name>keconnection-tarif</name>
+
+    <name>KeConnection - Tarif</name>
 
     <dependencies>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-template</artifactId>
         </dependency>
     </dependencies>

@@ -15,15 +15,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-correction</artifactId>
         </dependency>
 	    <dependency>
@@ -59,18 +59,18 @@
             <artifactId>logback-classic</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.glassfish.main.extras</groupId>
             <artifactId>glassfish-embedded-all</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>test</scope>
         </dependency>
         <!--<dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-common</artifactId>
             <version>${complitex.version}</version>
             <type>test-jar</type>

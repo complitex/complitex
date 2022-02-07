@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.correction.service.CorrectionBean">
+    <resultMap id="correctionResultMap" type="ru.complitex.correction.entity.Correction">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="external_id" property="externalId"/>
+        <result column="object_id" property="objectId"/>
+        <result column="correction" property="correction"/>
+        <result column="start_date" property="startDate"/>
+        <result column="end_date" property="endDate"/>
+
+        <result column="organization_id" property="organizationId"/>
+        <result column="user_organization_id" property="userOrganizationId"/>
+        <result column="entity_name" property="entityName"/>
+    </resultMap>
+
+    <!--suppress SqlResolve -->
+    <insert id="insertCorrection" parameterType="ru.complitex.correction.entity.Correction"
+            keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO "${entityName}_correction" (
+          <if test="parentId != null">"parent_id",</if>
+          <if test="additionalParentId != null">"additional_parent_id",</if>
+          <if test="additionalCorrection != null">"additional_correction",</if>
+          "external_id", "object_id", "correction", "start_date", "end_date", "organization_id", "user_organization_id", "module_id")
+        VALUES (
+          <if test="parentId != null">#{parentId},</if>
+          <if test="additionalParentId != null">#{additionalParentId},</if>
+          <if test="additionalCorrection != null">#{additionalCorrection},</if>
+          #{externalId}, #{objectId}, #{correction}, #{startDate}, #{endDate}, #{organizationId}, #{userOrganizationId}, #{moduleId})
+    </insert>
+
+    <!--suppress SqlResolve -->
+    <update id="updateCorrection" parameterType="ru.complitex.correction.entity.Correction">
+        UPDATE "${entityName}_correction" SET
+          <if test="parentId != null">"parent_id" = #{parentId},</if>
+          <if test="additionalParentId != null">"additional_parent_id" = #{additionalParentId},</if>
+          <if test="additionalCorrection != null">"additional_correction" = #{additionalCorrection},</if>
+          "organization_id" = #{organizationId}, "correction" = #{correction}, "object_id" = #{objectId},
+          "external_id" = #{externalId}, "user_organization_id" = #{userOrganizationId}, "start_date" = #{startDate},
+          "end_date" = #{endDate}
+        WHERE "id" = #{id}
+    </update>
+
+    <!--suppress SqlResolve -->
+    <delete id="deleteCorrection" parameterType="ru.complitex.correction.entity.Correction">
+        DELETE FROM "${entityName}_correction" WHERE "id" = #{id}
+    </delete>
+
+    <!--suppress SqlResolve -->
+    <sql id="selectCorrectionWhere">
+        <where>
+            <if test="object.parentId != null">AND c."parent_id" = #{object.parentId}</if>
+            <if test="object.additionalParentId != null">AND c."additional_parent_id" = #{object.additionalParentId}</if>
+            <if test="object.externalId != null">AND c."external_id" = #{object.externalId}</if>
+            <if test="object.objectId != null">AND c."object_id" = #{object.objectId}</if>
+            <if test="object.correction != null">AND upper(c."correction") = upper(#{object.correction})</if>
+            <if test="object.additionalCorrection != null">AND upper(c."additional_correction") = upper(#{object.additionalCorrection})</if>
+            <if test="object.startDate != null">AND c."start_date" = #{object.startDate}</if>
+            <if test="object.endDate != null">AND c."end_date" = #{object.endDate}</if>
+            <if test="object.organizationId != null">AND c."organization_id" = #{object.organizationId}</if>
+            <if test="object.userOrganizationId != null">AND c."user_organization_id" = #{object.userOrganizationId}</if>
+            <!--<if test="object.userOrganizationId == null">AND c."user_organization_id" is null</if>-->
+            <if test="userOrganizationsString != null">AND c."user_organization_id" in ${userOrganizationsString}</if>
+        </where>
+    </sql>
+
+    <sql id="selectCorrectionOrderLimit">
+<!--        <if test="sortProperty != null">order by #{sortProperty} #{asc}</if>-->
+        <if test="count > 0">limit #{first}, #{count}</if>
+    </sql>
+
+    <!--suppress SqlResolve -->
+    <select id="selectCorrection" resultMap="correctionResultMap" parameterType="ru.complitex.correction.entity.Correction">
+        SELECT c.*, '${entityName}' entity_name FROM "${entityName}_correction" c WHERE c."id" = #{id}
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectCorrections" parameterType="ru.complitex.common.entity.FilterWrapper" resultMap="correctionResultMap">
+        select c.*, '${object.entityName}' entity_name from "${object.entityName}_correction" c
+        <include refid="selectCorrectionWhere"/>
+        <include refid="selectCorrectionOrderLimit"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectCorrectionsCount" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="long">
+        SELECT count(*) FROM "${object.entityName}_correction" c
+        <include refid="selectCorrectionWhere"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectObjectIds" parameterType="map" resultType="long">
+        SELECT DISTINCT e."object_id" FROM "${entityName}" e
+        LEFT JOIN "${entityName}_attribute" attr ON (attr."status" = 1 AND e."object_id" = attr."object_id")
+        LEFT JOIN "${entityName}_string_value" sc ON (sc."id" = attr."value_id")
+        WHERE e."status" = 1 AND attr."entity_attribute_id" = #{entityAttributeId} AND upper(sc."value") = upper(#{correction})
+    </select>
+</mapper>

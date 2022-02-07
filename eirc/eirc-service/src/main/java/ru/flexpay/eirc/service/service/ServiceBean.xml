@@ -3,7 +3,7 @@
 
 <mapper namespace="ru.flexpay.eirc.service.service.ServiceBean">
 
-    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
+    <cache type="ru.complitex.common.mybatis.caches.EhcacheCache"/>
     <!--cache-ref namespace="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean"/-->
 
     <resultMap id="Service" type="ru.flexpay.eirc.service.entity.Service">
@@ -18,7 +18,7 @@
         </collection>
     </resultMap>
 
-    <resultMap id="Locale" type="org.complitex.common.entity.StringLocale">
+    <resultMap id="Locale" type="ru.complitex.common.entity.StringLocale">
         <constructor>
             <idArg column="service_locale_id"     javaType="Long"/>
             <arg   column="service_locale_name"   javaType="String"/>
@@ -57,13 +57,13 @@
 
     <sql id="serviceJoin">
         left join `service_string_value` sn on s.`id` = sn.`service_id`
-        <if test="_parameter instanceof org.complitex.common.entity.FilterWrapper and locale != null">
+        <if test="_parameter instanceof ru.complitex.common.entity.FilterWrapper and locale != null">
             and sn.`locale_id` = #{locale.id}
         </if>
         left join `locale` sl on sn.`locale_id` = sl.`id`
     </sql>
 
-    <select id="selectServices" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="Service" flushCache="false" useCache="true">
+    <select id="selectServices" parameterType="ru.complitex.common.entity.FilterWrapper" resultMap="Service" flushCache="false" useCache="true">
         select
         <include refid="serviceColumns"/>
         from `service` s
@@ -83,7 +83,7 @@
         </if>
     </select>
 
-    <select id="countServices" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long" flushCache="false" useCache="true">
+    <select id="countServices" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="long" flushCache="false" useCache="true">
         select count(distinct s.`id`) from `service` s
           left join `service_string_value` sn on s.`id` = sn.`service_id`
         <include refid="serviceWhere"/>

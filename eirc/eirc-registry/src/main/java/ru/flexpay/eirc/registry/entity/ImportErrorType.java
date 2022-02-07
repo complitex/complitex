@@ -1,11 +1,11 @@
 package ru.flexpay.eirc.registry.entity;
 
 import com.google.common.collect.ImmutableMap;
-import org.complitex.common.entity.IFixedIdType;
-import org.complitex.common.entity.ILocalizedType;
-import org.complitex.common.util.ResourceUtil;
-import org.complitex.correction.entity.AddressLinkStatus;
-import org.complitex.correction.entity.LinkStatus;
+import ru.complitex.common.entity.IFixedIdType;
+import ru.complitex.common.entity.ILocalizedType;
+import ru.complitex.common.util.ResourceUtil;
+import ru.complitex.correction.entity.AddressLinkStatus;
+import ru.complitex.correction.entity.LinkStatus;
 
 import java.util.Locale;
 import java.util.Map;

@@ -2,33 +2,33 @@
 <template>
     <web-components>
         <domain-object-permission-panel>
-            org.complitex.organization.web.component.DomainObjectPermissionPanel
+            ru.complitex.organization.web.component.DomainObjectPermissionPanel
         </domain-object-permission-panel>
         <organization-permission-panel>
-            org.complitex.organization.web.component.OrganizationPermissionPanel
+            ru.complitex.organization.web.component.OrganizationPermissionPanel
         </organization-permission-panel>
         <user-organization-picker>
-            org.complitex.organization.web.component.UserOrganizationPicker
+            ru.complitex.organization.web.component.UserOrganizationPicker
         </user-organization-picker>
     </web-components>
     <sidebar>
-        <menu class="org.complitex.keconnection.web.admin.AdminMenu"/>
+        <menu class="ru.complitex.keconnection.web.admin.AdminMenu"/>
 
-        <menu class="org.complitex.keconnection.heatmeter.web.consumption.ConsumptionMenu"/>
-        <menu class="org.complitex.keconnection.heatmeter.web.HeatmeterMenu"/>
-        <menu class="org.complitex.keconnection.address.menu.KeConnectionAddressMenu"/>
-        <menu class="org.complitex.address.web.AddressSyncMenu"/>
-        <menu class="org.complitex.keconnection.heatmeter.web.correction.CorrectionMenu"/>
-        <menu class="org.complitex.keconnection.organization.menu.KeConnectionOrganizationMenu"/>
+        <menu class="ru.complitex.keconnection.heatmeter.web.consumption.ConsumptionMenu"/>
+        <menu class="ru.complitex.keconnection.heatmeter.web.HeatmeterMenu"/>
+        <menu class="ru.complitex.keconnection.address.menu.KeConnectionAddressMenu"/>
+        <menu class="ru.complitex.address.web.AddressSyncMenu"/>
+        <menu class="ru.complitex.keconnection.heatmeter.web.correction.CorrectionMenu"/>
+        <menu class="ru.complitex.keconnection.organization.menu.KeConnectionOrganizationMenu"/>
         
-        <menu class="org.complitex.keconnection.tarif.menu.TarifMenu"/>
-        <menu class="org.complitex.keconnection.heatmeter.web.ServiceMenu"/>
+        <menu class="ru.complitex.keconnection.tarif.menu.TarifMenu"/>
+        <menu class="ru.complitex.keconnection.heatmeter.web.ServiceMenu"/>
 
-        <menu class="org.complitex.keconnection.heatmeter.web.HeatmeterTypeMenu"/>
-        <menu class="org.complitex.keconnection.organization_type.menu.KeConnectionOrganizationTypeMenu"/>
+        <menu class="ru.complitex.keconnection.heatmeter.web.HeatmeterTypeMenu"/>
+        <menu class="ru.complitex.keconnection.organization_type.menu.KeConnectionOrganizationTypeMenu"/>
 
-        <menu class="org.complitex.address.menu.AddressDescriptionMenu"/>
-        <menu class="org.complitex.keconnection.tarif.menu.TarifDescriptionMenu"/>
-        <menu class="org.complitex.organization.web.OrganizationDescriptionTemplateMenu"/>
+        <menu class="ru.complitex.address.menu.AddressDescriptionMenu"/>
+        <menu class="ru.complitex.keconnection.tarif.menu.TarifDescriptionMenu"/>
+        <menu class="ru.complitex.organization.web.OrganizationDescriptionTemplateMenu"/>
     </sidebar>
 </template>

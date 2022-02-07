@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.service_provider_account.entity;
 
-import org.complitex.common.entity.Attribute;
+import ru.complitex.common.entity.Attribute;
 
 /**
  * @author Pavel Sknar

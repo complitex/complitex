@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.complitex</groupId>
+        <groupId>ru.complitex</groupId>
         <artifactId>complitex</artifactId>
         <version>8.0.0-SNAPSHOT</version>
     </parent>
@@ -15,15 +15,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-template</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization-type</artifactId>
         </dependency>
     </dependencies>

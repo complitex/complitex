@@ -14,39 +14,39 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-resources</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-images</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-template</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-address</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization-type</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
         <dependency>

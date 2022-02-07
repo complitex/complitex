@@ -2,8 +2,8 @@ package ru.flexpay.eirc.organization;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.organization.DefaultOrganizationModule;
-import org.complitex.organization.IOrganizationModule;
+import ru.complitex.organization.DefaultOrganizationModule;
+import ru.complitex.organization.IOrganizationModule;
 import ru.flexpay.eirc.organization.strategy.EircOrganizationStrategy;
 
 import javax.ejb.EJB;

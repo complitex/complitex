@@ -5,8 +5,8 @@
 package ru.flexpay.eirc.web.template;
 
 import org.apache.wicket.RestartResponseException;
-import org.complitex.template.web.pages.welcome.WelcomePage;
-import org.complitex.template.web.security.SecurityRole;
+import ru.complitex.template.web.pages.welcome.WelcomePage;
+import ru.complitex.template.web.security.SecurityRole;
 
 /**
  *

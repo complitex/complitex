@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.address.strategy.building.BuildingStrategy">
+    <select id="selectBuildings" parameterType="ru.complitex.common.entity.DomainObjectFilter"
+            resultMap="ru.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
+        SELECT DISTINCT e."object_id", e."start_date", e."end_date", e."status", e."parent_id", e."parent_entity_id", e."permission_id"
+            FROM "building" e WHERE
+
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+
+        AND (e."parent_id" = #{additionalParams.buildingAddressId} OR EXISTS
+            (SELECT 1 FROM "building_attribute" ba WHERE ba."object_id" = e."object_id" AND ba."status" = 1
+              AND ba."entity_attribute_id" = 501 AND ba."value_id" = #{additionalParams.buildingAddressId}))
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectBuildingById" parameterType="ru.complitex.common.entity.DomainObjectFilter"
+            resultMap="ru.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
+        SELECT e.* FROM "${entityName}" e WHERE (e."status" IN (1, 0)) AND e."object_id" = #{objectId}
+            <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectBuildingAddresses" parameterType="long" resultType="long">
+        SELECT addr."object_id" FROM "building_address" addr WHERE addr."object_id" IN
+            (SELECT b."parent_id" FROM "building" b WHERE b."object_id" = #{buildingId})
+        UNION
+        SELECT addr."object_id" FROM "building_address" addr WHERE
+            EXISTS(SELECT 1 FROM "building_attribute" ba WHERE ba."object_id" = #{buildingId} AND ba."entity_attribute_id" = 501 AND ba."value_id" = addr."object_id")
+    </select>
+
+    <select id="selectHistoryObject" parameterType="ru.complitex.common.entity.DomainObjectFilter"
+            resultMap="ru.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap">
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlSelectHistoryObject"/>
+    </select>
+
+    <update id="updateBuildingActivity" parameterType="map">
+        UPDATE "building" e SET "status" = #{status} WHERE e."object_id" = #{buildingId}
+            AND
+            <choose>
+                <when test="enabled">
+                    e."status" = 1
+                </when>
+                <otherwise>
+                    e."status" = 0
+                </otherwise>
+            </choose>
+    </update>
+
+    <select id="selectBuildingObjectIds" parameterType="map" resultType="long">
+        SELECT distinct b."object_id" FROM "building" b
+      LEFT JOIN "building_attribute" num ON (num."object_id" = b."object_id" AND num."status" = 1 AND
+        num."entity_attribute_id" = 500)
+      LEFT JOIN "building_string_value" num_sc ON (num_sc."id" = num."value_id")
+      LEFT JOIN "building_attribute" corp ON (corp."object_id" = b."object_id" AND corp."status" = 1
+        AND corp."entity_attribute_id" = 501)
+      LEFT JOIN "building_string_value" corp_sc ON (corp_sc."id" = corp."value_id")
+        WHERE b."status" = 1 AND num_sc."value" = #{number}
+        AND
+        <choose>
+            <when test="corp == null">
+                corp_sc."value" is null
+            </when>
+            <otherwise>
+                corp_sc."value" = #{corp}
+            </otherwise>
+        </choose>
+        AND b."parent_entity_id" = #{parentEntityId} AND b."parent_id" = #{parentId}
+    </select>
+
+    <resultMap id="buildingCodeResultMap" type="ru.complitex.address.strategy.building.entity.BuildingCode">
+        <id column="id" property="id"/>
+        <result column="organization_id" property="organizationId"/>
+        <result column="code" property="buildingCode"/>
+        <result column="building_id" property="buildingId"/>
+    </resultMap>
+
+    <select id="getBuildingCodes" parameterType="map" resultMap="buildingCodeResultMap">
+        SELECT * FROM "building_code" WHERE "id" IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertBuildingCode"
+            parameterType="ru.complitex.address.strategy.building.entity.BuildingCode"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO "building_code" ("organization_id", "code", "building_id")
+            VALUES (#{organizationId}, #{buildingCode}, #{buildingId})
+    </insert>
+
+    <delete id="deleteBuildingCodes" parameterType="map">
+        DELETE FROM "building_code" WHERE "id" IN
+          (SELECT a."value_id" FROM "building_attribute" a WHERE a."object_id" = #{objectId}
+            AND a."entity_attribute_id" = #{buildingCodesAT})
+    </delete>
+
+    <select id="selectBuildingCodeIdByCode" parameterType="map" resultType="long">
+        SELECT "id" FROM "building_code" WHERE "organization_id" = #{organizationId} AND "code" = #{buildingCode}
+    </select>
+
+    <select id="selectBuildingCodeIdByBuilding" parameterType="map" resultType="long">
+        SELECT "id" FROM "building_code" WHERE "organization_id" = #{organizationId} AND "building_id" = #{buildingId}
+    </select>
+
+    <select id="selectBuildingCodeByOrganizationCode" parameterType="map" resultMap="buildingCodeResultMap">
+        SELECT bc.* FROM building_code bc
+            LEFT JOIN organization_attribute oa ON oa.object_id = bc.organization_id
+            LEFT JOIN organization_string_value osc ON osc.id = oa.value_id
+        WHERE bc.building_id = #{buildingId} AND oa.entity_attribute_id = 901 AND oa.end_date IS NULL
+              AND osc.value = #{organizationCode}
+    </select>
+
+    <sql id="selectByParent">
+        FROM "building" e WHERE e."status" IN (1, 0) AND e."parent_id" = #{addressId}
+    </sql>
+
+    <sql id="selectByReference">
+        FROM "building" e
+        JOIN "building_attribute" ref ON (ref."status" = 1 AND ref."object_id" = e."object_id"
+            AND ref."entity_attribute_id" = 501 AND ref."value_id" = #{addressId})
+        WHERE e."status" IN (1, 0)
+    </sql>
+
+    <sql id="selectReferenceAddress">
+        FROM "building_address" e
+        JOIN "building_attribute" ba ON (ba."status" = 1 AND ba."entity_attribute_id" = 501
+            AND ba."object_id" = #{buildingId} AND e."object_id" = ba."value_id")
+        WHERE e."status" IN (1, 0)
+    </sql>
+
+    <sql id="selectParentAddress">
+        FROM "building_address" e
+        JOIN "building" b ON ((b."status" IN (1, 0)) AND b."object_id" = #{buildingId} AND b."parent_id" = e."object_id")
+        WHERE e."status" IN (1, 0)
+    </sql>
+
+    <!--suppress SqlResolve -->
+    <select id="selectBuildingPermissionInfoByParent" parameterType="long"
+            resultMap="ru.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
+        SELECT e."object_id", e."permission_id"
+        <include refid="selectByParent"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectBuildingPermissionInfoByReference" parameterType="long"
+            resultMap="ru.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
+        SELECT DISTINCT e."object_id", e."permission_id"
+        <include refid="selectByReference"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectReferenceAddressPermissionInfo" parameterType="long"
+            resultMap="ru.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
+        SELECT DISTINCT e."object_id", e."permission_id"
+        <include refid="selectReferenceAddress"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectParentAddressPermissionInfo" parameterType="long"
+            resultMap="ru.complitex.common.strategy.DomainObjectStrategy.permissionInfoResultMap">
+        SELECT DISTINCT e."object_id", e."permission_id"
+        <include refid="selectParentAddress"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectBuildingActivityInfoByParent" parameterType="long" resultType="long">
+        SELECT e."object_id"
+        <include refid="selectByParent"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectBuildingActivityInfoByReference" parameterType="long" resultType="long">
+        SELECT e."object_id"
+        <include refid="selectByReference"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectReferenceAddressActivityInfo" parameterType="long" resultType="long">
+        SELECT e."object_id"
+        <include refid="selectReferenceAddress"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectParentAddressActivityInfo" parameterType="long" resultType="long">
+        SELECT e."object_id"
+        <include refid="selectParentAddress"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <update id="updateBuildingAddressActivity" parameterType="map">
+        UPDATE "building_address" e SET "status" = #{status} WHERE e."object_id" = #{addressId}
+        AND
+        <choose>
+            <when test="enabled">
+                e."status" = 1
+            </when>
+            <otherwise>
+                e."status" = 0
+            </otherwise>
+        </choose>
+    </update>
+
+    <sql id="orderBy">
+        <if test="orderByAttributeTypeId != null">
+            <choose>
+                <when test="orderByAttributeTypeId > 0">
+                    <if test="orderByAttributeTypeId == 1500 or orderByAttributeTypeId == 1501 or orderByAttributeTypeId == 1502">
+                        ORDER BY LPAD(
+                        (SELECT sc."value" FROM "${entityName}_string_value" sc WHERE sc."locale_id" = #{localeId} AND sc."id" =
+                        (SELECT orderByAttr."value_id" FROM "${entityName}_attribute" orderByAttr WHERE orderByAttr."object_id" = e."object_id"
+                        AND orderByAttr."status" = 1 AND orderByAttr."entity_attribute_id" = #{orderByAttributeTypeId}
+                        )
+                        ), 15, ' ')
+                        <choose>
+                            <when test="asc">
+                                ASC
+                            </when>
+                            <otherwise>
+                                DESC
+                            </otherwise>
+                        </choose>
+                    </if>
+                </when>
+                <when test="orderByAttributeTypeId == -1">
+                    <if test="localeId != null">
+                        ORDER BY
+                        LPAD(
+                        (SELECT num_sc."value" FROM "building_address_string_value" num_sc
+                        WHERE num_sc."locale_id" = #{localeId} AND EXISTS(
+                        SELECT 1 FROM "building_address_attribute" num WHERE num."status" = 1
+                        AND num."object_id" = e."object_id" AND num."entity_attribute_id" = 1500 AND num."value_id" = num_sc."id")
+                        ), 15, ' '),
+                        LPAD(IFNULL((SELECT corp_sc."value" FROM "building_address_string_value" corp_sc
+                        WHERE corp_sc."locale_id" = #{localeId} AND EXISTS(
+                        SELECT 1 FROM "building_address_attribute" corp WHERE corp."status" = 1
+                        AND corp."object_id" = e."object_id" AND corp."entity_attribute_id" = 1501 AND corp."value_id" = corp_sc."id")
+                        ),''), 15, ' '),
+                        LPAD(IFNULL((SELECT structure_sc."value" FROM "building_address_string_value" structure_sc
+                        WHERE structure_sc."locale_id" = #{localeId} AND EXISTS(
+                        SELECT 1 FROM "building_address_attribute" structure WHERE structure."status" = 1
+                        AND structure."object_id" = e."object_id" AND structure."entity_attribute_id" = 1502 AND structure."value_id" = structure_sc."id")
+                        ),''), 15, ' ')
+                    </if>
+                </when>
+                <otherwise>
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+    <!--suppress SqlResolve -->
+    <select id="selectBuildingAddresses2" parameterType="ru.complitex.common.entity.DomainObjectFilter"
+            resultMap="ru.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap" >
+        SELECT e.*
+        FROM "building_address" e
+        <if test="additionalParams.districtId != null">
+            LEFT JOIN "building_attribute" ba ON (ba."status" = 1 AND ba."entity_attribute_id" = 501
+                AND ba."value_id" = e."object_id")
+            LEFT JOIN "building" b ON (b."object_id" = ba."object_id")
+            LEFT JOIN "building_attribute" d ON (d."status" = 1 AND d."entity_attribute_id" = 500)
+        </if>
+
+        WHERE
+
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlFilter"/>
+
+        <if test="additionalParams.districtId != null">
+            AND ba."value_id" = e."object_id" AND d."value_id" = #{additionalParams.districtId}
+        </if>
+
+        <include refid="orderBy"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
+    </select>
+</mapper>

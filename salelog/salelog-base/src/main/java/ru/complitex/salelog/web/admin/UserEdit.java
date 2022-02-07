@@ -13,19 +13,19 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.admin.Module;
-import org.complitex.admin.service.UserBean;
-import org.complitex.admin.strategy.UserInfoStrategy;
-import org.complitex.common.entity.*;
-import org.complitex.common.service.LogBean;
-import org.complitex.common.service.PreferenceBean;
-import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.common.util.CloneUtil;
-import org.complitex.common.web.component.DomainObjectInputPanel;
-import org.complitex.common.web.component.search.SearchComponentState;
-import org.complitex.template.web.component.LocalePicker;
-import org.complitex.template.web.security.SecurityRole;
-import org.complitex.template.web.template.FormTemplatePage;
+import ru.complitex.admin.Module;
+import ru.complitex.admin.service.UserBean;
+import ru.complitex.admin.strategy.UserInfoStrategy;
+import ru.complitex.common.entity.*;
+import ru.complitex.common.service.LogBean;
+import ru.complitex.common.service.PreferenceBean;
+import ru.complitex.common.strategy.StringLocaleBean;
+import ru.complitex.common.util.CloneUtil;
+import ru.complitex.common.web.component.DomainObjectInputPanel;
+import ru.complitex.common.web.component.search.SearchComponentState;
+import ru.complitex.template.web.component.LocalePicker;
+import ru.complitex.template.web.security.SecurityRole;
+import ru.complitex.template.web.template.FormTemplatePage;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
@@ -34,8 +34,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import static org.complitex.common.entity.UserGroup.GROUP_NAME.*;
-import static org.complitex.common.web.DictionaryFwSession.*;
+import static ru.complitex.common.entity.UserGroup.GROUP_NAME.*;
+import static ru.complitex.common.web.DictionaryFwSession.*;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

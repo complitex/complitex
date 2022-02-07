@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.address.strategy.apartment.ApartmentStrategy">
+    <select id="selectApartmentObjectIds" parameterType="map" resultType="long">
+        SELECT distinct a."object_id" FROM "apartment" a
+          JOIN "apartment_attribute" num ON (num."object_id" = a."object_id" AND num."status" = 1 AND num."entity_attribute_id" = 100)
+          JOIN "apartment_string_value" num_sc ON (num_sc."id" = num."value_id")
+        WHERE a."status" = 1 AND num_sc."value" = #{number} AND a."parent_id" = #{buildingId}
+    </select>
+</mapper>

@@ -10,17 +10,17 @@
             </run>
         </groups>
         <classes>
-            <class name="org.complitex.common.util.StringUtilTest"/>
+            <class name="ru.complitex.common.util.StringUtilTest"/>
         </classes>
     </test>
     <test name="DateUtilTest">
         <classes>
-            <class name="org.complitex.common.util.DateUtilTest"/>
+            <class name="ru.complitex.common.util.DateUtilTest"/>
         </classes>
     </test>
     <test name="BuildingNumberConverterTest">
         <classes>
-            <class name="org.complitex.common.util.BuildingNumberConverterTest"/>
+            <class name="ru.complitex.common.util.BuildingNumberConverterTest"/>
         </classes>
     </test>
 </suite>

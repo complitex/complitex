@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>pspoffice</artifactId>
-        <groupId>org.complitex.pspoffice</groupId>
+        <groupId>ru.complitex.pspoffice</groupId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,25 +13,27 @@
 
     <artifactId>pspoffice-backend</artifactId>
 
+    <name>Pspoffice - Backend</name>
+
     <dependencies>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-address</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-street</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-person</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.pspoffice</groupId>
+            <groupId>ru.complitex.pspoffice</groupId>
             <artifactId>pspoffice-api</artifactId>
         </dependency>
 

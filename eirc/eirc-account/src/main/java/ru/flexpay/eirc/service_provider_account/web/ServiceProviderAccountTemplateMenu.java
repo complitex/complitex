@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.template.web.security.SecurityRole;
-import org.complitex.template.web.template.ITemplateLink;
-import org.complitex.template.web.template.ResourceTemplateMenu;
+import ru.complitex.template.web.security.SecurityRole;
+import ru.complitex.template.web.template.ITemplateLink;
+import ru.complitex.template.web.template.ResourceTemplateMenu;
 import ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean;
 import ru.flexpay.eirc.service_provider_account.web.list.ServiceProviderAccountList;
 

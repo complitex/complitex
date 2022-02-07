@@ -3,8 +3,8 @@ package ru.flexpay.eirc.registry.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.ibatis.session.SqlSession;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.AbstractBean;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.service.AbstractBean;
 import ru.flexpay.eirc.registry.entity.*;
 
 import javax.ejb.Stateless;

@@ -4,8 +4,8 @@
  */
 package ru.complitex.salelog.web;
 
-import org.complitex.template.web.ComplitexWebApplication;
-import org.complitex.template.web.component.toolbar.ToolbarButton;
+import ru.complitex.template.web.ComplitexWebApplication;
+import ru.complitex.template.web.component.toolbar.ToolbarButton;
 
 import java.util.Collections;
 import java.util.List;

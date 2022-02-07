@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.correction.service.AddressCorrectionBean">
+    <select id="selectStreetCorrectionsByBuilding" resultMap="streetCorrectionResultMap" parameterType="map">
+        SELECT c.* FROM "street_correction" c
+            JOIN "building_correction" b ON (b."object_id" = #{buildingId} AND b."organization_id" = #{calcCenterId})
+        WHERE c."organization_id" = #{calcCenterId} AND c."object_id" = #{streetId}
+    </select>
+
+    <insert id="insertBuildingCorrection" parameterType="ru.complitex.correction.entity.Correction" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO "building_correction"("parent_id", "object_id", "external_id",  "correction", "additional_correction",
+          "start_date", "end_date", "organization_id", "user_organization_id", "module_id")
+        VALUES (#{streetId}, #{objectId}, #{externalId}, TO_CYRILLIC(#{correction}), TO_CYRILLIC(#{correctionCorp}), #{startDate}, #{endDate},
+           #{organizationId}, #{userOrganizationId}, #{moduleId})
+    </insert>
+
+    <update id="updateBuildingCorrection" parameterType="ru.complitex.correction.entity.Correction">
+        UPDATE "building_correction" set "parent_id" = #{streetId}, "organization_id" = #{organizationId}, "correction" = TO_CYRILLIC(#{correction}),
+            "additional_correction" = TO_CYRILLIC(#{correctionCorp}), "object_id" = #{objectId}, "external_id" = #{externalId},
+            "module_id" = #{moduleId}, "user_organization_id" = #{userOrganizationId}
+        WHERE "id" = #{id}
+    </update>
+
+    <select id="selectBuildingObjectExists" parameterType="map" resultType="boolean">
+        SELECT count(b."object_id") > 0 FROM "building" b
+            JOIN "building_attribute" num ON (num."object_id" = b."object_id" AND num."status" = 1
+              AND num."entity_attribute_id" = 500)
+            JOIN "building_string_value" num_sc ON (num_sc."id" = num."value_id")
+            LEFT JOIN "building_attribute" corp ON (corp."object_id" = b."object_id" AND corp."status" = 1
+              AND corp."entity_attribute_id" = 501)
+            LEFT JOIN "building_string_value" corp_sc ON (corp_sc."id" = corp."value_id")
+        WHERE b."status" = 1
+        AND TO_CYRILLIC(num_sc."value") = #{buildingNumber}
+        AND
+        <choose>
+            <when test="buildingCorp == null">
+                corp_sc."value" IS NULL
+            </when>
+            <otherwise>
+                TO_CYRILLIC(corp_sc."value") = #{buildingCorp}
+            </otherwise>
+        </choose>
+        AND
+        b."object_id" = #{objectId}
+    </select>
+
+    <sql id="buildingFilter">
+        <where>
+            <if test="internalObject != null">
+                <if test="cityObject != null">
+                    AND csc."value" LIKE CONCAT('%', #{cityObject}, '%')
+                </if>
+                <if test="streetObject != null">
+                    AND ssc."value" LIKE CONCAT('%', #{streetObject}, '%')
+                </if>
+                <if test="buildingObject != null">
+                    AND basc."value" LIKE CONCAT('%', #{buildingObject}, '%')
+                </if>
+                <if test="smallObject">
+                    AND (csc."value" LIKE CONCAT('%', #{internalObject}, '%')
+                    OR ssc."value" LIKE CONCAT('%', #{internalObject}, '%')
+                    OR basc."value" LIKE CONCAT('%', #{internalObject}, '%'))
+                </if>
+            </if>
+            <if test="correction != null">
+                <if test="cityCorrection != null">
+                    AND cc."correction" LIKE CONCAT('%', #{cityCorrection}, '%')
+                </if>
+                <if test="streetCorrection != null">
+                    AND sc."correction" LIKE CONCAT('%', #{streetCorrection}, '%')
+                </if>
+                <if test="buildingCorrection != null">
+                    AND c."correction" LIKE CONCAT('%', #{buildingCorrection}, '%')
+                </if>
+                <if test="smallCorrection">
+                    AND (cc."correction" LIKE CONCAT('%', #{correction}, '%')
+                    OR sc."correction" LIKE CONCAT('%', #{correction}, '%')
+                    OR c."correction" LIKE CONCAT('%', #{correction}, '%'))
+                </if>
+            </if>
+
+            <if test="externalId != null">
+                AND c."external_id" LIKE CONCAT('%', #{externalId}, '%')
+            </if>
+            <if test="organizationId != null">
+                AND c."organization_id" = #{organizationId}
+            </if>
+            <if test="userOrganizationId != null">
+                AND c."user_organization_id" = #{userOrganizationId}
+            </if>
+            <if test="moduleId != null">
+                AND c."module_id" = #{moduleId}
+            </if>
+            <if test="not admin">
+                <if test="outerOrganizationsString != null">
+                    AND (c."organization_id" in ${outerOrganizationsString})
+                </if>
+                AND (c."user_organization_id" IS NULL OR c."user_organization_id" IN ${userOrganizationsString})
+            </if>
+        </where>
+    </sql>
+
+    <sql id="buildingJoin">
+        LEFT JOIN "organization_attribute" oa ON (oa."object_id" = c."organization_id"
+        AND oa."status" = 1 AND oa."entity_attribute_id" = 900)
+        LEFT JOIN "organization_string_value" osc ON (osc."id" = oa."value_id" AND osc."locale_id" = #{localeId})
+        LEFT JOIN "organization_string_value" osc_sys ON (osc_sys."id" = oa."value_id" AND osc_sys."locale_id" = (SELECT l."id" FROM "locale" l WHERE l."system" = true))
+
+        LEFT JOIN "organization_attribute" oa_i ON (oa_i."object_id" = c."module_id"
+        AND oa_i."status" = 1 AND oa_i."entity_attribute_id" = 900)
+        LEFT JOIN "organization_string_value" osc_i ON (osc_i."id" = oa_i."value_id" AND osc_i."locale_id" = #{localeId})
+        LEFT JOIN "organization_string_value" osc_i_sys ON (osc_i_sys."id" = oa_i."value_id" AND osc_i_sys."locale_id" = (SELECT l."id" FROM "locale" l WHERE l."system" = true))
+
+        LEFT JOIN "organization_attribute" uoa ON (uoa."object_id" = c."user_organization_id"
+        AND uoa."status" = 1 AND uoa."entity_attribute_id" = 900)
+        LEFT JOIN "organization_string_value" uosc ON (uosc."id" = uoa."value_id" AND uosc."locale_id" = #{localeId})
+        LEFT JOIN "organization_string_value" uosc_sys ON (uosc_sys."id" = uoa."value_id" AND uosc_sys."locale_id" = (SELECT l."id" FROM "locale" l WHERE l."system" = true))
+
+        <if test="orderByClause == 'object' or internalObject != null">
+            LEFT JOIN "building" b ON (b."object_id" = c."object_id")
+            LEFT JOIN "building_address" ba ON (ba."object_id" = b."parent_id")
+            LEFT JOIN "building_address_attribute" baa ON (baa."object_id" = ba."object_id" AND baa."entity_attribute_id" = 1500)
+            LEFT JOIN "building_address_string_value" basc ON (basc."id" = baa."value_id" AND basc."locale_id" = #{localeId})
+
+            LEFT JOIN "street" s ON (s."object_id" = ba."parent_id")
+            LEFT JOIN "street_attribute" sa ON (sa."object_id" = ba."parent_id")
+            LEFT JOIN "street_string_value" ssc ON (ssc."id" = sa."value_id" AND ssc."locale_id" = #{localeId})
+
+            LEFT JOIN "city" ON ("city"."object_id" = s."parent_id")
+            LEFT JOIN "city_attribute" ca ON (ca."object_id" = s."parent_id")
+            LEFT JOIN "city_string_value" csc ON (csc."id" = ca."value_id" AND csc."locale_id" = #{localeId})
+        </if>
+
+        <if test="orderByClause == 'correction' or correction != null">
+            LEFT JOIN "street_correction" sc ON (sc."id" = c."parent_id")
+            LEFT JOIN "city_correction" cc ON (cc."id" = sc."parent_id")
+        </if>
+    </sql>
+</mapper>

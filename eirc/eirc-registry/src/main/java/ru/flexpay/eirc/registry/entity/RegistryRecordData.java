@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.entity;
 
-import org.complitex.common.entity.PersonalName;
-import org.complitex.correction.entity.AddressLinkData;
+import ru.complitex.common.entity.PersonalName;
+import ru.complitex.correction.entity.AddressLinkData;
 import ru.flexpay.eirc.dictionary.entity.Address;
 import ru.flexpay.eirc.dictionary.entity.Person;
 

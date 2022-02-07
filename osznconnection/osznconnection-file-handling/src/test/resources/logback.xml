@@ -12,5 +12,5 @@
     <appender-ref ref="STDOUT" />
   </root>
 
-  <logger name="org.complitex" level="DEBUG"/>
+  <logger name="ru.complitex" level="DEBUG"/>
 </configuration>

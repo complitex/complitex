@@ -16,11 +16,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-address</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
         <dependency>
@@ -34,6 +34,10 @@
         <dependency>
             <artifactId>wicket-jquery-ui-plugins</artifactId>
             <groupId>com.googlecode.wicket-jquery-ui</groupId>
+        </dependency>
+        <dependency>
+            <groupId>ru.complitex</groupId>
+            <artifactId>complitex-common</artifactId>
         </dependency>
     </dependencies>
 </project>

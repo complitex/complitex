@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service;
 
 import com.google.common.collect.Sets;
-import org.complitex.common.exception.ExecuteException;
+import ru.complitex.common.exception.ExecuteException;
 
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.Lock;

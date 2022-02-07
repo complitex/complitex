@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.pspoffice.person.strategy.service.BuildingsGridBean">
+    
+    <sql id="from">
+        FROM `building` b 
+            JOIN `building_address` addr ON (addr.`status` = 1 AND ((b.`parent_id` = addr.`object_id`) OR
+            EXISTS(SELECT 1 FROM `building_attribute` ba WHERE ba.`object_id` = b.`object_id` AND ba.`status` = 1
+                AND ba.`entity_attribute_id` = ${additionalAddressAT} AND ba.`value_id` = addr.`object_id`)))
+                
+            JOIN `building_address_attribute` num_a ON (num_a.`object_id` = addr.`object_id` AND num_a.`status` = 1
+                    AND num_a.`entity_attribute_id` = ${buildingAddressNumberAT})
+            LEFT JOIN `building_address_string_value` num ON (num.`id` = num_a.`value_id`)
+            
+            LEFT JOIN `building_attribute` distr_a ON (distr_a.`status` = 1 AND distr_a.`object_id` = b.`object_id`
+                AND distr_a.`entity_attribute_id` = ${buildingDistrictAT})
+            LEFT JOIN `district` d ON (d.`status` = 1 AND d.`object_id` = distr_a.`value_id`)
+            
+            LEFT JOIN `street` s ON (s.`status` = 1 AND
+                s.`object_id` = addr.`parent_id` AND addr.`parent_entity_id` = 300)
+            
+            <if test="sortLocaleId != null">
+                LEFT JOIN `building_address_string_value` num_sort ON (num_sort.`id` = num_a.`value_id`
+                    AND num_sort.`locale_id` = #{sortLocaleId})
+                    
+                LEFT JOIN `building_address_attribute` corp_a ON (corp_a.`object_id` = addr.`object_id` 
+                    AND corp_a.`status` = 1 AND corp_a.`entity_attribute_id` = ${buildingAddressCorpAT})
+                LEFT JOIN `building_address_string_value` corp ON (corp.`id` = corp_a.`value_id` AND corp.`locale_id` = #{sortLocaleId})
+
+                LEFT JOIN `building_address_attribute` struct_a ON (struct_a.`object_id` = addr.`object_id` 
+                    AND struct_a.`status` = 1 AND struct_a.`entity_attribute_id` = ${buildingAddressStructureAT})
+                LEFT JOIN `building_address_string_value` struct ON (struct.`id` = struct_a.`value_id`
+                    AND struct.`locale_id` = #{sortLocaleId})
+                    
+                LEFT JOIN `street_attribute` s_a ON (s_a.`object_id` = s.`object_id` AND s_a.`status` = 1
+                    AND s_a.`entity_attribute_id` = ${streetNameAT})
+                LEFT JOIN `street_string_value` street ON (street.`id` = s_a.`value_id` AND street.`locale_id` = #{sortLocaleId})
+
+                LEFT JOIN `street_attribute` s_type ON (s_type.`object_id` = s.`object_id` AND s_type.`status` = 1
+                    AND s_type.`entity_attribute_id` = ${streetTypeAT})
+
+                LEFT JOIN `street_type_attribute` stype_a ON (stype_a.`object_id` = s_type.`object_id` 
+                    AND stype_a.`status` = 1 AND stype_a.`entity_attribute_id` = ${streetTypeNameAT})
+                LEFT JOIN `street_type_string_value` stype ON (stype.`id` = stype_a.`value_id` AND stype.`locale_id` = #{sortLocaleId})
+            </if>
+    </sql>
+    <sql id="where">
+        WHERE 
+            b.`status` = 1
+            <if test="buildingPermissionString != null">
+                AND b.`permission_id` IN ${buildingPermissionString}
+            </if>
+            AND (
+                (addr.`parent_id` = #{cityId} AND addr.`parent_entity_id` = 400) OR 
+                (s.`parent_id` = #{cityId} AND s.`parent_entity_id` = 400)
+            )
+            <if test="districtId != null">
+                AND d.`object_id` = #{districtId}
+            </if>
+            <if test="streetId != null">
+                AND s.`object_id` = #{streetId}
+            </if>
+            <if test="buildingNumber != null">
+                AND num.`value` = #{buildingNumber}
+            </if>
+    </sql>
+    
+    <select id="count" parameterType="map" resultType="long">
+        SELECT COUNT(DISTINCT b.`object_id`)
+            <include refid="ru.complitex.pspoffice.person.strategy.service.BuildingsGridBean.from"/>
+            <include refid="ru.complitex.pspoffice.person.strategy.service.BuildingsGridBean.where"/>
+    </select>
+
+    <select id="find" resultType="hashmap" parameterType="map">
+        SELECT DISTINCT b.`object_id` buildingId,
+                ((SELECT COUNT(1) FROM `apartment` a WHERE a.`status` = 1 AND a.`parent_id` = b.`object_id`
+                    AND a.`parent_entity_id` = 500
+                     <if test="apartmentPermissionString != null">
+                        AND a.`permission_id` IN ${apartmentPermissionString}
+                     </if>) + 
+                 (SELECT COUNT(1) FROM `room` r WHERE r.`status` = 1 AND r.`parent_id` = b.`object_id`
+                    AND r.`parent_entity_id` = 500
+                     <if test="roomPermissionString != null">
+                        AND r.`permission_id` IN ${roomPermissionString}
+                     </if>)) apartments
+        
+        <include refid="ru.complitex.pspoffice.person.strategy.service.BuildingsGridBean.from"/>
+        <include refid="ru.complitex.pspoffice.person.strategy.service.BuildingsGridBean.where"/>
+        
+        ORDER BY street.`value`, stype.`value`,
+            LPAD(num_sort.`value`, 15, ' '), LPAD(corp.`value`, 15, ' '), LPAD(struct.`value`, 15, ' ')
+            
+        LIMIT ${first},${count}
+    </select>
+</mapper>

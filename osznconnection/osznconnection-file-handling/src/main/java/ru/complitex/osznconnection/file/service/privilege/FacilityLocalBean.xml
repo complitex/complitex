@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.osznconnection.file.service.privilege.FacilityLocalBean">
+    <resultMap id="facilityLocalResultMap" type="ru.complitex.osznconnection.file.entity.privilege.FacilityLocal"
+               extends="ru.complitex.osznconnection.file.service.AbstractRequestBean.abstractRequest">
+        <association property="dbfFields" javaType="map">
+            <result column="COD" property="COD"/>
+            <result column="CDPR" property="CDPR"/>
+            <result column="NCARD" property="NCARD"/>
+            <result column="IDCODE" property="IDCODE"/>
+            <result column="PASP" property="PASP"/>
+            <result column="FIO" property="FIO"/>
+            <result column="IDPIL" property="IDPIL"/>
+            <result column="PASPPIL" property="PASPPIL"/>
+            <result column="FIOPIL" property="FIOPIL"/>
+            <result column="INDEX" property="INDEX"/>
+            <result column="NAMUL" property="NAMUL"/>
+            <result column="CDUL" property="CDUL"/>
+            <result column="HOUSE" property="HOUSE"/>
+            <result column="BUILD" property="BUILD"/>
+            <result column="APT" property="APT"/>
+            <result column="LGCODE" property="LGCODE"/>
+            <result column="KAT" property="KAT"/>
+            <result column="YEARIN" property="YEARIN"/>
+            <result column="MONTHIN" property="MONTHIN"/>
+            <result column="YEAR" property="YEAR"/>
+            <result column="MONTH" property="MONTH"/>
+            <result column="RAH" property="RAH"/>
+            <result column="RIZN" property="RIZN"/>
+            <result column="TARIF" property="TARIF"/>
+            <result column="VL" property="VL"/>
+            <result column="PLZAG" property="PLZAG"/>
+            <result column="PLPIL" property="PLPIL"/>
+            <result column="TARIFS" property="TARIFS"/>
+            <result column="TARIFN" property="TARIFN"/>
+            <result column="SUM" property="SUM"/>
+            <result column="LGKOL" property="LGKOL"/>
+            <result column="SUMPER" property="SUMPER"/>
+            <result column="DATN" property="DATN"/>
+            <result column="DATK" property="DATK"/>
+            <result column="PSN" property="PSN"/>
+            <result column="SUMM" property="SUMM"/>
+
+            <result column="DEPART" property="DEPART"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertFacilityLocalList" parameterType="list">
+        INSERT INTO "facility_local"
+        (
+        <trim suffixOverrides=",">
+            "request_file_id",
+            <foreach collection="list[0].dbfFields.keys" item="key">
+                "${key}",
+            </foreach>
+        </trim>
+        )
+        VALUES
+        <foreach collection="list" separator="," item="item">
+            (
+            <trim suffixOverrides=",">
+                #{item.requestFileId},
+                <foreach collection="item.dbfFields.keys" item="key">
+                    #{item.dbfFields.${key}},
+                </foreach>
+            </trim>
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectFacilityLocal" resultMap="facilityLocalResultMap" parameterType="long">
+        SELECT * FROM "facility_local" WHERE "request_file_id" = #{id}
+    </select>
+
+    <select id="selectFacilityLocalList" resultMap="facilityLocalResultMap" parameterType="ru.complitex.common.entity.FilterWrapper">
+        SELECT * FROM "facility_local" WHERE "request_file_id" = #{object.requestFileId} ${limit}
+    </select>
+
+    <select id="selectFacilityLocalListCount" resultType="long" parameterType="ru.complitex.common.entity.FilterWrapper">
+        SELECT count(id) FROM "facility_local" WHERE "request_file_id" = #{object.requestFileId}
+    </select>
+
+    <delete id="deleteFacilityLocal" parameterType="long">
+        DELETE FROM "facility_local" WHERE "request_file_id" = #{id}
+    </delete>
+</mapper>

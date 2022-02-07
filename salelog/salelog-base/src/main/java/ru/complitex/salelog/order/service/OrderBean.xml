@@ -11,12 +11,12 @@
         <result column="order_region_id" property="regionId"/>
         <result column="order_address" property="address"/>
         <result column="order_comment" property="comment"/>
-        <result column="order_status_code" property="status" typeHandler="org.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
+        <result column="order_status_code" property="status" typeHandler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler"/>
         <result column="order_begin_date" property="beginDate"/>
         <result column="order_end_date" property="endDate"/>
 
         <association property="customer" columnPrefix="order_" 
-                     resultMap="org.complitex.common.service.PersonBean.Person"/>
+                     resultMap="ru.complitex.common.service.PersonBean.Person"/>
 
         <association property="callGirl" resultMap="ru.complitex.salelog.service.CallGirlBean.CallGirl"/>
 
@@ -130,7 +130,7 @@
         </if>
     </sql>
 
-    <select id="selectOrders" parameterType="org.complitex.common.entity.FilterWrapper"
+    <select id="selectOrders" parameterType="ru.complitex.common.entity.FilterWrapper"
             resultMap="Order">
 
         select oo.*, <include refid="productSaleColumns"/> from (select
@@ -190,7 +190,7 @@
         left join `product` p on ps.`product_id` = p.`id`
     </select>
 
-    <select id="countOrders" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
+    <select id="countOrders" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="long">
         select count(distinct o.`object_id`) from `order` o
         left join `call_girl` cg on o.`call_girl_id` = cg.`id`
         <if test="object.productCode != null">

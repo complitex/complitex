@@ -1,7 +1,7 @@
 package ru.complitex.pspoffice.backend.adapter;
 
-import org.complitex.pspoffice.ownership.strategy.OwnershipFormStrategy;
-import org.complitex.pspoffice.person.strategy.entity.ApartmentCard;
+import ru.complitex.pspoffice.ownership.strategy.OwnershipFormStrategy;
+import ru.complitex.pspoffice.person.strategy.entity.ApartmentCard;
 import ru.complitex.pspoffice.api.model.*;
 
 import java.util.Collections;

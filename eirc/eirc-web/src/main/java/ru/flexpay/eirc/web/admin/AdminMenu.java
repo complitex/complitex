@@ -2,13 +2,13 @@ package ru.flexpay.eirc.web.admin;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.address.web.ImportPage;
-import org.complitex.admin.web.AdminTemplateMenu;
-import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.template.web.pages.ConfigEdit;
-import org.complitex.template.web.template.ITemplateLink;
+import ru.complitex.address.web.ImportPage;
+import ru.complitex.admin.web.AdminTemplateMenu;
+import ru.complitex.common.strategy.IStrategy;
+import ru.complitex.common.strategy.StrategyFactory;
+import ru.complitex.common.util.EjbBeanLocator;
+import ru.complitex.template.web.pages.ConfigEdit;
+import ru.complitex.template.web.template.ITemplateLink;
 import ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy;
 import ru.flexpay.eirc.dictionary.web.admin.EircConfigEdit;
 

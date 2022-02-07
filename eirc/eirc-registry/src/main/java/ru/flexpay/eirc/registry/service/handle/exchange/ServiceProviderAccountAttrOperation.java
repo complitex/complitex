@@ -1,10 +1,10 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.Status;
-import org.complitex.common.exception.AbstractException;
-import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.common.util.CloneUtil;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.entity.Status;
+import ru.complitex.common.exception.AbstractException;
+import ru.complitex.common.strategy.StringLocaleBean;
+import ru.complitex.common.util.CloneUtil;
 import ru.flexpay.eirc.registry.entity.Container;
 import ru.flexpay.eirc.registry.entity.Registry;
 import ru.flexpay.eirc.registry.entity.RegistryRecordData;

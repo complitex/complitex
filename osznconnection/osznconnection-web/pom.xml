@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.complitex.osznconnection</groupId>
+        <groupId>ru.complitex.osznconnection</groupId>
         <artifactId>osznconnection</artifactId>
         <version>8.0.0-SNAPSHOT</version>
     </parent>
@@ -15,55 +15,55 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-resources</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-images</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-template</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-address</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-correction</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-sync</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.osznconnection</groupId>
+            <groupId>ru.complitex.osznconnection</groupId>
             <artifactId>osznconnection-file-handling</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.osznconnection</groupId>
+            <groupId>ru.complitex.osznconnection</groupId>
             <artifactId>osznconnection-organization-type</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.osznconnection</groupId>
+            <groupId>ru.complitex.osznconnection</groupId>
             <artifactId>osznconnection-organization</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex.osznconnection</groupId>
+            <groupId>ru.complitex.osznconnection</groupId>
             <artifactId>osznconnection-address</artifactId>
         </dependency>
 

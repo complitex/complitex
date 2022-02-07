@@ -12,7 +12,7 @@ import java.util.Collection;
  * @author Artem
  */
 @Stateless
-public class EircOrganizationTypeStrategy extends org.complitex.organization_type.strategy.OrganizationTypeStrategy {
+public class EircOrganizationTypeStrategy extends ru.complitex.organization_type.strategy.OrganizationTypeStrategy {
 
     private static final String STRATEGY_NAME = EircOrganizationTypeStrategy.class.getSimpleName();
 

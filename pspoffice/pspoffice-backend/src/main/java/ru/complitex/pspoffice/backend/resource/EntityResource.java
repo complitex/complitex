@@ -2,9 +2,9 @@ package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.complitex.common.entity.Entity;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.strategy.EntityBean;
+import ru.complitex.common.entity.Entity;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.strategy.EntityBean;
 import ru.complitex.pspoffice.backend.adapter.EntityAdapter;
 
 import javax.ejb.EJB;

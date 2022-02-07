@@ -3,9 +3,9 @@ package ru.flexpay.eirc.mb_transformer.web.admin;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.admin.web.AdminTemplateMenu;
-import org.complitex.template.web.pages.ConfigEdit;
-import org.complitex.template.web.template.ITemplateLink;
+import ru.complitex.admin.web.AdminTemplateMenu;
+import ru.complitex.template.web.pages.ConfigEdit;
+import ru.complitex.template.web.template.ITemplateLink;
 
 import java.util.List;
 import java.util.Locale;

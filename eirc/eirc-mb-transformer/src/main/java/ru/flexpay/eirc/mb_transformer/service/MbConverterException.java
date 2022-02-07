@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.mb_transformer.service;
 
-import org.complitex.common.exception.AbstractException;
+import ru.complitex.common.exception.AbstractException;
 
 /**
  * @author Pavel Sknar

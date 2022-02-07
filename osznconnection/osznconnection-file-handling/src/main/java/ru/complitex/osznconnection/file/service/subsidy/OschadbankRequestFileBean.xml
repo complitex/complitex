@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.osznconnection.file.service.subsidy.OschadbankRequestFileBean">
+    <resultMap id="oschadbankRequestFileResultMap" type="ru.complitex.osznconnection.file.entity.subsidy.OschadbankRequestFile">
+        <id column="id" property="id"/>
+        <result column="request_file_id" property="requestFileId"/>
+        <association property="dbfFields" javaType="map">
+            <result column="EDRPOU" property="EDRPOU"/>
+            <result column="PROVIDER_NAME" property="PROVIDER_NAME"/>
+            <result column="DOCUMENT_NUMBER" property="DOCUMENT_NUMBER"/>
+            <result column="SERVICE_NAME" property="SERVICE_NAME"/>
+            <result column="REPORTING_PERIOD" property="REPORTING_PERIOD"/>
+            <result column="PROVIDER_CODE" property="PROVIDER_CODE"/>
+            <result column="PROVIDER_ACCOUNT" property="PROVIDER_ACCOUNT"/>
+            <result column="PROVIDER_IBAN" property="PROVIDER_IBAN"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertOschadbankRequestFile" parameterType="ru.complitex.osznconnection.file.entity.subsidy.OschadbankRequestFile">
+        INSERT INTO "oschadbank_request_file"
+        (
+        <trim suffixOverrides=",">
+            "request_file_id",
+            <foreach collection="dbfFields.keys" item="key">
+                "${key}",
+            </foreach>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffixOverrides=",">
+            #{requestFileId},
+            <foreach collection="dbfFields.keys" item="key">
+                #{dbfFields.${key}},
+            </foreach>
+        </trim>
+        )
+    </insert>
+
+    <select id="selectOschadbankRequestFile" parameterType="long" resultMap="oschadbankRequestFileResultMap">
+        SELECT * FROM oschadbank_request_file WHERE request_file_id = #{object.requestFileId}
+    </select>
+
+    <delete id="deleteOschadbankRequestFile" parameterType="long">
+        DELETE FROM oschadbank_request_file WHERE "request_file_id" = #{requestFileId}
+    </delete>
+</mapper>

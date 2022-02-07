@@ -25,8 +25,6 @@ import org.apache.wicket.Component;
 import org.odlabs.wiquery.core.javascript.JsScope;
 import org.odlabs.wiquery.core.options.*;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
-import org.odlabs.wiquery.ui.datepicker.DatePicker.ShowOnEnum;
-import org.odlabs.wiquery.ui.datepicker.DatePickerDuration.DurationEnum;
 import org.odlabs.wiquery.ui.datepicker.scope.JsScopeUiDatePickerDateTextEvent;
 import org.odlabs.wiquery.ui.datepicker.scope.JsScopeUiDatePickerEvent;
 import org.odlabs.wiquery.ui.datepicker.scope.JsScopeUiDatePickerOnChangeEvent;
@@ -879,7 +877,7 @@ public class DatePickerOptions extends Options
 	 * 
 	 * @param showOn
 	 */
-	public void setShowOn(ShowOnEnum showOn)
+	public void setShowOn(DatePicker.ShowOnEnum showOn)
 	{
 		putLiteral("showOn", showOn.name().toLowerCase());
 	}
@@ -887,10 +885,10 @@ public class DatePickerOptions extends Options
 	/**
 	 * @return the showOn option value
 	 */
-	public ShowOnEnum getShowOn()
+	public DatePicker.ShowOnEnum getShowOn()
 	{
 		String literal = getLiteral("showOn");
-		return literal == null ? ShowOnEnum.FOCUS : ShowOnEnum.valueOf(literal.toUpperCase());
+		return literal == null ? DatePicker.ShowOnEnum.FOCUS : DatePicker.ShowOnEnum.valueOf(literal.toUpperCase());
 	}
 
 	/**
@@ -1160,7 +1158,7 @@ public class DatePickerOptions extends Options
 			return (DatePickerDuration) duration;
 		}
 
-		return new DatePickerDuration(DurationEnum.NORMAL);
+		return new DatePickerDuration(DatePickerDuration.DurationEnum.NORMAL);
 	}
 
 	/*---- Events section ---*/

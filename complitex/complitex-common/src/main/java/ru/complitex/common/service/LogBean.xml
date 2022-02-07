@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.common.service.LogBean">
+    <insert id="insertLog" parameterType="ru.complitex.common.entity.Log" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO "log"
+            ("date", "login", "module", "controller", "model", "object_id", "event", "status", "description")
+        VALUES
+            (#{date}, #{login}, #{module}, #{controller}, #{model}, #{objectId}, #{event}, #{status}, #{description});
+    </insert>
+
+    <insert id="insertLogChanges" parameterType="list">
+        INSERT INTO "log_change"
+            ("log_id", "attribute_id", "collection", "property", "old_value", "new_value", "locale")
+        VALUES
+            <foreach collection="list" separator="," item="lc">
+                (#{lc.logId}, #{lc.attributeId}, #{lc.collection}, #{lc.property}, #{lc.oldValue}, #{lc.newValue}, #{lc.locale})
+            </foreach>
+    </insert>
+</mapper>

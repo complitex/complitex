@@ -1,7 +1,7 @@
 package ru.flexpay.eirc;
 
-import org.complitex.common.service.AbstractBean;
-import org.complitex.common.test.TestBean;
+import ru.complitex.common.service.AbstractBean;
+import ru.complitex.common.test.TestBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

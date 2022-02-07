@@ -32,7 +32,6 @@ import org.odlabs.wiquery.core.javascript.JsQuery;
 import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.core.options.*;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
-import org.odlabs.wiquery.ui.draggable.DraggableHelper.HelperEnum;
 
 /**
  * $Id$
@@ -557,7 +556,7 @@ public class DraggableBehavior extends WiQueryAbstractAjaxBehavior
 			return (DraggableHelper) helper;
 		}
 
-		return new DraggableHelper(HelperEnum.ORIGINAL);
+		return new DraggableHelper(DraggableHelper.HelperEnum.ORIGINAL);
 	}
 
 	/**

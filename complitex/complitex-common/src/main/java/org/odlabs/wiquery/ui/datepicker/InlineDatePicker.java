@@ -33,7 +33,6 @@ import org.odlabs.wiquery.core.options.ListItemOptions;
 import org.odlabs.wiquery.core.options.LiteralOption;
 import org.odlabs.wiquery.core.options.Options;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
-import org.odlabs.wiquery.ui.datepicker.DatePicker.ShowOnEnum;
 import org.odlabs.wiquery.ui.datepicker.scope.JsScopeUiDatePickerDateTextEvent;
 import org.odlabs.wiquery.ui.datepicker.scope.JsScopeUiDatePickerEvent;
 import org.odlabs.wiquery.ui.datepicker.scope.JsScopeUiDatePickerOnChangeEvent;
@@ -861,7 +860,7 @@ public class InlineDatePicker<T> extends WebMarkupContainer
 	 * @param showOn
 	 * @return instance of the current component
 	 */
-	public InlineDatePicker<T> setShowOn(ShowOnEnum showOn)
+	public InlineDatePicker<T> setShowOn(DatePicker.ShowOnEnum showOn)
 	{
 		options.setShowOn(showOn);
 		return this;
@@ -870,7 +869,7 @@ public class InlineDatePicker<T> extends WebMarkupContainer
 	/**
 	 * @return the showOn option value
 	 */
-	public ShowOnEnum getShowOn()
+	public DatePicker.ShowOnEnum getShowOn()
 	{
 		return this.options.getShowOn();
 	}

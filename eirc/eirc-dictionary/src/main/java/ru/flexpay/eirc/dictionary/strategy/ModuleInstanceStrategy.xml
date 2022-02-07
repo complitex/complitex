@@ -3,14 +3,14 @@
 
 <mapper namespace="ru.flexpay.eirc.dictionary.strategy.ModuleInstanceStrategy">
 
-    <select id="selectDomainObject" resultMap="org.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap"
-            parameterType="org.complitex.common.entity.DomainObjectFilter">
+    <select id="selectDomainObject" resultMap="ru.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap"
+            parameterType="ru.complitex.common.entity.DomainObjectFilter">
         SELECT e.* FROM `module_instance` e WHERE
-        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
-        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
         <include refid="sqlFilter"/>
-        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlOrderBy"/>
-        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlOrderBy"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
     </select>
 
     <sql id="sqlFilter">
@@ -45,10 +45,10 @@
         </if>
     </sql>
 
-    <select id="selectDomainObjectCount" resultType="long" parameterType="org.complitex.common.entity.DomainObjectFilter">
+    <select id="selectDomainObjectCount" resultType="long" parameterType="ru.complitex.common.entity.DomainObjectFilter">
         SELECT COUNT(1) FROM `module_instance` e WHERE
-        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
-        <include refid="org.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
         <include refid="sqlFilter"/>
     </select>
 

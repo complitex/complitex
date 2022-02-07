@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.entity;
 
-import org.complitex.common.exception.AbstractException;
+import ru.complitex.common.exception.AbstractException;
 
 import java.io.IOException;
 

@@ -2,9 +2,9 @@ package ru.flexpay.eirc.mb_transformer.entity;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
-import org.complitex.common.entity.IComponentConfig;
-import org.complitex.common.web.component.type.InputPanel;
-import org.complitex.common.web.model.LongModel;
+import ru.complitex.common.entity.IComponentConfig;
+import ru.complitex.common.web.component.type.InputPanel;
+import ru.complitex.common.web.model.LongModel;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
 import ru.flexpay.eirc.mb_transformer.web.component.OrganizationPicker;
 

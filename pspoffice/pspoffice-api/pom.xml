@@ -4,12 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>pspoffice</artifactId>
-        <groupId>org.complitex.pspoffice</groupId>
+        <groupId>ru.complitex.pspoffice</groupId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>pspoffice-api</artifactId>
+
+    <name>Pspoffice - API</name>
 
     <dependencies>
         <dependency>

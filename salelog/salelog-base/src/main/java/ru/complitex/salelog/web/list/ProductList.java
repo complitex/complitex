@@ -21,14 +21,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.convert.IConverter;
-import org.complitex.common.converter.BigDecimalConverter;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.web.component.datatable.DataProvider;
-import org.complitex.common.web.component.paging.PagingNavigator;
-import org.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
-import org.complitex.template.web.component.toolbar.AddItemButton;
-import org.complitex.template.web.component.toolbar.ToolbarButton;
-import org.complitex.template.web.template.TemplatePage;
+import ru.complitex.common.converter.BigDecimalConverter;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.web.component.datatable.DataProvider;
+import ru.complitex.common.web.component.paging.PagingNavigator;
+import ru.complitex.common.web.component.scroll.ScrollBookmarkablePageLink;
+import ru.complitex.template.web.component.toolbar.AddItemButton;
+import ru.complitex.template.web.component.toolbar.ToolbarButton;
+import ru.complitex.template.web.template.TemplatePage;
 import ru.complitex.salelog.entity.Product;
 import ru.complitex.salelog.service.ProductBean;
 import ru.complitex.salelog.web.component.NumberTextField;
@@ -39,7 +39,7 @@ import javax.ejb.EJB;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.complitex.common.util.PageUtil.newSorting;
+import static ru.complitex.common.util.PageUtil.newSorting;
 
 /**
  * @author Pavel Sknar

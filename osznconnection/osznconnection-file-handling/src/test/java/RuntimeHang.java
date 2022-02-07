@@ -1,6 +1,4 @@
-import org.complitex.address.util.AddressUtil;
-
-import java.util.Arrays;
+import ru.complitex.address.util.AddressUtil;
 
 /**
  * @author Anatoly A. Ivanov java@inheaven.ru

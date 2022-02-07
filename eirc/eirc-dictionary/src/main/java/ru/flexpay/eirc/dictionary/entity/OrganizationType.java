@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.dictionary.entity;
 
-import org.complitex.common.entity.IFixedIdType;
+import ru.complitex.common.entity.IFixedIdType;
 
 /**
  * @author Pavel Sknar

@@ -3,12 +3,12 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <typeAlias type="org.complitex.common.entity.StringLocale" alias="Locale"/>
-        <typeAlias type="org.complitex.common.entity.StringValue" alias="StringValue"/>
-        <typeAlias type="org.complitex.common.entity.Parameter" alias="Parameter"/>
-        <typeAlias type="org.complitex.common.entity.DomainObject" alias="DomainObject"/>
-        <typeAlias type="org.complitex.common.entity.Attribute" alias="Attribute"/>
-        <typeAlias type="org.complitex.common.entity.DomainObjectFilter" alias="DomainObjectExample"/>
+        <typeAlias type="ru.complitex.common.entity.StringLocale" alias="Locale"/>
+        <typeAlias type="ru.complitex.common.entity.StringValue" alias="StringValue"/>
+        <typeAlias type="ru.complitex.common.entity.Parameter" alias="Parameter"/>
+        <typeAlias type="ru.complitex.common.entity.DomainObject" alias="DomainObject"/>
+        <typeAlias type="ru.complitex.common.entity.Attribute" alias="Attribute"/>
+        <typeAlias type="ru.complitex.common.entity.DomainObjectFilter" alias="DomainObjectExample"/>
     </typeAliases>
 
     <environments default="local">
@@ -29,22 +29,22 @@
     </environments>
 
     <mappers>
-        <mapper resource="org/complitex/common/entity/Locale.xml"/>
-        <mapper resource="org/complitex/common/entity/Sequence.xml"/>
-        <mapper resource="org/complitex/common/entity/StringValue.xml"/>
+        <mapper resource="ru/complitex/common/entity/Locale.xml"/>
+        <mapper resource="ru/complitex/common/entity/Sequence.xml"/>
+        <mapper resource="ru/complitex/common/entity/StringValue.xml"/>
 
-        <mapper resource="org/complitex/common/entity/Attribute.xml"/>
-        <mapper resource="org/complitex/common/entity/DomainObject.xml"/>
+        <mapper resource="ru/complitex/common/entity/Attribute.xml"/>
+        <mapper resource="ru/complitex/common/entity/DomainObject.xml"/>
 
-        <mapper resource="org/complitex/common/service/EntityBean.xml"/>
-        <mapper resource="org/complitex/common/service/LogBean.xml"/>
-        <mapper resource="org/complitex/common/service/SessionBean.xml"/>
-        <mapper resource="org/complitex/common/service/PreferenceBean.xml"/>
-        <mapper resource="org/complitex/common/service/PermissionBean.xml"/>
-        <mapper resource="org/complitex/common/service/NameBean.xml"/>
-        <mapper resource="org/complitex/common/service/ConfigBean.xml"/>
+        <mapper resource="ru/complitex/common/service/EntityBean.xml"/>
+        <mapper resource="ru/complitex/common/service/LogBean.xml"/>
+        <mapper resource="ru/complitex/common/service/SessionBean.xml"/>
+        <mapper resource="ru/complitex/common/service/PreferenceBean.xml"/>
+        <mapper resource="ru/complitex/common/service/PermissionBean.xml"/>
+        <mapper resource="ru/complitex/common/service/NameBean.xml"/>
+        <mapper resource="ru/complitex/common/service/ConfigBean.xml"/>
 
-        <mapper resource="org/complitex/common/service/TestBean.xml"/>
+        <mapper resource="ru/complitex/common/service/TestBean.xml"/>
 
     </mappers>
 </configuration>

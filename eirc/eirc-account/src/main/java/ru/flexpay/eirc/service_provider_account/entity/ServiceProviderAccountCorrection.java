@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.service_provider_account.entity;
 
-import org.complitex.correction.entity.Correction;
+import ru.complitex.correction.entity.Correction;
 
 /**
  * @author Pavel Sknar

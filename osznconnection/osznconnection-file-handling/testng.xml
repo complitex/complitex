@@ -4,12 +4,12 @@
 <suite name="FileHandlingSuite" verbose="1" >
     <test name="ServiceProviderAccountNumberParserTest">
         <classes>
-            <class name="org.complitex.osznconnection.file.service_provider.util.ServiceProviderAccountNumberParserTest"/>
+            <class name="ru.complitex.osznconnection.file.service_provider.util.ServiceProviderAccountNumberParserTest"/>
         </classes>
     </test>
     <test name="SubsidyNameParserTest">
         <classes>
-            <class name="org.complitex.osznconnection.file.service.util.SubsidyNameParserTest"/>
+            <class name="ru.complitex.osznconnection.file.service.util.SubsidyNameParserTest"/>
         </classes>
     </test>
 </suite>

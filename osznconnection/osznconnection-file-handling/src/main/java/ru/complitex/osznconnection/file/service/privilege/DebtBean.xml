@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.osznconnection.file.service.privilege.DebtBean">
+    <resultMap id="debtResultMap" type="ru.complitex.osznconnection.file.entity.privilege.Debt"
+               extends="ru.complitex.osznconnection.file.service.AbstractRequestBean.abstractRequest">
+        <id column="id" property="id"/>
+
+        <result column="internal_city_id" property="cityId"/>
+        <result column="internal_street_id" property="streetId"/>
+        <result column="internal_street_type_id" property="streetTypeId"/>
+        <result column="internal_building_id" property="buildingId"/>
+
+        <result column="outgoing_city" property="outgoingCity"/>
+        <result column="outgoing_district" property="outgoingDistrict"/>
+        <result column="outgoing_street" property="outgoingStreet"/>
+        <result column="outgoing_street_type" property="outgoingStreetType"/>
+        <result column="outgoing_building_number" property="outgoingBuildingNumber"/>
+        <result column="outgoing_building_corp" property="outgoingBuildingCorp"/>
+        <result column="outgoing_apartment" property="outgoingApartment"/>
+
+        <result column="date" property="date"/>
+
+        <result column="last_name_cyr" property="lastName"/>
+        <result column="first_name_cyr" property="firstName"/>
+        <result column="middle_name_cyr" property="middleName"/>
+
+        <result column="city" property="city"/>
+
+        <association property="dbfFields" javaType="map">
+            <result column="IDPIL_CYR" property="IDPIL_CYR"/>
+            <result column="PASPPIL_CYR" property="PASPPIL_CYR"/>
+
+            <result column="FIOPIL_CYR" property="FIOPIL_CYR"/>
+            <result column="HOUSE_CYR" property="HOUSE_CYR"/>
+            <result column="BUILD_CYR" property="BUILD_CYR"/>
+            <result column="APT_CYR" property="APT_CYR"/>
+
+            <result column="COD" property="COD"/>
+            <result column="CDPR" property="CDPR"/>
+            <result column="NCARD" property="NCARD"/>
+            <result column="IDPIL" property="IDPIL"/>
+            <result column="PASPPIL" property="PASPPIL"/>
+            <result column="FIOPIL" property="FIOPIL"/>
+            <result column="INDEX" property="INDEX"/>
+            <result column="CDUL" property="CDUL"/>
+            <result column="HOUSE" property="HOUSE"/>
+            <result column="BUILD" property="BUILD"/>
+            <result column="APT" property="APT"/>
+            <result column="KAT" property="KAT"/>
+            <result column="LGCODE" property="LGCODE"/>
+            <result column="DATEIN" property="DATEIN"/>
+            <result column="DATEOUT" property="DATEOUT"/>
+            <result column="MONTHZV" property="MONTHZV"/>
+            <result column="YEARZV" property="YEARZV"/>
+            <result column="RAH" property="RAH"/>
+            <result column="MONEY" property="MONEY"/>
+            <result column="EBK" property="EBK"/>
+            <result column="SUM_BORG" property="SUM_BORG"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertDebtList" parameterType="list">
+        <include refid="ru.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.insertPrivilege">
+            <property name="table" value="debt"/>
+        </include>
+    </insert>
+
+    <select id="selectDebt" resultMap="debtResultMap" parameterType="long">
+        SELECT * FROM "debt" WHERE "request_file_id" = #{id}
+    </select>
+
+     <sql id="filter">
+        <where>
+            <include refid="ru.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.filterPrivilege"/>
+
+            <if test="fio != null">
+                AND r."FIOPIL" = #{fio}
+            </if>
+
+            <if test="spAccountNumber != null">
+                AND r."RAH" = #{spAccountNumber}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectDebtsCount" resultType="long" parameterType="ru.complitex.osznconnection.file.entity.example.PrivilegeExample">
+        SELECT COUNT(distinct r."id") FROM "debt" r
+        <include refid="filter"/>
+    </select>
+
+    <select id="selectDebts" parameterType="ru.complitex.osznconnection.file.entity.example.PrivilegeExample"
+            resultMap="debtResultMap">
+        SELECT t.*,
+        w."id" warning_id, w."request_id" warning_reqiest_id, w."request_file_type" warning_request_file_type, w."status" warning_status,
+        p."request_warning_id" param_request_warning_id, p."order" param_order, p."type" param_type, p."value" param_value
+        FROM (
+        SELECT DISTINCT r."id", r."status", r."request_file_id", r."FIOPIL", r."IDPIL", r."PASPPIL",
+        r."CDUL", r."HOUSE", r."BUILD", r."APT", r."date", r."RAH", r."SUM_BORG",
+
+        TO_CYRILLIC(r."IDPIL") IDPIL_CYR,
+        TO_CYRILLIC(r."PASPPIL") PASPPIL_CYR,
+
+        TO_CYRILLIC(r."first_name") first_name_cyr,
+        TO_CYRILLIC(r."middle_name") middle_name_cyr,
+        TO_CYRILLIC(r."last_name") last_name_cyr,
+
+        TO_CYRILLIC(r."FIOPIL") FIOPIL_CYR,
+        TO_CYRILLIC(r."HOUSE") HOUSE_CYR,
+        TO_CYRILLIC(r."BUILD") BUILD_CYR,
+        TO_CYRILLIC(r."APT") APT_CYR,
+
+        f."organization_id", f."user_organization_id", f."group_id",
+        r."internal_city_id", r."internal_street_id", r."internal_street_type_id", r."internal_building_id",
+        r."outgoing_city", r."outgoing_district", r."outgoing_street", r."outgoing_street_type", r."outgoing_building_number",
+        r."outgoing_building_corp", r."outgoing_apartment",
+        r."city", r.account_number
+        FROM "debt" r
+        LEFT JOIN "request_file" f ON f."id" = r."request_file_id"
+
+        <include refid="filter"/>
+
+        <if test="orderByClause != null">
+            <choose>
+                <when test="orderByClause == 'street_reference'">
+                    ORDER BY r."CDUL"
+                </when>
+
+                <when test="orderByClause == 'IDCODE' or orderByClause == 'HOUSE' or orderByClause == 'BUILD' or orderByClause == 'APT' or orderByClause == 'RAH'">
+                    ORDER BY "${orderByClause}"+0
+                </when>
+                <otherwise>ORDER BY "${orderByClause}"</otherwise>
+            </choose>
+            <choose>
+                <when test="asc">ASC</when>
+                <otherwise>DESC</otherwise>
+            </choose>
+        </if>
+
+        <if test="count != 0">limit #{first},#{count}</if>
+        ) t
+        LEFT JOIN "request_warning" w ON (w."request_id" = t."id")
+        LEFT JOIN "request_warning_parameter" p ON w."id" = p."request_warning_id"
+    </select>
+
+    <delete id="deleteDebt" parameterType="long">
+        DELETE FROM "debt" WHERE "request_file_id" = #{id}
+    </delete>
+
+    <update id="updateDebt" parameterType="ru.complitex.osznconnection.file.entity.privilege.Debt">
+        <include refid="ru.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.updatePrivilege">
+            <property name="table" value="debt"/>
+        </include>
+    </update>
+
+    <select id="selectDebtIds" parameterType="long" resultType="long">
+        SELECT "id" FROM "debt" WHERE "request_file_id" = #{requestFileId}
+    </select>
+
+    <select id="selectDebtForOperation" parameterType="map" resultMap="debtResultMap">
+        SELECT f."organization_id", f."user_organization_id", f."group_id",
+
+        TO_CYRILLIC(r."IDPIL") IDPIL_CYR,
+        TO_CYRILLIC(r."PASPPIL") PASPPIL_CYR,
+
+        TO_CYRILLIC(r."FIOPIL") FIOPIL_CYR,
+        TO_CYRILLIC(r."HOUSE") HOUSE_CYR,
+        TO_CYRILLIC(r."BUILD") BUILD_CYR,
+        TO_CYRILLIC(r."APT") APT_CYR,
+
+        TO_CYRILLIC(r."first_name") first_name_cyr,
+        TO_CYRILLIC(r."middle_name") middle_name_cyr,
+        TO_CYRILLIC(r."last_name") last_name_cyr,
+
+        r.*
+        FROM "debt" r
+        JOIN "request_file" f ON r."request_file_id" = f."id"
+        WHERE r."request_file_id" = #{requestFileId}
+        AND r."id" IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="clearDebtBound" parameterType="map">
+        <include refid="ru.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.clearPrivilegeBound">
+            <property name="table" value="debt"/>
+        </include>
+    </update>
+
+    <update id="markDebtCorrected" parameterType="map">
+        <include refid="ru.complitex.osznconnection.file.service.privilege.AbstractPrivilegeBean.markPrivilegeCorrected">
+            <property name="table" value="debt"/>
+        </include>
+    </update>
+
+    <select id="countByFile" resultType="int" parameterType="map">
+        SELECT COUNT(1) FROM "debt"
+        WHERE "request_file_id" = #{requestFileId} AND "status" IN
+        <foreach collection="statuses" item="status" open="(" close=")" separator=",">
+            #{status}
+        </foreach>
+    </select>
+
+    <update id="updateDebtAccountNumber" parameterType="ru.complitex.osznconnection.file.entity.privilege.Debt">
+        UPDATE "debt" SET "account_number" = #{accountNumber}, "status" = #{status} WHERE "id" = #{id}
+    </update>
+</mapper>

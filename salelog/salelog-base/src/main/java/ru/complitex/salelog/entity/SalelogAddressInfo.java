@@ -5,8 +5,8 @@
 package ru.complitex.salelog.entity;
 
 import com.google.common.collect.ImmutableList;
-import org.complitex.address.AddressInfo;
-import org.complitex.address.AddressInfoProvider;
+import ru.complitex.address.AddressInfo;
+import ru.complitex.address.AddressInfoProvider;
 
 import javax.ejb.Singleton;
 import java.util.List;

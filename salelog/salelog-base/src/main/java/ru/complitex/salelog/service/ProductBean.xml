@@ -44,7 +44,7 @@
         </if>
     </sql>
 
-    <select id="selectProducts" parameterType="org.complitex.common.entity.FilterWrapper"
+    <select id="selectProducts" parameterType="ru.complitex.common.entity.FilterWrapper"
             resultMap="Product">
         select
         <include refid="productColumns"/>
@@ -65,7 +65,7 @@
         </if>
     </select>
 
-    <select id="countProducts" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long">
+    <select id="countProducts" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="long">
         select count(distinct `id`) from `product` p
         where 1=1
         <include refid="productCondition"/>

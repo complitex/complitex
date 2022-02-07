@@ -8,24 +8,24 @@
     </settings>
 
     <typeHandlers>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.common.entity.Status"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.common.entity.ValueType"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.common.entity.Status"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.common.entity.ValueType"/>
 
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.address.entity.AddressEntity"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.sync.entity.SyncEntity"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.sync.entity.DomainSyncStatus"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.address.entity.AddressEntity"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.sync.entity.SyncEntity"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.sync.entity.DomainSyncStatus"/>
 
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestStatus"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileStatus"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileType"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileSubType"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestFileGroupType"/>
-        <typeHandler handler="org.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="org.complitex.osznconnection.file.entity.RequestWarningStatus"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.osznconnection.file.entity.RequestStatus"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.osznconnection.file.entity.RequestFileStatus"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.osznconnection.file.entity.RequestFileType"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.osznconnection.file.entity.RequestFileSubType"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.osznconnection.file.entity.RequestFileGroupType"/>
+        <typeHandler handler="ru.complitex.common.mybatis.FixedIdBaseTypeHandler" javaType="ru.complitex.osznconnection.file.entity.RequestWarningStatus"/>
     </typeHandlers>
 
     <plugins>
         <!--cursor plugin-->
-        <plugin interceptor="org.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
+        <plugin interceptor="ru.complitex.common.mybatis.CursorResultSetHandlerPlugin"/>
     </plugins>
 
     <environments default="local">
@@ -45,74 +45,74 @@
     </environments>
 
     <mappers>
-        <mapper resource="org/complitex/common/strategy/SequenceBean.xml"/>
-        <mapper resource="org/complitex/common/strategy/DomainObjectStrategy.xml"/>
-        <mapper resource="org/complitex/common/strategy/EntityBean.xml"/>
-        <mapper resource="org/complitex/common/strategy/PermissionBean.xml"/>
+        <mapper resource="ru/complitex/common/strategy/SequenceBean.xml"/>
+        <mapper resource="ru/complitex/common/strategy/DomainObjectStrategy.xml"/>
+        <mapper resource="ru/complitex/common/strategy/EntityBean.xml"/>
+        <mapper resource="ru/complitex/common/strategy/PermissionBean.xml"/>
 
-        <mapper resource="org/complitex/common/service/LogBean.xml"/>
-        <mapper resource="org/complitex/common/service/SessionBean.xml"/>
-        <mapper resource="org/complitex/common/service/PreferenceBean.xml"/>
-        <mapper resource="org/complitex/common/service/NameBean.xml"/>
-        <mapper resource="org/complitex/common/service/ConfigBean.xml"/>
+        <mapper resource="ru/complitex/common/service/LogBean.xml"/>
+        <mapper resource="ru/complitex/common/service/SessionBean.xml"/>
+        <mapper resource="ru/complitex/common/service/PreferenceBean.xml"/>
+        <mapper resource="ru/complitex/common/service/NameBean.xml"/>
+        <mapper resource="ru/complitex/common/service/ConfigBean.xml"/>
 
-        <mapper resource="org/complitex/address/strategy/building/BuildingStrategy.xml"/>
-        <mapper resource="org/complitex/address/strategy/street/StreetStrategy.xml"/>
-        <mapper resource="org/complitex/address/strategy/city/CityStrategy.xml"/>
-        <mapper resource="org/complitex/address/strategy/district/DistrictStrategy.xml"/>
+        <mapper resource="ru/complitex/address/strategy/building/BuildingStrategy.xml"/>
+        <mapper resource="ru/complitex/address/strategy/street/StreetStrategy.xml"/>
+        <mapper resource="ru/complitex/address/strategy/city/CityStrategy.xml"/>
+        <mapper resource="ru/complitex/address/strategy/district/DistrictStrategy.xml"/>
 
-        <mapper resource="org/complitex/correction/service/CorrectionBean.xml"/>
+        <mapper resource="ru/complitex/correction/service/CorrectionBean.xml"/>
 
-        <mapper resource="org/complitex/admin/service/UserBean.xml"/>
-        <mapper resource="org/complitex/admin/service/UserProfileBean.xml"/>
-        <mapper resource="org/complitex/logging/service/LogListBean.xml"/>
+        <mapper resource="ru/complitex/admin/service/UserBean.xml"/>
+        <mapper resource="ru/complitex/admin/service/UserProfileBean.xml"/>
+        <mapper resource="ru/complitex/logging/service/LogListBean.xml"/>
 
-        <mapper resource="org/complitex/organization/strategy/OrganizationStrategy.xml"/>
-        <mapper resource="org/complitex/organization/service/OrganizationImportBean.xml"/>
+        <mapper resource="ru/complitex/organization/strategy/OrganizationStrategy.xml"/>
+        <mapper resource="ru/complitex/organization/service/OrganizationImportBean.xml"/>
 
-        <!--<mapper resource="org/complitex/osznconnection/organization/strategy/OsznOrganization.xml"/>-->
+        <!--<mapper resource="ru/complitex/osznconnection/organization/strategy/OsznOrganization.xml"/>-->
 
-        <mapper resource="org/complitex/osznconnection/file/service/AbstractRequestBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/RequestFileBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/AbstractRequestBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/RequestFileBean.xml"/>
 
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/RequestFileGroupBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/PaymentBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/ActualPaymentBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidyBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/BenefitBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidyTarifBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/SubsidySplitBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/OschadbankRequestFileBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/OschadbankRequestBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/OschadbankResponseFileBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/subsidy/OschadbankResponseBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/RequestFileGroupBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/PaymentBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/ActualPaymentBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/SubsidyBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/BenefitBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/SubsidyTarifBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/SubsidySplitBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/OschadbankRequestFileBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/OschadbankRequestBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/OschadbankResponseFileBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/subsidy/OschadbankResponseBean.xml"/>
 
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/AbstractPrivilegeBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeFileGroupBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/DwellingCharacteristicsBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityServiceTypeBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityForm2Bean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityLocalBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/FacilityReferenceBookBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/OwnershipCorrectionBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeCorrectionBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/PrivilegeProlongationBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/privilege/DebtBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/AbstractPrivilegeBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/PrivilegeFileGroupBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/DwellingCharacteristicsBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/FacilityServiceTypeBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/FacilityForm2Bean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/FacilityLocalBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/FacilityReferenceBookBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/OwnershipCorrectionBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/PrivilegeCorrectionBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/PrivilegeProlongationBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/privilege/DebtBean.xml"/>
 
-        <mapper resource="org/complitex/osznconnection/file/service/PersonAccountBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/RequestFileHistoryBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/PersonAccountBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/RequestFileHistoryBean.xml"/>
 
 
-        <mapper resource="org/complitex/osznconnection/file/service/status/details/StatusDetailBean.xml"/>
-        <mapper resource="org/complitex/osznconnection/file/service/warning/RequestWarningBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/status/details/StatusDetailBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/warning/RequestWarningBean.xml"/>
 
-        <mapper resource="org/complitex/osznconnection/file/service/file_description/RequestFileDescriptionBean.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service/file_description/RequestFileDescriptionBean.xml"/>
 
         <!--remote mappers-->
-        <mapper resource="org/complitex/osznconnection/file/service_provider/ServiceProviderAdapter.xml"/>
+        <mapper resource="ru/complitex/osznconnection/file/service_provider/ServiceProviderAdapter.xml"/>
 
         <!--sync-->
-        <mapper resource="org/complitex/sync/service/DomainSyncBean.xml"/>
-        <mapper resource="org/complitex/sync/service/DomainSyncAdapter.xml"/>
+        <mapper resource="ru/complitex/sync/service/DomainSyncBean.xml"/>
+        <mapper resource="ru/complitex/sync/service/DomainSyncAdapter.xml"/>
     </mappers>
 </configuration>

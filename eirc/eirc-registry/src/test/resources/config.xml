@@ -1,6 +1,6 @@
 <config>
     <!--property name="org.glassfish.ejb.embedded.glassfish.installation.root"
-              value="C:\\java\\org.complitex\\complitex\\complitex-common\\src\\test\\glassfish">
+              value="C:\\java\\ru.complitex\\complitex\\complitex-common\\src\\test\\glassfish">
     </property-->
     <property name="org.glassfish.ejb.embedded.glassfish.installation.root"
               value="../complitex/complitex-common/src/test/glassfish">

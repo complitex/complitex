@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.complitex</groupId>
+        <groupId>ru.complitex</groupId>
         <artifactId>complitex</artifactId>
         <version>8.0.0-SNAPSHOT</version>
         <relativePath>../complitex/pom.xml</relativePath>
@@ -13,7 +13,7 @@
         <complitex.version>8.0.0-SNAPSHOT</complitex.version>
     </properties>
 
-    <groupId>org.complitex.osznconnection</groupId>
+    <groupId>ru.complitex.osznconnection</groupId>
     <artifactId>osznconnection</artifactId>
     <version>8.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -43,52 +43,52 @@
         <dependencies>
             <!-- Complitex Modules -->
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-common</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-template</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-admin</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-address</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-correction</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-logging</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-organization</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-organization-type</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-resources</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex</groupId>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-images</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
@@ -96,27 +96,27 @@
             <!-- OsznConnection Modules-->
 
             <dependency>
-                <groupId>org.complitex.osznconnection</groupId>
+                <groupId>ru.complitex.osznconnection</groupId>
                 <artifactId>osznconnection-file-handling</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex.osznconnection</groupId>
+                <groupId>ru.complitex.osznconnection</groupId>
                 <artifactId>osznconnection-organization-type</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex.osznconnection</groupId>
+                <groupId>ru.complitex.osznconnection</groupId>
                 <artifactId>osznconnection-organization</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex.osznconnection</groupId>
+                <groupId>ru.complitex.osznconnection</groupId>
                 <artifactId>osznconnection-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.complitex.osznconnection</groupId>
+                <groupId>ru.complitex.osznconnection</groupId>
                 <artifactId>osznconnection-address</artifactId>
                 <version>${project.version}</version>
             </dependency>

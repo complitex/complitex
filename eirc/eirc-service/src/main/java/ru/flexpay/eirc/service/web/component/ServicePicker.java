@@ -10,8 +10,8 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.strategy.StringLocaleBean;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.strategy.StringLocaleBean;
 import ru.flexpay.eirc.service.entity.Service;
 
 import javax.ejb.EJB;

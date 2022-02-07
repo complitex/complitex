@@ -1,11 +1,11 @@
 package ru.flexpay.eirc.organization.web;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.organization.IOrganizationStrategy;
-import org.complitex.common.util.EjbBeanLocator;
-import org.complitex.organization.web.OrganizationMenu;
-import org.complitex.template.web.security.SecurityRole;
+import ru.complitex.common.strategy.IStrategy;
+import ru.complitex.common.strategy.organization.IOrganizationStrategy;
+import ru.complitex.common.util.EjbBeanLocator;
+import ru.complitex.organization.web.OrganizationMenu;
+import ru.complitex.template.web.security.SecurityRole;
 
 /**
  *

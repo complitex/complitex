@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.pspoffice.importing.legacy.service.ReferenceDataCorrectionBean">
+    
+    <resultMap id="referenceDataCorrection" type="ru.complitex.pspoffice.importing.legacy.entity.ReferenceDataCorrection">
+        <id column="pk_id" property="pkId"/>
+        <result column="system_object_id" property="systemObjectId"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="ru.complitex.pspoffice.importing.legacy.entity.ReferenceDataCorrection" useGeneratedKeys="true"
+                keyProperty="pkId">
+        INSERT INTO `${entity}_correction`(`id`, `idjek`, `nkod`, `system_object_id`, `content`) VALUES
+            (#{id}, #{idjek}, #{nkod}, #{systemObjectId}, #{content})
+    </insert>
+    
+    <update id="update" parameterType="ru.complitex.pspoffice.importing.legacy.entity.ReferenceDataCorrection">
+        UPDATE `${entity}_correction` SET `processed` = #{processed}, `system_object_id` = #{systemObjectId} 
+        WHERE `pk_id` = #{pkId}
+    </update>
+    
+    <delete id="delete" parameterType="collection">
+        DELETE FROM `${entity}_correction` WHERE `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="jekIds" item="idjek">
+            #{idjek}
+        </foreach>
+    </delete>
+    
+    <select id="exists" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM `${entity}_correction` WHERE `idjek` = #{idjek}
+    </select>
+    
+    <select id="countForProcessingForJeks" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM `${entity}_correction` WHERE `system_object_id` IS NULL
+        AND `processed` = 0
+            AND `idjek` IN 
+            <foreach open="(" close=")" separator="," collection="jekIds" item="idjek">
+                #{idjek}
+            </foreach>
+    </select>
+    
+    <select id="countForProcessing" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM `${entity}_correction` WHERE `system_object_id` IS NULL
+            AND `processed` = 0 AND `idjek` = #{idjek}
+    </select>
+    
+    <select id="findForProcessing" resultMap="ru.complitex.pspoffice.importing.legacy.service.ReferenceDataCorrectionBean.referenceDataCorrection"
+            parameterType="map">
+        SELECT c.*, '${entity}' `entity` FROM `${entity}_correction` c WHERE c.`idjek` = #{idjek} AND c.`system_object_id` IS NULL
+            AND c.`processed` = 0 LIMIT ${count}
+    </select>
+    
+    <update id="clearProcessingStatus" parameterType="map">
+        UPDATE `${entity}_correction` SET `processed` = 0 WHERE `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="jekIds" item="idjek">
+            #{idjek}
+        </foreach>
+    </update>
+    
+    <select id="isReservedObjectResolved" parameterType="map" resultType="int">
+        SELECT COUNT(DISTINCT `system_object_id`) FROM `${entity}_correction` WHERE `id` = #{objectId} AND `system_object_id` IS NOT NULL
+        AND `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="jekIds" item="idjek">
+            #{idjek}
+        </foreach>
+    </select>
+    
+    <select id="getReservedOwnerType" parameterType="map" resultType="string">
+        SELECT DISTINCT(`nkod`) FROM `owner_type_correction` WHERE `id` = #{OWNER_TYPE}
+        AND `idjek` IN 
+        <foreach open="(" close=")" separator="," collection="jekIds" item="idjek">
+            #{idjek}
+        </foreach>
+    </select>
+    
+    <select id="getByIdAndJek" parameterType="map" 
+        resultMap="ru.complitex.pspoffice.importing.legacy.service.ReferenceDataCorrectionBean.referenceDataCorrection">
+        SELECT * FROM `${entity}_correction` WHERE `id` = #{id} AND
+        `idjek` = #{idjek}
+    </select>
+    
+</mapper>

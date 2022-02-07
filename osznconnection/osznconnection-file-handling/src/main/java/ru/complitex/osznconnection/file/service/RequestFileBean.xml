@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.osznconnection.file.service.RequestFileBean">
+    <resultMap id="requestFileResultMap" type="ru.complitex.osznconnection.file.entity.RequestFile">
+        <id column="id" property="id"/>
+        <result column="group_id" property="groupId"/>
+        <result column="loaded" property="loaded"/>
+        <result column="name" property="name"/>
+        <result column="directory" property="directory"/>
+        <result column="organization_id" property="organizationId"/>
+        <result column="user_organization_id" property="userOrganizationId"/>
+        <result column="begin_date" property="beginDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="dbf_record_count" property="dbfRecordCount"/>
+        <result column="length" property="length"/>
+        <result column="check_sum" property="checkSum"/>
+        <result column="type" property="type"/>
+        <result column="sub_type" property="subType"/>
+        <result column="loaded_record_count" property="loadedRecordCount"/>
+        <result column="binded_record_count" property="bindedRecordCount"/>
+        <result column="filled_record_count" property="filledRecordCount"/>
+        <result column="sum" property="sum"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="requestFileResultMap">
+        SELECT * FROM "request_file"
+    </select>
+
+    <insert id="insertRequestFile" parameterType="ru.complitex.osznconnection.file.entity.RequestFile"
+            keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO "request_file"
+            ("group_id", "organization_id", "name", "directory", "begin_date", "end_date", "dbf_record_count",
+             "length", "check_sum", "type", "sub_type", "loaded", "status", "user_organization_id", "user_id")
+        VALUES
+            (#{groupId}, #{organizationId}, #{name}, #{directory}, #{beginDate}, #{endDate},
+             #{dbfRecordCount}, #{length}, #{checkSum}, #{type}, #{subType}, #{loaded}, #{status},
+             #{userOrganizationId}, #{userId})
+    </insert>
+
+    <update id="updateRequestFile" parameterType="ru.complitex.osznconnection.file.entity.RequestFile">
+        UPDATE "request_file" SET
+             <if test="groupId != null">"group_id" = #{groupId}, </if>
+             <if test="dbfRecordCount != null">"dbf_record_count" = #{dbfRecordCount}, </if>
+            "status" = #{status}
+        WHERE "id" = #{id}
+    </update>
+
+    <delete id="deleteRequestFile" parameterType="long">
+        DELETE FROM "request_file" WHERE "id" = #{id};
+    </delete>
+
+    <select id="findById" parameterType="long" resultMap="requestFileResultMap">
+        SELECT * FROM "request_file" WHERE "id" = #{id}
+    </select>
+
+    <sql id="permissionFilter">
+        <if test="not admin">
+            AND ("user_organization_id" IN ${userOrganizationsString})
+            <if test="outerOrganizationsString != null">
+                AND ("organization_id" IN ${outerOrganizationsString})
+            </if>
+        </if>
+    </sql>
+
+    <sql id="requestFilesFilterWhere">
+        <where>
+            <if test="id != null">rf."id" = #{id}</if>
+            <if test="groupId != null">AND "group_id" = #{groupId}</if>
+            <if test="loaded != null">AND YEAR("loaded") = YEAR(#{loaded}) AND DAYOFYEAR("loaded") = DAYOFYEAR(#{loaded})</if>
+            <if test="name != null">AND "name" like CONCAT('%',#{name},'%')</if>
+            <if test="organizationId != null">AND "organization_id" = #{organizationId}</if>
+            <if test="userOrganizationId != null">AND "user_organization_id" = #{userOrganizationId}</if>
+            <if test="year != null">AND YEAR("begin_date") = #{year}</if>
+            <if test="month != null">AND MONTH("begin_date") = #{month}</if>
+            <if test="dbfRecordCount != null">AND "dbf_record_count" like concat('%',#{dbfRecordCount},'%')</if>
+            <if test="type != null">AND "type" = #{type}</if>
+            <if test="subType != null">AND "sub_type" = #{subType}</if>
+            <if test="subType == null">AND "sub_type" is null</if>
+            <if test="status != null">AND "status" = #{status}</if>
+            <if test="serviceProvider != null">AND "name" like concat(#{edrpou}, '%')</if>
+
+            <include refid="permissionFilter"/>
+        </where>
+    </sql>
+
+    <!--suppress SqlResolve -->
+    <select id="selectLoadedRequestFiles" parameterType="ru.complitex.osznconnection.file.entity.RequestFileFilter"
+            resultMap="requestFileResultMap">
+        SELECT *, (SELECT COUNT(1) FROM "${recordTable}" WHERE "request_file_id" = rf."id") as loaded_record_count
+        <include refid="ru.complitex.osznconnection.file.service.RequestFileBean.fromFilterSort"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectProcessedRequestFiles" parameterType="ru.complitex.osznconnection.file.entity.RequestFileFilter"
+            resultMap="requestFileResultMap">
+        SELECT *,
+        (SELECT COUNT(1) FROM "${recordTable}" WHERE "request_file_id" = rf."id") as loaded_record_count,
+        (SELECT COUNT(1) FROM "${recordTable}" WHERE "request_file_id" = rf."id" AND "account_number" is not null) as binded_record_count,
+        (SELECT COUNT(1) FROM "${recordTable}" WHERE "request_file_id" = rf."id" AND "status" = 215) as filled_record_count
+        <include refid="ru.complitex.osznconnection.file.service.RequestFileBean.fromFilterSort"/>
+    </select>
+
+    <!--suppress SqlResolve -->
+    <select id="selectSubsidyFiles" parameterType="ru.complitex.osznconnection.file.entity.RequestFileFilter"
+            resultMap="requestFileResultMap">
+        SELECT *,
+            (SELECT COUNT(1) FROM "subsidy" WHERE "request_file_id" = rf."id") as loaded_record_count,
+            (SELECT COUNT(1) FROM "subsidy" WHERE "request_file_id" = rf."id" AND "account_number" is not null) as binded_record_count,
+            (SELECT COUNT(1) FROM "subsidy" WHERE "request_file_id" = rf."id" AND ("status" = 215 or "status" = 258 or "status" = 260)) as filled_record_count,
+            (SELECT SUM(CAST("SUMMA" AS DECIMAL(15,2))) FROM "subsidy" WHERE "request_file_id" = rf."id") as "sum"
+        <include refid="ru.complitex.osznconnection.file.service.RequestFileBean.fromFilterSort"/>
+    </select>
+
+    <sql id="fromFilterSort">
+        FROM "request_file" rf
+            <if test="sortProperty == 'service_provider'">
+              left join "organization_string_value" sc on (sc."value" = SUBSTRING(rf."name", 1, LENGTH(rf."name")-8))
+              left join "organization_attribute" oa on  sc."id" = oa."value_id"
+              left join "organization_attribute" oa_name on oa_name."object_id" = oa."object_id"
+              left join "organization_string_value" sc_name on sc_name."id" = oa_name."value_id"
+            </if>
+
+            <include refid="ru.complitex.osznconnection.file.service.RequestFileBean.requestFilesFilterWhere"/>
+
+            <if test="sortProperty == 'service_provider'">
+              AND (oa."entity_attribute_id" = 926)
+              AND (oa_name."entity_attribute_id" = 900)
+            </if>
+
+            <if test="sum != null">
+                group by "sum" having "sum" = #{sum}
+            </if>
+
+                <if test="sortProperty != null">
+                    <choose>
+                        <when test="sortProperty == 'name'">
+                            ORDER BY "directory"
+                                <choose>
+                                    <when test="ascending">ASC</when>
+                                    <otherwise>DESC</otherwise>
+                                </choose>,
+                                "name"
+                                <choose>
+                                    <when test="ascending">ASC</when>
+                                    <otherwise>DESC</otherwise>
+                                </choose>
+                        </when>
+                        <when test="sortProperty == 'service_provider'">
+                            order by sc_name."value"
+                            <choose>
+                                <when test="ascending">asc</when>
+                                <otherwise>desc</otherwise>
+                            </choose>
+                        </when>
+                        <when test="sortProperty == 'sum'">
+                            order by "sum"
+                            <choose>
+                                <when test="ascending">asc</when>
+                                <otherwise>desc</otherwise>
+                            </choose>
+                        </when>
+                        <otherwise>
+                            ORDER BY rf."${sortProperty}"
+                            <choose>
+                                <when test="ascending">ASC</when>
+                                <otherwise>DESC</otherwise>
+                            </choose>
+                        </otherwise>
+                    </choose>
+                </if>
+        OFFSET #{first} LIMIT #{count}
+    </sql>
+
+    <select id="selectRequestFilesCount" parameterType="ru.complitex.osznconnection.file.entity.RequestFileFilter" resultType="long">
+        SELECT COUNT(1) FROM "request_file" rf <include refid="requestFilesFilterWhere"/>
+    </select>
+
+    <select id="selectIsLoaded" parameterType="ru.complitex.osznconnection.file.entity.RequestFile"
+            resultType="boolean">
+        SELECT
+            count(1) > 0
+        FROM
+            "request_file"
+        WHERE
+            "name" = #{name} AND organization_id = #{organizationId} AND "user_organization_id" = #{userOrganizationId}
+                AND "begin_date" = #{beginDate}
+                  AND ("end_date" = #{endDate} OR "end_date" IS NULL)
+            AND "check_sum" = #{checkSum}
+    </select>
+
+    <select id="selectLoadedId" parameterType="ru.complitex.osznconnection.file.entity.RequestFile" resultType="long">
+        SELECT id FROM "request_file" WHERE "name" = #{name} AND "organization_id" = #{organizationId}
+            AND "user_organization_id" = #{userOrganizationId}
+            AND "begin_date" = #{beginDate}
+            AND ("end_date" = #{endDate} or "end_date" is null)
+            AND ("check_sum" = #{checkSum} or "check_sum" is null)
+        LIMIT 1
+    </select>
+
+    <select id="findSubsidyTarifFiles" parameterType="long" resultMap="requestFileResultMap">
+        SELECT * FROM "request_file" WHERE organization_id = #{organizationId} AND "user_organization_id" = #{userOrganizationId} AND "type" = 3
+    </select>
+
+    <select id="getFacilityReferenceFiles" parameterType="map" resultMap="requestFileResultMap">
+        SELECT * FROM "request_file" WHERE "organization_id" = #{osznId} AND "user_organization_id" = #{userOrganizationId}
+            AND "type" = #{requestFileType}
+    </select>
+
+    <select id="selectRequestFileStatus" resultType="ru.complitex.osznconnection.file.entity.RequestFileStatus" parameterType="long">
+        SELECT "status" FROM "request_file" WHERE "id" = #{id}
+    </select>
+
+    <update id="fixLoadingOnInit">
+        UPDATE "request_file" SET "status" = 111 WHERE "status" IN (112, 113);
+    </update>
+    <update id="fixBingingOnInit">
+        UPDATE "request_file" SET "status" = 121 WHERE "status" IN (122, 123);
+    </update>
+    <update id="fixFillingOnInit">
+        UPDATE "request_file" SET "status" = 131 WHERE "status" IN (132, 133);
+    </update>
+    <update id="fixSavingOnInit">
+        UPDATE "request_file" SET "status" = 141 WHERE "status" IN (142, 143);
+    </update>
+    <update id="fixExportingOnInit">
+        UPDATE "request_file" SET "status" = 151 WHERE "status" IN (152, 153);
+    </update>
+
+    <select id="selectLastRequestFile" parameterType="ru.complitex.osznconnection.file.entity.RequestFile"
+            resultMap="requestFileResultMap">
+        SELECT * from "request_file" WHERE "organization_id" = #{organizationId} AND "user_organization_id" = #{userOrganizationId}
+          AND "type" = #{type} AND #{beginDate} > "begin_date" AND "end_date" IS NULL AND "status" = 110
+    </select>
+
+    <select id="selectFirstRequestFile" parameterType="ru.complitex.osznconnection.file.entity.RequestFile"
+            resultMap="requestFileResultMap">
+        SELECT * FROM "request_file" where "organization_id" = #{organizationId} AND "user_organization_id" = #{userOrganizationId}
+          AND "type" = #{type} AND "begin_date" > #{beginDate} AND "status" = 110 order by "begin_date" DESC LIMIT 1
+    </select>
+</mapper>

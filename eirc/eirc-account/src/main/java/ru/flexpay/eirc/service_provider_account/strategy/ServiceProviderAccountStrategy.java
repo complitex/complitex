@@ -1,11 +1,11 @@
 package ru.flexpay.eirc.service_provider_account.strategy;
 
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StringValueBean;
-import org.complitex.template.strategy.TemplateStrategy;
-import org.complitex.template.web.security.SecurityRole;
+import ru.complitex.common.entity.Attribute;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.entity.DomainObjectFilter;
+import ru.complitex.common.strategy.StringValueBean;
+import ru.complitex.template.strategy.TemplateStrategy;
+import ru.complitex.template.web.security.SecurityRole;
 import ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute;
 
 import javax.ejb.EJB;

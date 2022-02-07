@@ -2,9 +2,9 @@ package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.strategy.StrategyFactory;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.entity.DomainObjectFilter;
+import ru.complitex.common.strategy.StrategyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.complitex.pspoffice.api.model.DomainModel;

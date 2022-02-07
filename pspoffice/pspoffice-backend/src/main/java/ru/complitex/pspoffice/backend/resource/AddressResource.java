@@ -2,15 +2,15 @@ package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.complitex.address.strategy.building.BuildingStrategy;
-import org.complitex.address.strategy.city.CityStrategy;
-import org.complitex.address.strategy.city_type.CityTypeStrategy;
-import org.complitex.address.strategy.country.CountryStrategy;
-import org.complitex.address.strategy.district.DistrictStrategy;
-import org.complitex.address.strategy.region.RegionStrategy;
-import org.complitex.address.strategy.street.StreetStrategy;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.DomainObjectFilter;
+import ru.complitex.address.strategy.building.BuildingStrategy;
+import ru.complitex.address.strategy.city.CityStrategy;
+import ru.complitex.address.strategy.city_type.CityTypeStrategy;
+import ru.complitex.address.strategy.country.CountryStrategy;
+import ru.complitex.address.strategy.district.DistrictStrategy;
+import ru.complitex.address.strategy.region.RegionStrategy;
+import ru.complitex.address.strategy.street.StreetStrategy;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.entity.DomainObjectFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.complitex.pspoffice.api.model.AddressModel;
@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
-import static org.complitex.common.util.Locales.RU;
-import static org.complitex.common.util.Locales.UA;
+import static ru.complitex.common.util.Locales.RU;
+import static ru.complitex.common.util.Locales.UA;
 
 /**
  * @author Anatoly A. Ivanov

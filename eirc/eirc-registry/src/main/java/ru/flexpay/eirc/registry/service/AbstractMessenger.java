@@ -5,8 +5,8 @@ import ch.qos.cal10n.MessageConveyor;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.complitex.common.util.DateUtil;
-import org.complitex.common.util.ResourceUtil;
+import ru.complitex.common.util.DateUtil;
+import ru.complitex.common.util.ResourceUtil;
 
 import java.io.Serializable;
 import java.text.DateFormat;

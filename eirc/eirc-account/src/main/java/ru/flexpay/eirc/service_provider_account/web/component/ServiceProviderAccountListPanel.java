@@ -31,13 +31,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.entity.StringLocale;
-import org.complitex.common.strategy.StringLocaleBean;
-import org.complitex.common.web.component.ShowMode;
-import org.complitex.common.web.component.ShowModePanel;
-import org.complitex.common.web.component.datatable.DataProvider;
-import org.complitex.common.web.component.organization.OrganizationIdPicker;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.entity.StringLocale;
+import ru.complitex.common.strategy.StringLocaleBean;
+import ru.complitex.common.web.component.ShowMode;
+import ru.complitex.common.web.component.ShowModePanel;
+import ru.complitex.common.web.component.datatable.DataProvider;
+import ru.complitex.common.web.component.organization.OrganizationIdPicker;
 import ru.flexpay.eirc.dictionary.entity.OrganizationType;
 import ru.flexpay.eirc.dictionary.entity.Person;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
@@ -52,8 +52,8 @@ import javax.ejb.EJB;
 import java.util.List;
 import java.util.Map;
 
-import static org.complitex.common.web.component.ShowMode.ACTIVE;
-import static org.complitex.common.web.component.ShowMode.ALL;
+import static ru.complitex.common.web.component.ShowMode.ACTIVE;
+import static ru.complitex.common.web.component.ShowMode.ALL;
 
 /**
  * @author Pavel Sknar

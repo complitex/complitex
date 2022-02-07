@@ -3,10 +3,10 @@ package ru.flexpay.eirc.web.correction;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.correction.web.address.*;
-import org.complitex.correction.web.organization.OrganizationCorrectionList;
-import org.complitex.template.web.template.ITemplateLink;
-import org.complitex.template.web.template.ResourceTemplateMenu;
+import ru.complitex.correction.web.address.*;
+import ru.complitex.correction.web.organization.OrganizationCorrectionList;
+import ru.complitex.template.web.template.ITemplateLink;
+import ru.complitex.template.web.template.ResourceTemplateMenu;
 import ru.flexpay.eirc.service.correction.web.list.ServiceCorrectionList;
 import ru.flexpay.eirc.service_provider_account.web.list.ServiceProviderAccountCorrectionList;
 

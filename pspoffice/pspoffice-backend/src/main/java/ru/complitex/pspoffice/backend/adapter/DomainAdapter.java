@@ -1,9 +1,9 @@
 package ru.complitex.pspoffice.backend.adapter;
 
-import org.complitex.common.entity.Attribute;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.entity.Status;
-import org.complitex.common.entity.StringValue;
+import ru.complitex.common.entity.Attribute;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.entity.Status;
+import ru.complitex.common.entity.StringValue;
 import ru.complitex.pspoffice.api.model.DomainAttributeModel;
 import ru.complitex.pspoffice.api.model.DomainModel;
 

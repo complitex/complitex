@@ -35,7 +35,6 @@ import org.odlabs.wiquery.core.javascript.JsQuery;
 import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.core.options.*;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
-import org.odlabs.wiquery.ui.resizable.ResizableAnimeDuration.DurationEnum;
 
 import java.util.List;
 
@@ -280,7 +279,7 @@ public class ResizableBehavior extends WiQueryAbstractAjaxBehavior
 			return (ResizableAnimeDuration) animeDuration;
 		}
 
-		return new ResizableAnimeDuration(DurationEnum.SLOW);
+		return new ResizableAnimeDuration(ResizableAnimeDuration.DurationEnum.SLOW);
 	}
 
 	/**

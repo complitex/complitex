@@ -22,7 +22,7 @@
             <artifactId>eirc-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.complitex</groupId>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
     </dependencies>

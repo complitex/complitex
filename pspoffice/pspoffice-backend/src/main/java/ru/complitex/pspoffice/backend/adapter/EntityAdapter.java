@@ -1,7 +1,7 @@
 package ru.complitex.pspoffice.backend.adapter;
 
-import org.complitex.common.entity.Entity;
-import org.complitex.common.entity.StringValue;
+import ru.complitex.common.entity.Entity;
+import ru.complitex.common.entity.StringValue;
 import ru.complitex.pspoffice.api.model.EntityAttributeModel;
 import ru.complitex.pspoffice.api.model.EntityModel;
 

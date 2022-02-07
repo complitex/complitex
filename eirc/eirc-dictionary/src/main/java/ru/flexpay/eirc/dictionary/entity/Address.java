@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.dictionary.entity;
 
-import org.complitex.address.entity.AddressEntity;
+import ru.complitex.address.entity.AddressEntity;
 
 import java.io.Serializable;
 

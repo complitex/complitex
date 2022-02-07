@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.complitex.pspoffice</groupId>
+    <groupId>ru.complitex.pspoffice</groupId>
     <artifactId>pspoffice-address</artifactId>
     <name>Pspoffice - Address</name>
     <version>4.0.0-SNAPSHOT</version>
@@ -16,6 +16,18 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>ru.complitex</groupId>
+            <artifactId>complitex-catalog-entity</artifactId>
+            <version>8.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.complitex.pspoffice</groupId>
+            <artifactId>pspoffice-address-catalog-entity</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -211,6 +223,14 @@
                             <mainClass>${mainClass}</mainClass>
                         </manifest>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>

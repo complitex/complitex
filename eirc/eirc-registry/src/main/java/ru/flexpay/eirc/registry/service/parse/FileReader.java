@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.registry.service.parse;
 
 import com.google.common.collect.Lists;
-import org.complitex.common.exception.ExecuteException;
+import ru.complitex.common.exception.ExecuteException;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

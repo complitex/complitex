@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.registry.service.handle.exchange;
 
-import org.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.entity.FilterWrapper;
 import ru.flexpay.eirc.dictionary.entity.Address;
 import ru.flexpay.eirc.eirc_account.entity.EircAccount;
 import ru.flexpay.eirc.registry.entity.Registry;

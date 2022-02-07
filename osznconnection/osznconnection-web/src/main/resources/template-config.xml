@@ -4,24 +4,24 @@
           xsi:schemaLocation="http://www.complitex.org/web/template http://www.complitex.org/web/template/complitex-template.xsd">
     <web-components>
         <domain-object-permission-panel>
-            org.complitex.organization.web.component.DomainObjectPermissionPanel
+            ru.complitex.organization.web.component.DomainObjectPermissionPanel
         </domain-object-permission-panel>
         <organization-permission-panel>
-            org.complitex.organization.web.component.OrganizationPermissionPanel
+            ru.complitex.organization.web.component.OrganizationPermissionPanel
         </organization-permission-panel>
         <user-organization-picker>
-            org.complitex.organization.web.component.UserOrganizationPicker
+            ru.complitex.organization.web.component.UserOrganizationPicker
         </user-organization-picker>
     </web-components>
     <sidebar>
-        <menu class="org.complitex.osznconnection.file.web.menu.SubsidyRequestMenu"/>
-        <menu class="org.complitex.osznconnection.file.web.menu.PrivilegeRequestMenu"/>
-        <menu class="org.complitex.osznconnection.file.web.menu.CorrectionMenu"/>
-        <menu class="org.complitex.address.menu.AddressMenu"/>
-        <menu class="org.complitex.osznconnection.file.web.menu.OsznDictionaryMenu"/>
-        <menu class="org.complitex.sync.web.DomainSyncMenu"/>
-        <menu class="org.complitex.osznconnection.file.web.AdminTemplateMenu"/>
-        <menu class="org.complitex.osznconnection.file.web.menu.OsznDescriptionMenu"/>
+        <menu class="ru.complitex.osznconnection.file.web.menu.SubsidyRequestMenu"/>
+        <menu class="ru.complitex.osznconnection.file.web.menu.PrivilegeRequestMenu"/>
+        <menu class="ru.complitex.osznconnection.file.web.menu.CorrectionMenu"/>
+        <menu class="ru.complitex.address.menu.AddressMenu"/>
+        <menu class="ru.complitex.osznconnection.file.web.menu.OsznDictionaryMenu"/>
+        <menu class="ru.complitex.sync.web.DomainSyncMenu"/>
+        <menu class="ru.complitex.osznconnection.file.web.AdminTemplateMenu"/>
+        <menu class="ru.complitex.osznconnection.file.web.menu.OsznDescriptionMenu"/>
     </sidebar>
     <groups>
         <group name="SUBSIDY_GROUP"/>

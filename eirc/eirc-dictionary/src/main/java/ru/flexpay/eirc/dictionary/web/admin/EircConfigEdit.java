@@ -1,7 +1,7 @@
 package ru.flexpay.eirc.dictionary.web.admin;
 
-import org.complitex.common.entity.IConfig;
-import org.complitex.template.web.pages.ConfigEdit;
+import ru.complitex.common.entity.IConfig;
+import ru.complitex.template.web.pages.ConfigEdit;
 import ru.flexpay.eirc.dictionary.service.EircConfigBean;
 
 import javax.ejb.EJB;

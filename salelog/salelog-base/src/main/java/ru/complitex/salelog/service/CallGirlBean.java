@@ -1,7 +1,7 @@
 package ru.complitex.salelog.service;
 
-import org.complitex.common.entity.FilterWrapper;
-import org.complitex.common.service.AbstractBean;
+import ru.complitex.common.entity.FilterWrapper;
+import ru.complitex.common.service.AbstractBean;
 import ru.complitex.salelog.entity.CallGirl;
 
 import javax.ejb.Stateless;

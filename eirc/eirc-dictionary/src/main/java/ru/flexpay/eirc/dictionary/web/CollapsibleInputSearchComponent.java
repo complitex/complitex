@@ -1,12 +1,12 @@
 package ru.flexpay.eirc.dictionary.web;
 
 import com.google.common.collect.ImmutableList;
-import org.complitex.common.entity.DomainObject;
-import org.complitex.common.strategy.IStrategy;
-import org.complitex.common.strategy.StrategyFactory;
-import org.complitex.common.web.component.ShowMode;
-import org.complitex.common.web.component.search.ISearchCallback;
-import org.complitex.common.web.component.search.SearchComponentState;
+import ru.complitex.common.entity.DomainObject;
+import ru.complitex.common.strategy.IStrategy;
+import ru.complitex.common.strategy.StrategyFactory;
+import ru.complitex.common.web.component.ShowMode;
+import ru.complitex.common.web.component.search.ISearchCallback;
+import ru.complitex.common.web.component.search.SearchComponentState;
 import ru.flexpay.eirc.dictionary.entity.Address;
 
 import javax.ejb.EJB;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author Pavel Sknar
  */
-public abstract class CollapsibleInputSearchComponent extends org.complitex.common.web.component.search.CollapsibleInputSearchComponent {
+public abstract class CollapsibleInputSearchComponent extends ru.complitex.common.web.component.search.CollapsibleInputSearchComponent {
 
     private static final List<String> SEARCH_FILTERS = ImmutableList.of("country", "region", "city", "street", "building", "apartment", "room");
 

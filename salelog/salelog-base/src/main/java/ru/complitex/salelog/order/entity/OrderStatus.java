@@ -1,7 +1,7 @@
 package ru.complitex.salelog.order.entity;
 
-import org.complitex.common.entity.IFixedIdType;
-import org.complitex.common.util.ResourceUtil;
+import ru.complitex.common.entity.IFixedIdType;
+import ru.complitex.common.util.ResourceUtil;
 
 import java.util.Locale;
 

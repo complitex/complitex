@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute">
-    <cache type="org.complitex.common.mybatis.caches.EhcacheCache"/>
+    <cache type="ru.complitex.common.mybatis.caches.EhcacheCache"/>
 
     <resultMap id="serviceProviderAccountAttributeResultMap" type="ru.flexpay.eirc.service_provider_account.entity.ServiceProviderAccountAttribute"
-               extends="org.complitex.common.strategy.DomainObjectStrategy.attributeResultMap">
+               extends="ru.complitex.common.strategy.DomainObjectStrategy.attributeResultMap">
         <id column="pk_id" property="pkId"/>
     </resultMap>
 

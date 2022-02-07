@@ -3,11 +3,11 @@ package ru.complitex.salelog.web.admin;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.complitex.logging.web.LogList;
-import org.complitex.template.web.pages.ConfigEdit;
-import org.complitex.template.web.security.SecurityRole;
-import org.complitex.template.web.template.ITemplateLink;
-import org.complitex.template.web.template.ResourceTemplateMenu;
+import ru.complitex.logging.web.LogList;
+import ru.complitex.template.web.pages.ConfigEdit;
+import ru.complitex.template.web.security.SecurityRole;
+import ru.complitex.template.web.template.ITemplateLink;
+import ru.complitex.template.web.template.ResourceTemplateMenu;
 
 import java.util.ArrayList;
 import java.util.List;

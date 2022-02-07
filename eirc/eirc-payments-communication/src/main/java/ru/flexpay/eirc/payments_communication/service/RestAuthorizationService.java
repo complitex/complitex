@@ -1,6 +1,6 @@
 package ru.flexpay.eirc.payments_communication.service;
 
-import org.complitex.template.web.security.SecurityRole;
+import ru.complitex.template.web.security.SecurityRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.flexpay.eirc.payments_communication.entity.ResponseContent;

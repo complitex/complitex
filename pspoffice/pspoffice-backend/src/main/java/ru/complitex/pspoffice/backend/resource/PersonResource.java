@@ -2,15 +2,15 @@ package ru.complitex.pspoffice.backend.resource;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.complitex.common.entity.DomainObjectFilter;
-import org.complitex.common.entity.Gender;
-import org.complitex.common.util.AttributeUtil;
-import org.complitex.pspoffice.document.strategy.DocumentStrategy;
-import org.complitex.pspoffice.document.strategy.entity.Document;
-import org.complitex.pspoffice.person.strategy.PersonStrategy;
-import org.complitex.pspoffice.person.strategy.entity.Person;
-import org.complitex.pspoffice.person.strategy.entity.PersonName;
-import org.complitex.pspoffice.person.strategy.service.PersonNameBean;
+import ru.complitex.common.entity.DomainObjectFilter;
+import ru.complitex.common.entity.Gender;
+import ru.complitex.common.util.AttributeUtil;
+import ru.complitex.pspoffice.document.strategy.DocumentStrategy;
+import ru.complitex.pspoffice.document.strategy.entity.Document;
+import ru.complitex.pspoffice.person.strategy.PersonStrategy;
+import ru.complitex.pspoffice.person.strategy.entity.Person;
+import ru.complitex.pspoffice.person.strategy.entity.PersonName;
+import ru.complitex.pspoffice.person.strategy.service.PersonNameBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.complitex.pspoffice.api.model.DocumentModel;
@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
-import static org.complitex.common.util.Locales.RU;
-import static org.complitex.common.util.Locales.UA;
+import static ru.complitex.common.util.Locales.RU;
+import static ru.complitex.common.util.Locales.UA;
 
 /**
  * @author Anatoly A. Ivanov

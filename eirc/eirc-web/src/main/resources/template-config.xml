@@ -8,8 +8,8 @@
         <menu class="ru.flexpay.eirc.registry.web.RegistryTemplateMenu"/>
         <menu class="ru.flexpay.eirc.organization.web.EircOrganizationTemplateMenu"/>
         <menu class="ru.flexpay.eirc.organization_type.web.OrganizationTypeMenu"/>
-        <menu class="org.complitex.address.menu.AddressMenu"/>
-        <menu class="org.complitex.address.menu.AddressDescriptionMenu"/>
+        <menu class="ru.complitex.address.menu.AddressMenu"/>
+        <menu class="ru.complitex.address.menu.AddressDescriptionMenu"/>
         <menu class="ru.flexpay.eirc.web.correction.CorrectionMenu"/>
     </sidebar>
 </template>

@@ -2,7 +2,7 @@ package ru.flexpay.eirc.payments_communication.service;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.complitex.template.web.security.SecurityWebListener;
+import ru.complitex.template.web.security.SecurityWebListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,7 +2,7 @@ package ru.flexpay.eirc.registry.entity;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import org.complitex.common.entity.IFixedIdType;
+import ru.complitex.common.entity.IFixedIdType;
 
 import java.util.Collections;
 import java.util.Map;

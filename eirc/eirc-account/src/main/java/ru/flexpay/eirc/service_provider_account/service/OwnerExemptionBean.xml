@@ -67,7 +67,7 @@
         </if>
     </sql>
 
-    <select id="selectOwnerExemptions" parameterType="org.complitex.common.entity.FilterWrapper"
+    <select id="selectOwnerExemptions" parameterType="ru.complitex.common.entity.FilterWrapper"
             resultMap="OwnerExemption">
         select
         <include refid="ownerExemptionColumns"/>
@@ -106,7 +106,7 @@
         </if>
     </select>
 
-    <select id="selectOwnerExemptionsWithExemptions" parameterType="org.complitex.common.entity.FilterWrapper"
+    <select id="selectOwnerExemptionsWithExemptions" parameterType="ru.complitex.common.entity.FilterWrapper"
             resultMap="OwnerExemption">
         select oe.*,
         <include refid="ru.flexpay.eirc.service_provider_account.service.ExemptionBean.exemptionColumns"/>
@@ -150,7 +150,7 @@
         where e.`end_date` is null
     </select>
 
-    <select id="countOwnerExemptions" parameterType="org.complitex.common.entity.FilterWrapper" resultType="integer">
+    <select id="countOwnerExemptions" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="integer">
         select count(distinct oe.`object_id`) from `owner_exemption` oe
         where oe.`end_date` is null
 
