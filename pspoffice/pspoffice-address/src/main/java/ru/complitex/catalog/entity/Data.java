@@ -81,4 +81,8 @@ public class Data extends Relevance {
     public void setReferenceId(Long referenceId) {
         this.referenceId = referenceId;
     }
+
+    public Type getType() {
+        return getValue().getType();
+    }
 }

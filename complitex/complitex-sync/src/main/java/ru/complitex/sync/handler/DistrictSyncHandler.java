@@ -15,8 +15,8 @@ import ru.complitex.correction.entity.Correction;
 import ru.complitex.correction.service.CorrectionBean;
 import ru.complitex.sync.entity.DomainSync;
 import ru.complitex.sync.entity.SyncEntity;
-import ru.complitex.sync.service.DomainSyncAdapter;
 import ru.complitex.sync.service.DomainSyncBean;
+import ru.complitex.sync.service.DomainSyncJsonAdapter;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -32,9 +32,9 @@ import static ru.complitex.sync.entity.DomainSyncStatus.SYNCHRONIZED;
  * Date: 17.07.2014 23:34
  */
 @Stateless
-public class DistrictSyncHandler implements IDomainSyncHandler {
+public class DistrictSyncHandler extends DomainSyncHandler {
     @EJB
-    private DomainSyncAdapter addressSyncAdapter;
+    private DomainSyncJsonAdapter addressSyncJsonAdapter;
 
     @EJB
     private DistrictStrategy districtStrategy;
@@ -46,21 +46,13 @@ public class DistrictSyncHandler implements IDomainSyncHandler {
     private DomainSyncBean domainSyncBean;
 
     @Override
-    public List<DomainSync> getParentDomainSyncs() {
-        return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY, SYNCHRONIZED)));
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync city, Date date) throws RemoteCallException {
+        return addressSyncJsonAdapter.getDistrictSyncs(getCityDomainSyncParameter(city, date));
     }
 
     @Override
-    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY_TYPE,
-                Long.valueOf(parentDomainSync.getAdditionalParentId()))));
-
-        if (cityTypeDomainSyncs.isEmpty()){
-            throw new CorrectionNotFoundException("city type correction not found " + cityTypeDomainSyncs);
-        }
-
-        return addressSyncAdapter.getDistrictSyncs(cityTypeDomainSyncs.get(0).getAdditionalName(),
-                parentDomainSync.getName(), date);
+    public List<DomainSync> getParentDomainSyncs() {
+        return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY, SYNCHRONIZED)));
     }
 
     private Long getParentObjectId(DomainSync domainSync, Long organizationId){

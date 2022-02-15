@@ -5,7 +5,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import ru.complitex.catalog.component.ItemInput;
 import ru.complitex.catalog.entity.Item;
-import ru.complitex.pspoffice.address.catalog.entity.Flat;
+import ru.complitex.pspoffice.address.entity.Flat;
 import ru.complitex.pspoffice.address.model.ReferenceModel;
 import ru.complitex.ui.entity.Filter;
 

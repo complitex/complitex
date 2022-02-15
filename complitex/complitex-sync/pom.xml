@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>ru.complitex</groupId>
+            <artifactId>complitex-address-entity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
         <dependency>
@@ -29,6 +33,11 @@
         <dependency>
             <groupId>ru.complitex</groupId>
             <artifactId>complitex-correction</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -8,7 +8,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import ru.complitex.pspoffice.address.catalog.page.*;
 import ru.complitex.pspoffice.address.correction.page.*;
 import ru.complitex.pspoffice.address.resource.CssResourceReference;
 import ru.complitex.pspoffice.address.sync.page.SyncPage;

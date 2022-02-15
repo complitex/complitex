@@ -12,11 +12,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.complitex.address.entity.AddressEntity;
 import ru.complitex.address.strategy.street.StreetStrategy;
 import ru.complitex.common.entity.FilterWrapper;
 import ru.complitex.common.util.ResourceUtil;
-import ru.complitex.common.util.StringUtil;
 import ru.complitex.common.web.component.ajax.AjaxLinkLabel;
 import ru.complitex.common.web.component.datatable.Action;
 import ru.complitex.common.web.component.datatable.FilteredDataTable;
@@ -25,8 +26,6 @@ import ru.complitex.common.wicket.BroadcastBehavior;
 import ru.complitex.sync.entity.*;
 import ru.complitex.sync.service.DomainSyncBean;
 import ru.complitex.sync.service.DomainSyncService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import java.util.*;
@@ -118,12 +117,12 @@ public class DomainSyncPanel extends Panel {
         add(new AjaxLink("load") {
             @Override
             public boolean isVisible() {
-                return !domainSyncService.getProcessing();
+                return !domainSyncService.isProcessing();
             }
 
             @Override
             public void onClick(final AjaxRequestTarget target) {
-                if (domainSyncService.getProcessing()){
+                if (domainSyncService.isProcessing()){
                     return;
                 }
 
@@ -146,14 +145,14 @@ public class DomainSyncPanel extends Panel {
 
             @Override
             public boolean isVisible() {
-                return !domainSyncService.getProcessing();
+                return !domainSyncService.isProcessing();
             }
         });
 
         add(new AjaxLink("cancel") {
             @Override
             public boolean isVisible() {
-                return domainSyncService.getProcessing();
+                return domainSyncService.isProcessing();
             }
 
             @Override
@@ -198,36 +197,21 @@ public class DomainSyncPanel extends Panel {
                     handler.add(DomainSyncPanel.this);
                 }
 
-                if (payload instanceof DomainSync && System.currentTimeMillis() - lastProcessed > 100) {
-                    lastProcessed = System.currentTimeMillis();
+                if (payload instanceof DomainSync) {
+                    index++;
 
-                    DomainSync domainSync = (DomainSync) payload;
+                    if (System.currentTimeMillis() - lastProcessed > 250) {
+                        String message = index + ", " + ((DomainSync) payload).getName();
 
-                    String parent = StringUtil.emptyOnNull(domainSync.getParentId());
+                        processed.setDefaultModelObject(message);
 
-                    if (domainSync.getParentId() != null){
-                        DomainSync filter = new DomainSync();
+                        handler.add(processed);
 
-                        filter.setExternalId(domainSync.getParentId());
-
-                        List<DomainSync> domainSyncs = domainSyncBean.getList(FilterWrapper.of(filter));
-
-                        if (!domainSyncs.isEmpty()){
-                            parent = StringUtil.emptyOnNull(domainSyncs.get(0).getName()) + " " + StringUtil.emptyOnNull(domainSyncs.get(0).getAdditionalName());
-                        }
+                        lastProcessed = System.currentTimeMillis();
                     }
-
-                    String message = index++ + ", " + parent + " " +
-                            domainSync.getName() + " " + StringUtil.valueOf(domainSync.getAdditionalName());
-
-                    processed.setDefaultModelObject(message);
-                    handler.add(processed);
                 }
             }
         });
-
-
-
     }
 
     protected void onUpdate(IPartialPageRequestHandler target){

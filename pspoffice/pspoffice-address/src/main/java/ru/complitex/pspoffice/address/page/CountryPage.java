@@ -1,34 +1,34 @@
-package ru.complitex.pspoffice.address.catalog.page;
+package ru.complitex.pspoffice.address.page;
 
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.CityType;
+import ru.complitex.pspoffice.address.entity.Country;
 
 import javax.inject.Inject;
 
 /**
  * @author Ivanov Anatoliy
  */
-public class CityTypePage extends AddressPage {
+public class CountryPage extends AddressPage {
     @Inject
     private CatalogService catalogService;
 
-    public CityTypePage() {
-        super(CityType.CATALOG);
+    public CountryPage() {
+        super(Country.CATALOG);
     }
 
     @Override
     protected boolean isRequired(Value value) {
-        return value.is(CityType.CITY_TYPE_NAME, Locale.SYSTEM) || value.is(CityType.CITY_TYPE_SHORT_NAME, Locale.SYSTEM);
+        return value.is(Country.COUNTRY_NAME, Locale.SYSTEM);
     }
 
     @Override
     protected boolean validate(Item item) {
-        if (catalogService.getItemsCount(CityType.CATALOG, getDate())
+        if (catalogService.getItemsCount(Country.CATALOG, getDate())
                 .withoutId(item.getId())
-                .withText(CityType.CITY_TYPE_NAME, Locale.SYSTEM, item.getText(CityType.CITY_TYPE_NAME, Locale.SYSTEM))
+                .withText(Country.COUNTRY_NAME, Locale.SYSTEM, item.getText(Country.COUNTRY_NAME, Locale.SYSTEM))
                 .get() > 0) {
             error(getString("error_unique"));
 

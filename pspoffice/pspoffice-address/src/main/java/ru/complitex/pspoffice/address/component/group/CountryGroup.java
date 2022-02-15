@@ -3,7 +3,7 @@ package ru.complitex.pspoffice.address.component.group;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import ru.complitex.catalog.component.ItemInput;
-import ru.complitex.pspoffice.address.catalog.entity.Country;
+import ru.complitex.pspoffice.address.entity.Country;
 
 import java.time.LocalDate;
 

@@ -1,15 +1,19 @@
-package ru.complitex.pspoffice.address.catalog.page;
+package ru.complitex.pspoffice.address.page;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.House;
+import ru.complitex.catalog.util.Dates;
+import ru.complitex.pspoffice.address.entity.House;
 import ru.complitex.pspoffice.address.component.group.DistrictStreetGroup;
+import ru.complitex.pspoffice.address.entity.Street;
+import ru.complitex.pspoffice.address.entity.StreetType;
 
 import javax.inject.Inject;
 
@@ -22,6 +26,24 @@ public class HousePage extends AddressPage {
 
     public HousePage() {
         super(House.CATALOG);
+    }
+
+    @Override
+    protected IModel<String> newModel(IModel<Item> model, Value value) {
+        if (value.getReferenceCatalog() != null && value.getReferenceCatalog().getKeyId() == Street.CATALOG) {
+            Long referenceId = model.getObject().getReferenceId(value.getKeyId());
+
+            if (referenceId != null) {
+                Item street = catalogService.getItem(Street.CATALOG, referenceId, Dates.now());
+
+                if (street != null) {
+                    return Model.of(catalogService.getItem(StreetType.CATALOG, street.getReferenceId(Street.STREET_TYPE), Dates.now())
+                            .getText(StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM) + " " + street.getText(Street.STREET_NAME, Locale.SYSTEM));
+                }
+            }
+        }
+
+        return super.newModel(model, value);
     }
 
     @Override

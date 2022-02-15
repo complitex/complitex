@@ -1,10 +1,10 @@
 package ru.complitex.catalog.model;
 
 import org.apache.wicket.model.IModel;
-import ru.complitex.catalog.entity.Data;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Type;
 import ru.complitex.catalog.entity.Value;
+import ru.complitex.catalog.entity.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

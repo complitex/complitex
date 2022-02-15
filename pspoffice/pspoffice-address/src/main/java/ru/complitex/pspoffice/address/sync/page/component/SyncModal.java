@@ -15,7 +15,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import ru.complitex.catalog.util.Dates;
-import ru.complitex.pspoffice.address.catalog.entity.*;
+import ru.complitex.pspoffice.address.entity.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

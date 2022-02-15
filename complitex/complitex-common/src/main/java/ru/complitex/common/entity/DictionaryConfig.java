@@ -10,7 +10,7 @@ import ru.complitex.common.web.component.type.InputPanel;
  *         Date: 02.03.11 16:31
  */
 public enum DictionaryConfig implements IComponentConfig {
-    IMPORT_FILE_STORAGE_DIR, SYNC_DATA_SOURCE, MODULE_ID;
+    IMPORT_FILE_STORAGE_DIR, SYNC_DATA_SOURCE, SYNC_URL, MODULE_ID;
 
     @Override
     public String getGroupKey() {

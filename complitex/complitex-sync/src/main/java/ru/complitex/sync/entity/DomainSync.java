@@ -58,8 +58,10 @@ public class DomainSync implements ILongId {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public DomainSync setParentId(Long parentId) {
         this.parentId = parentId;
+
+        return this;
     }
 
     public String getAdditionalParentId() {

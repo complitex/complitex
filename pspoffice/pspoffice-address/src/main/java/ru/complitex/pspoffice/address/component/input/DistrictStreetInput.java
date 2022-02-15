@@ -6,8 +6,8 @@ import org.apache.wicket.model.StringResourceModel;
 import ru.complitex.catalog.component.ItemInput;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.District;
-import ru.complitex.pspoffice.address.catalog.entity.Street;
+import ru.complitex.pspoffice.address.entity.District;
+import ru.complitex.pspoffice.address.entity.Street;
 import ru.complitex.ui.entity.Filter;
 
 import javax.inject.Inject;

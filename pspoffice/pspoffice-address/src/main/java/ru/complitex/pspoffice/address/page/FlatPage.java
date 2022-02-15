@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.catalog.page;
+package ru.complitex.pspoffice.address.page;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -8,7 +8,7 @@ import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.Flat;
+import ru.complitex.pspoffice.address.entity.Flat;
 import ru.complitex.pspoffice.address.component.group.HouseGroup;
 
 import javax.inject.Inject;

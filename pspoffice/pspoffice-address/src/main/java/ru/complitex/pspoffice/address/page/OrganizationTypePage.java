@@ -1,10 +1,10 @@
-package ru.complitex.pspoffice.address.catalog.page;
+package ru.complitex.pspoffice.address.page;
 
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.OrganizationType;
+import ru.complitex.pspoffice.address.entity.OrganizationType;
 
 import javax.inject.Inject;
 

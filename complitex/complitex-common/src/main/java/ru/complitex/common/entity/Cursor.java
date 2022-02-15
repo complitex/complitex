@@ -16,8 +16,13 @@ public class Cursor<T> implements Serializable{
     public Cursor() {
     }
 
-    @SuppressWarnings("unchecked")
-    public Cursor(Integer resultCode, List data) {
+    public Cursor(List<T> data) {
+        this.data = data;
+
+        resultCode = 1;
+    }
+
+    public Cursor(Integer resultCode, List<T> data) {
         this.resultCode = resultCode;
         this.data = data;
     }

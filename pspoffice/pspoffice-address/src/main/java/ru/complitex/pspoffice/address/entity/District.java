@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.catalog.entity;
+package ru.complitex.pspoffice.address.entity;
 
 /**
  * @author Ivanov Anatoliy

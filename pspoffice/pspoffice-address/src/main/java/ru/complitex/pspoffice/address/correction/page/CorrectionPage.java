@@ -1,6 +1,6 @@
 package ru.complitex.pspoffice.address.correction.page;
 
-import ru.complitex.pspoffice.address.catalog.page.AddressPage;
+import ru.complitex.pspoffice.address.page.AddressPage;
 
 /**
  * @author Ivanov Anatoliy

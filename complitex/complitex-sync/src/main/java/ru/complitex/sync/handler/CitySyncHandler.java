@@ -14,10 +14,11 @@ import ru.complitex.common.web.component.ShowMode;
 import ru.complitex.correction.entity.Correction;
 import ru.complitex.correction.service.CorrectionBean;
 import ru.complitex.sync.entity.DomainSync;
+import ru.complitex.sync.entity.DomainSyncParameter;
 import ru.complitex.sync.entity.DomainSyncStatus;
 import ru.complitex.sync.entity.SyncEntity;
-import ru.complitex.sync.service.DomainSyncAdapter;
 import ru.complitex.sync.service.DomainSyncBean;
+import ru.complitex.sync.service.DomainSyncJsonAdapter;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -30,9 +31,9 @@ import java.util.Objects;
  * 19.01.2018 17:17
  */
 @Stateless
-public class CitySyncHandler implements IDomainSyncHandler{
+public class CitySyncHandler extends DomainSyncHandler {
     @EJB
-    private DomainSyncAdapter addressSyncAdapter;
+    private DomainSyncJsonAdapter addressSyncJsonAdapter;
 
     @EJB
     private CorrectionBean correctionBean;
@@ -44,8 +45,13 @@ public class CitySyncHandler implements IDomainSyncHandler{
     private CityStrategy cityStrategy;
 
     @Override
-    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        return addressSyncAdapter.getCitySyncs(parentDomainSync.getName(), date);
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync region, Date date) throws RemoteCallException {
+        DomainSyncParameter parameter = new DomainSyncParameter(date);
+
+        parameter.setCountryName(getDomainSync(SyncEntity.COUNTRY, region.getParentId()).getName());
+        parameter.setRegionName(region.getName());
+
+        return addressSyncJsonAdapter.getCitySyncs(parameter);
     }
 
     @Override

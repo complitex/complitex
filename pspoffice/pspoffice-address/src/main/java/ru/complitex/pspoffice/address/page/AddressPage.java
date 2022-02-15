@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.catalog.page;
+package ru.complitex.pspoffice.address.page;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -7,7 +7,6 @@ import ru.complitex.catalog.entity.Catalog;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.util.Dates;
-import ru.complitex.pspoffice.address.page.BasePage;
 
 import java.time.LocalDate;
 

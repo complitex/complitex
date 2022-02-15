@@ -7,8 +7,8 @@ import ru.complitex.catalog.component.ItemInput;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.City;
-import ru.complitex.pspoffice.address.catalog.entity.CityType;
+import ru.complitex.pspoffice.address.entity.City;
+import ru.complitex.pspoffice.address.entity.CityType;
 import ru.complitex.pspoffice.address.model.ReferenceModel;
 import ru.complitex.ui.entity.Filter;
 

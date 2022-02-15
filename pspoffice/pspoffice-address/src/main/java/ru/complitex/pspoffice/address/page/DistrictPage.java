@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.catalog.page;
+package ru.complitex.pspoffice.address.page;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -7,7 +7,7 @@ import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.Street;
+import ru.complitex.pspoffice.address.entity.District;
 import ru.complitex.pspoffice.address.component.group.CityGroup;
 
 import javax.inject.Inject;
@@ -15,17 +15,17 @@ import javax.inject.Inject;
 /**
  * @author Ivanov Anatoliy
  */
-public class StreetPage extends AddressPage {
+public class DistrictPage extends AddressPage {
     @Inject
     private CatalogService catalogService;
 
-    public StreetPage() {
-        super(Street.CATALOG);
+    public DistrictPage() {
+        super(District.CATALOG);
     }
 
     @Override
     protected Component newReferenceGroup(String id, IModel<Item> model, Value value) {
-        if (value.is(Street.CITY)) {
+        if (value.is(District.CITY)) {
             return new CityGroup(id, new DataModel<>(model, value), getDate()).setRequired(true);
         }
 
@@ -34,16 +34,15 @@ public class StreetPage extends AddressPage {
 
     @Override
     protected boolean isRequired(Value value) {
-        return value.is(Street.CITY) || value.is(Street.STREET_TYPE) || value.is(Street.STREET_NAME, Locale.SYSTEM);
+        return value.is(District.CITY) || value.is(District.DISTRICT_NAME, Locale.SYSTEM) ;
     }
 
     @Override
     protected boolean validate(Item item) {
-        if (catalogService.getItemsCount(Street.CATALOG, getDate())
+        if (catalogService.getItemsCount(District.CATALOG, getDate())
                 .withoutId(item.getId())
-                .withReferenceId(Street.CITY, item.getReferenceId(Street.CITY))
-                .withReferenceId(Street.STREET_TYPE, item.getReferenceId(Street.STREET_TYPE))
-                .withText(Street.STREET_NAME, Locale.SYSTEM, item.getText(Street.STREET_NAME, Locale.SYSTEM))
+                .withReferenceId(District.CITY, item.getReferenceId(District.CITY))
+                .withText(District.DISTRICT_NAME, Locale.SYSTEM, item.getText(District.DISTRICT_NAME, Locale.SYSTEM))
                 .get() > 0) {
             error(getString("error_unique"));
 

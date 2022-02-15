@@ -1,34 +1,34 @@
-package ru.complitex.pspoffice.address.catalog.page;
+package ru.complitex.pspoffice.address.page;
 
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.Country;
+import ru.complitex.pspoffice.address.entity.StreetType;
 
 import javax.inject.Inject;
 
 /**
  * @author Ivanov Anatoliy
  */
-public class CountryPage extends AddressPage {
+public class StreetTypePage extends AddressPage {
     @Inject
     private CatalogService catalogService;
 
-    public CountryPage() {
-        super(Country.CATALOG);
+    public StreetTypePage() {
+        super(StreetType.CATALOG);
     }
 
     @Override
     protected boolean isRequired(Value value) {
-        return value.is(Country.COUNTRY_NAME, Locale.SYSTEM);
+        return value.is(StreetType.STREET_TYPE_NAME, Locale.SYSTEM) || value.is(StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM);
     }
 
     @Override
     protected boolean validate(Item item) {
-        if (catalogService.getItemsCount(Country.CATALOG, getDate())
+        if (catalogService.getItemsCount(StreetType.CATALOG, getDate())
                 .withoutId(item.getId())
-                .withText(Country.COUNTRY_NAME, Locale.SYSTEM, item.getText(Country.COUNTRY_NAME, Locale.SYSTEM))
+                .withText(StreetType.STREET_TYPE_NAME, Locale.SYSTEM, item.getText(StreetType.STREET_TYPE_NAME, Locale.SYSTEM))
                 .get() > 0) {
             error(getString("error_unique"));
 

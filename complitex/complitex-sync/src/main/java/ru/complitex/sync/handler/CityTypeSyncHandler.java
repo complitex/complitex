@@ -13,8 +13,9 @@ import ru.complitex.common.web.component.ShowMode;
 import ru.complitex.correction.entity.Correction;
 import ru.complitex.correction.service.CorrectionBean;
 import ru.complitex.sync.entity.DomainSync;
-import ru.complitex.sync.service.DomainSyncAdapter;
+import ru.complitex.sync.entity.DomainSyncParameter;
 import ru.complitex.sync.service.DomainSyncBean;
+import ru.complitex.sync.service.DomainSyncJsonAdapter;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -26,9 +27,9 @@ import java.util.List;
  * 19.01.2018 17:18
  */
 @Stateless
-public class CityTypeSyncHandler implements IDomainSyncHandler{
+public class CityTypeSyncHandler extends DomainSyncHandler {
     @EJB
-    private DomainSyncAdapter addressSyncAdapter;
+    private DomainSyncJsonAdapter addressSyncJsonAdapter;
 
     @EJB
     private CorrectionBean correctionBean;
@@ -41,7 +42,7 @@ public class CityTypeSyncHandler implements IDomainSyncHandler{
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        return addressSyncAdapter.getCityTypeSyncs(date);
+        return addressSyncJsonAdapter.getCityTypeSyncs(new DomainSyncParameter(date));
     }
 
     @Override

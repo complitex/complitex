@@ -89,7 +89,6 @@ public class DomainSyncAdapter extends AbstractBean {
          * Возвращает: 1 либо код ошибки (INTEGER):
          * -10 Неопознанная ошибка
          */
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getCountrySyncs(Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectCountrySyncs", date);
     }
@@ -101,12 +100,10 @@ public class DomainSyncAdapter extends AbstractBean {
      * -10 Неопознанная ошибка
      * -1 Не найдена страна
      */
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getRegionSyncs(String countryName, Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectRegionSyncs", date, of("countryName", countryName));
     }
 
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getCityTypeSyncs(Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectCityTypeSyncs", date);
     }
@@ -118,7 +115,6 @@ public class DomainSyncAdapter extends AbstractBean {
      * -10 Неопознанная ошибка
      * -1 Не найден регион
      */
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getCitySyncs(String regionName, Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectCitySyncs", date, of("regionName", regionName));
     }
@@ -135,7 +131,6 @@ public class DomainSyncAdapter extends AbstractBean {
      * DistrID - varchar2,            -- Код района (ID)
      * возвращаемое значение: 0 - все хорошо, -1 - неизвестный тип нас.пункта, -2 - неизвестный нас.пункт
      */
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getDistrictSyncs(String cityTypeName, String cityName, Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectDistrictSyncs", date, of("cityName", cityName, "cityTypeName", cityTypeName));
     }
@@ -150,7 +145,6 @@ public class DomainSyncAdapter extends AbstractBean {
      * StreetTypeID - varchar2,          -- Код типа улицы (ID)
      * возвращаемое значение: 0 - все хорошо, -1 - ошибка
      */
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getStreetTypeSyncs(Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectStreetTypeSyncs", date);
     }
@@ -168,7 +162,6 @@ public class DomainSyncAdapter extends AbstractBean {
      * StreetID - varchar2,              -- Код улицы (ID)
      * возвращаемое значение: 0 - все хорошо, -1 - неизвестный тип нас.пункта, -2 - неизвестный нас.пункт
      */
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getStreetSyncs(String cityName, String cityTypeName, Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectStreetSyncs", date, of("cityName", cityName, "cityTypeName", cityTypeName));
     }
@@ -191,7 +184,6 @@ public class DomainSyncAdapter extends AbstractBean {
      * DATE Дата актуальности
      * Cur ref CURSOR Возвращаемый курсор со списком домов
      */
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getBuildingSyncs(String cityName, String cityTypeName, String districtName,
                                                String streetTypeName, String streetName, Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectBuildingSyncs", date, of("cityName", cityName,
@@ -199,7 +191,6 @@ public class DomainSyncAdapter extends AbstractBean {
                 "streetTypeName", streetTypeName));
     }
 
-    @SuppressWarnings("unchecked")
     public Cursor<DomainSync> getOrganizationSyncs(Date date) throws RemoteCallException {
         return getDomainSyncCursor("selectOrganizationSyncs", date);
     }

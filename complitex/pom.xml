@@ -11,18 +11,17 @@
 
     <modules>
         <module>complitex-address</module>
-        <module>complitex-correction</module>
         <module>complitex-admin</module>
         <module>complitex-common</module>
+        <module>complitex-correction</module>
         <module>complitex-images</module>
         <module>complitex-logging</module>
         <module>complitex-organization</module>
-        <module>complitex-resources</module>
-        <module>complitex-template</module>
         <module>complitex-organization-type</module>
-        <module>complitex-ui</module>
+        <module>complitex-resources</module>
         <module>complitex-sync</module>
-        <module>complitex-catalog-entity</module>
+        <module>complitex-template</module>
+        <module>complitex-ui</module>
     </modules>
 
     <properties>
@@ -47,6 +46,11 @@
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-address</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
+                <artifactId>complitex-address-entity</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -250,14 +254,14 @@
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
-                <version>3.4.4</version>
+                <version>3.5.9</version>
             </dependency>
 
             <!-- google guava -->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>24.1.1-jre</version>
+                <version>31.0.1-jre</version>
             </dependency>
 
             <!-- opencsv -->
@@ -402,6 +406,11 @@
                 <version>2.9.9</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20211205</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

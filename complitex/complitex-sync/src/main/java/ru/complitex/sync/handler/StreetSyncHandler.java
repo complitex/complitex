@@ -15,8 +15,8 @@ import ru.complitex.correction.entity.Correction;
 import ru.complitex.correction.service.CorrectionBean;
 import ru.complitex.sync.entity.DomainSync;
 import ru.complitex.sync.entity.SyncEntity;
-import ru.complitex.sync.service.DomainSyncAdapter;
 import ru.complitex.sync.service.DomainSyncBean;
+import ru.complitex.sync.service.DomainSyncJsonAdapter;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -32,10 +32,9 @@ import static ru.complitex.sync.entity.DomainSyncStatus.SYNCHRONIZED;
  *         Date: 03.08.2014 6:46
  */
 @Stateless
-public class StreetSyncHandler implements IDomainSyncHandler {
-
+public class StreetSyncHandler extends DomainSyncHandler {
     @EJB
-    private DomainSyncAdapter domainSyncAdapter;
+    private DomainSyncJsonAdapter domainSyncJsonAdapter;
 
     @EJB
     private StreetStrategy streetStrategy;
@@ -47,16 +46,8 @@ public class StreetSyncHandler implements IDomainSyncHandler {
     private CorrectionBean correctionBean;
 
     @Override
-    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY_TYPE,
-                Long.valueOf(parentDomainSync.getAdditionalParentId()))));
-
-        if (cityTypeDomainSyncs.isEmpty()){
-            throw new CorrectionNotFoundException("city type correction not found " + cityTypeDomainSyncs);
-        }
-
-        return domainSyncAdapter.getStreetSyncs(parentDomainSync.getName(),
-                cityTypeDomainSyncs.get(0).getAdditionalName(), date);
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync city, Date date) throws RemoteCallException {
+        return domainSyncJsonAdapter.getStreetSyncs(getCityDomainSyncParameter(city, date));
     }
 
     @Override

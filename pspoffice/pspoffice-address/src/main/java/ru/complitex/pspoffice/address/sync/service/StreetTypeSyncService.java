@@ -2,7 +2,7 @@ package ru.complitex.pspoffice.address.sync.service;
 
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.catalog.entity.StreetType;
+import ru.complitex.pspoffice.address.entity.StreetType;
 import ru.complitex.pspoffice.address.correction.entity.StreetTypeCorrection;
 import ru.complitex.pspoffice.address.producer.SyncProducer;
 import ru.complitex.pspoffice.address.sync.entity.Sync;

@@ -1,12 +1,12 @@
 package ru.complitex.catalog.service;
 
 import org.mybatis.cdi.Transactional;
+import ru.complitex.catalog.mapper.ItemMapper;
 import ru.complitex.catalog.entity.Catalog;
 import ru.complitex.catalog.entity.Data;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.mapper.CatalogMapper;
 import ru.complitex.catalog.mapper.DataMapper;
-import ru.complitex.catalog.mapper.ItemMapper;
 import ru.complitex.ui.entity.Filter;
 
 import javax.enterprise.context.RequestScoped;
@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -81,6 +82,10 @@ public class CatalogService {
         }
 
         public abstract T get();
+
+        public Optional<T> getOptional(){
+            return Optional.ofNullable(get());
+        }
     }
 
     public abstract class FilterItemBuilder<T> extends ItemBuilder<T> {

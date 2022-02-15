@@ -14,12 +14,14 @@ import ru.complitex.common.web.component.ShowMode;
 import ru.complitex.correction.entity.Correction;
 import ru.complitex.correction.service.CorrectionBean;
 import ru.complitex.sync.entity.DomainSync;
+import ru.complitex.sync.entity.DomainSyncParameter;
 import ru.complitex.sync.entity.SyncEntity;
-import ru.complitex.sync.service.DomainSyncAdapter;
 import ru.complitex.sync.service.DomainSyncBean;
+import ru.complitex.sync.service.DomainSyncJsonAdapter;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -29,12 +31,12 @@ import static ru.complitex.sync.entity.DomainSyncStatus.SYNCHRONIZED;
 
 /**
  * @author Anatoly Ivanov
- *         Date: 03.08.2014 6:47
+ * Date: 03.08.2014 6:47
  */
 @Stateless
-public class BuildingSyncHandler implements IDomainSyncHandler {
+public class BuildingSyncHandler extends DomainSyncHandler {
     @EJB
-    private DomainSyncAdapter domainSyncAdapter;
+    private DomainSyncJsonAdapter domainSyncJsonAdapter;
 
     @EJB
     private BuildingStrategy buildingStrategy;
@@ -46,16 +48,30 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
     private DomainSyncBean domainSyncBean;
 
     @Override
-    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        List<DomainSync> cityTypeDomainSyncs = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY_TYPE,
-                Long.valueOf(parentDomainSync.getAdditionalParentId()))));
+    public Cursor<DomainSync> getCursorDomainSyncs(DomainSync city, Date date) throws RemoteCallException {
+        List<DomainSync> streets = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.STREET, SYNCHRONIZED)
+                .setParentId(city.getExternalId())));
 
-        if (cityTypeDomainSyncs.isEmpty()){
-            throw new CorrectionNotFoundException("city type correction not found " + cityTypeDomainSyncs);
+        DomainSyncParameter parameter = getCityDomainSyncParameter(city, date);
+
+        List<DomainSync> buildings = new ArrayList<>();
+
+        for (DomainSync street : streets) {
+            List<DomainSync> streetTypes = domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.STREET_TYPE,
+                    Long.valueOf(street.getAdditionalParentId()))));
+
+            if (streetTypes.isEmpty()) {
+                throw new RuntimeException("street type not found " + street);
+            }
+
+            parameter.setStreetTypeName(streetTypes.get(0).getName());
+
+            parameter.setStreetName(street.getName());
+
+            buildings.addAll(domainSyncJsonAdapter.getBuildingSyncs(parameter).getData());
         }
 
-        return domainSyncAdapter.getBuildingSyncs(parentDomainSync.getName(), cityTypeDomainSyncs.get(0).getAdditionalName(), null,
-                null, null, date);
+        return new Cursor<>(buildings);
     }
 
     @Override
@@ -63,15 +79,15 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         return domainSyncBean.getList(FilterWrapper.of(new DomainSync(SyncEntity.CITY, SYNCHRONIZED)));
     }
 
-    private Long getParentObjectId(DomainSync domainSync, Long organizationId){
+    private Long getParentObjectId(DomainSync domainSync, Long organizationId) {
         List<Correction> streetCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.STREET,
                 domainSync.getParentId(), organizationId, null);
 
-        if (streetCorrections.isEmpty()){
+        if (streetCorrections.isEmpty()) {
             throw new CorrectionNotFoundException("street correction not found " + domainSync);
         }
 
-        if (streetCorrections.size() > 1){
+        if (streetCorrections.size() > 1) {
             throw new CorrectionNotFoundException("street correction size > 1 " + domainSync);
         }
 
@@ -146,7 +162,7 @@ public class BuildingSyncHandler implements IDomainSyncHandler {
         List<Correction> districtCorrections = correctionBean.getCorrectionsByExternalId(AddressEntity.DISTRICT,
                 Long.valueOf(domainSync.getAdditionalParentId()), organizationId, null);
 
-        if (districtCorrections.isEmpty()){
+        if (districtCorrections.isEmpty()) {
             throw new CorrectionNotFoundException("district correction not found " + domainSync);
         }
 

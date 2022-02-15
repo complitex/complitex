@@ -5,16 +5,23 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import ru.complitex.catalog.component.ItemInput;
 import ru.complitex.catalog.entity.Item;
-import ru.complitex.pspoffice.address.catalog.entity.Street;
+import ru.complitex.catalog.entity.Locale;
+import ru.complitex.catalog.service.CatalogService;
+import ru.complitex.pspoffice.address.entity.Street;
+import ru.complitex.pspoffice.address.entity.StreetType;
 import ru.complitex.pspoffice.address.model.ReferenceModel;
 import ru.complitex.ui.entity.Filter;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 
 /**
  * @author Ivanov Anatoliy
  */
 public class StreetInput extends CityInput {
+    @Inject
+    private CatalogService catalogService;
+
     private final IModel<Long> streetModel;
 
     private final ItemInput street;
@@ -39,6 +46,12 @@ public class StreetInput extends CityInput {
                 updateCity(target);
 
                 onStreetChange(target);
+            }
+
+            @Override
+            protected String getTextValue(Item item) {
+                return catalogService.getItem(StreetType.CATALOG, item.getReferenceId(Street.STREET_TYPE), date)
+                        .getText(StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM) + " " + super.getTextValue(item);
             }
 
             @Override

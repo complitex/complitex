@@ -13,7 +13,8 @@ import ru.complitex.common.web.component.ShowMode;
 import ru.complitex.correction.entity.Correction;
 import ru.complitex.correction.service.CorrectionBean;
 import ru.complitex.sync.entity.DomainSync;
-import ru.complitex.sync.service.DomainSyncAdapter;
+import ru.complitex.sync.entity.DomainSyncParameter;
+import ru.complitex.sync.service.DomainSyncJsonAdapter;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -27,19 +28,19 @@ import static ru.complitex.common.util.StringUtil.isEqualIgnoreCase;
  *         Date: 23.07.2014 22:57
  */
 @Stateless
-public class StreetTypeSyncHandler implements IDomainSyncHandler {
+public class StreetTypeSyncHandler extends DomainSyncHandler {
     @EJB
-    private StreetTypeStrategy streetTypeStrategy;
+    private DomainSyncJsonAdapter addressSyncJsonAdapter;
 
     @EJB
-    private DomainSyncAdapter addressSyncAdapter;
+    private StreetTypeStrategy streetTypeStrategy;
 
     @EJB
     private CorrectionBean correctionBean;
 
     @Override
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync parentDomainSync, Date date) throws RemoteCallException {
-        return addressSyncAdapter.getStreetTypeSyncs(date);
+        return addressSyncJsonAdapter.getStreetTypeSyncs(new DomainSyncParameter(date));
     }
 
     @Override
