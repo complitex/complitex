@@ -207,4 +207,8 @@ public class FilterWrapper<T extends Serializable> implements Serializable{
 
         return this;
     }
+
+    public StringLocale getLocale() {
+        return stringLocale;
+    }
 }

@@ -39,9 +39,9 @@
     </sql>
 
     <sql id="buildingAddressValueJoin">
-        inner join `building_address` ba on ba.`object_id` = b.`parent_id`
-        inner join `building_address_attribute` baa on baa.`object_id` = b.`parent_id`
-        inner join `building_address_string_value` bac on bac.`id` = baa.`value_id`
+        inner join `building` ba on ba.`object_id` = b.`parent_id`
+        inner join `building_attribute` baa on baa.`object_id` = b.`parent_id`
+        inner join `building_string_value` bac on bac.`id` = baa.`value_id`
     </sql>
 
     <sql id="streetValueJoin">
@@ -131,10 +131,10 @@
     <sql id="buildingAddressJoin">
         <include refid="ru.flexpay.eirc.eirc_account.service.EircAccountBean.buildingJoin"/>
 
-        left join `building_address` building_a1 on building_a1.`object_id` = building1.`parent_id`
-        left join `building_address` building_a2 on building_a2.`object_id` = building2.`parent_id`
-        left join `building_address` building_a3 on building_a3.`object_id` = building3.`parent_id`
-        left join `building_address` building_a4 on building_a4.`object_id` = building4.`parent_id`
+        left join `building` building_a1 on building_a1.`object_id` = building1.`parent_id`
+        left join `building` building_a2 on building_a2.`object_id` = building2.`parent_id`
+        left join `building` building_a3 on building_a3.`object_id` = building3.`parent_id`
+        left join `building` building_a4 on building_a4.`object_id` = building4.`parent_id`
     </sql>
 
     <sql id="buildingAddressCondition">
@@ -282,10 +282,10 @@
             (aa.`object_id` = apartment1.`object_id` or aa.`object_id` = apartment2.`object_id`)
         left join `apartment_string_value` ac on ac.`id` = aa.`value_id`
 
-        left join `building_address_attribute` baa on
+        left join `building_attribute` baa on
             (baa.`object_id` = building_a1.`object_id` or baa.`object_id` = building_a2.`object_id` or
              baa.`object_id` = building_a3.`object_id` or baa.`object_id` = building_a4.`object_id`)
-        left join `building_address_string_value` bac on (bac.`id` = baa.`value_id` and bac.`locale_id`  = #{locale.id})
+        left join `building_string_value` bac on (bac.`id` = baa.`value_id` and bac.`locale_id`  = #{locale.id})
 
         left join `street_attribute` sa1 on
             ((sa1.`object_id` = street1.`object_id` or sa1.`object_id` = street2.`object_id` or
