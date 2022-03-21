@@ -1,7 +1,7 @@
 package ru.complitex.pspoffice.frontend.web.card;
 
 import ru.complitex.pspoffice.frontend.service.PspOfficeClient;
-import ru.complitex.ui.wicket.datatable.TableDataProvider;
+import ru.complitex.pspoffice.frontend.web.component.datatable.TableDataProvider;
 import ru.complitex.pspoffice.api.model.ApartmentCardModel;
 
 import javax.inject.Inject;

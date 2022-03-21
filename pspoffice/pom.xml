@@ -31,7 +31,6 @@
         <module>../complitex/complitex-organization</module>
         <module>../complitex/complitex-organization-type</module>
         <module>../complitex/complitex-template</module>
-        <module>../complitex/complitex-ui</module>
 
         <module>pspoffice-address</module>
         <module>pspoffice-api</module>
@@ -103,11 +102,6 @@
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-template</artifactId>
-                <version>${complitex.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-ui</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
 

@@ -43,7 +43,7 @@
 
 
     <mappers>
-        <mapper class="ru.complitex.pspoffice.address.user.mapper.UserMapper"/>
+        <mapper class="ru.complitex.user.mapper.UserMapper"/>
 
         <mapper class="ru.complitex.catalog.mapper.CatalogMapper"/>
         <mapper class="ru.complitex.catalog.mapper.ValueMapper"/>

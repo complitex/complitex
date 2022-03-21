@@ -2,11 +2,11 @@ package ru.complitex.pspoffice.address.sync.service;
 
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.entity.Street;
-import ru.complitex.pspoffice.address.correction.entity.CityCorrection;
-import ru.complitex.pspoffice.address.correction.entity.CityTypeCorrection;
-import ru.complitex.pspoffice.address.correction.entity.StreetCorrection;
-import ru.complitex.pspoffice.address.correction.entity.StreetTypeCorrection;
+import ru.complitex.address.entity.Street;
+import ru.complitex.correction.entity.CityCorrection;
+import ru.complitex.correction.entity.CityTypeCorrection;
+import ru.complitex.correction.entity.StreetCorrection;
+import ru.complitex.correction.entity.StreetTypeCorrection;
 import ru.complitex.pspoffice.address.producer.SyncProducer;
 import ru.complitex.pspoffice.address.sync.entity.Sync;
 import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;

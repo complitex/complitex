@@ -6,10 +6,10 @@ import org.apache.wicket.markup.MarkupType;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.handler.TextRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import ru.complitex.address.entity.*;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.entity.*;
 
 import javax.inject.Inject;
 import java.time.LocalDate;

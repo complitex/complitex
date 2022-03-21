@@ -11,7 +11,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import ru.complitex.pspoffice.frontend.web.BasePage;
 import ru.complitex.pspoffice.frontend.web.person.PersonPage;
-import ru.complitex.ui.wicket.datatable.TablePanel;
+import ru.complitex.pspoffice.frontend.web.component.datatable.TablePanel;
 import ru.complitex.pspoffice.api.model.ApartmentCardModel;
 
 import javax.inject.Inject;

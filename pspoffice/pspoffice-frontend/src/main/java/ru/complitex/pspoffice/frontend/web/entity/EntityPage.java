@@ -8,8 +8,8 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import ru.complitex.pspoffice.frontend.service.PspOfficeClient;
 import ru.complitex.pspoffice.frontend.web.FormPage;
-import ru.complitex.ui.wicket.datatable.TableDataProvider;
-import ru.complitex.ui.wicket.datatable.TablePanel;
+import ru.complitex.pspoffice.frontend.web.component.datatable.TableDataProvider;
+import ru.complitex.pspoffice.frontend.web.component.datatable.TablePanel;
 import ru.complitex.pspoffice.api.model.EntityAttributeModel;
 import ru.complitex.pspoffice.api.model.EntityModel;
 

@@ -3,7 +3,7 @@ package ru.complitex.pspoffice.frontend.web.address.building;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import ru.complitex.pspoffice.frontend.web.BasePage;
-import ru.complitex.ui.wicket.datatable.TablePanel;
+import ru.complitex.pspoffice.frontend.web.component.datatable.TablePanel;
 
 import javax.inject.Inject;
 import java.util.Arrays;

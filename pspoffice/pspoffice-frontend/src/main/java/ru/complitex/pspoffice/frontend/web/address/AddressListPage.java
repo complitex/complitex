@@ -14,12 +14,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import ru.complitex.pspoffice.api.model.AddressModel;
 import ru.complitex.pspoffice.frontend.web.BasePage;
 import ru.complitex.pspoffice.frontend.web.address.country.CountryPage;
-import ru.complitex.ui.wicket.datatable.TablePanel;
-import ru.complitex.ui.wicket.datatable.column.EditColumn;
-import ru.complitex.ui.wicket.link.LinkPanel;
-import ru.complitex.pspoffice.api.model.AddressModel;
+import ru.complitex.pspoffice.frontend.web.component.LinkPanel;
+import ru.complitex.pspoffice.frontend.web.component.datatable.TablePanel;
+import ru.complitex.pspoffice.frontend.web.component.datatable.column.EditColumn;
 
 import javax.inject.Inject;
 import java.util.Arrays;

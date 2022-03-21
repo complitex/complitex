@@ -1,0 +1,30 @@
+<!doctype html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <title wicket:id="title"></title>
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-light bg-light border-bottom">
+    <a class="navbar-brand"><h4 wicket:id="header"></h4></a>
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+        </ul>
+        <div class="navbar-nav">
+            <a wicket:id="logout" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div wicket:id="menu" class="menu"></div>
+
+        <div class="col w-100">
+            <wicket:child/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

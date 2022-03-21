@@ -22,7 +22,6 @@
         <module>complitex-resources</module>
         <module>complitex-sync</module>
         <module>complitex-template</module>
-        <module>complitex-ui</module>
     </modules>
 
     <properties>        
@@ -95,11 +94,6 @@
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-template</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -2,8 +2,8 @@ package ru.complitex.pspoffice.address.sync.service;
 
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.entity.Flat;
-import ru.complitex.pspoffice.address.correction.entity.*;
+import ru.complitex.address.entity.Flat;
+import ru.complitex.correction.entity.*;
 import ru.complitex.pspoffice.address.producer.SyncProducer;
 import ru.complitex.pspoffice.address.sync.entity.Sync;
 import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
