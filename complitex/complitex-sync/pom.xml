@@ -20,10 +20,6 @@
         </dependency>
         <dependency>
             <groupId>ru.complitex</groupId>
-            <artifactId>complitex-address-entity</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ru.complitex</groupId>
             <artifactId>complitex-organization</artifactId>
         </dependency>
         <dependency>

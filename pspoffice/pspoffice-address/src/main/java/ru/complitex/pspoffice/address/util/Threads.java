@@ -1,4 +1,4 @@
-package ru.complitex.catalog.util;
+package ru.complitex.pspoffice.address.util;
 
 import org.jboss.weld.context.api.ContextualInstance;
 import org.jboss.weld.context.bound.BoundLiteral;

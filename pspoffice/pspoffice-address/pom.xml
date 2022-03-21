@@ -23,14 +23,12 @@
     <dependencies>
         <dependency>
             <groupId>ru.complitex</groupId>
-            <artifactId>complitex-catalog-entity</artifactId>
-            <version>8.0.0-SNAPSHOT</version>
+            <artifactId>complitex-catalog</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>ru.complitex.pspoffice</groupId>
-            <artifactId>pspoffice-address-catalog-entity</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <groupId>ru.complitex</groupId>
+            <artifactId>complitex-ui</artifactId>
         </dependency>
 
         <dependency>

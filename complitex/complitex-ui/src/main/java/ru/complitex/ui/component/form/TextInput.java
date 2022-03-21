@@ -16,7 +16,7 @@ public class TextInput<T> extends Panel {
     public TextInput(String id, IModel<T> model) {
         super(id);
 
-        textField = new TextField<>("input", model){
+        textField = new TextField<T>("input", model){
             @SuppressWarnings("unchecked")
             @Override
             public void convertInput() {

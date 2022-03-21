@@ -4,7 +4,7 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionManager;
 import org.mybatis.cdi.SqlSessionManagerRegistry;
 import ru.complitex.catalog.entity.Item;
-import ru.complitex.catalog.util.Threads;
+import ru.complitex.pspoffice.address.util.Threads;
 import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
 
 import javax.inject.Inject;

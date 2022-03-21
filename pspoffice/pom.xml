@@ -23,6 +23,7 @@
     <modules>
         <module>../complitex/complitex-address</module>
         <module>../complitex/complitex-admin</module>
+        <module>../complitex/complitex-catalog</module>
         <module>../complitex/complitex-common</module>
         <module>../complitex/complitex-images</module>
         <module>../complitex/complitex-logging</module>
@@ -54,15 +55,9 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Complitex Modules -->
             <dependency>
                 <groupId>ru.complitex</groupId>
-                <artifactId>complitex-common</artifactId>
-                <version>${complitex.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-template</artifactId>
+                <artifactId>complitex-address</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
@@ -72,32 +67,12 @@
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
-                <artifactId>complitex-address</artifactId>
+                <artifactId>complitex-catalog</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
-                <artifactId>complitex-address-entity</artifactId>
-                <version>${complitex.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-organization-type</artifactId>
-                <version>${complitex.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-organization</artifactId>
-                <version>${complitex.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-logging</artifactId>
-                <version>${complitex.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-resources</artifactId>
+                <artifactId>complitex-common</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
             <dependency>
@@ -107,103 +82,126 @@
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
+                <artifactId>complitex-logging</artifactId>
+                <version>${complitex.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
+                <artifactId>complitex-organization</artifactId>
+                <version>${complitex.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
+                <artifactId>complitex-organization-type</artifactId>
+                <version>${complitex.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
+                <artifactId>complitex-resources</artifactId>
+                <version>${complitex.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
+                <artifactId>complitex-template</artifactId>
+                <version>${complitex.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-ui</artifactId>
                 <version>${complitex.version}</version>
             </dependency>
 
-
-            <!--PspOffice Modules -->
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-address</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-backend</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-departure-reason</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-document</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-document-type</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-frontend</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-housing-rights</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-import</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-military-service-relation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-owner-relationship</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-ownership-form</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-person</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-registration-type</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-report</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-report-html</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex.pspoffice</groupId>
+                <artifactId>pspoffice-street</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>ru.complitex.pspoffice</groupId>
                 <artifactId>pspoffice-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-person</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-report</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-report-html</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-owner-relationship</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-ownership-form</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-registration-type</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-document-type</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-document</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-military-service-relation</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-departure-reason</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-housing-rights</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-import</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-street</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ru.complitex.pspoffice</groupId>
-                <artifactId>pspoffice-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            
-            <!-- iText -->
             <dependency>
                 <groupId>com.lowagie</groupId>
                 <artifactId>itext</artifactId>
@@ -223,7 +221,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 

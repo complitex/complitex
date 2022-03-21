@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.util.Dates;
-import ru.complitex.catalog.util.Threads;
+import ru.complitex.pspoffice.address.util.Threads;
 import ru.complitex.pspoffice.address.correction.entity.*;
 import ru.complitex.pspoffice.address.entity.*;
 import ru.complitex.pspoffice.address.page.BasePage;

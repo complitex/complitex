@@ -12,6 +12,7 @@
     <modules>
         <module>complitex-address</module>
         <module>complitex-admin</module>
+        <module>complitex-catalog</module>
         <module>complitex-common</module>
         <module>complitex-correction</module>
         <module>complitex-images</module>
@@ -24,38 +25,21 @@
         <module>complitex-ui</module>
     </modules>
 
-    <properties>
-        <!-- wicket version -->
+    <properties>        
         <wicket.version>7.18.0</wicket.version>
-
-        <!-- wicketstuff inject -->
         <wicket-stuff.version>7.18.0</wicket-stuff.version>
-
-        <!--skip test-->
         <maven.test.skip>true</maven.test.skip>
-
-        <!-- source encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
         <compiler.showDeprecation>true</compiler.showDeprecation>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- Modules -->
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-address</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-address-entity</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-correction</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -65,7 +49,17 @@
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
+                <artifactId>complitex-catalog</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
+                <artifactId>complitex-correction</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -95,6 +89,11 @@
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
+                <artifactId>complitex-sync</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.complitex</groupId>
                 <artifactId>complitex-template</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -103,13 +102,7 @@
                 <artifactId>complitex-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>ru.complitex</groupId>
-                <artifactId>complitex-sync</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
-            <!--Wicket-->
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket-core</artifactId>
@@ -161,7 +154,6 @@
                 <version>${wicket.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>org.wicketstuff</groupId>
                 <artifactId>wicketstuff-javaee-inject</artifactId>
@@ -179,34 +171,17 @@
                 <version>2.10.0.pr1</version>
             </dependency>
 
-
-           <!-- <dependency>
-                <groupId>org.odlabs.wiquery</groupId>
-                <artifactId>wiquery-core</artifactId>
-                <version>${wiquery.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.odlabs.wiquery</groupId>
-                <artifactId>wiquery-jquery-ui</artifactId>
-                <version>${wiquery.version}</version>
-            </dependency>-->
-
-            <!-- Java EE API -->
             <dependency>
                 <groupId>javax</groupId>
                 <artifactId>javaee-api</artifactId>
                 <version>7.0</version>
             </dependency>
 
-            <!-- Glassfish embedded -->
-            <!--
             <dependency>
                 <groupId>org.glassfish.main.extras</groupId>
                 <artifactId>glassfish-embedded-all</artifactId>
-                <version>4.0.1-b06</version>
+                <version>4.1.2</version>
             </dependency>
-            -->
 
             <dependency>
                 <groupId>mysql</groupId>
@@ -214,7 +189,6 @@
                 <version>8.0.16</version>
             </dependency>
 
-            <!-- slf4j logging -->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -236,70 +210,60 @@
                 <version>1.2.3</version>
             </dependency>
 
-            <!-- p6spy -->
             <dependency>
                 <groupId>p6spy</groupId>
                 <artifactId>p6spy</artifactId>
                 <version>3.0.0</version>
             </dependency>
 
-            <!-- commons codec -->
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.9</version>
             </dependency>
 
-            <!-- MyBatis -->
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>3.5.9</version>
             </dependency>
 
-            <!-- google guava -->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>31.0.1-jre</version>
             </dependency>
 
-            <!-- opencsv -->
             <dependency>
                 <groupId>net.sf.opencsv</groupId>
                 <artifactId>opencsv</artifactId>
                 <version>2.3</version>
             </dependency>
 
-            <!--xhtmlrenderer-->
             <dependency>
                 <groupId>org.xhtmlrenderer</groupId>
                 <artifactId>core-renderer</artifactId>
                 <version>R8</version>
             </dependency>
 
-            <!--jsoup-->
             <dependency>
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>1.6.3</version>
             </dependency>
 
-            <!--reflections-->
             <dependency>
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>0.9.10</version>
             </dependency>
 
-            <!--joda-time-->
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>2.9.9</version>
             </dependency>
 
-            <!--Commons Lang-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -325,7 +289,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <!-- Ehcache -->
             <dependency>
                 <groupId>org.mybatis.caches</groupId>
                 <artifactId>mybatis-ehcache</artifactId>
@@ -338,7 +301,6 @@
                 <version>2.10.4</version>
             </dependency>
 
-            <!-- Oracle driver -->
             <dependency>
                 <groupId>com.oracle</groupId>
                 <artifactId>ojdbc14_g</artifactId>
@@ -351,7 +313,6 @@
                 <version>10.2.0.4.0</version>
             </dependency>
 
-            <!--Bootstrap-->
             <dependency>
                 <groupId>de.agilecoders.wicket</groupId>
                 <artifactId>wicket-bootstrap-core</artifactId>
@@ -368,7 +329,6 @@
                 <version>0.9.7</version>
             </dependency>
 
-            <!--Apache POI-->
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
@@ -380,7 +340,6 @@
                 <version>4.0.1</version>
             </dependency>
 
-            <!--Swagger-->
             <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-jaxrs</artifactId>
@@ -399,7 +358,6 @@
                 <version>1.5.15</version>
             </dependency>
 
-            <!--jackson-->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
@@ -419,11 +377,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
+                <version>3.10.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

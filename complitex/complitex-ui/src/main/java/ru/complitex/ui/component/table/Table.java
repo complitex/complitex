@@ -44,7 +44,7 @@ public class Table<T extends Serializable> extends Panel {
         body.setOutputMarkupId(true);
         add(body);
 
-        DataView<T> items = new DataView<>("items", provider) {
+        DataView<T> items = new DataView<T>("items", provider) {
             @Override
             protected void populateItem(Item<T> item) {
                 RepeatingView repeatingView = new RepeatingView("data");

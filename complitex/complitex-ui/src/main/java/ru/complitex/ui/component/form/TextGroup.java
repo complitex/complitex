@@ -17,7 +17,7 @@ public class TextGroup<T extends Serializable> extends FormGroup {
     public TextGroup(String id, IModel<String> labelModel, IModel<T> model, Class<T> type) {
         super(id, labelModel);
 
-        TextField<T> textField = new TextField<>("input", model, type){
+        TextField<T> textField = new TextField<T>("input", model, type){
             @Override
             public boolean isRequired() {
                 return TextGroup.this.isRequired();

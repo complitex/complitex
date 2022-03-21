@@ -2,7 +2,6 @@ package ru.complitex.ui.wicket.datatable.column;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
@@ -26,6 +25,6 @@ public abstract class EditColumn<T> extends FilteredAbstractColumn<T, String> {
             public void onClick() {
 
             }
-        }.setSize(Buttons.Size.Small).setIconType(GlyphIconType.search)).add(new AjaxFormSubmitBehavior("click") {});
+        }.setSize(Buttons.Size.Small)).add(new AjaxFormSubmitBehavior("click") {});
     }
 }

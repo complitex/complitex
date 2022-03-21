@@ -34,7 +34,7 @@ public abstract class AutoComplete<T extends Serializable> extends Panel {
 
         setOutputMarkupId(true);
 
-        idField = new HiddenField<>("id", model, Long.class){
+        idField = new HiddenField<Long>("id", model, Long.class){
             @Override
             public boolean isRequired() {
                 return AutoComplete.this.isRequired();
@@ -48,7 +48,7 @@ public abstract class AutoComplete<T extends Serializable> extends Panel {
 
         add(idField);
 
-        textField = new AutoCompleteTextField<>("input",
+        textField = new AutoCompleteTextField<T>("input",
                 new IModel<T>(){
                     @Override
                     public T getObject() {

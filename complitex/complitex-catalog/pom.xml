@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>complitex-ui</artifactId>
+    <artifactId>complitex-catalog</artifactId>
 
-    <name>Complitex - UI</name>
+    <name>Complitex - Catalog</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,13 +20,25 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-core</artifactId>
-            <version>9.8.0</version>
+            <groupId>ru.complitex</groupId>
+            <artifactId>complitex-ui</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-extensions</artifactId>
+            <artifactId>wicket-core</artifactId>
             <version>9.8.0</version>
         </dependency>
 
@@ -34,6 +46,17 @@
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
             <version>5.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-cdi</artifactId>
+            <version>1.1.1</version>
         </dependency>
     </dependencies>
 </project>

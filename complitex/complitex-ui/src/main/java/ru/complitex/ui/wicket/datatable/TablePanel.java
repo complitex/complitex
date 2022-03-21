@@ -2,14 +2,13 @@ package ru.complitex.ui.wicket.datatable;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapBookmarkablePageLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-import de.agilecoders.wicket.core.markup.html.bootstrap.image.GlyphIconType;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.table.toolbars.BootstrapNavigationToolbar;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
@@ -59,7 +58,7 @@ public class TablePanel<T extends Serializable> extends Panel {
             });
         }
 
-        dataTable.addBottomToolbar(new BootstrapNavigationToolbar(dataTable));
+        dataTable.addBottomToolbar(new NavigationToolbar(dataTable));
 
         filterForm.add(dataTable);
     }
@@ -101,7 +100,7 @@ public class TablePanel<T extends Serializable> extends Panel {
 
                     cellItem.add(new LinkPanel(componentId, new BootstrapBookmarkablePageLink(LinkPanel.LINK_COMPONENT_ID,
                             editPageClass,pageParameters, Buttons.Type.Menu)
-                            .setIconType(GlyphIconType.edit).setSize(Buttons.Size.Small)));
+                            .setSize(Buttons.Size.Small)));
                 }
             });
 

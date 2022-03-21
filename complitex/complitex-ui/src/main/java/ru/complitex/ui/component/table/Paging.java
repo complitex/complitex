@@ -22,7 +22,7 @@ import java.util.HashMap;
  * @author Ivanov Anatoliy
  */
 public class Paging extends Panel {
-    public static final MetaDataKey<HashMap<String, Long>> ITEMS_PER_PAGE = new MetaDataKey<>() {};
+    public static final MetaDataKey<HashMap<String, Long>> ITEMS_PER_PAGE = new MetaDataKey<HashMap<String, Long>>() {};
 
     public Paging(String id, IPageableItems pageableItems, String tableKey) {
         super(id);
