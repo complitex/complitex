@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="eirc-account.properties">
+        <property name="db.driver" value="org.postgresql.Driver"/>
+        <property name="db.url" value="jdbc:postgresql://localhost/eirc"/>
+        <property name="db.username" value="eirc"/>
+        <property name="db.password" value="eirc"/>
+    </properties>
+
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <environments default="catalog">
+        <environment id="catalog">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${db.driver}"/>
+                <property name="url" value="${db.url}"/>
+                <property name="username" value="${db.username}"/>
+                <property name="password" value="${db.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper class="ru.complitex.user.mapper.UserMapper"/>
+
+        <mapper class="ru.complitex.catalog.mapper.CatalogMapper"/>
+        <mapper class="ru.complitex.catalog.mapper.ValueMapper"/>
+        <mapper class="ru.complitex.catalog.mapper.ItemMapper"/>
+        <mapper class="ru.complitex.catalog.mapper.DataMapper"/>
+    </mappers>
+</configuration>

@@ -32,6 +32,7 @@
         <compiler.showDeprecation>true</compiler.showDeprecation>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <complitex.version>8.0.0-SNAPSHOT</complitex.version>
     </properties>
 
     <dependencyManagement>
@@ -39,62 +40,62 @@
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-address</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-admin</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-catalog</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-common</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-correction</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-images</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-logging</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-organization</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-organization-type</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-resources</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-sync</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.complitex</groupId>
                 <artifactId>complitex-template</artifactId>
-                <version>${project.version}</version>
+                <version>${complitex.version}</version>
             </dependency>
 
             <dependency>

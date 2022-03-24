@@ -6,7 +6,7 @@
     <parent>
         <artifactId>eirc</artifactId>
         <groupId>ru.complitex.eirc</groupId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>eirc-service</artifactId>
