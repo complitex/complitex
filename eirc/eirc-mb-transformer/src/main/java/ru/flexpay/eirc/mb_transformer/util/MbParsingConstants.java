@@ -1,4 +1,4 @@
-package ru.flexpay.eirc.mb_transformer.util;
+package ru.complitex.eirc.mb_transformer.util;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;

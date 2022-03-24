@@ -1,4 +1,4 @@
 #!/bin/sh
 
-java -classpath "../lib/*" ru.flexpay.eirc.mb_transformer.console.Transformer "$@"
+java -classpath "../lib/*" ru.complitex.eirc.mb_transformer.console.Transformer "$@"
 

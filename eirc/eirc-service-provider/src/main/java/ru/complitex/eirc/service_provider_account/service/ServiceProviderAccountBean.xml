@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean">
+
+    <cache type="ru.complitex.common.mybatis.caches.EhcacheCache"/>
+
+    <resultMap id="ServiceProviderAccount" type="ru.complitex.eirc.service_provider_account.entity.ServiceProviderAccount">
+        <id column="spa_pk_id" property="pkId"/>
+        <result column="spa_object_id" property="id"/>
+        <result column="spa_account_number" property="accountNumber"/>
+        <result column="spa_organization_id" property="organizationId"/>
+        <result column="spa_organization_name" property="organizationName"/>
+        <result column="spa_begin_date" property="beginDate"/>
+        <result column="spa_end_date" property="endDate"/>
+        <result column="spa_registry_record_container_id" property="registryRecordContainerId"/>
+
+        <association property="eircAccount" resultMap="ru.complitex.eirc.eirc_account.service.EircAccountBean.EircAccount"/>
+        <association property="service" resultMap="ru.complitex.eirc.service.service.ServiceBean.Service"/>
+        <association property="person" columnPrefix="spa_" resultMap="ru.complitex.eirc.dictionary.entity.PersonBean.Person"/>
+    </resultMap>
+
+    <sql id="serviceProviderAccountColumns">
+        spa.`pk_id` as `spa_pk_id`, spa.`object_id` as `spa_object_id`, spa.`eirc_account_id` as `spa_eirc_account_id`,
+        spa.`organization_id` as `spa_organization_id`, oc.`value` as `spa_organization_name`,
+        spa.`account_number` as `spa_account_number`,
+        spa.`service_id` as `spa_service_id`, spa.`first_name` as `spa_first_name`, spa.`last_name` as `spa_last_name`,
+        spa.`middle_name` as `spa_middle_name`, spa.`begin_date` as `spa_begin_date`, spa.`end_date` as `spa_end_date`,
+        spa.`registry_record_container_id` as `spa_registry_record_container_id`
+    </sql>
+
+    <sql id="serviceProviderAccountCondition">
+        <if test="map.serviceProviderAccount != null">
+            <if test="map.serviceProviderAccount.accountNumber != null">
+                <choose>
+                    <when test="like">
+                        and spa.`account_number` like concat('%', #{map.serviceProviderAccount.accountNumber}, '%')
+                    </when>
+                    <otherwise>
+                        and spa.`account_number` = #{map.serviceProviderAccount.accountNumber}
+                    </otherwise>
+                </choose>
+            </if>
+
+            <if test="map.serviceProviderAccount.person != null">
+                <if test="map.serviceProviderAccount.person.lastName != null">
+                    and spa.`last_name` like concat('%', #{map.serviceProviderAccount.person.lastName}, '%')
+                </if>
+                <if test="map.serviceProviderAccount.person.firstName != null">
+                    and spa.`first_name` like concat('%', #{map.serviceProviderAccount.person.firstName}, '%')
+                </if>
+                <if test="map.serviceProviderAccount.person.middleName != null">
+                    and spa.`middle_name` like concat('%', #{map.serviceProviderAccount.person.middleName}, '%')
+                </if>
+            </if>
+
+            <if test="map.serviceProviderAccount.organizationId != null">
+                and spa.`organization_id` =  #{map.serviceProviderAccount.organizationId}
+            </if>
+        </if>
+        <if test="map.serviceProviderName != null">
+            and oc.`value` like concat('%', #{map.serviceProviderName}, '%')
+        </if>
+    </sql>
+
+    <sql id="showModeCondition">
+        <choose>
+            <when test="map.inactive == true">
+                spa.`end_date` is not null
+            </when>
+            <when test="map.all == true">
+                1 = 1
+            </when>
+            <otherwise>
+                spa.`end_date` is null
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="generalSPAColumns">
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.serviceProviderAccountColumns"/>,
+        <include refid="ru.complitex.eirc.service.service.ServiceBean.serviceColumns"/>,
+        <include refid="ru.complitex.eirc.eirc_account.service.EircAccountBean.eircAccountColumns"/>
+    </sql>
+
+    <sql id="generalWithAddressSPAColumns">
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalSPAColumns"/>,
+        <include refid="ru.complitex.eirc.eirc_account.service.EircAccountBean.addressColumns"/>
+    </sql>
+
+    <sql id="generalSPAJoin">
+        left join `organization_attribute` oa on oa.`object_id` = spa.`organization_id` and oa.`entity_attribute_id` = 900
+        left join `organization_string_value` oc on oc.`id` = oa.`value_id` and oc.`locale_id` = #{locale.id}
+        left join `service` s on s.`id` = spa.`service_id`
+        <include refid="ru.complitex.eirc.service.service.ServiceBean.serviceJoin"/>
+        left join `eirc_account` e on e.`object_id` = spa.`eirc_account_id`
+    </sql>
+
+    <sql id="generalWithAddressSPAJoin">
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalSPAJoin"/>
+        <include refid="ru.complitex.eirc.eirc_account.service.EircAccountBean.addressJoin"/>
+    </sql>
+
+    <sql id="generalWithAddressSPACondition">
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.showModeCondition"/>
+
+        <include refid="ru.complitex.eirc.service.service.ServiceBean.serviceCondition"/>
+
+        <include refid="ru.complitex.eirc.eirc_account.service.EircAccountBean.addressCondition"/>
+        <include refid="ru.complitex.eirc.eirc_account.service.EircAccountBean.otherConditions"/>
+
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.serviceProviderAccountCondition"/>
+    </sql>
+
+    <select id="selectServiceProviderAccounts" parameterType="ru.complitex.common.entity.FilterWrapper"
+            resultMap="ServiceProviderAccount">
+        select
+        <include refid="generalWithAddressSPAColumns"/>
+        from `service_provider_account` spa
+        inner join (select distinct spa.`pk_id` as `max_pk_id`
+
+                    from `service_provider_account` spa
+                    <if test="map.inactive == true or map.all == true">
+                        inner join (select max(pk_id) as max_pk_id from `service_provider_account` group by object_id) spa2 on
+                        spa.pk_id=spa2.max_pk_id
+                    </if>
+                    <include refid="generalWithAddressSPAJoin"/>
+
+                    where
+
+                    <include refid="generalWithAddressSPACondition"/>
+                    <if test="count > 0">
+                        limit ${first},${count}
+                    </if>) spa3
+                                    on spa.`pk_id` = spa3.`max_pk_id`
+
+        <include refid="generalWithAddressSPAJoin"/>
+
+        <if test="sortProperty != null">
+            order by
+            <choose>
+                <when test="sortProperty == 'eirc_account_person'">
+                    <include refid="ru.complitex.eirc.eirc_account.service.EircAccountBean.eircAccountPersonSort"/>
+                </when>
+                <when test="sortProperty == 'eirc_account_address'">
+                    <include refid="ru.complitex.eirc.eirc_account.service.EircAccountBean.eircAccountAddressSort"/>
+                </when>
+                <when test="sortProperty == 'spa_person'">
+                    spa.`last_name`
+                    <if test="asc">
+                        ${asc}
+                    </if>,
+                    spa.`first_name`
+                    <if test="asc">
+                        ${asc}
+                    </if>,
+                    spa.`middle_name`
+                </when>
+
+                <otherwise>
+                    ${sortProperty}
+                </otherwise>
+            </choose>
+            <if test="asc">
+                ${asc}
+            </if>
+        </if>
+    </select>
+
+    <select id="countServiceProviderAccounts" parameterType="ru.complitex.common.entity.FilterWrapper" resultType="long">
+        select count(distinct spa.`object_id`) from `service_provider_account` spa
+        <if test="map.inactive == true or map.all == true">
+            inner join (select max(pk_id) as max_pk_id from `service_provider_account` group by object_id) spa2 on spa.pk_id=spa2.max_pk_id
+        </if>
+        <include refid="generalWithAddressSPAJoin"/>
+        where
+        <include refid="generalWithAddressSPACondition"/>
+    </select>
+
+    <select id="selectServiceProviderAccount" parameterType="map" resultMap="ServiceProviderAccount">
+        select
+        <include refid="generalSPAColumns"/>
+
+        from `service_provider_account` spa
+        <include refid="generalSPAJoin"/>
+
+        where spa.`object_id` = #{id} order by `spa_begin_date` desc
+    </select>
+
+    <select id="selectServiceProviderAccountByPkId" parameterType="map" resultMap="ServiceProviderAccount">
+        select
+        <include refid="generalSPAColumns"/>
+
+        from `service_provider_account` spa
+        <include refid="generalSPAJoin"/>
+
+        where spa.`pk_id` = #{pkId}
+    </select>
+
+    <select id="selectServiceProviderAccountByRRContainerId" parameterType="map" resultMap="ServiceProviderAccount">
+        select
+        <include refid="generalSPAColumns"/>
+
+        from `service_provider_account` spa
+        <include refid="generalSPAJoin"/>
+
+        where spa.`registry_record_container_id` = #{registryRecordContainerId} order by `spa_begin_date` asc
+    </select>
+
+    <select id="selectServiceProviderAccountsByPkId" parameterType="map" resultMap="ServiceProviderAccount">
+        select
+        <include refid="generalSPAColumns"/>
+
+        from `service_provider_account` spa
+        <include refid="generalSPAJoin"/>
+
+        where spa.`pk_id` in #{pkIds}
+    </select>
+
+    <select id="serviceProviderAccountsExists" parameterType="long" resultType="integer">
+        select 1
+
+        from `service_provider_account`
+
+        where `eirc_account_id` = #{eircAccountId} limit 0,1
+    </select>
+
+    <insert id="insertServiceProviderAccount"
+            parameterType="ru.complitex.eirc.service_provider_account.entity.ServiceProviderAccount" keyProperty="pkId" useGeneratedKeys="true">
+        insert into `service_provider_account` (`object_id`, `eirc_account_id`, `organization_id`, `account_number`, `service_id`,
+                                    `first_name`, `last_name`, `middle_name`, `begin_date`, `end_date`, `registry_record_container_id`)
+                            values (#{id}, #{eircAccount.id}, #{organizationId}, #{accountNumber}, #{service.id},
+                                    #{person.firstName}, #{person.lastName}, #{person.middleName}, #{beginDate}, #{endDate}, #{registryRecordContainerId})
+    </insert>
+
+    <update id="updateServiceProviderAccountEndDate"
+            parameterType="ru.complitex.eirc.service_provider_account.entity.ServiceProviderAccount">
+        update `service_provider_account` set `end_date` = #{endDate}, `registry_record_container_id` = #{registryRecordContainerId} where `pk_id` = #{pkId}
+    </update>
+
+    <delete id="deleteServiceProviderAccount"
+            parameterType="ru.complitex.eirc.service_provider_account.entity.ServiceProviderAccount">
+        delete from `service_provider_account` where `pk_id` = #{pkId}
+    </delete>
+
+</mapper>

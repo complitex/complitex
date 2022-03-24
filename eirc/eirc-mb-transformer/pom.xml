@@ -4,13 +4,12 @@
 
     <parent>
         <artifactId>eirc</artifactId>
-        <groupId>ru.flexpay.eirc</groupId>
+        <groupId>ru.complitex.eirc</groupId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>eirc-mb-transformer</artifactId>
     <packaging>war</packaging>
-    <!--packaging>jar</packaging-->
     <version>2.0.0-SNAPSHOT</version>
 
     <name>EIRC - MB transformer</name>
@@ -21,11 +20,6 @@
             <artifactId>commons-cli</artifactId>
             <version>1.0</version>
         </dependency>
-        <!--dependency>
-            <groupId>com.googlecode.wicket-jquery-ui</groupId>
-            <artifactId>wicket-kendo-ui</artifactId>
-            <version>6.13.0</version>
-        </dependency-->
         <dependency>
             <groupId>ru.complitex</groupId>
             <artifactId>complitex-common</artifactId>
@@ -67,19 +61,19 @@
             <artifactId>complitex-correction</artifactId>
         </dependency>
 	    <dependency>
-            <groupId>ru.flexpay.eirc</groupId>
+            <groupId>ru.complitex.eirc</groupId>
             <artifactId>eirc-dictionary</artifactId>
         </dependency>
         <dependency>
-            <groupId>ru.flexpay.eirc</groupId>
+            <groupId>ru.complitex.eirc</groupId>
             <artifactId>eirc-service</artifactId>
         </dependency>
         <dependency>
-            <groupId>ru.flexpay.eirc</groupId>
+            <groupId>ru.complitex.eirc</groupId>
             <artifactId>eirc-organization</artifactId>
         </dependency>
         <dependency>
-            <groupId>ru.flexpay.eirc</groupId>
+            <groupId>ru.complitex.eirc</groupId>
             <artifactId>eirc-registry</artifactId>
         </dependency>
         <dependency>
@@ -99,50 +93,5 @@
             <artifactId>commons-digester</artifactId>
             <version>1.8</version>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.5</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.28</version>
-        </dependency>
-        -->
     </dependencies>
-<!--
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>ru.flexpay.eirc.mb_transformer.service.MbCorrectionsTransformer</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <descriptor>src/main/assembly/dep.xml</descriptor>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    -->
 </project>

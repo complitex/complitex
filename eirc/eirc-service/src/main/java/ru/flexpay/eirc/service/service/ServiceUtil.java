@@ -1,7 +1,7 @@
-package ru.flexpay.eirc.service.service;
+package ru.complitex.eirc.service.service;
 
 import ru.complitex.common.entity.FilterWrapper;
-import ru.flexpay.eirc.service.entity.Service;
+import ru.complitex.eirc.service.entity.Service;
 
 /**
  * @author Pavel Sknar

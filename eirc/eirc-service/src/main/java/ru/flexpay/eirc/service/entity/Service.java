@@ -1,6 +1,6 @@
-package ru.flexpay.eirc.service.entity;
+package ru.complitex.eirc.service.entity;
 
-import ru.flexpay.eirc.dictionary.entity.DictionaryNamedObject;
+import ru.complitex.eirc.dictionary.entity.DictionaryNamedObject;
 
 /**
  * @author Pavel Sknar

@@ -39,14 +39,14 @@
 
         <mapper resource="ru/complitex/common/entity/Correction.xml"/>
         <mapper resource="ru/complitex/correction/service/OrganizationCorrectionBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service/correction/service/ServiceCorrectionBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/ServiceProviderAccountCorrectionBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service/correction/service/ServiceCorrectionBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/ServiceProviderAccountCorrectionBean.xml"/>
 
-        <mapper resource="ru/flexpay/eirc/service/service/ServiceBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/dictionary/service/PersonBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/eirc_account/service/EircAccountBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/ServiceProviderAccountBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service/service/ServiceBean.xml"/>
+        <mapper resource="ru/complitex/eirc/dictionary/service/PersonBean.xml"/>
+        <mapper resource="ru/complitex/eirc/eirc_account/service/EircAccountBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/ServiceProviderAccountBean.xml"/>
         
-        <mapper resource="ru/flexpay/eirc/mb_transformer/service/MbTransformerRegistryBean.xml"/>
+        <mapper resource="ru/complitex/eirc/mb_transformer/service/MbTransformerRegistryBean.xml"/>
     </mappers>
 </configuration>

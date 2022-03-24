@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean">
+
+    <resultMap id="FinancialAttribute" type="ru.complitex.eirc.service_provider_account.entity.FinancialAttribute">
+        <id     column="fa_id"                             property="id"/>
+        <result column="fa_amount"                         property="amount"/>
+        <result column="fa_date_formation"                 property="dateFormation"/>
+        <result column="fa_registry_record_container_id"      property="registryRecordContainerId"/>
+        <association property="serviceProviderAccount"  resultMap="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.ServiceProviderAccount"/>
+    </resultMap>
+
+    <cache/>
+
+    <sql id="tableName">`template`</sql>
+
+    <sql id="financialAttributeColumns">
+        fa.`id` as `fa_id`, fa.`amount` as `fa_amount`, fa.`date_formation` as `fa_date_formation`,
+        fa.`service_provider_account_id` as `fa_service_provider_account_id`,
+        fa.`registry_record_container_id` as `fa_registry_record_container_id`
+    </sql>
+
+    <sql id="financialAttributeWhere">
+        <where>
+            <if test="object != null">
+                <if test="object.id != null">
+                    and fa.`id` = #{id}
+                </if>
+                <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPACondition"/>
+            </if>
+        </where>
+    </sql>
+
+
+    <sql id="selectFinancialAttributes">
+        <if test="last == 1">
+            select f.* from (
+        </if>
+        select
+        <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.financialAttributeColumns"/>,
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAColumns"/>
+        from
+
+        <include refid="tableName"/> as fa
+
+        left join `service_provider_account` spa on spa.`object_id` = fa.`service_provider_account_id`
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAJoin"/>
+
+        <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.financialAttributeWhere"/>
+
+        <if test="last == 1">
+            order by `fa_date_formation` desc) as f
+            group by f.`fa_service_provider_account_id`
+        </if>
+
+        <if test="sortProperty != null">
+            order by f.`${sortProperty}`
+
+            <if test="asc">
+                ${asc}
+            </if>
+        </if>
+
+        <if test="count > 0">
+            limit ${first},${count}
+        </if>
+    </sql>
+
+    <sql id="selectAllPeriodDateFinancialAttributes">
+        <bind name="last" value="0"/>
+        <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.selectFinancialAttributes"/>
+    </sql>
+
+    <sql id="selectLastDateFinancialAttributes">
+        <bind name="last" value="1"/>
+        <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.selectFinancialAttributes"/>
+    </sql>
+
+
+    <sql id="countFinancialAttributes">
+        <choose>
+            <when test="last == 1">
+
+                select count(distinct `fa_id`) from
+                (select fa.`id` as `fa_id`, max(fa.`data_formation`) from <include refid="tableName"/>
+                as fa
+
+                left join `service_provider_account` spa on spa.`object_id` = fa.`service_provider_account_id`
+                <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAJoin"/>
+
+                <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.financialAttributeWhere"/>
+                group by fa.`service_provider_account_id`)
+            </when>
+            <otherwise>
+                select count(distinct `id`) from
+                <include refid="tableName"/> as fa
+
+                left join `service_provider_account` spa on spa.`object_id` = fa.`service_provider_account_id`
+                <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAJoin"/>
+
+                <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.financialAttributeWhere"/>
+            </otherwise>
+        </choose>
+
+    </sql>
+
+    <sql id="countAllPeriodDateFinancialAttributes">
+        <bind name="last" value="0"/>
+        <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.countFinancialAttributes"/>
+    </sql>
+
+    <sql id="countLastDateFinancialAttributes">
+        <bind name="last" value="1"/>
+        <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.countFinancialAttributes"/>
+    </sql>
+
+
+    <sql id="selectFinancialAttribute">
+        <bind name="last" value="0"/>
+        select
+        <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.financialAttributeColumns"/>,
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAColumns"/>
+        from <include refid="tableName"/> as fa
+
+        left join `service_provider_account` spa on spa.`object_id` = fa.`service_provider_account_id`
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAJoin"/>
+
+        where fa.`id` = #{id}
+    </sql>
+
+    <sql id="insertFinancialAttribute">
+        insert into <include refid="tableName"/> (`service_provider_account_id`, `amount`, `date_formation`, `registry_record_container_id`)
+                            values (#{serviceProviderAccount.id}, #{amount}, #{dateFormation}, #{registryRecordContainerId})
+    </sql>
+
+    <sql id="updateFinancialAttribute">
+        update <include refid="tableName"/> set `service_provider_account_id` = #{serviceProviderAccount.id},
+            `amount` = #{amount}, `date_formation` = #{dateFormation} where `id` = #{id}
+    </sql>
+
+    <sql id="selectFinancialAttributeByRRContainerId">
+        <bind name="last" value="0"/>
+        select
+        <include refid="ru.complitex.eirc.service_provider_account.service.FinancialAttributeBean.financialAttributeColumns"/>,
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAColumns"/>
+        from <include refid="tableName"/> as fa
+
+        left join `service_provider_account` spa on spa.`object_id` = fa.`service_provider_account_id`
+        <include refid="ru.complitex.eirc.service_provider_account.service.ServiceProviderAccountBean.generalWithAddressSPAJoin"/>
+
+        where fa.`registry_record_container_id` = #{object.registryRecordContainerId}
+    </sql>
+
+    <sql id="financialAttributeExists">
+        select 1 from <include refid="tableName"/> where `registry_record_container_id` = #{registryRecordContainerId}
+    </sql>
+
+    <sql id="deleteFinancialAttributeByRRContainerId">
+        delete from <include refid="tableName"/> where `registry_record_container_id` = #{registryRecordContainerId}
+    </sql>
+
+</mapper>

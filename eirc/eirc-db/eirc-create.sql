@@ -320,7 +320,7 @@ DROP TABLE IF EXISTS `registry_file`;
 CREATE TABLE `registry_file` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `registry_id` BIGINT(20) NOT NULL,
-  `name_on_server` VARCHAR(255) NOT NULL comment 'File name on flexpay server',
+  `name_on_server` VARCHAR(255) NOT NULL comment 'File name on complitex server',
   `original_name` VARCHAR(255) NOT NULL comment 'Original file name',
   `description` VARCHAR(255) comment 'File description',
   `creation_date` DATETIME NOT NULL comment 'File creation date',

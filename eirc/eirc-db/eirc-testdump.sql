@@ -2279,7 +2279,7 @@ CREATE TABLE `preference` (
 
 LOCK TABLES `preference` WRITE;
 /*!40000 ALTER TABLE `preference` DISABLE KEYS */;
-INSERT INTO `preference` VALUES (1,2,'global','locale','ru'),(2,1,'global','locale','ru'),(3,1,'global#search_component_state','country','1'),(4,1,'global#search_component_state','city','1'),(5,1,'global#search_component_state','street','1'),(6,1,'global#search_component_state','region','1'),(7,1,'global#search_component_state','room','-1'),(8,1,'global#search_component_state','apartment','-1'),(9,1,'global#search_component_state','building','1'),(10,1,'class ru.flexpay.eirc.registry.web.list.RegistryRecordList','CURRENT_PAGE','0'),(11,1,'ru.flexpay.eirc.eirc_account.web.list.EircAccountList','CURRENT_PAGE','2'),(12,1,'ru.complitex.logging.web.LogList','CURRENT_PAGE','5'),(13,3,'global','locale','ru'),(14,3,'global','is_use_default_search_component_state','false'),(15,4,'global','locale','ru'),(16,4,'global','is_use_default_search_component_state','false'),(17,1,'ru.complitex.common.strategy.web.DomainObjectListPanel#organization','CURRENT_PAGE','0');
+INSERT INTO `preference` VALUES (1,2,'global','locale','ru'),(2,1,'global','locale','ru'),(3,1,'global#search_component_state','country','1'),(4,1,'global#search_component_state','city','1'),(5,1,'global#search_component_state','street','1'),(6,1,'global#search_component_state','region','1'),(7,1,'global#search_component_state','room','-1'),(8,1,'global#search_component_state','apartment','-1'),(9,1,'global#search_component_state','building','1'),(10,1,'class ru.complitex.eirc.registry.web.list.RegistryRecordList','CURRENT_PAGE','0'),(11,1,'ru.complitex.eirc.eirc_account.web.list.EircAccountList','CURRENT_PAGE','2'),(12,1,'ru.complitex.logging.web.LogList','CURRENT_PAGE','5'),(13,3,'global','locale','ru'),(14,3,'global','is_use_default_search_component_state','false'),(15,4,'global','locale','ru'),(16,4,'global','is_use_default_search_component_state','false'),(17,1,'ru.complitex.common.strategy.web.DomainObjectListPanel#organization','CURRENT_PAGE','0');
 /*!40000 ALTER TABLE `preference` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2512,7 +2512,7 @@ DROP TABLE IF EXISTS `registry_file`;
 CREATE TABLE `registry_file` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `registry_id` bigint(20) NOT NULL,
-  `name_on_server` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'File name on flexpay server',
+  `name_on_server` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'File name on complitex server',
   `original_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Original file name',
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'File description',
   `creation_date` datetime NOT NULL COMMENT 'File creation date',

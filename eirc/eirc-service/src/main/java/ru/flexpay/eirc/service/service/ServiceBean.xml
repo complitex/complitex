@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="ru.flexpay.eirc.service.service.ServiceBean">
+<mapper namespace="ru.complitex.eirc.service.service.ServiceBean">
 
     <cache type="ru.complitex.common.mybatis.caches.EhcacheCache"/>
-    <!--cache-ref namespace="ru.flexpay.eirc.service_provider_account.service.ServiceProviderAccountBean"/-->
 
-    <resultMap id="Service" type="ru.flexpay.eirc.service.entity.Service">
+    <resultMap id="Service" type="ru.complitex.eirc.service.entity.Service">
         <result column="service_id"        property="id"/>
         <result column="service_code"      property="code"/>
         <result column="service_parent_id" property="parentId"/>
@@ -108,12 +107,12 @@
         </foreach>
     </select>
 
-    <insert id="insertService" parameterType="ru.flexpay.eirc.service.entity.Service" keyProperty="id" useGeneratedKeys="true" >
+    <insert id="insertService" parameterType="ru.complitex.eirc.service.entity.Service" keyProperty="id" useGeneratedKeys="true" >
         insert into `service` (`code`, `parent_id`)
                             values (#{code}, #{parentId})
     </insert>
 
-    <update id="updateService" parameterType="ru.flexpay.eirc.service.entity.Service" >
+    <update id="updateService" parameterType="ru.complitex.eirc.service.entity.Service" >
         update `service` set `code` = #{code}, `parent_id` = #{parentId} where `id` = #{id}
     </update>
 
@@ -129,11 +128,11 @@
         delete from `service_string_value` where `service_id` = #{serviceId} and `locale_id` = #{localeId}
     </delete>
 
-    <delete id="deleteServiceNames" parameterType="ru.flexpay.eirc.service.entity.Service" >
+    <delete id="deleteServiceNames" parameterType="ru.complitex.eirc.service.entity.Service" >
         delete from `service_string_value` where `service_id` = #{id}
     </delete>
 
-    <delete id="deleteService" parameterType="ru.flexpay.eirc.service.entity.Service" >
+    <delete id="deleteService" parameterType="ru.complitex.eirc.service.entity.Service" >
         delete from `service` where `id` = #{id}
     </delete>
 

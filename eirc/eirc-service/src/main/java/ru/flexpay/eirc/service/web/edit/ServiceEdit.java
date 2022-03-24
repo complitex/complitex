@@ -1,4 +1,4 @@
-package ru.flexpay.eirc.service.web.edit;
+package ru.complitex.eirc.service.web.edit;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -21,9 +21,9 @@ import ru.complitex.common.strategy.StringLocaleBean;
 import ru.complitex.common.web.component.ajax.AjaxFeedbackPanel;
 import ru.complitex.template.web.security.SecurityRole;
 import ru.complitex.template.web.template.FormTemplatePage;
-import ru.flexpay.eirc.service.entity.Service;
-import ru.flexpay.eirc.service.service.ServiceBean;
-import ru.flexpay.eirc.service.web.list.ServiceList;
+import ru.complitex.eirc.service.entity.Service;
+import ru.complitex.eirc.service.service.ServiceBean;
+import ru.complitex.eirc.service.web.list.ServiceList;
 
 import javax.ejb.EJB;
 import java.util.List;

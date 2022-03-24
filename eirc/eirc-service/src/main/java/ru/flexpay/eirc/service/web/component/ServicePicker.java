@@ -1,4 +1,4 @@
-package ru.flexpay.eirc.service.web.component;
+package ru.complitex.eirc.service.web.component;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import ru.complitex.common.entity.FilterWrapper;
 import ru.complitex.common.strategy.StringLocaleBean;
-import ru.flexpay.eirc.service.entity.Service;
+import ru.complitex.eirc.service.entity.Service;
 
 import javax.ejb.EJB;
 

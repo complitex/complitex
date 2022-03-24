@@ -3,7 +3,7 @@
 
 <mapper namespace="ru.complitex.salelog.entity.PersonBean">
 
-    <resultMap id="Person" type="ru.flexpay.eirc.dictionary.entity.Person">
+    <resultMap id="Person" type="ru.complitex.eirc.dictionary.entity.Person">
 
         <result column="first_name" property="firstName"/>
         <result column="last_name" property="lastName"/>

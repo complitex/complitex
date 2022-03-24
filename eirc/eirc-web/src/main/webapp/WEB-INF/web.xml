@@ -15,7 +15,7 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>ru.flexpay.eirc.payments_communication.service</param-value>
+            <param-value>ru.complitex.eirc.payment.service</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -29,7 +29,7 @@
         <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
         <init-param>
             <param-name>applicationClassName</param-name>
-            <param-value>ru.flexpay.eirc.web.EircWebApplication</param-value>
+            <param-value>ru.complitex.eirc.web.EircWebApplication</param-value>
         </init-param>
     </filter>
     <filter-mapping>

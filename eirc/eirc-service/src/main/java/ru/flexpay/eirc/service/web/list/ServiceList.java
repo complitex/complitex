@@ -1,4 +1,4 @@
-package ru.flexpay.eirc.service.web.list;
+package ru.complitex.eirc.service.web.list;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
@@ -27,9 +27,9 @@ import ru.complitex.template.web.component.toolbar.AddItemButton;
 import ru.complitex.template.web.component.toolbar.ToolbarButton;
 import ru.complitex.template.web.security.SecurityRole;
 import ru.complitex.template.web.template.TemplatePage;
-import ru.flexpay.eirc.service.entity.Service;
-import ru.flexpay.eirc.service.service.ServiceBean;
-import ru.flexpay.eirc.service.web.edit.ServiceEdit;
+import ru.complitex.eirc.service.entity.Service;
+import ru.complitex.eirc.service.service.ServiceBean;
+import ru.complitex.eirc.service.web.edit.ServiceEdit;
 
 import javax.ejb.EJB;
 import java.util.List;

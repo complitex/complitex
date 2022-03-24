@@ -14,7 +14,7 @@
             <property name="excludeNamespaces" value="
             ru.complitex.common.entity.StringLocale,
             ru.complitex.common.entity.Entity,
-            ru.flexpay.eirc.service_provider_account.service.OwnerExemptionBean"/>
+            ru.complitex.eirc.service_provider_account.service.OwnerExemptionBean"/>
         </plugin>
     </plugins>
 
@@ -55,25 +55,25 @@
         <mapper resource="ru/complitex/organization/service/OrganizationImportBean.xml"/>
 
         <mapper resource="ru/complitex/correction/service/CorrectionBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service/correction/service/ServiceCorrectionBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/ServiceProviderAccountCorrectionBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service/correction/service/ServiceCorrectionBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/ServiceProviderAccountCorrectionBean.xml"/>
 
-        <mapper resource="ru/flexpay/eirc/dictionary/service/PersonBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/dictionary/strategy/ModuleInstanceStrategy.xml"/>
-        <mapper resource="ru/flexpay/eirc/eirc_account/service/EircAccountBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service/service/ServiceBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/ServiceProviderAccountBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/ExemptionBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/OwnerExemptionBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/FinancialAttributeBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/SaldoOutBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/ChargeBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/PaymentAttributeBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/CashPaymentBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/service_provider_account/service/CashlessPaymentBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/registry/service/ContainerBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/registry/service/RegistryRecordBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/registry/service/RegistryBean.xml"/>
-        <mapper resource="ru/flexpay/eirc/registry/service/handle/changing/ObjectChangingBean.xml"/>
+        <mapper resource="ru/complitex/eirc/dictionary/service/PersonBean.xml"/>
+        <mapper resource="ru/complitex/eirc/dictionary/strategy/ModuleInstanceStrategy.xml"/>
+        <mapper resource="ru/complitex/eirc/eirc_account/service/EircAccountBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service/service/ServiceBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/ServiceProviderAccountBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/ExemptionBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/OwnerExemptionBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/FinancialAttributeBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/SaldoOutBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/ChargeBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/PaymentAttributeBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/CashPaymentBean.xml"/>
+        <mapper resource="ru/complitex/eirc/service_provider_account/service/CashlessPaymentBean.xml"/>
+        <mapper resource="ru/complitex/eirc/registry/service/ContainerBean.xml"/>
+        <mapper resource="ru/complitex/eirc/registry/service/RegistryRecordBean.xml"/>
+        <mapper resource="ru/complitex/eirc/registry/service/RegistryBean.xml"/>
+        <mapper resource="ru/complitex/eirc/registry/service/handle/changing/ObjectChangingBean.xml"/>
     </mappers>
 </configuration>

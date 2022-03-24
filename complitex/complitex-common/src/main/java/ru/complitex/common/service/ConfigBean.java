@@ -141,7 +141,7 @@ public class ConfigBean extends AbstractBean{
     }
 
     protected Set<Class<? extends IConfig>> getIConfigClasses() {
-        Reflections reflections = new Reflections("ru.complitex", "ru.flexpay", new SubTypesScanner());
+        Reflections reflections = new Reflections("ru.complitex", "ru.complitex", new SubTypesScanner());
 
         return reflections.getSubTypesOf(IConfig.class);
     }

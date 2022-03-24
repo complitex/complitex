@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.complitex.eirc.dictionary.strategy.ModuleInstanceStrategy">
+
+    <select id="selectDomainObject" resultMap="ru.complitex.common.strategy.DomainObjectStrategy.domainObjectResultMap"
+            parameterType="ru.complitex.common.entity.DomainObjectFilter">
+        SELECT e.* FROM `module_instance` e WHERE
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+        <include refid="sqlFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlOrderBy"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlLimit"/>
+    </select>
+
+    <sql id="sqlFilter">
+        <if test="id != null">
+            AND e.`object_id` = #{objectId}
+        </if>
+        <foreach item="attrExample" collection="attributeExamples">
+            <if test="attrExample.value != null">
+                AND EXISTS(SELECT 1 FROM `module_instance_attribute` attr WHERE attr.`object_id` = e.`object_id`
+                AND attr.`status` = 1 AND attr.`entity_attribute_id` = #{attrExample.entityAttributeId}
+                AND attr.`value_id` IN (SELECT sc.`id` FROM `${entityName}_string_value` sc WHERE sc.`value`
+                <choose>
+                    <when test="comparisonType == 'LIKE'">
+                        LIKE CONCAT('%', #{attrExample.value}, '%')
+                    </when>
+                    <when test="comparisonType == 'EQUALITY'">
+                        = #{attrExample.value}
+                    </when>
+                </choose>
+                )
+                )
+            </if>
+        </foreach>
+        <if test="additionalParams != null and additionalParams['moduleInstanceTypeIds'] != null">
+            AND EXISTS(SELECT 1 FROM `module_instance_attribute` attr WHERE attr.`object_id` = e.`object_id`
+            AND attr.`status` = 1 AND attr.`entity_attribute_id` = 1014
+            AND attr.`value_id` IN
+            <foreach open="(" close=")" separator="," item="id" collection="additionalParams['moduleInstanceTypeIds']">
+                #{id}
+            </foreach>
+            )
+        </if>
+    </sql>
+
+    <select id="selectDomainObjectCount" resultType="long" parameterType="ru.complitex.common.entity.DomainObjectFilter">
+        SELECT COUNT(1) FROM `module_instance` e WHERE
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlStatusFilter"/>
+        <include refid="ru.complitex.common.strategy.DomainObjectStrategy.sqlPermissionFilter"/>
+        <include refid="sqlFilter"/>
+    </select>
+
+    <select id="selectModuleInstanceId" parameterType="map" resultType="long">
+        select distinct a.`object_id` from `module_instance` a
+
+        join `module_instance_attribute` n on (n.`object_id` = a.`object_id` and n.`status` = 1
+        and n.`entity_attribute_id` = 1012)
+        join `module_instance_string_value` n_sc on (n_sc.`id` = n.`value_id`)
+
+        where a.`status` = 1 and n_sc.`value` = #{uniqueIndex}
+    </select>
+
+</mapper>

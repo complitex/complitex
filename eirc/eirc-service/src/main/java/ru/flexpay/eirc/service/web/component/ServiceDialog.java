@@ -1,4 +1,4 @@
-package ru.flexpay.eirc.service.web.component;
+package ru.complitex.eirc.service.web.component;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.Component;
@@ -22,8 +22,8 @@ import ru.complitex.common.web.component.paging.PagingNavigator;
 import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
 import org.odlabs.wiquery.ui.dialog.Dialog;
-import ru.flexpay.eirc.service.entity.Service;
-import ru.flexpay.eirc.service.service.ServiceBean;
+import ru.complitex.eirc.service.entity.Service;
+import ru.complitex.eirc.service.service.ServiceBean;
 
 import javax.ejb.EJB;
 import java.util.Collections;

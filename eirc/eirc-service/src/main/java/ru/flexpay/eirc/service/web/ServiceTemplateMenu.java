@@ -1,4 +1,4 @@
-package ru.flexpay.eirc.service.web;
+package ru.complitex.eirc.service.web;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.wicket.Page;
@@ -7,8 +7,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import ru.complitex.template.web.security.SecurityRole;
 import ru.complitex.template.web.template.ITemplateLink;
 import ru.complitex.template.web.template.ResourceTemplateMenu;
-import ru.flexpay.eirc.service.service.ServiceBean;
-import ru.flexpay.eirc.service.web.list.ServiceList;
+import ru.complitex.eirc.service.service.ServiceBean;
+import ru.complitex.eirc.service.web.list.ServiceList;
 
 import javax.ejb.EJB;
 import java.util.List;

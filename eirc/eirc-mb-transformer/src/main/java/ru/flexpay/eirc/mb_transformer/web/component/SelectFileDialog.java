@@ -1,11 +1,11 @@
-package ru.flexpay.eirc.mb_transformer.web.component;
+package ru.complitex.eirc.mb_transformer.web.component;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.ResourceModel;
 import org.odlabs.wiquery.ui.dialog.Dialog;
-import ru.flexpay.eirc.mb_transformer.service.FileService;
+import ru.complitex.eirc.mb_transformer.service.FileService;
 
 import javax.ejb.EJB;
 import javax.swing.tree.TreeNode;

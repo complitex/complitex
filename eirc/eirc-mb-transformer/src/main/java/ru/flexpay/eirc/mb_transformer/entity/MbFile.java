@@ -1,4 +1,4 @@
-package ru.flexpay.eirc.mb_transformer.entity;
+package ru.complitex.eirc.mb_transformer.entity;
 
 import org.apache.commons.lang3.StringUtils;
 
