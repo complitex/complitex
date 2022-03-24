@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.mapping.StatementType;
 import org.mybatis.cdi.Mapper;
-import ru.complitex.pspoffice.address.sync.entity.Sync;
-import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
+import ru.complitex.sync.entity.Sync;
+import ru.complitex.sync.entity.SyncCatalog;
 
 /**
  * @author Ivanov Anatoliy

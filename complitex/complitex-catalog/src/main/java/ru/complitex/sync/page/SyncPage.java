@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.sync.page;
+package ru.complitex.sync.page;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import org.apache.wicket.Application;
@@ -20,13 +20,12 @@ import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.util.Dates;
 import ru.complitex.correction.entity.*;
-import ru.complitex.pspoffice.address.sync.entity.Sync;
-import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
-import ru.complitex.pspoffice.address.sync.page.component.CatalogPanel;
-import ru.complitex.pspoffice.address.sync.page.component.SyncModal;
-import ru.complitex.pspoffice.address.sync.page.component.SyncPanel;
-import ru.complitex.pspoffice.address.sync.service.*;
-import ru.complitex.pspoffice.address.sync.util.Threads;
+import ru.complitex.sync.entity.Sync;
+import ru.complitex.sync.entity.SyncCatalog;
+import ru.complitex.sync.page.component.CatalogPanel;
+import ru.complitex.sync.page.component.SyncModal;
+import ru.complitex.sync.page.component.SyncPanel;
+import ru.complitex.sync.service.*;
 import ru.complitex.ui.page.BasePage;
 
 import javax.inject.Inject;
@@ -68,6 +67,9 @@ public class SyncPage extends BasePage {
 
     @Inject
     private FlatSyncService flatSyncService;
+
+    @Inject
+    private IThreadService threadService;
 
     private final Map<Integer, SyncPanel> map = new HashMap<>();
 
@@ -234,7 +236,7 @@ public class SyncPage extends BasePage {
 
                 select.forEach(catalog -> map.get(catalog).init());
 
-                Threads.submit(() -> {
+                threadService.submit(() -> {
                     try {
                         select.forEach(catalog -> {
                             switch (catalog) {

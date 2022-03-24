@@ -7,7 +7,7 @@ import ru.complitex.address.page.*;
 import ru.complitex.correction.page.*;
 import ru.complitex.organization.page.OrganizationPage;
 import ru.complitex.organization.page.OrganizationTypePage;
-import ru.complitex.pspoffice.address.sync.page.SyncPage;
+import ru.complitex.sync.page.SyncPage;
 
 /**
  * @author Ivanov Anatoliy

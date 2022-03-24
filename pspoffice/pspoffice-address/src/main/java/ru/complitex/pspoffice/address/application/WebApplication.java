@@ -13,7 +13,7 @@ import ru.complitex.organization.page.OrganizationPage;
 import ru.complitex.organization.page.OrganizationTypePage;
 import ru.complitex.pspoffice.address.api.AddressJsonPage;
 import ru.complitex.pspoffice.address.page.*;
-import ru.complitex.pspoffice.address.sync.page.SyncPage;
+import ru.complitex.sync.page.SyncPage;
 import ru.complitex.user.page.LoginPage;
 import ru.complitex.ui.page.BasePage;
 import ru.complitex.user.session.WebSession;

@@ -1,13 +1,11 @@
-package ru.complitex.pspoffice.address.sync.service;
+package ru.complitex.sync.service;
 
+import ru.complitex.address.entity.Country;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.address.entity.Country;
 import ru.complitex.correction.entity.CountryCorrection;
-import ru.complitex.pspoffice.address.producer.SyncProducer;
-import ru.complitex.pspoffice.address.sync.entity.Sync;
-import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
-import ru.complitex.pspoffice.address.sync.mapper.SyncMapper;
+import ru.complitex.sync.entity.Sync;
+import ru.complitex.sync.entity.SyncCatalog;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -21,8 +19,7 @@ import java.util.Iterator;
 @ApplicationScoped
 public class CountrySyncService extends SyncService {
     @Inject
-    @SyncProducer
-    private SyncMapper syncMapper;
+    private IAddressService syncCatalogService;
 
     @Inject
     private CatalogService catalogService;
@@ -30,7 +27,7 @@ public class CountrySyncService extends SyncService {
     public Iterator<SyncCatalog> getSyncCatalogs(LocalDate date, int locale) {
         SyncCatalog syncCatalog = new SyncCatalog(date, locale);
 
-        syncMapper.callCountrySyncs(syncCatalog);
+        syncCatalogService.getCountrySyncs(syncCatalog);
 
         return Collections.singletonList(syncCatalog).iterator();
     }

@@ -1,9 +1,10 @@
-package ru.complitex.pspoffice.address.sync.util;
+package ru.complitex.pspoffice.address.sync.service;
 
 import org.jboss.weld.context.api.ContextualInstance;
 import org.jboss.weld.context.bound.BoundLiteral;
 import org.jboss.weld.context.bound.BoundRequestContext;
 import org.jboss.weld.manager.api.WeldManager;
+import ru.complitex.sync.service.IThreadService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.CDI;
@@ -17,10 +18,11 @@ import java.util.stream.Collectors;
 /**
  * @author Ivanov Anatoliy
  */
-public class Threads {
+@RequestScoped
+public class ThreadService implements IThreadService {
     private final static ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
 
-    public static Future<?> submit(ExecutorService executorService, Runnable task) {
+    public Future<?> submit(ExecutorService executorService, Runnable task) {
         Collection<ContextualInstance<?>> requestContexts = CDI.current().select(WeldManager.class).get()
                 .getActiveWeldAlterableContexts().stream()
                 .filter(c -> c.getScope().equals(RequestScoped.class))
@@ -42,7 +44,7 @@ public class Threads {
         });
     }
 
-    public static Future<?> submit(Runnable task) {
+    public Future<?> submit(Runnable task) {
         return submit(THREAD_POOL, task);
     }
 }

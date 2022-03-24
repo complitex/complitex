@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.sync.entity;
+package ru.complitex.sync.entity;
 
 import ru.complitex.catalog.util.Strings;
 

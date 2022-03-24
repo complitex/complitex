@@ -1,11 +1,10 @@
-package ru.complitex.pspoffice.address.sync.service;
+package ru.complitex.sync.service;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionManager;
 import org.mybatis.cdi.SqlSessionManagerRegistry;
 import ru.complitex.catalog.entity.Item;
-import ru.complitex.pspoffice.address.sync.util.Threads;
-import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
+import ru.complitex.sync.entity.SyncCatalog;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -22,6 +21,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class SyncService implements ISyncService {
     @Inject
     private SqlSessionManagerRegistry registry;
+
+    @Inject
+    private IThreadService threadService;
 
     private final Semaphore semaphore = new Semaphore(8);
 
@@ -72,7 +74,7 @@ public abstract class SyncService implements ISyncService {
             throw new RuntimeException(e);
         }
 
-        Future<?> future = Threads.submit(() -> {
+        Future<?> future = threadService.submit(() -> {
             try {
                 registry.getManagers().forEach(m -> m.startManagedSession(ExecutorType.REUSE));
 

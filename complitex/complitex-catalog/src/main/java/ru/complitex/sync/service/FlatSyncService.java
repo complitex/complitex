@@ -1,13 +1,11 @@
-package ru.complitex.pspoffice.address.sync.service;
+package ru.complitex.sync.service;
 
+import ru.complitex.address.entity.Flat;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.address.entity.Flat;
 import ru.complitex.correction.entity.*;
-import ru.complitex.pspoffice.address.producer.SyncProducer;
-import ru.complitex.pspoffice.address.sync.entity.Sync;
-import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
-import ru.complitex.pspoffice.address.sync.mapper.SyncMapper;
+import ru.complitex.sync.entity.Sync;
+import ru.complitex.sync.entity.SyncCatalog;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -23,8 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ApplicationScoped
 public class FlatSyncService extends SyncService {
     @Inject
-    @SyncProducer
-    private SyncMapper syncMapper;
+    private IAddressService syncCatalogService;
 
     @Inject
     private CatalogService catalogService;
@@ -77,7 +74,7 @@ public class FlatSyncService extends SyncService {
 
                             syncCatalog.setPart(part != null ? part : "");
 
-                            syncMapper.callFlatSyncs(syncCatalog);
+                            syncCatalogService.getFlatSyncs(syncCatalog);
 
                             return syncCatalog;
                         }))

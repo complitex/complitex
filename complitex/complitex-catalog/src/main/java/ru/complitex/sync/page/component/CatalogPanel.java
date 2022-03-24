@@ -1,7 +1,7 @@
-package ru.complitex.pspoffice.address.sync.page.component;
+package ru.complitex.sync.page.component;
 
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.pspoffice.address.sync.service.ISyncService;
+import ru.complitex.sync.service.ISyncService;
 
 import javax.inject.Inject;
 import java.time.LocalDate;

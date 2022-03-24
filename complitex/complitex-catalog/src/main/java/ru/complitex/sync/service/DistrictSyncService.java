@@ -1,15 +1,13 @@
-package ru.complitex.pspoffice.address.sync.service;
+package ru.complitex.sync.service;
 
+import ru.complitex.address.entity.District;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.address.entity.District;
 import ru.complitex.correction.entity.CityCorrection;
 import ru.complitex.correction.entity.CityTypeCorrection;
 import ru.complitex.correction.entity.DistrictCorrection;
-import ru.complitex.pspoffice.address.producer.SyncProducer;
-import ru.complitex.pspoffice.address.sync.entity.Sync;
-import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
-import ru.complitex.pspoffice.address.sync.mapper.SyncMapper;
+import ru.complitex.sync.entity.Sync;
+import ru.complitex.sync.entity.SyncCatalog;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -22,8 +20,7 @@ import java.util.Iterator;
 @ApplicationScoped
 public class DistrictSyncService extends SyncService {
     @Inject
-    @SyncProducer
-    private SyncMapper syncMapper;
+    private IAddressService syncCatalogService;
 
     @Inject
     private CatalogService catalogService;
@@ -45,7 +42,7 @@ public class DistrictSyncService extends SyncService {
                     syncCatalog.setCityType(cityTypeCorrection);
                     syncCatalog.setCity(cityCorrection.getText(CityCorrection.CITY_NAME, locale));
 
-                    syncMapper.callDistrictSyncs(syncCatalog);
+                    syncCatalogService.getDistrictSyncs(syncCatalog);
 
                     return syncCatalog;
                 })

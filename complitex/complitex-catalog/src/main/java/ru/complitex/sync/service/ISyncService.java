@@ -1,11 +1,11 @@
-package ru.complitex.pspoffice.address.sync.service;
+package ru.complitex.sync.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
-import ru.complitex.pspoffice.address.sync.entity.Sync;
-import ru.complitex.pspoffice.address.sync.entity.SyncCatalog;
+import ru.complitex.sync.entity.Sync;
+import ru.complitex.sync.entity.SyncCatalog;
 
 import java.time.LocalDate;
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.sync.page.component;
+package ru.complitex.sync.page.component;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;

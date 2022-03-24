@@ -1,8 +1,8 @@
-package ru.complitex.pspoffice.address.sync.service;
+package ru.complitex.sync.service;
 
 import ru.complitex.catalog.entity.Item;
-import ru.complitex.pspoffice.address.sync.entity.Sync;
-import ru.complitex.pspoffice.address.sync.entity.SyncParameter;
+import ru.complitex.sync.entity.Sync;
+import ru.complitex.sync.entity.SyncParameter;
 
 import java.io.Serializable;
 

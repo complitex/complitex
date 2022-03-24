@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.sync.entity;
+package ru.complitex.sync.entity;
 
 import java.time.LocalDate;
 import java.util.List;

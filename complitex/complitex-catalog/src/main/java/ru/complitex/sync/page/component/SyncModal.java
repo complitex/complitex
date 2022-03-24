@@ -1,4 +1,4 @@
-package ru.complitex.pspoffice.address.sync.page.component;
+package ru.complitex.sync.page.component;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapAjaxLink;
