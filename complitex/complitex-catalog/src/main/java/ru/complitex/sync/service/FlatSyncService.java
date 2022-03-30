@@ -21,16 +21,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ApplicationScoped
 public class FlatSyncService extends SyncService {
     @Inject
-    private IAddressService syncCatalogService;
+    private CatalogService catalogService;
 
     @Inject
-    private CatalogService catalogService;
+    private CitySyncService citySyncService;
+
+    @Inject
+    private DistrictSyncService districtSyncService;
 
     @Inject
     private StreetSyncService streetSyncService;
 
     @Inject
     private HouseSyncService houseSyncService;
+
+    @Inject
+    private IAddressService addressService;
 
     @Override
     public Iterator<SyncCatalog> getSyncCatalogs(LocalDate date, int locale) {
@@ -44,10 +50,6 @@ public class FlatSyncService extends SyncService {
                         .withLong(HouseCorrection.STREET_ID, streetCorrection.getLong(StreetCorrection.STREET_ID))
                         .get().stream()
                         .map(houseCorrection -> {
-                            String street = streetCorrection.getText(StreetCorrection.STREET_NAME, locale);
-
-                            String streetType = houseSyncService.getStreetTypeShortName(streetCorrection, date, locale);
-
                             String district = catalogService.getItem(DistrictCorrection.CATALOG, date)
                                     .withReferenceId(DistrictCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
                                     .withReferenceId(DistrictCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
@@ -57,24 +59,24 @@ public class FlatSyncService extends SyncService {
 
                             Item cityCorrection = houseSyncService.getCityCorrection(streetCorrection, date);
 
-                            String city = cityCorrection.getText(CityCorrection.CITY_NAME, locale);
-
-                            String cityType = streetSyncService.getCityTypeShortName(cityCorrection, date, locale);
+                            Item regionCorrection = districtSyncService.getRegionCorrection(cityCorrection, date, locale);
 
                             SyncCatalog syncCatalog = new SyncCatalog(date, locale);
 
-                            syncCatalog.setCity(city);
-                            syncCatalog.setCityType(cityType);
+                            syncCatalog.setCountry(citySyncService.getCountryName(regionCorrection, date, locale));
+                            syncCatalog.setRegion(regionCorrection.getText(RegionCorrection.REGION_NAME, locale));
+                            syncCatalog.setCity(cityCorrection.getText(CityCorrection.CITY_NAME, locale));
+                            syncCatalog.setCityType(streetSyncService.getCityTypeShortName(cityCorrection, date, locale));
                             syncCatalog.setDistrict(district);
-                            syncCatalog.setStreet(street);
-                            syncCatalog.setStreetType(streetType);
+                            syncCatalog.setStreet(streetCorrection.getText(StreetCorrection.STREET_NAME, locale));
+                            syncCatalog.setStreetType(houseSyncService.getStreetTypeShortName(streetCorrection, date, locale));
                             syncCatalog.setHouse(houseCorrection.getText(HouseCorrection.HOUSE_NUMBER, locale));
 
                             String part = houseCorrection.getText(HouseCorrection.HOUSE_PART, locale);
 
                             syncCatalog.setPart(part != null ? part : "");
 
-                            syncCatalogService.getFlatSyncs(syncCatalog);
+                            addressService.getFlatSyncs(syncCatalog);
 
                             return syncCatalog;
                         }))

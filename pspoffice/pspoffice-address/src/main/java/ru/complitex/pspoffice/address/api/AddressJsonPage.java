@@ -23,73 +23,85 @@ public class AddressJsonPage extends WebPage {
     private CatalogService catalogService;
 
     public AddressJsonPage(PageParameters parameters) {
-        int catalog = getCatalog(parameters.get("catalogName").toString());
+        int catalog = getCatalog(parameters.get("catalog").toString());
 
-        String countryName = parameters.get("countryName").toOptionalString();
-        String regionName = parameters.get("regionName").toOptionalString();
-        String cityTypeName = parameters.get("cityTypeName").toOptionalString();
-        String cityName = parameters.get("cityName").toOptionalString();
-        String districtName = parameters.get("districtName").toOptionalString();
-        String streetTypeName = parameters.get("streetTypeName").toOptionalString();
-        String streetName = parameters.get("streetName").toOptionalString();
+        String country = parameters.get("country").toOptionalString();
+        String region = parameters.get("region").toOptionalString();
+        String cityType = parameters.get("cityType").toOptionalString();
+        String city = parameters.get("city").toOptionalString();
+        String district = parameters.get("district").toOptionalString();
+        String streetType = parameters.get("streetType").toOptionalString();
+        String street = parameters.get("street").toOptionalString();
 
         String dateString = parameters.get("date").toOptionalString();
 
         LocalDate date = dateString != null ? LocalDate.parse(dateString) : LocalDate.now();
 
-        Long country = null;
-        Long region = null;
-        Long cityType = null;
-        Long city = null;
-        Long district = null;
-        Long streetType = null;
-        Long street = null;
+        Long countryId = null;
+        Long regionId = null;
+        Long cityTypeId = null;
+        Long cityId = null;
+        Long districtId = null;
+        Long streetTypeId = null;
+        Long streetId = null;
 
-        if (countryName != null) {
-            country = catalogService.getItem(Country.CATALOG, date)
-                    .withText(Country.COUNTRY_NAME, Locale.SYSTEM, countryName)
+        if (country != null) {
+            countryId = catalogService.getItem(Country.CATALOG, date)
+                    .withText(Country.COUNTRY_NAME, Locale.SYSTEM, country)
                     .getOptional().map(Item::getId).orElse(null);
         }
 
-        if (regionName != null) {
-            region = catalogService.getItem(Region.CATALOG, date)
-                    .withReferenceId(Region.COUNTRY, country)
-                    .withText(Region.REGION_NAME, Locale.SYSTEM, regionName)
+        if (region != null) {
+            regionId = catalogService.getItem(Region.CATALOG, date)
+                    .withReferenceId(Region.COUNTRY, countryId)
+                    .withText(Region.REGION_NAME, Locale.SYSTEM, region)
                     .getOptional().map(Item::getId).orElse(null);
         }
 
-        if (cityTypeName != null) {
-            cityType = catalogService.getItem(CityType.CATALOG, date)
-                    .withText(CityType.CITY_TYPE_NAME, Locale.SYSTEM, cityTypeName)
+        if (cityType != null) {
+            cityTypeId = catalogService.getItem(CityType.CATALOG, date)
+                    .withText(CityType.CITY_TYPE_NAME, Locale.SYSTEM, cityType)
+                    .getOptional().map(Item::getId).orElse(null);
+
+            if (cityTypeId == null) {
+                cityTypeId = catalogService.getItem(CityType.CATALOG, date)
+                        .withText(CityType.CITY_TYPE_SHORT_NAME, Locale.SYSTEM, cityType)
+                        .getOptional().map(Item::getId).orElse(null);
+            }
+        }
+
+        if (city != null) {
+            cityId = catalogService.getItem(City.CATALOG, date)
+                    .withReferenceId(City.REGION, regionId)
+                    .withReferenceId(City.CITY_TYPE, cityTypeId)
+                    .withText(City.CITY_NAME, Locale.SYSTEM, city)
                     .getOptional().map(Item::getId).orElse(null);
         }
 
-        if (cityName != null) {
-            city = catalogService.getItem(City.CATALOG, date)
-                    .withReferenceId(City.REGION, region)
-                    .withReferenceId(City.CITY_TYPE, cityType)
-                    .withText(City.CITY_NAME, Locale.SYSTEM, cityName)
+        if (district != null) {
+            districtId = catalogService.getItem(District.CATALOG, date)
+                    .withReferenceId(District.CITY, cityId)
+                    .withText(District.DISTRICT_NAME, Locale.SYSTEM, district)
                     .getOptional().map(Item::getId).orElse(null);
         }
 
-        if (districtName != null) {
-            district = catalogService.getItem(District.CATALOG, date)
-                    .withReferenceId(District.CITY, city)
-                    .withText(District.DISTRICT_NAME, Locale.SYSTEM, districtName)
+        if (streetType != null) {
+            streetTypeId = catalogService.getItem(StreetType.CATALOG, date)
+                    .withText(StreetType.STREET_TYPE_NAME, Locale.SYSTEM, streetType)
                     .getOptional().map(Item::getId).orElse(null);
+
+            if (streetTypeId == null) {
+                streetTypeId = catalogService.getItem(StreetType.CATALOG, date)
+                        .withText(StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM, streetType)
+                        .getOptional().map(Item::getId).orElse(null);
+            }
         }
 
-        if (streetTypeName != null) {
-            streetType = catalogService.getItem(StreetType.CATALOG, date)
-                    .withText(StreetType.STREET_TYPE_NAME, Locale.SYSTEM, streetTypeName)
-                    .getOptional().map(Item::getId).orElse(null);
-        }
-
-        if (streetName != null) {
-            street = catalogService.getItem(Street.CATALOG, date)
-                    .withReferenceId(Street.CITY, city)
-                    .withReferenceId(Street.STREET_TYPE, streetType)
-                    .withText(Street.STREET_NAME, Locale.SYSTEM, streetName)
+        if (street != null) {
+            streetId = catalogService.getItem(Street.CATALOG, date)
+                    .withReferenceId(Street.CITY, cityId)
+                    .withReferenceId(Street.STREET_TYPE, streetTypeId)
+                    .withText(Street.STREET_NAME, Locale.SYSTEM, street)
                     .getOptional().map(Item::getId).orElse(null);
         }
 
@@ -99,23 +111,23 @@ public class AddressJsonPage extends WebPage {
 
         switch (catalog) {
             case Region.CATALOG -> {
-                builder.withReferenceId(Region.COUNTRY, country);
+                builder.withReferenceId(Region.COUNTRY, countryId);
             }
             case City.CATALOG -> {
-                builder.withReferenceId(City.REGION, region);
+                builder.withReferenceId(City.REGION, regionId);
             }
             case District.CATALOG -> {
-                builder.withReferenceId(District.CITY, city);
+                builder.withReferenceId(District.CITY, cityId);
             }
             case Street.CATALOG -> {
-                builder.withReferenceId(Street.CITY, city);
+                builder.withReferenceId(Street.CITY, cityId);
             }
             case House.CATALOG -> {
-                if (district != null) {
-                    builder.withReferenceId(House.DISTRICT, district);
+                if (districtId != null) {
+                    builder.withReferenceId(House.DISTRICT, districtId);
                 }
 
-                builder.withReferenceId(House.STREET, street);
+                builder.withReferenceId(House.STREET, streetId);
             }
         }
 
@@ -168,7 +180,7 @@ public class AddressJsonPage extends WebPage {
             }
 
             case Region.CATALOG -> {
-                json.put("country", item.getReferenceId(Region.COUNTRY));
+                json.put("countryId", item.getReferenceId(Region.COUNTRY));
                 json.put("regionName", getName(item, Region.REGION_NAME));
             }
 
@@ -178,13 +190,13 @@ public class AddressJsonPage extends WebPage {
             }
 
             case City.CATALOG -> {
-                json.put("region", item.getReferenceId(City.REGION));
-                json.put("cityType", item.getReferenceId(City.CITY_TYPE));
+                json.put("regionId", item.getReferenceId(City.REGION));
+                json.put("cityTypeId", item.getReferenceId(City.CITY_TYPE));
                 json.put("cityName", getName(item, City.CITY_NAME));
             }
 
             case District.CATALOG -> {
-                json.put("city", item.getReferenceId(District.CITY));
+                json.put("cityId", item.getReferenceId(District.CITY));
                 json.put("districtName", getName(item, District.DISTRICT_NAME));
             }
 
@@ -194,21 +206,21 @@ public class AddressJsonPage extends WebPage {
             }
 
             case Street.CATALOG -> {
-                json.put("city", item.getReferenceId(Street.CITY));
-                json.put("streetType", item.getReferenceId(Street.STREET_TYPE));
+                json.put("cityId", item.getReferenceId(Street.CITY));
+                json.put("streetTypeId", item.getReferenceId(Street.STREET_TYPE));
                 json.put("streetName", getName(item, Street.STREET_NAME));
             }
 
             case House.CATALOG -> {
-                json.put("district", item.getReferenceId(House.DISTRICT));
-                json.put("street", item.getReferenceId(House.STREET));
+                json.put("districtId", item.getReferenceId(House.DISTRICT));
+                json.put("streetId", item.getReferenceId(House.STREET));
                 json.put("houseNumber", getName(item, House.HOUSE_NUMBER));
                 json.put("housePart", getName(item, House.HOUSE_PART));
             }
 
             case Flat.CATALOG -> {
-                json.put("street", item.getReferenceId(Flat.STREET));
-                json.put("house", item.getReferenceId(Flat.HOUSE));
+                json.put("streetId", item.getReferenceId(Flat.STREET));
+                json.put("houseId", item.getReferenceId(Flat.HOUSE));
                 json.put("flatNumber", getName(item, Flat.FLAT_NUMBER));
             }
         }

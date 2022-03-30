@@ -48,8 +48,8 @@ public class CitySyncHandler extends DomainSyncHandler {
     public Cursor<DomainSync> getCursorDomainSyncs(DomainSync region, Date date) throws RemoteCallException {
         DomainSyncParameter parameter = new DomainSyncParameter(date);
 
-        parameter.setCountryName(getDomainSync(SyncEntity.COUNTRY, region.getParentId()).getName());
-        parameter.setRegionName(region.getName());
+        parameter.setCountry(getDomainSync(SyncEntity.COUNTRY, region.getParentId()).getName());
+        parameter.setRegion(region.getName());
 
         return addressSyncJsonAdapter.getCitySyncs(parameter);
     }

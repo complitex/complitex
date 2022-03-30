@@ -3,9 +3,7 @@ package ru.complitex.sync.service;
 import ru.complitex.address.entity.District;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.correction.entity.CityCorrection;
-import ru.complitex.correction.entity.CityTypeCorrection;
-import ru.complitex.correction.entity.DistrictCorrection;
+import ru.complitex.correction.entity.*;
 import ru.complitex.sync.entity.Sync;
 import ru.complitex.sync.entity.SyncCatalog;
 
@@ -20,10 +18,21 @@ import java.util.Iterator;
 @ApplicationScoped
 public class DistrictSyncService extends SyncService {
     @Inject
-    private IAddressService syncCatalogService;
+    private CatalogService catalogService;
 
     @Inject
-    private CatalogService catalogService;
+    private CitySyncService citySyncService;
+
+    @Inject
+    private IAddressService addressService;
+
+    public Item getRegionCorrection(Item cityCorrection, LocalDate date, int locale) {
+        return catalogService.getItem(RegionCorrection.CATALOG, date)
+                .withReferenceId(RegionCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
+                .withReferenceId(RegionCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
+                .withLong(RegionCorrection.REGION_ID, cityCorrection.getLong(CityCorrection.REGION_ID))
+                .get();
+    }
 
     @Override
     public Iterator<SyncCatalog> getSyncCatalogs(LocalDate date, int locale) {
@@ -33,6 +42,8 @@ public class DistrictSyncService extends SyncService {
                 .get().stream()
                 .map(cityCorrection -> {
                     String cityTypeCorrection = catalogService.getItem(CityTypeCorrection.CATALOG, date)
+                            .withReferenceId(RegionCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
+                            .withReferenceId(RegionCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
                             .withLong(CityTypeCorrection.CITY_TYPE_ID, cityCorrection.getLong(CityCorrection.CITY_TYPE_ID))
                             .get()
                             .getText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, locale);
@@ -42,7 +53,12 @@ public class DistrictSyncService extends SyncService {
                     syncCatalog.setCityType(cityTypeCorrection);
                     syncCatalog.setCity(cityCorrection.getText(CityCorrection.CITY_NAME, locale));
 
-                    syncCatalogService.getDistrictSyncs(syncCatalog);
+                    Item regionCorrection = getRegionCorrection(cityCorrection, date, locale);
+
+                    syncCatalog.setRegion(regionCorrection.getText(RegionCorrection.REGION_NAME, locale));
+                    syncCatalog.setCountry(citySyncService.getCountryName(regionCorrection, date, locale));
+
+                    addressService.getDistrictSyncs(syncCatalog);
 
                     return syncCatalog;
                 })

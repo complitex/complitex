@@ -19,16 +19,16 @@ import java.util.Iterator;
 @ApplicationScoped
 public class StreetTypeSyncService extends SyncService {
     @Inject
-    private IAddressService syncCatalogService;
+    private CatalogService catalogService;
 
     @Inject
-    private CatalogService catalogService;
+    private IAddressService addressService;
 
     @Override
     public Iterator<SyncCatalog> getSyncCatalogs(LocalDate date, int locale) {
         SyncCatalog syncCatalog = new SyncCatalog(date, locale);
 
-        syncCatalogService.getStreetTypeSyncs(syncCatalog);
+        addressService.getStreetTypeSyncs(syncCatalog);
 
         return Collections.singletonList(syncCatalog).iterator();
     }

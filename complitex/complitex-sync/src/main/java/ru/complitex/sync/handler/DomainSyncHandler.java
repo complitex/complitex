@@ -34,10 +34,10 @@ public abstract class DomainSyncHandler implements IDomainSyncHandler {
 
         DomainSyncParameter parameter = new DomainSyncParameter(date);
 
-        parameter.setCountryName(county.getName());
-        parameter.setRegionName(region.getName());
-        parameter.setCityTypeName(cityType.getName());
-        parameter.setCityName(city.getName());
+        parameter.setCountry(county.getName());
+        parameter.setRegion(region.getName());
+        parameter.setCityType(cityType.getName());
+        parameter.setCity(city.getName());
 
         return parameter;
     }

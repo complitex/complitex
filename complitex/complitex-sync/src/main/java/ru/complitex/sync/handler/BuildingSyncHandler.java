@@ -64,9 +64,9 @@ public class BuildingSyncHandler extends DomainSyncHandler {
                 throw new RuntimeException("street type not found " + street);
             }
 
-            parameter.setStreetTypeName(streetTypes.get(0).getName());
+            parameter.setStreetType(streetTypes.get(0).getName());
 
-            parameter.setStreetName(street.getName());
+            parameter.setStreet(street.getName());
 
             buildings.addAll(domainSyncJsonAdapter.getBuildingSyncs(parameter).getData());
         }

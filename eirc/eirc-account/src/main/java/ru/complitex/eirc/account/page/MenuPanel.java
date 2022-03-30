@@ -7,6 +7,7 @@ import ru.complitex.address.page.*;
 import ru.complitex.correction.page.*;
 import ru.complitex.organization.page.OrganizationPage;
 import ru.complitex.organization.page.OrganizationTypePage;
+import ru.complitex.sync.page.SyncPage;
 
 /**
  * @author Ivanov Anatoliy
@@ -42,5 +43,10 @@ public class MenuPanel extends Panel {
         correction.add(new BookmarkablePageLink<>("street", StreetCorrectionPage.class));
         correction.add(new BookmarkablePageLink<>("house", HouseCorrectionPage.class));
         correction.add(new BookmarkablePageLink<>("flat", FlatCorrectionPage.class));
+
+        WebMarkupContainer setting = new WebMarkupContainer("setting");
+        add(setting);
+
+        setting.add(new BookmarkablePageLink<>("synchronization", SyncPage.class));
     }
 }

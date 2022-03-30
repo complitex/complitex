@@ -5,6 +5,7 @@ import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
 import ru.complitex.correction.entity.CityCorrection;
 import ru.complitex.correction.entity.CityTypeCorrection;
+import ru.complitex.correction.entity.CountryCorrection;
 import ru.complitex.correction.entity.RegionCorrection;
 import ru.complitex.sync.entity.Sync;
 import ru.complitex.sync.entity.SyncCatalog;
@@ -20,10 +21,19 @@ import java.util.Iterator;
 @ApplicationScoped
 public class CitySyncService extends SyncService {
     @Inject
-    private IAddressService syncCatalogService;
+    private CatalogService catalogService;
 
     @Inject
-    private CatalogService catalogService;
+    private IAddressService addressService;
+
+    public String getCountryName(Item regionCorrection, LocalDate date, int locale) {
+        return catalogService.getItem(CountryCorrection.CATALOG, date)
+                .withReferenceId(RegionCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
+                .withReferenceId(RegionCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
+                .withLong(CountryCorrection.COUNTRY_ID, regionCorrection.getLong(RegionCorrection.COUNTRY_ID))
+                .get()
+                .getText(CountryCorrection.COUNTRY_NAME, locale);
+    }
 
     @Override
     public Iterator<SyncCatalog> getSyncCatalogs(LocalDate date, int locale) {
@@ -34,9 +44,11 @@ public class CitySyncService extends SyncService {
                 .map(regionCorrection -> {
                     SyncCatalog syncCatalog = new SyncCatalog(date, locale);
 
+                    syncCatalog.setCountry(getCountryName(regionCorrection, date, locale));
+
                     syncCatalog.setRegion(regionCorrection.getText(RegionCorrection.REGION_NAME, locale));
 
-                    syncCatalogService.getCitySyncs(syncCatalog);
+                    addressService.getCitySyncs(syncCatalog);
 
                     return syncCatalog;
                 })

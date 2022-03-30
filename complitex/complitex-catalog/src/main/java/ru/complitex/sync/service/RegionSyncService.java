@@ -19,10 +19,10 @@ import java.util.Iterator;
 @ApplicationScoped
 public class RegionSyncService extends SyncService {
     @Inject
-    private IAddressService syncCatalogService;
+    private CatalogService catalogService;
 
     @Inject
-    private CatalogService catalogService;
+    private IAddressService addressService;
 
     @Override
     public Iterator<SyncCatalog> getSyncCatalogs(LocalDate date, int locale) {
@@ -35,7 +35,7 @@ public class RegionSyncService extends SyncService {
 
                     syncCatalog.setCountry(countryCorrection.getText(CountryCorrection.COUNTRY_NAME, locale));
 
-                    syncCatalogService.getRegionSyncs(syncCatalog);
+                    addressService.getRegionSyncs(syncCatalog);
 
                     return syncCatalog;
                 })

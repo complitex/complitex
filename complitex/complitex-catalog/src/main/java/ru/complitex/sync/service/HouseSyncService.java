@@ -18,13 +18,19 @@ import java.util.Iterator;
 @ApplicationScoped
 public class HouseSyncService extends SyncService {
     @Inject
-    private IAddressService syncCatalogService;
-
-    @Inject
     private CatalogService catalogService;
 
     @Inject
+    private CitySyncService citySyncService;
+
+    @Inject
+    private DistrictSyncService districtSyncService;
+
+    @Inject
     private StreetSyncService streetSyncService;
+
+    @Inject
+    private IAddressService addressService;
 
     public Item getCityCorrection(Item streetCorrection, LocalDate date) {
         return catalogService.getItem(CityCorrection.CATALOG, date)
@@ -50,15 +56,15 @@ public class HouseSyncService extends SyncService {
                 .withReferenceId(StreetCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
                 .get().stream()
                 .flatMap(streetCorrection -> {
-                    String street = streetCorrection.getText(StreetCorrection.STREET_NAME, locale);
-
                     String streetType = getStreetTypeShortName(streetCorrection, date, locale);
 
                     Item cityCorrection = getCityCorrection(streetCorrection, date);
 
-                    String city = cityCorrection.getText(CityCorrection.CITY_NAME, locale);
-
                     String cityType = streetSyncService.getCityTypeShortName(cityCorrection, date, locale);
+
+                    Item regionCorrection = districtSyncService.getRegionCorrection(cityCorrection, date, locale);
+
+                    String country = citySyncService.getCountryName(regionCorrection, date, locale);
 
                     return catalogService.getItems(DistrictCorrection.CATALOG, date)
                             .withReferenceId(DistrictCorrection.CATALOG_ORGANIZATION, CATALOG_ORGANIZATION)
@@ -70,13 +76,16 @@ public class HouseSyncService extends SyncService {
                                 try {
                                      syncCatalog = new SyncCatalog(date, locale);
 
-                                    syncCatalog.setCity(city);
+                                    syncCatalog.setCity(cityCorrection.getText(CityCorrection.CITY_NAME, locale));
                                     syncCatalog.setCityType(cityType);
                                     syncCatalog.setDistrict(districtCorrection.getText(DistrictCorrection.DISTRICT_NAME, locale));
-                                    syncCatalog.setStreet(street);
+                                    syncCatalog.setStreet(streetCorrection.getText(StreetCorrection.STREET_NAME, locale));
                                     syncCatalog.setStreetType(streetType != null ? streetType : "");
 
-                                    syncCatalogService.getHouseSyncs(syncCatalog);
+                                    syncCatalog.setRegion(regionCorrection.getText(RegionCorrection.REGION_NAME, locale));
+                                    syncCatalog.setCountry(country);
+
+                                    addressService.getHouseSyncs(syncCatalog);
 
                                     return syncCatalog;
                                 } catch (Exception e) {

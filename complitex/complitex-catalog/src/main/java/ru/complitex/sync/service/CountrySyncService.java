@@ -19,15 +19,15 @@ import java.util.Iterator;
 @ApplicationScoped
 public class CountrySyncService extends SyncService {
     @Inject
-    private IAddressService syncCatalogService;
+    private CatalogService catalogService;
 
     @Inject
-    private CatalogService catalogService;
+    private IAddressService addressService;
 
     public Iterator<SyncCatalog> getSyncCatalogs(LocalDate date, int locale) {
         SyncCatalog syncCatalog = new SyncCatalog(date, locale);
 
-        syncCatalogService.getCountrySyncs(syncCatalog);
+        addressService.getCountrySyncs(syncCatalog);
 
         return Collections.singletonList(syncCatalog).iterator();
     }

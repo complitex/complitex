@@ -44,34 +44,34 @@ public class DomainSyncJsonAdapter {
 
     public String getJson(DomainSyncParameter parameter) throws RemoteCallException {
         try {
-            String query = "?catalogName=" + parameter.getCatalogName();
+            String query = "?catalog=" + parameter.getCatalog();
 
-            if (parameter.getCountryName() != null) {
-                query += "&countryName=" +encode(parameter.getCountryName());
+            if (parameter.getCountry() != null) {
+                query += "&country=" +encode(parameter.getCountry());
             }
 
-            if (parameter.getRegionName() != null) {
-                query += "&regionName=" + encode(parameter.getRegionName());
+            if (parameter.getRegion() != null) {
+                query += "&region=" + encode(parameter.getRegion());
             }
 
-            if (parameter.getCityTypeName() != null) {
-                query += "&cityTypeName=" + encode(parameter.getCityTypeName());
+            if (parameter.getCityType() != null) {
+                query += "&cityType=" + encode(parameter.getCityType());
             }
 
-            if (parameter.getCityName() != null) {
-                query += "&cityName=" + encode(parameter.getCityName());
+            if (parameter.getCity() != null) {
+                query += "&city=" + encode(parameter.getCity());
             }
 
-            if (parameter.getDistrictName() != null) {
-                query += "&districtName=" + encode(parameter.getDistrictName());
+            if (parameter.getDistrict() != null) {
+                query += "&district=" + encode(parameter.getDistrict());
             }
 
-            if (parameter.getStreetTypeName() != null) {
-                query += "&streetTypeName=" + encode(parameter.getStreetTypeName());
+            if (parameter.getStreetType() != null) {
+                query += "&streetType=" + encode(parameter.getStreetType());
             }
 
-            if (parameter.getStreetName() != null) {
-                query += "&streetName=" + encode(parameter.getStreetName());
+            if (parameter.getStreet() != null) {
+                query += "&street=" + encode(parameter.getStreet());
             }
 
             if (parameter.getDate() != null) {
@@ -137,7 +137,7 @@ public class DomainSyncJsonAdapter {
 
     public Cursor<DomainSync> getRegionSyncs(DomainSyncParameter parameter) throws RemoteCallException {
         return getSyncs(SyncEntity.REGION, parameter.catalog("region"), (sync, item) -> {
-            sync.setParentId(item.getLong("country"));
+            sync.setParentId(item.getLong("countryId"));
             updateName(sync, item.getJSONObject("regionName"));
         });
     }
@@ -151,15 +151,15 @@ public class DomainSyncJsonAdapter {
 
     public Cursor<DomainSync> getCitySyncs(DomainSyncParameter parameter) throws RemoteCallException {
         return getSyncs(SyncEntity.CITY, parameter.catalog("city"), (sync, item) -> {
-            sync.setParentId(item.getLong("region"));
-            sync.setAdditionalParentId(item.getLong("cityType") + "");
+            sync.setParentId(item.getLong("regionId"));
+            sync.setAdditionalParentId(item.getLong("cityTypeId") + "");
             updateName(sync, item.getJSONObject("cityName"));
         });
     }
 
     public Cursor<DomainSync> getDistrictSyncs(DomainSyncParameter parameter) throws RemoteCallException {
         return getSyncs(SyncEntity.DISTRICT, parameter.catalog("district"), (sync, item) -> {
-            sync.setParentId(item.getLong("city"));
+            sync.setParentId(item.getLong("cityId"));
             updateName(sync, item.getJSONObject("districtName"));
         });
     }
@@ -173,16 +173,16 @@ public class DomainSyncJsonAdapter {
 
     public Cursor<DomainSync> getStreetSyncs(DomainSyncParameter parameter) throws RemoteCallException {
         return getSyncs(SyncEntity.STREET, parameter.catalog("street"), (sync, item) -> {
-            sync.setParentId(item.getLong("city"));
-            sync.setAdditionalParentId(item.getLong("streetType") + "");
+            sync.setParentId(item.getLong("cityId"));
+            sync.setAdditionalParentId(item.getLong("streetTypeId") + "");
             updateName(sync, item.getJSONObject("streetName"));
         });
     }
 
     public Cursor<DomainSync> getBuildingSyncs(DomainSyncParameter parameter) throws RemoteCallException {
         return getSyncs(SyncEntity.BUILDING, parameter.catalog("house"), (sync, item) -> {
-            sync.setParentId(item.getLong("street"));
-            sync.setAdditionalParentId(item.getLong("district") + "");
+            sync.setParentId(item.getLong("streetId"));
+            sync.setAdditionalParentId(item.getLong("districtId") + "");
             updateName(sync, item.getJSONObject("houseNumber"));
             updateAdditionalName(sync, item.getJSONObject("housePart"));
         });

@@ -3,10 +3,7 @@ package ru.complitex.sync.service;
 import ru.complitex.address.entity.Street;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.correction.entity.CityCorrection;
-import ru.complitex.correction.entity.CityTypeCorrection;
-import ru.complitex.correction.entity.StreetCorrection;
-import ru.complitex.correction.entity.StreetTypeCorrection;
+import ru.complitex.correction.entity.*;
 import ru.complitex.sync.entity.Sync;
 import ru.complitex.sync.entity.SyncCatalog;
 
@@ -21,10 +18,16 @@ import java.util.Iterator;
 @ApplicationScoped
 public class StreetSyncService extends SyncService {
     @Inject
-    private IAddressService syncCatalogService;
+    private CatalogService catalogService;
 
     @Inject
-    private CatalogService catalogService;
+    private CitySyncService citySyncService;
+
+    @Inject
+    private DistrictSyncService districtSyncService;
+
+    @Inject
+    private IAddressService addressService;
 
     public String getCityTypeShortName(Item cityCorrection, LocalDate date, int locale) {
         return catalogService.getItem(CityTypeCorrection.CATALOG, date)
@@ -49,7 +52,12 @@ public class StreetSyncService extends SyncService {
                     syncCatalog.setCityType(cityType);
                     syncCatalog.setCity(cityCorrection.getText(CityCorrection.CITY_NAME, locale));
 
-                    syncCatalogService.getStreetSyncs(syncCatalog);
+                    Item regionCorrection = districtSyncService.getRegionCorrection(cityCorrection, date, locale);
+
+                    syncCatalog.setRegion(regionCorrection.getText(RegionCorrection.REGION_NAME, locale));
+                    syncCatalog.setCountry(citySyncService.getCountryName(regionCorrection, date, locale));
+
+                    addressService.getStreetSyncs(syncCatalog);
 
                     return syncCatalog;
                 })

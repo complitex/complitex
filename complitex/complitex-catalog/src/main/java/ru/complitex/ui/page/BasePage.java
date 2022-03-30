@@ -2,7 +2,6 @@ package ru.complitex.ui.page;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
@@ -10,13 +9,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import ru.complitex.ui.resource.CssResourceReference;
-import ru.complitex.user.entity.UserRoles;
 
 
 /**
  * @author Ivanov Anatoliy
  */
-@AuthorizeInstantiation(UserRoles.ADMINISTRATOR)
+//@AuthorizeInstantiation(UserRoles.ADMINISTRATOR)
 public class BasePage extends WebPage {
     public static final MetaDataKey<String> NAME = new MetaDataKey<>() {};
 

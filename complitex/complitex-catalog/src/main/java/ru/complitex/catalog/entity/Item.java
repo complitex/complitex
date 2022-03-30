@@ -95,7 +95,7 @@ public class Item extends Entity {
         Value val = catalog.getValue(value);
 
         if (val.getType().getKeyId() == Type.NUMERIC) {
-            getOrCreateData(val).setNumeric(BigDecimal.valueOf(numeric));
+            getOrCreateData(val).setNumeric(numeric != null ? BigDecimal.valueOf(numeric) : null);
         } else {
             throw new IllegalStateException(val.toString());
         }

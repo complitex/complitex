@@ -6,14 +6,14 @@ import java.util.Date;
  * @author Ivanov Anatoliy
  */
 public class DomainSyncParameter {
-    private String catalogName;
-    private String countryName;
-    private String regionName;
-    private String cityTypeName;
-    private String cityName;
-    private String districtName;
-    private String streetTypeName;
-    private String streetName;
+    private String catalog;
+    private String country;
+    private String region;
+    private String cityType;
+    private String city;
+    private String district;
+    private String streetType;
+    private String street;
     private Date date;
 
     public DomainSyncParameter() {
@@ -23,82 +23,82 @@ public class DomainSyncParameter {
         this.date = date;
     }
 
-    private DomainSyncParameter(String catalogName, String countryName, String regionName,
-                                String cityTypeName, String cityName, String districtName,
-                                String streetTypeName, String streetName, Date date) {
-        this.catalogName = catalogName;
-        this.countryName = countryName;
-        this.regionName = regionName;
-        this.cityTypeName = cityTypeName;
-        this.cityName = cityName;
-        this.districtName = districtName;
-        this.streetTypeName = streetTypeName;
-        this.streetName = streetName;
+    private DomainSyncParameter(String catalog, String country, String region,
+                                String cityType, String city, String district,
+                                String streetType, String street, Date date) {
+        this.catalog = catalog;
+        this.country = country;
+        this.region = region;
+        this.cityType = cityType;
+        this.city = city;
+        this.district = district;
+        this.streetType = streetType;
+        this.street = street;
         this.date = date;
     }
 
-    public String getCatalogName() {
-        return catalogName;
+    public String getCatalog() {
+        return catalog;
     }
 
-    public void setCatalogName(String catalogName) {
-        this.catalogName = catalogName;
+    public void setCatalog(String catalog) {
+        this.catalog = catalog;
     }
 
-    public String getCountryName() {
-        return countryName;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public String getRegionName() {
-        return regionName;
+    public String getRegion() {
+        return region;
     }
 
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
-    public String getCityTypeName() {
-        return cityTypeName;
+    public String getCityType() {
+        return cityType;
     }
 
-    public void setCityTypeName(String cityTypeName) {
-        this.cityTypeName = cityTypeName;
+    public void setCityType(String cityType) {
+        this.cityType = cityType;
     }
 
-    public String getCityName() {
-        return cityName;
+    public String getCity() {
+        return city;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getDistrictName() {
-        return districtName;
+    public String getDistrict() {
+        return district;
     }
 
-    public void setDistrictName(String districtName) {
-        this.districtName = districtName;
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
-    public String getStreetTypeName() {
-        return streetTypeName;
+    public String getStreetType() {
+        return streetType;
     }
 
-    public void setStreetTypeName(String streetTypeName) {
-        this.streetTypeName = streetTypeName;
+    public void setStreetType(String streetType) {
+        this.streetType = streetType;
     }
 
-    public String getStreetName() {
-        return streetName;
+    public String getStreet() {
+        return street;
     }
 
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public Date getDate() {
@@ -110,7 +110,7 @@ public class DomainSyncParameter {
     }
 
     public DomainSyncParameter catalog(String catalogName) {
-        setCatalogName(catalogName);
+        setCatalog(catalogName);
 
         return this;
     }
