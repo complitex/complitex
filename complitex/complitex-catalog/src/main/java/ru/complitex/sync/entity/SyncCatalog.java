@@ -15,8 +15,8 @@ public class SyncCatalog extends SyncParameter {
     private String district;
     private String street;
     private String streetType;
-    private String house;
-    private String part;
+    private String houseNumber;
+    private String housePart;
 
     public SyncCatalog() {
     }
@@ -89,20 +89,20 @@ public class SyncCatalog extends SyncParameter {
         this.streetType = streetType;
     }
 
-    public String getHouse() {
-        return house;
+    public String getHouseNumber() {
+        return houseNumber;
     }
 
-    public void setHouse(String house) {
-        this.house = house;
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 
-    public String getPart() {
-        return part;
+    public String getHousePart() {
+        return housePart;
     }
 
-    public void setPart(String part) {
-        this.part = part;
+    public void setHousePart(String housePart) {
+        this.housePart = housePart;
     }
 
     @Override
@@ -115,8 +115,8 @@ public class SyncCatalog extends SyncParameter {
                 (district != null ? ", district='" + district + '\'' : "") +
                 (street != null ? ", street='" + street + '\'' : "") +
                 (streetType != null ? ", streetType='" + streetType + '\'' : "") +
-                (house != null ? ", house='" + house + '\'' : "") +
-                (part != null ? ", part='" + part + '\'' : "") +
+                (houseNumber != null ? ", houseNumber='" + houseNumber + '\'' : "") +
+                (housePart != null ? ", housePart='" + housePart + '\'' : "") +
                 "} " + super.toString();
     }
 }

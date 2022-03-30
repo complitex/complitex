@@ -12,6 +12,7 @@ import ru.complitex.correction.page.*;
 import ru.complitex.eirc.account.page.MenuPanel;
 import ru.complitex.organization.page.OrganizationPage;
 import ru.complitex.organization.page.OrganizationTypePage;
+import ru.complitex.sync.page.SyncPage;
 import ru.complitex.ui.page.BasePage;
 import ru.complitex.user.page.LoginPage;
 import ru.complitex.user.session.WebSession;
@@ -80,5 +81,7 @@ public class WebApplication extends AuthenticatedWebApplication {
         mountPage("street-correction", StreetCorrectionPage.class);
         mountPage("house-correction", HouseCorrectionPage.class);
         mountPage("flat-correction", FlatCorrectionPage.class);
+
+        mountPage("synchronization", SyncPage.class);
     }
 }

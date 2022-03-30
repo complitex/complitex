@@ -32,6 +32,8 @@ public class AddressJsonPage extends WebPage {
         String district = parameters.get("district").toOptionalString();
         String streetType = parameters.get("streetType").toOptionalString();
         String street = parameters.get("street").toOptionalString();
+        String houseNumber = parameters.get("houseNumber").toOptionalString();
+        String housePart = parameters.get("housePart").toOptionalString();
 
         String dateString = parameters.get("date").toOptionalString();
 
@@ -44,6 +46,7 @@ public class AddressJsonPage extends WebPage {
         Long districtId = null;
         Long streetTypeId = null;
         Long streetId = null;
+        Long houseId = null;
 
         if (country != null) {
             countryId = catalogService.getItem(Country.CATALOG, date)
@@ -105,6 +108,19 @@ public class AddressJsonPage extends WebPage {
                     .getOptional().map(Item::getId).orElse(null);
         }
 
+        if (houseNumber != null) {
+            CatalogService.ItemBuilder<Item>  builder = catalogService.getItem(House.CATALOG, date)
+                    .withReferenceId(House.DISTRICT, districtId)
+                    .withReferenceId(House.STREET, streetId)
+                    .withText(House.HOUSE_NUMBER, Locale.SYSTEM, houseNumber);
+
+            if (housePart != null && !housePart.isEmpty()) {
+                builder.withText(House.HOUSE_PART, Locale.SYSTEM, housePart);
+            }
+
+             houseId = builder.getOptional().map(Item::getId).orElse(null);
+        }
+
         JSONArray jsonArray = new JSONArray();
 
         CatalogService.FilterItemBuilder<List<Item>> builder = catalogService.getItems(catalog, date);
@@ -128,6 +144,9 @@ public class AddressJsonPage extends WebPage {
                 }
 
                 builder.withReferenceId(House.STREET, streetId);
+            }
+            case Flat.CATALOG -> {
+                builder.withReferenceId(Flat.HOUSE, houseId);
             }
         }
 

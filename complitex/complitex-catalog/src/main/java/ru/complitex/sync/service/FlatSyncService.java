@@ -70,11 +70,8 @@ public class FlatSyncService extends SyncService {
                             syncCatalog.setDistrict(district);
                             syncCatalog.setStreet(streetCorrection.getText(StreetCorrection.STREET_NAME, locale));
                             syncCatalog.setStreetType(houseSyncService.getStreetTypeShortName(streetCorrection, date, locale));
-                            syncCatalog.setHouse(houseCorrection.getText(HouseCorrection.HOUSE_NUMBER, locale));
-
-                            String part = houseCorrection.getText(HouseCorrection.HOUSE_PART, locale);
-
-                            syncCatalog.setPart(part != null ? part : "");
+                            syncCatalog.setHouseNumber(houseCorrection.getText(HouseCorrection.HOUSE_NUMBER, locale));
+                            syncCatalog.setHousePart(houseCorrection.getText(HouseCorrection.HOUSE_PART, locale));
 
                             addressService.getFlatSyncs(syncCatalog);
 

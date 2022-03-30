@@ -62,6 +62,14 @@ public class AddressService implements IAddressService {
                 query += "&street=" + encode(syncCatalog.getStreet());
             }
 
+            if (syncCatalog.getHouseNumber() != null) {
+                query += "&houseNumber=" + encode(syncCatalog.getHouseNumber());
+            }
+
+            if (syncCatalog.getHousePart() != null) {
+                query += "&housePart=" + encode(syncCatalog.getHousePart());
+            }
+
             if (syncCatalog.getDate() != null) {
                 query += "&date=" + syncCatalog.getDate().toString();
             }
@@ -192,7 +200,7 @@ public class AddressService implements IAddressService {
     public void getFlatSyncs(SyncCatalog syncCatalog) {
         sync("flat", syncCatalog, (sync, item) -> {
             sync.setParentId(item.getLong("houseId"));
-            sync.setAdditionalParentId(item.getLong("houseId") + "");
+            sync.setAdditionalParentId(item.getLong("streetId") + "");
             updateName(sync, item.getJSONObject("flatNumber"));
         });
     }
