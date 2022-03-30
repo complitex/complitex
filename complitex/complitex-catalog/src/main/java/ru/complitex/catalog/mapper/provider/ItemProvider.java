@@ -71,7 +71,8 @@ public class ItemProvider {
             String relevance = "data_" + value.getId();
 
             sql.LEFT_OUTER_JOIN(
-                    table + "_data " + relevance + " ON " + table + ".id = " + relevance + "." + table + "_id"
+                    table + "_data " + relevance + " ON " + table + ".id = " + relevance + "." + table + "_id  " +
+                            "AND " + relevance + ".value_id = #{filter.object.data[" + i + "].value.id}"
             );
 
             sql.AND();
@@ -84,8 +85,6 @@ public class ItemProvider {
                 sql.WHERE("(" + relevance + ".start_date IS NULL OR " + relevance + ".start_date <= #{filter.date}) " +
                         "AND (" + relevance + ".end_date IS NULL OR " + relevance + ".end_date > #{filter.date})");
             }
-
-            sql.WHERE(relevance + ".value_id = #{filter.object.data[" + i + "].value.id}");
 
             if (filter.isAnd()) {
                 sql.AND();

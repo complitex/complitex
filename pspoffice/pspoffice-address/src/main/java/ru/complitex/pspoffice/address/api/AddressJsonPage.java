@@ -51,14 +51,14 @@ public class AddressJsonPage extends WebPage {
         if (country != null) {
             countryId = catalogService.getItem(Country.CATALOG, date)
                     .withText(Country.COUNTRY_NAME, Locale.SYSTEM, country)
-                    .getOptional().map(Item::getId).orElse(null);
+                    .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (region != null) {
             regionId = catalogService.getItem(Region.CATALOG, date)
                     .withReferenceId(Region.COUNTRY, countryId)
                     .withText(Region.REGION_NAME, Locale.SYSTEM, region)
-                    .getOptional().map(Item::getId).orElse(null);
+                    .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (cityType != null) {
@@ -69,7 +69,7 @@ public class AddressJsonPage extends WebPage {
             if (cityTypeId == null) {
                 cityTypeId = catalogService.getItem(CityType.CATALOG, date)
                         .withText(CityType.CITY_TYPE_SHORT_NAME, Locale.SYSTEM, cityType)
-                        .getOptional().map(Item::getId).orElse(null);
+                        .getOptional().map(Item::getId).orElse(-1L);
             }
         }
 
@@ -78,14 +78,14 @@ public class AddressJsonPage extends WebPage {
                     .withReferenceId(City.REGION, regionId)
                     .withReferenceId(City.CITY_TYPE, cityTypeId)
                     .withText(City.CITY_NAME, Locale.SYSTEM, city)
-                    .getOptional().map(Item::getId).orElse(null);
+                    .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (district != null) {
             districtId = catalogService.getItem(District.CATALOG, date)
                     .withReferenceId(District.CITY, cityId)
                     .withText(District.DISTRICT_NAME, Locale.SYSTEM, district)
-                    .getOptional().map(Item::getId).orElse(null);
+                    .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (streetType != null) {
@@ -96,7 +96,7 @@ public class AddressJsonPage extends WebPage {
             if (streetTypeId == null) {
                 streetTypeId = catalogService.getItem(StreetType.CATALOG, date)
                         .withText(StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM, streetType)
-                        .getOptional().map(Item::getId).orElse(null);
+                        .getOptional().map(Item::getId).orElse(-1L);
             }
         }
 
@@ -105,20 +105,16 @@ public class AddressJsonPage extends WebPage {
                     .withReferenceId(Street.CITY, cityId)
                     .withReferenceId(Street.STREET_TYPE, streetTypeId)
                     .withText(Street.STREET_NAME, Locale.SYSTEM, street)
-                    .getOptional().map(Item::getId).orElse(null);
+                    .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (houseNumber != null) {
-            CatalogService.ItemBuilder<Item>  builder = catalogService.getItem(House.CATALOG, date)
+            houseId =  catalogService.getItem(House.CATALOG, date)
                     .withReferenceId(House.DISTRICT, districtId)
                     .withReferenceId(House.STREET, streetId)
-                    .withText(House.HOUSE_NUMBER, Locale.SYSTEM, houseNumber);
-
-            if (housePart != null && !housePart.isEmpty()) {
-                builder.withText(House.HOUSE_PART, Locale.SYSTEM, housePart);
-            }
-
-             houseId = builder.getOptional().map(Item::getId).orElse(null);
+                    .withText(House.HOUSE_NUMBER, Locale.SYSTEM, houseNumber)
+                    .withText(House.HOUSE_PART, Locale.SYSTEM, housePart != null && !housePart.isEmpty() ? housePart : null)
+                    .getOptional().map(Item::getId).orElse(-1L);
         }
 
         JSONArray jsonArray = new JSONArray();
