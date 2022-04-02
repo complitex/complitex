@@ -9,7 +9,7 @@ import org.apache.wicket.cdi.ConversationPropagation;
 import org.apache.wicket.markup.html.WebPage;
 import ru.complitex.address.page.*;
 import ru.complitex.correction.page.*;
-import ru.complitex.eirc.account.page.MenuPanel;
+import ru.complitex.eirc.account.page.*;
 import ru.complitex.organization.page.OrganizationPage;
 import ru.complitex.organization.page.OrganizationTypePage;
 import ru.complitex.sync.page.SyncPage;
@@ -35,7 +35,7 @@ public class WebApplication extends AuthenticatedWebApplication {
 
         mountPages();
 
-        setMetaData(BasePage.NAME, "EIRC Account");
+        setMetaData(BasePage.NAME, "Единый информационно-расчётный центр");
 
         setMetaData(BasePage.MENU, MenuPanel.class.getCanonicalName());
     }
@@ -83,5 +83,12 @@ public class WebApplication extends AuthenticatedWebApplication {
         mountPage("flat-correction", FlatCorrectionPage.class);
 
         mountPage("synchronization", SyncPage.class);
+
+        mountPage("surname", SurnamePage.class);
+        mountPage("given-name", GivenNamePage.class);
+        mountPage("patronymic", PatronymicPage.class);
+        mountPage("account", AccountPage.class);
+        mountPage("service", ServicePage.class);
+        mountPage("provider-account", ProviderAccountPage.class);
     }
 }

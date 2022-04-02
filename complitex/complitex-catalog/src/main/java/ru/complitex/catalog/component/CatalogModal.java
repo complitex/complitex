@@ -18,10 +18,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.complitex.catalog.entity.Catalog;
-import ru.complitex.catalog.entity.Item;
-import ru.complitex.catalog.entity.Type;
-import ru.complitex.catalog.entity.Value;
+import ru.complitex.catalog.entity.*;
 import ru.complitex.catalog.model.DataModel;
 import ru.complitex.catalog.service.CatalogService;
 import ru.complitex.catalog.util.Dates;
@@ -135,14 +132,17 @@ public class CatalogModal extends Modal<Item> {
         };
     }
 
-    protected Component newReferenceGroup(String id, IModel<Item> model, Value value) {
-        Value referenceValue = value.getReferenceCatalog().getValues().stream()
+    protected int getReferenceValueKeyId(Value value) {
+        return value.getReferenceCatalog().getValues().stream()
                 .filter(v -> v.getName().contains("NAME"))
                 .findFirst()
-                .orElseThrow();
+                .map(KeyRelevance::getKeyId)
+                .orElse(-1);
+    }
 
-        return new ItemGroup(id, new ResourceModel(value.getResourceKey()),
-                value.getReferenceCatalog().getKeyId(), new DataModel<>(model, value), referenceValue.getKeyId(), date)
+    protected Component newReferenceGroup(String id, IModel<Item> model, Value value) {
+        return new ItemGroup(id, new ResourceModel(value.getResourceKey()), value.getReferenceCatalog().getKeyId(),
+                new DataModel<>(model, value), getReferenceValueKeyId(value), date)
                 .setRequired(isRequired(value));
     }
 

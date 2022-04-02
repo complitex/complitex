@@ -54,6 +54,7 @@ public class StreetTypeSyncService extends SyncService {
         Item item = catalogService.newItem(StreetType.CATALOG)
                 .withText(StreetType.STREET_TYPE_NAME, locale, sync.getName())
                 .withText(StreetType.STREET_TYPE_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(StreetType.STREET_TYPE_SHORT_NAME, locale, sync.getAdditionalName())
                 .withText(StreetType.STREET_TYPE_SHORT_NAME, getAltLocale(locale), sync.getAltAdditionalName())
                 .get();
 

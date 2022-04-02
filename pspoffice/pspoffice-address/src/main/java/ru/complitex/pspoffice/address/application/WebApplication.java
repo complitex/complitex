@@ -36,7 +36,7 @@ public class WebApplication extends AuthenticatedWebApplication {
 
         mountPages();
 
-        setMetaData(BasePage.NAME, "PSPOffice Address");
+        setMetaData(BasePage.NAME, "Паспортный стол");
 
         setMetaData(BasePage.MENU, MenuPanel.class.getCanonicalName());
     }

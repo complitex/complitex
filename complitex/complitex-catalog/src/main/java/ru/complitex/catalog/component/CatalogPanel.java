@@ -59,11 +59,14 @@ public class CatalogPanel extends Panel {
                     Long referenceId = model.getObject().getReferenceId(value.getKeyId());
 
                     if (referenceId != null) {
+                        int keyId = getReferenceValueKeyId(value);
+
                         Value referenceValue = value.getReferenceCatalog().getValues().stream()
-                                .filter(v -> v.getName().contains(value.getReferenceCatalog().getName() + "_NAME") ||
+                                .filter(v -> v.getKeyId() == keyId ||
+                                        v.getName().contains(value.getReferenceCatalog().getName() + "_NAME") ||
                                         v.getName().contains(value.getReferenceCatalog().getName() + "_NUMBER"))
                                 .findFirst()
-                                .orElseThrow();
+                                .orElse(null);
 
                         Item item = catalogService.getItem(value.getReferenceCatalog().getKeyId(), referenceId, Dates.now());
 
@@ -111,6 +114,13 @@ public class CatalogPanel extends Panel {
             }
 
             @Override
+            protected int getReferenceValueKeyId(Value value) {
+                int keyId =  CatalogPanel.this.getReferenceValueKeyId(value);
+
+                return keyId != -1 ? keyId : super.getReferenceValueKeyId(value);
+            }
+
+            @Override
             protected Component newReferenceGroup(String id, IModel<Item> model, Value value) {
                 Component group = CatalogPanel.this.newReferenceGroup(id, model, value);
 
@@ -136,6 +146,10 @@ public class CatalogPanel extends Panel {
             }
         };
         form.add(create);
+    }
+
+    protected int getReferenceValueKeyId(Value value) {
+        return -1;
     }
 
     protected Component newReferenceGroup(String id, IModel<Item> model, Value value) {
