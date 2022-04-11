@@ -91,10 +91,8 @@ public class HouseInput extends DistrictStreetInput {
     protected void onHouseChange(AjaxRequestTarget target) {}
 
     protected void updateHouse(AjaxRequestTarget target) {
-        if (houseModel.getObject() != null) {
-            houseModel.setObject(null);
+        houseModel.setObject(null);
 
-            target.add(house);
-        }
+        target.add(house);
     }
 }

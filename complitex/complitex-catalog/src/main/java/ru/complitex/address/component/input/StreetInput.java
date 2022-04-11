@@ -87,10 +87,8 @@ public class StreetInput extends CityInput {
     protected void onStreetChange(AjaxRequestTarget target) {}
 
     protected void updateStreet(AjaxRequestTarget target) {
-        if (streetModel.getObject() != null){
-            streetModel.setObject(null);
+        streetModel.setObject(null);
 
-            target.add(street);
-        }
+        target.add(street);
     }
 }

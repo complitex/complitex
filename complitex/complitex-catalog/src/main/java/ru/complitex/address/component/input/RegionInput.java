@@ -86,18 +86,14 @@ public class RegionInput extends Panel {
     protected void onRegionChange(AjaxRequestTarget target) {}
 
     protected void updateCountry(AjaxRequestTarget target) {
-        if (countryModel.getObject() != null) {
-            countryModel.setObject(null);
+        countryModel.setObject(null);
 
-            target.add(country);
-        }
+        target.add(country);
     }
 
     protected void updateRegion(AjaxRequestTarget target) {
-        if (regionModel.getObject() != null) {
-            regionModel.setObject(null);
+        regionModel.setObject(null);
 
-            target.add(region);
-        }
+        target.add(region);
     }
 }

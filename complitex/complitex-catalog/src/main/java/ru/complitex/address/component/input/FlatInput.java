@@ -2,6 +2,7 @@ package ru.complitex.address.component.input;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import ru.complitex.address.entity.Flat;
 import ru.complitex.catalog.model.ReferenceModel;
@@ -17,8 +18,20 @@ import java.time.LocalDate;
 public class FlatInput extends HouseInput {
     private boolean flatRequired;
 
-    public FlatInput(String id, IModel<Long> flatModel, LocalDate date) {
-        super(id, new ReferenceModel(Flat.CATALOG, flatModel, Flat.HOUSE, date), date);
+    public FlatInput(String id, IModel<Long> houseModel, IModel<Long> flatModel, LocalDate date) {
+        super(id, new ReferenceModel(Flat.CATALOG, flatModel, Flat.HOUSE, date){
+            @Override
+            public Long getObject() {
+                return houseModel.getObject() != null ? houseModel.getObject() : super.getObject();
+            }
+
+            @Override
+            public void setObject(Long referenceId) {
+                houseModel.setObject(referenceId);
+
+                super.setObject(referenceId);
+            }
+        }, date);
 
         ItemInput flat = new ItemInput("flat", Flat.CATALOG, flatModel, Flat.FLAT_NUMBER, date) {
             @Override
@@ -39,6 +52,10 @@ public class FlatInput extends HouseInput {
         flat.setPlaceholder(new StringResourceModel("flat", this));
 
         add(flat);
+    }
+
+    public FlatInput(String id, IModel<Long> flatModel, LocalDate date) {
+        this(id, Model.of(), flatModel, date);
     }
 
     public boolean isFlatRequired() {

@@ -91,11 +91,9 @@ public class CityInput extends RegionInput {
     protected void onCityChange(AjaxRequestTarget target) {}
 
     protected void updateCity(AjaxRequestTarget target) {
-        if (cityModel.getObject() != null) {
-            cityModel.setObject(null);
+        cityModel.setObject(null);
 
-            renderCity(target);
-        }
+        renderCity(target);
     }
 
     protected void renderCity(AjaxRequestTarget target){

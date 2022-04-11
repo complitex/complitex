@@ -1,13 +1,21 @@
 package ru.complitex.eirc.account.page;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+import ru.complitex.address.component.group.HouseFlatGroup;
 import ru.complitex.address.entity.Flat;
 import ru.complitex.address.entity.House;
+import ru.complitex.catalog.entity.Catalog;
+import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Value;
+import ru.complitex.catalog.model.DataModel;
 import ru.complitex.catalog.page.CatalogPage;
 import ru.complitex.eirc.account.entity.Account;
 import ru.complitex.eirc.account.entity.GivenName;
 import ru.complitex.eirc.account.entity.Patronymic;
 import ru.complitex.eirc.account.entity.Surname;
+
+import java.time.LocalDate;
 
 /**
  * @author Ivanov Anatoliy
@@ -28,5 +36,30 @@ public class AccountPage extends CatalogPage {
 
             default -> super.getReferenceValueKeyId(value);
         };
+    }
+
+    @Override
+    protected boolean isVisible(Value value) {
+        return value.getKeyId() != Account.HOUSE;
+    }
+
+    @Override
+    protected boolean isLongColumn(Value value) {
+        return value.getKeyId() == Account.ACCOUNT_NUMBER;
+    }
+
+    @Override
+    protected boolean isRequired(Value value) {
+        return value.is(Account.ACCOUNT_NUMBER);
+    }
+
+    @Override
+    protected Component newFormGroup(String id, Catalog catalog, Value value, IModel<Item> model) {
+        if (value.getKeyId() == Account.FLAT) {
+            return new HouseFlatGroup(id, new DataModel<>(model, catalog.getValue(Account.HOUSE)),
+                    new DataModel<>(model, value), LocalDate.now());
+        }
+
+        return super.newFormGroup(id, catalog, value, model);
     }
 }

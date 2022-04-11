@@ -34,14 +34,16 @@ public class ReferenceModel implements IModel<Long> {
     public Long getObject() {
         Long itemId = model.getObject();
 
-        if (!Objects.equals(this.itemId, itemId)) {
+        if (!Objects.equals(this.itemId, itemId) || referenceId == null) {
             this.itemId = itemId;
 
-            if (catalogService == null) {
-                NonContextual.of(this).inject(this);
-            }
+            if (itemId != null) {
+                if (catalogService == null) {
+                    NonContextual.of(this).inject(this);
+                }
 
-            referenceId = catalogService.getReferenceId(catalog, itemId, value, date);
+                referenceId = catalogService.getReferenceId(catalog, itemId, value, date);
+            }
         }
 
         return referenceId;

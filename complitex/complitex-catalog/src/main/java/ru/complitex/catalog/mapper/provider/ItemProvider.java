@@ -97,7 +97,7 @@ public class ItemProvider {
                     sql.WHERE(relevance + ".reference_id = #{filter.object.data[" + i + "].referenceId}");
                 } else if (filter.isEqual()) {
                     sql.WHERE(relevance + ".reference_id IS NULL");
-                } else if (filter.isLike()) {
+                } else if (filter.isLike() && data.getText() != null) {
                     String reference = value.getReferenceCatalog().getTable();
 
                     sql.LEFT_OUTER_JOIN(

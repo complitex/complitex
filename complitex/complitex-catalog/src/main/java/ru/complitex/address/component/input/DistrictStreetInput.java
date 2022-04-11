@@ -100,10 +100,8 @@ public class DistrictStreetInput extends StreetInput {
     protected void onDistrictStreetChange(AjaxRequestTarget target) {}
 
     protected void updateDistrict(AjaxRequestTarget target) {
-        if (districtModel.getObject() != null){
-            districtModel.setObject(null);
+        districtModel.setObject(null);
 
-            target.add(district);
-        }
+        target.add(district);
     }
 }

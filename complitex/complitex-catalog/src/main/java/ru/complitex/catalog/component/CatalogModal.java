@@ -76,13 +76,13 @@ public class CatalogModal extends Modal<Item> {
             protected void populateItem(ListItem<Value> item) {
                 Value value = item.getModelObject();
 
-                Component group = newFormGroup("group",  value);
+                Component group = newFormGroup("group", catalog, value, model);
 
                 if (group instanceof EmptyPanel) {
                     item.setVisible(false);
                 }
 
-                if (value.getType().getKeyId() == Type.REFERENCE || value.getType().getKeyId() == Type.TIMESTAMP) {
+                if (value.getType().getKeyId() == Type.REFERENCE || value.getType().getKeyId() == Type.TIMESTAMP || isLongColumn(value)) {
                     group.add(AttributeModifier.replace("class", "col-12"));
                 }
 
@@ -118,7 +118,7 @@ public class CatalogModal extends Modal<Item> {
         return false;
     }
 
-    protected Component newFormGroup(String id, Value value) {
+    protected Component newFormGroup(String id, Catalog catalog, Value value, IModel<Item> model) {
         IModel<String> labelModel = new ResourceModel(value.getResourceKey());
 
         boolean required  = isRequired(value);
@@ -189,7 +189,7 @@ public class CatalogModal extends Modal<Item> {
 
             getSession().success(getString("info_saved"));
 
-            container.visitChildren(FormComponent.class, (c, v) -> ((FormComponent) c).clearInput());
+            clear();
         } catch (Exception e) {
             log.error("error save domain", e);
 
@@ -208,6 +208,17 @@ public class CatalogModal extends Modal<Item> {
     public void cancel(AjaxRequestTarget target){
         close(target);
 
-        container.visitChildren(FormComponent.class, (c, v) -> ((FormComponent) c).clearInput());
+        clear();
+    }
+
+    private void clear() {
+        container.visitChildren(FormComponent.class, (c, v) -> {
+            ((FormComponent) c).clearInput();
+            ((FormComponent<?>) c).getModel().setObject(null);
+        });
+    }
+
+    protected boolean isLongColumn(Value value) {
+        return false;
     }
 }
