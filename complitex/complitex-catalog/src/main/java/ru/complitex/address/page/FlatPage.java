@@ -4,6 +4,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import ru.complitex.address.component.group.HouseGroup;
 import ru.complitex.address.entity.Flat;
+import ru.complitex.address.service.AddressService;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
@@ -20,8 +21,20 @@ public class FlatPage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 
+    @Inject
+    private AddressService addressService;
+
     public FlatPage() {
         super(Flat.CATALOG);
+    }
+
+    @Override
+    protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
+        if (value.is(Flat.HOUSE)) {
+            return () -> addressService.getFullHouseName(model.getObject().getReferenceId(Flat.HOUSE), getDate());
+        }
+
+        return super.getColumnModel(model, value);
     }
 
     @Override

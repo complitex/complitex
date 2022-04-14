@@ -49,4 +49,14 @@ public class AddressService {
 
         return getFullCityName(cityId, date) + ", " + streetTypeName + ". " + streetName;
     }
+
+    public String getFullHouseName(Long houseId, LocalDate date) {
+        String houseNumber = catalogService.getText(House.CATALOG, houseId, House.HOUSE_NUMBER, Locale.SYSTEM, date);
+
+        String housePart = catalogService.getText(House.CATALOG, houseId, House.HOUSE_PART, Locale.SYSTEM, date);
+
+        Long streetId = catalogService.getReferenceId(House.CATALOG, houseId, House.STREET, date);
+
+        return getFullStreetName(streetId, date) + ", " + houseNumber + (housePart != null ? ", КОРП. " + housePart : "");
+    }
 }
