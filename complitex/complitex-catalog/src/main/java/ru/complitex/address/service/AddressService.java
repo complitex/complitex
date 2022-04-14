@@ -38,6 +38,14 @@ public class AddressService {
         return getFullRegionName(regionId, date) + ", " + cityTypeName + ". " + cityName;
     }
 
+    public String getFullDistrictName(Long districtId, LocalDate date) {
+        String districtName = catalogService.getText(District.CATALOG, districtId, District.DISTRICT_NAME, Locale.SYSTEM, date);
+
+        Long cityId = catalogService.getReferenceId(District.CATALOG, districtId, District.CITY, date);
+
+        return getFullCityName(cityId, date) + ", " + districtName;
+    }
+
     public String getFullStreetName(Long streetId, LocalDate date) {
         Long streetTypeId = catalogService.getReferenceId(Street.CATALOG, streetId, Street.STREET_TYPE, date);
 
