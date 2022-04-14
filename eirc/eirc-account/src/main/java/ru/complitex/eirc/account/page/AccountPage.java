@@ -5,6 +5,7 @@ import org.apache.wicket.model.IModel;
 import ru.complitex.address.component.group.HouseFlatGroup;
 import ru.complitex.address.entity.Flat;
 import ru.complitex.address.entity.House;
+import ru.complitex.address.service.AddressService;
 import ru.complitex.catalog.entity.Catalog;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Value;
@@ -15,14 +16,27 @@ import ru.complitex.eirc.account.entity.GivenName;
 import ru.complitex.eirc.account.entity.Patronymic;
 import ru.complitex.eirc.account.entity.Surname;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 
 /**
  * @author Ivanov Anatoliy
  */
 public class AccountPage extends CatalogPage {
+    @Inject
+    private AddressService addressService;
+
     public AccountPage() {
         super(Account.CATALOG);
+    }
+
+    @Override
+    protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
+        if (value.is(Account.FLAT)) {
+            return () -> addressService.getFullFlatName(model.getObject().getReferenceId(Account.FLAT), getDate());
+        }
+
+        return super.getColumnModel(model, value);
     }
 
     @Override

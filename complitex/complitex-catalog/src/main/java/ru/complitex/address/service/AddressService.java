@@ -57,6 +57,14 @@ public class AddressService {
 
         Long streetId = catalogService.getReferenceId(House.CATALOG, houseId, House.STREET, date);
 
-        return getFullStreetName(streetId, date) + ", " + houseNumber + (housePart != null ? ", КОРП. " + housePart : "");
+        return getFullStreetName(streetId, date) + ", Д. " + houseNumber + (housePart != null ? ", КОРП. " + housePart : "");
+    }
+
+    public String getFullFlatName(Long flatId, LocalDate date) {
+        String flatName = catalogService.getText(Flat.CATALOG, flatId, Flat.FLAT_NUMBER, Locale.SYSTEM, date);
+
+        Long houseId = catalogService.getReferenceId(Flat.CATALOG, flatId, Flat.HOUSE, date);
+
+        return getFullHouseName(houseId, date) + ", КВ. " + flatName;
     }
 }
