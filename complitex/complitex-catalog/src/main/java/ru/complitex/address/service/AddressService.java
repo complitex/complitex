@@ -1,9 +1,6 @@
 package ru.complitex.address.service;
 
-import ru.complitex.address.entity.City;
-import ru.complitex.address.entity.CityType;
-import ru.complitex.address.entity.Country;
-import ru.complitex.address.entity.Region;
+import ru.complitex.address.entity.*;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.service.CatalogService;
 
@@ -39,5 +36,17 @@ public class AddressService {
         Long regionId = catalogService.getReferenceId(City.CATALOG, cityId, City.REGION, date);
 
         return getFullRegionName(regionId, date) + ", " + cityTypeName + ". " + cityName;
+    }
+
+    public String getFullStreetName(Long streetId, LocalDate date) {
+        Long streetTypeId = catalogService.getReferenceId(Street.CATALOG, streetId, Street.STREET_TYPE, date);
+
+        String streetTypeName = catalogService.getText(StreetType.CATALOG, streetTypeId, StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM, date);
+
+        String streetName = catalogService.getText(Street.CATALOG, streetId, Street.STREET_NAME, Locale.SYSTEM, date);
+
+        Long cityId = catalogService.getReferenceId(Street.CATALOG, streetId, Street.CITY, date);
+
+        return getFullCityName(cityId, date) + ", " + streetTypeName + ". " + streetName;
     }
 }

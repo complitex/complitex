@@ -8,6 +8,7 @@ import ru.complitex.address.component.group.DistrictStreetGroup;
 import ru.complitex.address.entity.House;
 import ru.complitex.address.entity.Street;
 import ru.complitex.address.entity.StreetType;
+import ru.complitex.address.service.AddressService;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
@@ -25,12 +26,19 @@ public class HousePage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 
+    @Inject
+    private AddressService addressService;
+
     public HousePage() {
         super(House.CATALOG);
     }
 
     @Override
     protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
+        if (value.is(House.STREET)) {
+            return () -> addressService.getFullStreetName(model.getObject().getReferenceId(House.STREET), getDate());
+        }
+
         if (value.getReferenceCatalog() != null && value.getReferenceCatalog().getKeyId() == Street.CATALOG) {
             Long referenceId = model.getObject().getReferenceId(value.getKeyId());
 

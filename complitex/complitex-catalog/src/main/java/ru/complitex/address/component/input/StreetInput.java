@@ -5,10 +5,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import ru.complitex.address.entity.Street;
 import ru.complitex.address.entity.StreetType;
-import ru.complitex.catalog.model.ReferenceModel;
 import ru.complitex.catalog.component.ItemInput;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
+import ru.complitex.catalog.model.ReferenceModel;
 import ru.complitex.catalog.service.CatalogService;
 import ru.complitex.ui.entity.Filter;
 
@@ -51,7 +51,7 @@ public class StreetInput extends CityInput {
             @Override
             protected String getTextValue(Item item) {
                 return catalogService.getItem(StreetType.CATALOG, item.getReferenceId(Street.STREET_TYPE), date)
-                        .getText(StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM) + " " + super.getTextValue(item);
+                        .getText(StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM) + ". " + super.getTextValue(item);
             }
 
             @Override
