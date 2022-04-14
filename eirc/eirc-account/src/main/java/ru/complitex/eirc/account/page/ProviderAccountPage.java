@@ -15,11 +15,22 @@ public class ProviderAccountPage extends CatalogPage {
     @Override
     protected int getReferenceValueKeyId(Value value) {
         return switch (value.getKeyId()) {
+            case ProviderAccount.ACCOUNT -> Account.ACCOUNT_NUMBER;
             case ProviderAccount.SURNAME -> Surname.SURNAME;
             case ProviderAccount.GIVEN_NAME -> GivenName.GIVEN_NAME;
             case ProviderAccount.PATRONYMIC -> Patronymic.PATRONYMIC;
 
             default -> super.getReferenceValueKeyId(value);
         };
+    }
+
+    @Override
+    protected boolean isLongColumn(Value value) {
+        return value.is(ProviderAccount.PROVIDER_ACCOUNT_NUMBER);
+    }
+
+    @Override
+    protected boolean isRequired(Value value) {
+        return value.is(ProviderAccount.PROVIDER_ACCOUNT_NUMBER);
     }
 }

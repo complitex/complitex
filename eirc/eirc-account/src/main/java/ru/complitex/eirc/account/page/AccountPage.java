@@ -54,12 +54,12 @@ public class AccountPage extends CatalogPage {
 
     @Override
     protected boolean isVisible(Value value) {
-        return value.getKeyId() != Account.HOUSE;
+        return !value.is(Account.HOUSE);
     }
 
     @Override
     protected boolean isLongColumn(Value value) {
-        return value.getKeyId() == Account.ACCOUNT_NUMBER;
+        return value.is(Account.ACCOUNT_NUMBER);
     }
 
     @Override
