@@ -5,10 +5,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import ru.complitex.address.entity.City;
 import ru.complitex.address.entity.CityType;
-import ru.complitex.catalog.model.ReferenceModel;
 import ru.complitex.catalog.component.ItemInput;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
+import ru.complitex.catalog.model.ReferenceModel;
 import ru.complitex.catalog.service.CatalogService;
 import ru.complitex.ui.entity.Filter;
 
@@ -50,7 +50,7 @@ public class CityInput extends RegionInput {
             @Override
             protected String getTextValue(Item item) {
                 return catalogService.getItem(CityType.CATALOG, item.getReferenceId(City.CITY_TYPE), date)
-                        .getText(CityType.CITY_TYPE_SHORT_NAME, Locale.SYSTEM) + " " + super.getTextValue(item);
+                        .getText(CityType.CITY_TYPE_SHORT_NAME, Locale.SYSTEM) + ". " + super.getTextValue(item);
             }
 
             @Override

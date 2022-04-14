@@ -11,7 +11,6 @@ import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
 import ru.complitex.catalog.page.CatalogPage;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.catalog.util.Dates;
 
 import javax.inject.Inject;
 
@@ -32,7 +31,7 @@ public class CityPage extends CatalogPage {
     @Override
     protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
         if (value.is(City.REGION)) {
-            return () -> addressService.getFullRegionNameByCity(model.getObject(), Dates.now());
+            return () -> addressService.getFullRegionName(model.getObject().getReferenceId(City.REGION), getDate());
         }
 
         return super.getColumnModel(model, value);

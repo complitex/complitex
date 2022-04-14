@@ -4,6 +4,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import ru.complitex.address.component.group.CityGroup;
 import ru.complitex.address.entity.District;
+import ru.complitex.address.service.AddressService;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
@@ -20,8 +21,21 @@ public class DistrictPage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 
+    @Inject
+    private AddressService addressService;
+
     public DistrictPage() {
         super(District.CATALOG);
+    }
+
+    @Override
+    protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
+        if (value.is(District.CITY)) {
+            return () -> addressService.getFullCityName(model.getObject().getReferenceId(District.CITY), getDate());
+
+        }
+
+        return super.getColumnModel(model, value);
     }
 
     @Override
