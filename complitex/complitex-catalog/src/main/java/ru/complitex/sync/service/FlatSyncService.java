@@ -117,7 +117,6 @@ public class FlatSyncService extends SyncService {
     public Item getItem(Sync sync, LocalDate date, int locale) {
         return catalogService.getItem(Flat.CATALOG, date)
                 .withReferenceId(Flat.HOUSE, getHouseId(sync.getParentId(), date))
-                .withReferenceId(Flat.STREET, getStreetId(Long.valueOf(sync.getAdditionalParentId()), date))
                 .withText(Flat.FLAT_NUMBER, locale, sync.getName())
                 .get();
     }
@@ -126,7 +125,6 @@ public class FlatSyncService extends SyncService {
     public Item addItem(Sync sync, LocalDate date, int locale) {
         Item item = catalogService.newItem(Flat.CATALOG)
                 .withReferenceId(Flat.HOUSE, getHouseId(sync.getParentId(), date))
-                .withReferenceId(Flat.STREET, getStreetId(Long.valueOf(sync.getAdditionalParentId()), date))
                 .withText(Flat.FLAT_NUMBER, locale, sync.getName())
                 .withText(Flat.FLAT_NUMBER, getAltLocale(locale), sync.getAltName())
                 .get();
@@ -174,7 +172,6 @@ public class FlatSyncService extends SyncService {
         Item item = catalogService.getReferenceItem(correction, FlatCorrection.FLAT, date);
 
         item.setReferenceId(Flat.HOUSE, getHouseId(correction.getLong(FlatCorrection.HOUSE_ID), date));
-        item.setReferenceId(Flat.STREET, getStreetId(correction.getLong(FlatCorrection.STREET_ID), date));
         item.setText(Flat.FLAT_NUMBER, locale, correction.getText(FlatCorrection.FLAT_NUMBER, locale));
         item.setText(Flat.FLAT_NUMBER, getAltLocale(locale), correction.getText(FlatCorrection.FLAT_NUMBER, getAltLocale(locale)));
 

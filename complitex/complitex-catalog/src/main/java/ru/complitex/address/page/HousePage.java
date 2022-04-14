@@ -12,6 +12,7 @@ import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
+import ru.complitex.catalog.page.CatalogPage;
 import ru.complitex.catalog.service.CatalogService;
 import ru.complitex.catalog.util.Dates;
 
@@ -20,7 +21,7 @@ import javax.inject.Inject;
 /**
  * @author Ivanov Anatoliy
  */
-public class HousePage extends AddressPage {
+public class HousePage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 
@@ -29,7 +30,7 @@ public class HousePage extends AddressPage {
     }
 
     @Override
-    protected IModel<String> newModel(IModel<Item> model, Value value) {
+    protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
         if (value.getReferenceCatalog() != null && value.getReferenceCatalog().getKeyId() == Street.CATALOG) {
             Long referenceId = model.getObject().getReferenceId(value.getKeyId());
 
@@ -43,7 +44,7 @@ public class HousePage extends AddressPage {
             }
         }
 
-        return super.newModel(model, value);
+        return super.getColumnModel(model, value);
     }
 
     @Override

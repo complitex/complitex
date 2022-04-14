@@ -234,7 +234,6 @@ public class AddressJsonPage extends WebPage {
             }
 
             case Flat.CATALOG -> {
-                json.put("streetId", item.getReferenceId(Flat.STREET));
                 json.put("houseId", item.getReferenceId(Flat.HOUSE));
                 json.put("flatNumber", getName(item, Flat.FLAT_NUMBER));
             }

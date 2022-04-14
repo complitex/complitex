@@ -42,7 +42,7 @@ public class CatalogPanel extends Panel {
         this.catalog = catalogService.getCatalog(catalog);
 
         List<Value> values = this.catalog.getValues().stream()
-                .filter(value -> isVisible(value))
+                .filter(this::isVisible)
                 .collect(Collectors.toList());
 
         List<Column<Item>> columns = new ArrayList<>();
@@ -137,7 +137,7 @@ public class CatalogPanel extends Panel {
         return new DataColumn(value) {
             @Override
             protected IModel<? extends Serializable> getModel(IModel<Item> model) {
-                IModel<String> displayModel = CatalogPanel.this.newModel(model, value);
+                IModel<String> displayModel = CatalogPanel.this.getColumnModel(model, value);
 
                 if (displayModel != null) {
                     return displayModel;
@@ -175,7 +175,7 @@ public class CatalogPanel extends Panel {
         return null;
     }
 
-    protected IModel<String> newModel(IModel<Item> model, Value value) {
+    protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
         return null;
     }
 

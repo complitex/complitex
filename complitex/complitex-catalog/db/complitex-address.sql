@@ -34,6 +34,5 @@ CALL create_local_text(27, 3, 'HOUSE_NUMBER'); -- Номер дома
 CALL create_local_text(27, 4, 'HOUSE_PART'); -- Корпус дома
 
 CALL create_catalog(28, 'FLAT'); -- Квартира
-CALL create_reference(28, 1, 26, 'STREET'); -- Улица
-CALL create_reference(28, 2, 27, 'HOUSE'); -- Дом
-CALL create_local_text(28, 3, 'FLAT_NUMBER'); -- Номер квартиры
+CALL create_reference(28, 1, 27, 'HOUSE'); -- Дом
+CALL create_local_text(28, 2, 'FLAT_NUMBER'); -- Номер квартиры

@@ -8,6 +8,7 @@ import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
+import ru.complitex.catalog.page.CatalogPage;
 import ru.complitex.catalog.service.CatalogService;
 
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ import javax.inject.Inject;
 /**
  * @author Ivanov Anatoliy
  */
-public class DistrictPage extends AddressPage {
+public class DistrictPage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 

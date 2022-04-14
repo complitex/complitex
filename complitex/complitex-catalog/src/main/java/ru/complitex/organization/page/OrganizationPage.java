@@ -3,22 +3,22 @@ package ru.complitex.organization.page;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import ru.complitex.organization.entity.Organization;
-import ru.complitex.organization.entity.OrganizationType;
-import ru.complitex.address.page.AddressPage;
 import ru.complitex.catalog.component.ItemGroup;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
+import ru.complitex.catalog.page.CatalogPage;
 import ru.complitex.catalog.service.CatalogService;
+import ru.complitex.organization.entity.Organization;
+import ru.complitex.organization.entity.OrganizationType;
 
 import javax.inject.Inject;
 
 /**
  * @author Ivanov Anatoliy
  */
-public class OrganizationPage extends AddressPage {
+public class OrganizationPage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 

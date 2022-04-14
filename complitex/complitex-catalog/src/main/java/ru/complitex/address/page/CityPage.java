@@ -4,23 +4,38 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import ru.complitex.address.component.group.RegionGroup;
 import ru.complitex.address.entity.City;
+import ru.complitex.address.service.AddressService;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
+import ru.complitex.catalog.page.CatalogPage;
 import ru.complitex.catalog.service.CatalogService;
+import ru.complitex.catalog.util.Dates;
 
 import javax.inject.Inject;
 
 /**
  * @author Ivanov Anatoliy
  */
-public class CityPage extends AddressPage {
+public class CityPage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 
+    @Inject
+    private AddressService addressService;
+
     public CityPage() {
         super(City.CATALOG);
+    }
+
+    @Override
+    protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
+        if (value.is(City.REGION)) {
+            return () -> addressService.getFullRegionNameByCity(model.getObject(), Dates.now());
+        }
+
+        return super.getColumnModel(model, value);
     }
 
     @Override

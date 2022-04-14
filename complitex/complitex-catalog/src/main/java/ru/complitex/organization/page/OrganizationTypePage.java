@@ -1,18 +1,18 @@
 package ru.complitex.organization.page;
 
-import ru.complitex.organization.entity.OrganizationType;
-import ru.complitex.address.page.AddressPage;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
+import ru.complitex.catalog.page.CatalogPage;
 import ru.complitex.catalog.service.CatalogService;
+import ru.complitex.organization.entity.OrganizationType;
 
 import javax.inject.Inject;
 
 /**
  * @author Ivanov Anatoliy
  */
-public class OrganizationTypePage extends AddressPage {
+public class OrganizationTypePage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 
