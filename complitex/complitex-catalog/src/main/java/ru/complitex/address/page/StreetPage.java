@@ -4,6 +4,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import ru.complitex.address.component.group.CityGroup;
 import ru.complitex.address.entity.Street;
+import ru.complitex.address.service.AddressService;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Locale;
 import ru.complitex.catalog.entity.Value;
@@ -20,8 +21,20 @@ public class StreetPage extends CatalogPage {
     @Inject
     private CatalogService catalogService;
 
+    @Inject
+    private AddressService addressService;
+
     public StreetPage() {
         super(Street.CATALOG);
+    }
+
+    @Override
+    protected IModel<String> getColumnModel(IModel<Item> model, Value value) {
+        if (value.is(Street.CITY)) {
+           return () -> addressService.getFullCityName(model.getObject().getReferenceId(Street.CITY), getDate());
+        }
+
+        return super.getColumnModel(model, value);
     }
 
     @Override
