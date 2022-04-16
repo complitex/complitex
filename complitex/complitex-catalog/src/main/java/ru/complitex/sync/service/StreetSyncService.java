@@ -94,7 +94,7 @@ public class StreetSyncService extends SyncService {
         return catalogService.getItem(Street.CATALOG, date)
                 .withReferenceId(Street.CITY, getCityId(sync.getParentId(), date))
                 .withReferenceId(Street.STREET_TYPE, getStreetTypeId(Long.valueOf(sync.getAdditionalParentId()), date))
-                .withText(Street.STREET_NAME, locale, sync.getName())
+                .withText(Street.STREET_NAME, sync.getName(), locale)
                 .get();
     }
 
@@ -103,8 +103,8 @@ public class StreetSyncService extends SyncService {
         Item item = catalogService.newItem(Street.CATALOG)
                 .withReferenceId(Street.CITY, getCityId(sync.getParentId(), date))
                 .withReferenceId(Street.STREET_TYPE, getStreetTypeId(Long.valueOf(sync.getAdditionalParentId()), date))
-                .withText(Street.STREET_NAME, locale, sync.getName())
-                .withText(Street.STREET_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(Street.STREET_NAME, sync.getName(), locale)
+                .withText(Street.STREET_NAME, sync.getAltName(), getAltLocale(locale))
                 .get();
 
         return catalogService.inserts(item, date);
@@ -120,8 +120,8 @@ public class StreetSyncService extends SyncService {
                 .withLong(StreetCorrection.STREET_TYPE_ID, Long.valueOf(sync.getAdditionalParentId()))
                 .withLong(StreetCorrection.STREET_ID, sync.getExternalId())
                 .withText(StreetCorrection.STREET_CODE, sync.getAdditionalExternalId())
-                .withText(StreetCorrection.STREET_NAME, locale, sync.getName())
-                .withText(StreetCorrection.STREET_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(StreetCorrection.STREET_NAME, sync.getName(), locale)
+                .withText(StreetCorrection.STREET_NAME, sync.getAltName(), getAltLocale(locale))
                 .withTimestamp(StreetCorrection.SYNCHRONIZATION_DATE, date)
                 .get();
 
@@ -137,8 +137,8 @@ public class StreetSyncService extends SyncService {
         correction.setLong(StreetCorrection.CITY_ID, sync.getParentId());
         correction.setLong(StreetCorrection.STREET_TYPE_ID, Long.valueOf(sync.getAdditionalParentId()));
         correction.setText(StreetCorrection.STREET_CODE, sync.getAdditionalExternalId());
-        correction.setText(StreetCorrection.STREET_NAME, locale, sync.getName());
-        correction.setText(StreetCorrection.STREET_NAME, getAltLocale(locale), sync.getAltName());
+        correction.setText(StreetCorrection.STREET_NAME, sync.getName(), locale);
+        correction.setText(StreetCorrection.STREET_NAME, sync.getAltName(), getAltLocale(locale));
 
         return catalogService.update(correction, date);
     }
@@ -149,8 +149,8 @@ public class StreetSyncService extends SyncService {
 
         item.setReferenceId(Street.CITY, getCityId(correction.getLong(StreetCorrection.CITY_ID), date));
         item.setReferenceId(Street.STREET_TYPE, getStreetTypeId(correction.getLong(StreetCorrection.STREET_TYPE_ID), date));
-        item.setText(Street.STREET_NAME, locale, correction.getText(StreetCorrection.STREET_NAME, locale));
-        item.setText(Street.STREET_NAME, getAltLocale(locale), correction.getText(StreetCorrection.STREET_NAME, getAltLocale(locale)));
+        item.setText(Street.STREET_NAME, correction.getText(StreetCorrection.STREET_NAME, locale), locale);
+        item.setText(Street.STREET_NAME, correction.getText(StreetCorrection.STREET_NAME, getAltLocale(locale)), getAltLocale(locale));
 
         return catalogService.update(item, date);
     }

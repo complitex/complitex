@@ -37,6 +37,14 @@ public class ItemInput extends AutoComplete<Item> {
         filter = newFilter();
     }
 
+    public Catalog getCatalog() {
+        return catalog;
+    }
+
+    public Value getValue() {
+        return value;
+    }
+
     protected Filter<Item> newFilter(){
         return new Filter<>(new Item(catalog), 5).date(date).like();
     }

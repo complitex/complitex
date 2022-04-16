@@ -33,13 +33,9 @@ public class MenuPanel extends Panel {
         catalog.add(new BookmarkablePageLink<>("surname", SurnamePage.class));
         catalog.add(new BookmarkablePageLink<>("given_name", GivenNamePage.class));
         catalog.add(new BookmarkablePageLink<>("patronymic", PatronymicPage.class));
-
-        WebMarkupContainer account = new WebMarkupContainer("account");
-        add(account);
-
-        account.add(new BookmarkablePageLink<>("account", AccountPage.class));
-        account.add(new BookmarkablePageLink<>("service", ServicePage.class));
-        account.add(new BookmarkablePageLink<>("provider-account", ProviderAccountPage.class));
+        catalog.add(new BookmarkablePageLink<>("account", AccountPage.class));
+        catalog.add(new BookmarkablePageLink<>("service", ServicePage.class));
+        catalog.add(new BookmarkablePageLink<>("provider-account", ProviderAccountPage.class));
 
         WebMarkupContainer correction = new WebMarkupContainer("correction");
         add(correction);

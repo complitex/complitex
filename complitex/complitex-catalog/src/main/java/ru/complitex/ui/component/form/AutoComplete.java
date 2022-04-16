@@ -21,6 +21,8 @@ import java.util.UUID;
  * @author Ivanov Anatoliy
  */
 public abstract class AutoComplete<T extends Serializable> extends Panel {
+    private final IModel<Long> model;
+
     private final HiddenField<Long> idField;
 
     private final AutoCompleteTextField<T> textField;
@@ -31,6 +33,8 @@ public abstract class AutoComplete<T extends Serializable> extends Panel {
 
     public AutoComplete(String id, IModel<Long> model) {
         super(id);
+
+        this.model = model;
 
         setOutputMarkupId(true);
 
@@ -114,6 +118,15 @@ public abstract class AutoComplete<T extends Serializable> extends Panel {
                     }
                 };
             }
+
+            @Override
+            public void updateModel() {
+                super.updateModel();
+
+                if (getForm().isSubmitted()) {
+                    onSubmit();
+                }
+            }
         };
 
         textField.setType(Object.class);
@@ -130,6 +143,10 @@ public abstract class AutoComplete<T extends Serializable> extends Panel {
         }));
 
         add(textField);
+    }
+
+    public IModel<Long> getModel() {
+        return model;
     }
 
     protected void onChangeId(AjaxRequestTarget target) {}
@@ -174,5 +191,9 @@ public abstract class AutoComplete<T extends Serializable> extends Panel {
 
     public void setPlaceholder(IModel<String> placeholder) {
         this.placeholder = placeholder;
+    }
+
+    public void onSubmit() {
+
     }
 }

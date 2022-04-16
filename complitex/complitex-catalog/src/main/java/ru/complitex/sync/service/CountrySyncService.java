@@ -44,15 +44,15 @@ public class CountrySyncService extends SyncService {
     @Override
     public Item getItem(Sync sync, LocalDate date, int locale) {
         return catalogService.getItem(Country.CATALOG, date)
-                .withText(Country.COUNTRY_NAME, locale, sync.getName())
+                .withText(Country.COUNTRY_NAME, sync.getName(), locale)
                 .get();
     }
 
     @Override
     public Item addItem(Sync sync, LocalDate date, int locale) {
         Item item = catalogService.newItem(Country.CATALOG)
-                .withText(Country.COUNTRY_NAME, locale, sync.getName())
-                .withText(Country.COUNTRY_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(Country.COUNTRY_NAME, sync.getName(), locale)
+                .withText(Country.COUNTRY_NAME, sync.getAltName(), getAltLocale(locale))
                 .get();
 
         return catalogService.inserts(item, date);
@@ -66,8 +66,8 @@ public class CountrySyncService extends SyncService {
                 .withReferenceId(CountryCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
                 .withLong(CountryCorrection.COUNTRY_ID, sync.getExternalId())
                 .withText(CountryCorrection.COUNTRY_CODE, sync.getAdditionalExternalId())
-                .withText(CountryCorrection.COUNTRY_NAME, locale, sync.getName())
-                .withText(CountryCorrection.COUNTRY_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(CountryCorrection.COUNTRY_NAME, sync.getName(), locale)
+                .withText(CountryCorrection.COUNTRY_NAME, sync.getAltName(), getAltLocale(locale))
                 .withTimestamp(CountryCorrection.SYNCHRONIZATION_DATE, date)
                 .get();
 
@@ -81,8 +81,8 @@ public class CountrySyncService extends SyncService {
         catalogService.update(correction, date);
 
         correction.setText(CountryCorrection.COUNTRY_CODE, sync.getAdditionalExternalId());
-        correction.setText(CountryCorrection.COUNTRY_NAME, locale, sync.getName());
-        correction.setText(CountryCorrection.COUNTRY_NAME, getAltLocale(locale), sync.getAltName());
+        correction.setText(CountryCorrection.COUNTRY_NAME, sync.getName(), locale);
+        correction.setText(CountryCorrection.COUNTRY_NAME, sync.getAltName(), getAltLocale(locale));
 
         return catalogService.update(correction, date);
     }
@@ -91,8 +91,8 @@ public class CountrySyncService extends SyncService {
     public boolean updateItem(Item correction, LocalDate date, int locale) {
         Item item = catalogService.getReferenceItem(correction, CountryCorrection.COUNTRY, date);
 
-        item.setText(Country.COUNTRY_NAME, locale, correction.getText(CountryCorrection.COUNTRY_NAME, locale));
-        item.setText(Country.COUNTRY_NAME, getAltLocale(locale), correction.getText(CountryCorrection.COUNTRY_NAME, getAltLocale(locale)));
+        item.setText(Country.COUNTRY_NAME, correction.getText(CountryCorrection.COUNTRY_NAME, locale), locale);
+        item.setText(Country.COUNTRY_NAME, correction.getText(CountryCorrection.COUNTRY_NAME, getAltLocale(locale)), getAltLocale(locale));
 
         return catalogService.update(item, date);
     }

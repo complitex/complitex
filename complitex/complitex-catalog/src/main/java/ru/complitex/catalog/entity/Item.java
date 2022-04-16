@@ -111,7 +111,7 @@ public class Item extends Entity {
         getOrCreateData(value).setText(text);
     }
 
-    public void setText(int value, int locale, String text) {
+    public void setText(int value, String text, int locale) {
         getOrCreateData(catalog.getValue(value, locale)).setText(text);
     }
 

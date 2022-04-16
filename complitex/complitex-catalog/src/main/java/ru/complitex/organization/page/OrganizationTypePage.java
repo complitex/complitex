@@ -33,7 +33,7 @@ public class OrganizationTypePage extends CatalogPage {
     protected boolean validate(Item item) {
         if (catalogService.getItemsCount(OrganizationType.CATALOG, getDate())
                 .withoutId(item.getId())
-                .withText(OrganizationType.ORGANIZATION_TYPE_NAME, Locale.SYSTEM, item.getText(OrganizationType.ORGANIZATION_TYPE_NAME, Locale.SYSTEM))
+                .withText(OrganizationType.ORGANIZATION_TYPE_NAME, item.getText(OrganizationType.ORGANIZATION_TYPE_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

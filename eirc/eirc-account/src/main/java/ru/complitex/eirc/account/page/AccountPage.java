@@ -11,13 +11,15 @@ import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.entity.Value;
 import ru.complitex.catalog.model.DataModel;
 import ru.complitex.catalog.page.CatalogPage;
+import ru.complitex.eirc.account.component.group.GivenNameGroup;
+import ru.complitex.eirc.account.component.group.PatronymicGroup;
+import ru.complitex.eirc.account.component.group.SurnameGroup;
 import ru.complitex.eirc.account.entity.Account;
 import ru.complitex.eirc.account.entity.GivenName;
 import ru.complitex.eirc.account.entity.Patronymic;
 import ru.complitex.eirc.account.entity.Surname;
 
 import javax.inject.Inject;
-import java.time.LocalDate;
 
 /**
  * @author Ivanov Anatoliy
@@ -69,11 +71,14 @@ public class AccountPage extends CatalogPage {
 
     @Override
     protected Component newFormGroup(String id, Catalog catalog, Value value, IModel<Item> model) {
-        if (value.getKeyId() == Account.FLAT) {
-            return new HouseFlatGroup(id, new DataModel<>(model, catalog.getValue(Account.HOUSE)),
-                    new DataModel<>(model, value), LocalDate.now());
-        }
+        return switch (value.getKeyId()) {
+            case Account.FLAT ->  new HouseFlatGroup(id, new DataModel<>(model, catalog.getValue(Account.HOUSE)),
+                    new DataModel<>(model, value), getDate());
+            case Account.SURNAME -> new SurnameGroup(id, new DataModel<>(model, catalog.getValue(Account.SURNAME)), getDate());
+            case Account.GIVEN_NAME -> new GivenNameGroup(id, new DataModel<>(model, catalog.getValue(Account.GIVEN_NAME)), getDate());
+            case Account.PATRONYMIC -> new PatronymicGroup(id, new DataModel<>(model, catalog.getValue(Account.PATRONYMIC)), getDate());
 
-        return super.newFormGroup(id, catalog, value, model);
+            default -> super.newFormGroup(id, catalog, value, model);
+        };
     }
 }

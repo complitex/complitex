@@ -3,7 +3,10 @@ package ru.complitex.sync.service;
 import ru.complitex.address.entity.District;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.service.CatalogService;
-import ru.complitex.correction.entity.*;
+import ru.complitex.correction.entity.CityCorrection;
+import ru.complitex.correction.entity.CityTypeCorrection;
+import ru.complitex.correction.entity.DistrictCorrection;
+import ru.complitex.correction.entity.RegionCorrection;
 import ru.complitex.sync.entity.Sync;
 import ru.complitex.sync.entity.SyncCatalog;
 
@@ -87,7 +90,7 @@ public class DistrictSyncService extends SyncService {
     public Item getItem(Sync sync, LocalDate date, int locale) {
         return catalogService.getItem(District.CATALOG, date)
                 .withReferenceId(District.CITY, getCityId(sync.getParentId(), date))
-                .withText(District.DISTRICT_NAME, locale, sync.getName())
+                .withText(District.DISTRICT_NAME, sync.getName(), locale)
                 .get();
     }
 
@@ -95,8 +98,8 @@ public class DistrictSyncService extends SyncService {
     public Item addItem(Sync sync, LocalDate date, int locale) {
         Item item = catalogService.newItem(District.CATALOG)
                 .withReferenceId(District.CITY, getCityId(sync.getParentId(), date))
-                .withText(District.DISTRICT_NAME, locale, sync.getName())
-                .withText(District.DISTRICT_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(District.DISTRICT_NAME, sync.getName(), locale)
+                .withText(District.DISTRICT_NAME, sync.getAltName(), getAltLocale(locale))
                 .get();
 
         return catalogService.inserts(item, date);
@@ -111,8 +114,8 @@ public class DistrictSyncService extends SyncService {
                 .withLong(DistrictCorrection.CITY_ID, sync.getParentId())
                 .withLong(DistrictCorrection.DISTRICT_ID, sync.getExternalId())
                 .withText(DistrictCorrection.DISTRICT_CODE, sync.getAdditionalExternalId())
-                .withText(DistrictCorrection.DISTRICT_NAME, locale, sync.getName())
-                .withText(DistrictCorrection.DISTRICT_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(DistrictCorrection.DISTRICT_NAME, sync.getName(), locale)
+                .withText(DistrictCorrection.DISTRICT_NAME, sync.getAltName(), getAltLocale(locale))
                 .withTimestamp(DistrictCorrection.SYNCHRONIZATION_DATE, date)
                 .get();
 
@@ -127,8 +130,8 @@ public class DistrictSyncService extends SyncService {
 
         correction.setLong(DistrictCorrection.CITY_ID, sync.getParentId());
         correction.setText(DistrictCorrection.DISTRICT_CODE, sync.getAdditionalExternalId());
-        correction.setText(DistrictCorrection.DISTRICT_NAME, locale, sync.getName());
-        correction.setText(DistrictCorrection.DISTRICT_NAME, getAltLocale(locale), sync.getAltName());
+        correction.setText(DistrictCorrection.DISTRICT_NAME, sync.getName(), locale);
+        correction.setText(DistrictCorrection.DISTRICT_NAME, sync.getAltName(), getAltLocale(locale));
 
         return catalogService.update(correction, date);
     }
@@ -138,8 +141,8 @@ public class DistrictSyncService extends SyncService {
         Item item = catalogService.getReferenceItem(correction, DistrictCorrection.DISTRICT, date);
 
         item.setReferenceId(District.CITY, getCityId(correction.getLong(DistrictCorrection.CITY_ID), date));
-        item.setText(District.DISTRICT_NAME, locale, correction.getText(DistrictCorrection.DISTRICT_NAME, locale));
-        item.setText(District.DISTRICT_NAME, getAltLocale(locale), correction.getText(DistrictCorrection.DISTRICT_NAME, getAltLocale(locale)));
+        item.setText(District.DISTRICT_NAME, correction.getText(DistrictCorrection.DISTRICT_NAME, locale), locale);
+        item.setText(District.DISTRICT_NAME, correction.getText(DistrictCorrection.DISTRICT_NAME, getAltLocale(locale)), getAltLocale(locale));
 
         return catalogService.update(item, date);
     }

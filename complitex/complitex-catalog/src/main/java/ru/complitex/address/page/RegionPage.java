@@ -43,7 +43,7 @@ public class RegionPage extends CatalogPage {
         if (catalogService.getItemsCount(Region.CATALOG, getDate())
                 .withoutId(item.getId())
                 .withReferenceId(Region.COUNTRY, item.getReferenceId(Region.COUNTRY))
-                .withText(Region.REGION_NAME, Locale.SYSTEM, item.getText(Region.REGION_NAME, Locale.SYSTEM))
+                .withText(Region.REGION_NAME, item.getText(Region.REGION_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

@@ -45,17 +45,17 @@ public class CityTypeSyncService extends SyncService {
     @Override
     public Item getItem(Sync sync, LocalDate date, int locale) {
         return catalogService.getItem(CityType.CATALOG, date)
-                .withText(CityType.CITY_TYPE_NAME, locale, sync.getName())
+                .withText(CityType.CITY_TYPE_NAME, sync.getName(), locale)
                 .get();
     }
 
     @Override
     public Item addItem(Sync sync, LocalDate date, int locale) {
         Item item = catalogService.newItem(CityType.CATALOG)
-                .withText(CityType.CITY_TYPE_NAME, locale, sync.getName())
-                .withText(CityType.CITY_TYPE_NAME, getAltLocale(locale), sync.getAltName())
-                .withText(CityType.CITY_TYPE_SHORT_NAME, locale, sync.getAdditionalName())
-                .withText(CityType.CITY_TYPE_SHORT_NAME, getAltLocale(locale), sync.getAltAdditionalName())
+                .withText(CityType.CITY_TYPE_NAME, sync.getName(), locale)
+                .withText(CityType.CITY_TYPE_NAME, sync.getAltName(), getAltLocale(locale))
+                .withText(CityType.CITY_TYPE_SHORT_NAME, sync.getAdditionalName(), locale)
+                .withText(CityType.CITY_TYPE_SHORT_NAME, sync.getAltAdditionalName(), getAltLocale(locale))
                 .get();
 
         return catalogService.inserts(item, date);
@@ -69,10 +69,10 @@ public class CityTypeSyncService extends SyncService {
                 .withReferenceId(CityTypeCorrection.CORRECTION_ORGANIZATION, CORRECTION_ORGANIZATION)
                 .withLong(CityTypeCorrection.CITY_TYPE_ID, sync.getExternalId())
                 .withText(CityTypeCorrection.CITY_TYPE_CODE, sync.getAdditionalExternalId())
-                .withText(CityTypeCorrection.CITY_TYPE_NAME, locale, sync.getName())
-                .withText(CityTypeCorrection.CITY_TYPE_NAME, getAltLocale(locale), sync.getAltName())
-                .withText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, locale, sync.getAdditionalName())
-                .withText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, getAltLocale(locale), sync.getAltAdditionalName())
+                .withText(CityTypeCorrection.CITY_TYPE_NAME, sync.getName(), locale)
+                .withText(CityTypeCorrection.CITY_TYPE_NAME, sync.getAltName(), getAltLocale(locale))
+                .withText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, sync.getAdditionalName(), locale)
+                .withText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, sync.getAltAdditionalName(), getAltLocale(locale))
                 .withTimestamp(CityTypeCorrection.SYNCHRONIZATION_DATE, date)
                 .get();
 
@@ -86,10 +86,10 @@ public class CityTypeSyncService extends SyncService {
         catalogService.update(correction, date);
 
         correction.setText(CityTypeCorrection.CITY_TYPE_CODE, sync.getAdditionalExternalId());
-        correction.setText(CityTypeCorrection.CITY_TYPE_NAME, locale, sync.getName());
-        correction.setText(CityTypeCorrection.CITY_TYPE_NAME, getAltLocale(locale), sync.getAltName());
-        correction.setText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, locale, sync.getAdditionalName());
-        correction.setText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, getAltLocale(locale), sync.getAltAdditionalName());
+        correction.setText(CityTypeCorrection.CITY_TYPE_NAME, sync.getName(), locale);
+        correction.setText(CityTypeCorrection.CITY_TYPE_NAME, sync.getAltName(), getAltLocale(locale));
+        correction.setText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, sync.getAdditionalName(), locale);
+        correction.setText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, sync.getAltAdditionalName(), getAltLocale(locale));
 
         return catalogService.update(correction, date);
     }
@@ -98,10 +98,10 @@ public class CityTypeSyncService extends SyncService {
     public boolean updateItem(Item correction, LocalDate date, int locale) {
         Item item = catalogService.getReferenceItem(correction, CityTypeCorrection.CITY_TYPE, date);
 
-        item.setText(CityType.CITY_TYPE_NAME, locale, correction.getText(CityTypeCorrection.CITY_TYPE_NAME, locale));
-        item.setText(CityType.CITY_TYPE_NAME, getAltLocale(locale), correction.getText(CityTypeCorrection.CITY_TYPE_NAME, getAltLocale(locale)));
-        item.setText(CityType.CITY_TYPE_SHORT_NAME, locale, correction.getText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, locale));
-        item.setText(CityType.CITY_TYPE_SHORT_NAME, getAltLocale(locale), correction.getText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, getAltLocale(locale)));
+        item.setText(CityType.CITY_TYPE_NAME, correction.getText(CityTypeCorrection.CITY_TYPE_NAME, locale), locale);
+        item.setText(CityType.CITY_TYPE_NAME, correction.getText(CityTypeCorrection.CITY_TYPE_NAME, getAltLocale(locale)), getAltLocale(locale));
+        item.setText(CityType.CITY_TYPE_SHORT_NAME, correction.getText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, locale), locale);
+        item.setText(CityType.CITY_TYPE_SHORT_NAME, correction.getText(CityTypeCorrection.CITY_TYPE_SHORT_NAME, getAltLocale(locale)), getAltLocale(locale));
 
         return catalogService.update(item, date);
     }

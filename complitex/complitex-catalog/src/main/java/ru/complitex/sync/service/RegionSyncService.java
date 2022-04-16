@@ -63,7 +63,7 @@ public class RegionSyncService extends SyncService {
     public Item getItem(Sync sync, LocalDate date, int locale) {
         return catalogService.getItem(Region.CATALOG, date)
                 .withReferenceId(Region.COUNTRY, getCountryId(sync.getParentId(), date))
-                .withText(Region.REGION_NAME, locale, sync.getName())
+                .withText(Region.REGION_NAME, sync.getName(), locale)
                 .get();
     }
 
@@ -71,8 +71,8 @@ public class RegionSyncService extends SyncService {
     public Item addItem(Sync sync, LocalDate date, int locale) {
         Item item = catalogService.newItem(Region.CATALOG)
                 .withReferenceId(Region.COUNTRY, getCountryId(sync.getParentId(), date))
-                .withText(Region.REGION_NAME, locale, sync.getName())
-                .withText(Region.REGION_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(Region.REGION_NAME, sync.getName(), locale)
+                .withText(Region.REGION_NAME, sync.getAltName(), getAltLocale(locale))
                 .get();
 
         return catalogService.inserts(item, date);
@@ -87,8 +87,8 @@ public class RegionSyncService extends SyncService {
                 .withLong(RegionCorrection.COUNTRY_ID, sync.getParentId())
                 .withLong(RegionCorrection.REGION_ID, sync.getExternalId())
                 .withText(RegionCorrection.REGION_CODE, sync.getAdditionalExternalId())
-                .withText(RegionCorrection.REGION_NAME, locale, sync.getName())
-                .withText(RegionCorrection.REGION_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(RegionCorrection.REGION_NAME, sync.getName(), locale)
+                .withText(RegionCorrection.REGION_NAME, sync.getAltName(), getAltLocale(locale))
                 .withTimestamp(RegionCorrection.SYNCHRONIZATION_DATE, date)
                 .get();
 
@@ -103,8 +103,8 @@ public class RegionSyncService extends SyncService {
 
         correction.setLong(RegionCorrection.COUNTRY_ID, sync.getParentId());
         correction.setText(RegionCorrection.REGION_CODE, sync.getAdditionalExternalId());
-        correction.setText(RegionCorrection.REGION_NAME, locale, sync.getName());
-        correction.setText(RegionCorrection.REGION_NAME, getAltLocale(locale), sync.getAltName());
+        correction.setText(RegionCorrection.REGION_NAME, sync.getName(), locale);
+        correction.setText(RegionCorrection.REGION_NAME, sync.getAltName(), getAltLocale(locale));
 
         return catalogService.update(correction, date);
     }
@@ -114,8 +114,8 @@ public class RegionSyncService extends SyncService {
         Item item = catalogService.getReferenceItem(correction, RegionCorrection.REGION, date);
 
         item.setReferenceId(Region.COUNTRY, getCountryId(correction.getLong(RegionCorrection.COUNTRY_ID), date));
-        item.setText(Region.REGION_NAME, locale, correction.getText(RegionCorrection.REGION_NAME, locale));
-        item.setText(Region.REGION_NAME, getAltLocale(locale), correction.getText(RegionCorrection.REGION_NAME, getAltLocale(locale)));
+        item.setText(Region.REGION_NAME, correction.getText(RegionCorrection.REGION_NAME, locale), locale);
+        item.setText(Region.REGION_NAME, correction.getText(RegionCorrection.REGION_NAME, getAltLocale(locale)), getAltLocale(locale));
 
         return catalogService.update(item, date);
     }

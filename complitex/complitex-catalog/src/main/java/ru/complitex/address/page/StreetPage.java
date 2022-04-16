@@ -57,7 +57,7 @@ public class StreetPage extends CatalogPage {
                 .withoutId(item.getId())
                 .withReferenceId(Street.CITY, item.getReferenceId(Street.CITY))
                 .withReferenceId(Street.STREET_TYPE, item.getReferenceId(Street.STREET_TYPE))
-                .withText(Street.STREET_NAME, Locale.SYSTEM, item.getText(Street.STREET_NAME, Locale.SYSTEM))
+                .withText(Street.STREET_NAME, item.getText(Street.STREET_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

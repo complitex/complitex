@@ -128,8 +128,8 @@ public class HouseSyncService extends SyncService {
         return catalogService.getItem(House.CATALOG, date)
                 .withReferenceId(House.DISTRICT, getDistrictId(Long.valueOf(sync.getAdditionalParentId()), date))
                 .withReferenceId(House.STREET, getStreetId(sync.getParentId(), date))
-                .withText(House.HOUSE_NUMBER, locale, sync.getName())
-                .withText(House.HOUSE_PART, locale, sync.getAdditionalName())
+                .withText(House.HOUSE_NUMBER, sync.getName(), locale)
+                .withText(House.HOUSE_PART, sync.getAdditionalName(), locale)
                 .get();
     }
 
@@ -138,10 +138,10 @@ public class HouseSyncService extends SyncService {
         Item item = catalogService.newItem(House.CATALOG)
                 .withReferenceId(House.DISTRICT, getDistrictId(Long.valueOf(sync.getAdditionalParentId()), date))
                 .withReferenceId(House.STREET, getStreetId(sync.getParentId(), date))
-                .withText(House.HOUSE_NUMBER, locale, sync.getName())
-                .withText(House.HOUSE_NUMBER, getAltLocale(locale), sync.getAltName())
-                .withText(House.HOUSE_PART, locale, sync.getAdditionalName())
-                .withText(House.HOUSE_PART, getAltLocale(locale), sync.getAltAdditionalName())
+                .withText(House.HOUSE_NUMBER, sync.getName(), locale)
+                .withText(House.HOUSE_NUMBER, sync.getAltName(), getAltLocale(locale))
+                .withText(House.HOUSE_PART, sync.getAdditionalName(), locale)
+                .withText(House.HOUSE_PART, sync.getAltAdditionalName(), getAltLocale(locale))
                 .get();
 
         return catalogService.inserts(item, date);
@@ -157,10 +157,10 @@ public class HouseSyncService extends SyncService {
                 .withLong(HouseCorrection.STREET_ID, sync.getParentId())
                 .withLong(HouseCorrection.HOUSE_ID, sync.getExternalId())
                 .withText(HouseCorrection.HOUSE_CODE, sync.getAdditionalExternalId())
-                .withText(HouseCorrection.HOUSE_NUMBER, locale, sync.getName())
-                .withText(HouseCorrection.HOUSE_NUMBER, getAltLocale(locale), sync.getAltName())
-                .withText(HouseCorrection.HOUSE_PART, locale, sync.getAdditionalName())
-                .withText(HouseCorrection.HOUSE_PART, getAltLocale(locale), sync.getAltAdditionalName())
+                .withText(HouseCorrection.HOUSE_NUMBER, sync.getName(), locale)
+                .withText(HouseCorrection.HOUSE_NUMBER, sync.getAltName(), getAltLocale(locale))
+                .withText(HouseCorrection.HOUSE_PART, sync.getAdditionalName(), locale)
+                .withText(HouseCorrection.HOUSE_PART, sync.getAltAdditionalName(), getAltLocale(locale))
                 .withLong(HouseCorrection.SERVICING_ORGANIZATION_ID, sync.getServicingOrganization())
                 .withLong(HouseCorrection.BALANCE_HOLDER_ID, sync.getBalanceHolder())
                 .withTimestamp(HouseCorrection.SYNCHRONIZATION_DATE, date)
@@ -178,10 +178,10 @@ public class HouseSyncService extends SyncService {
         correction.setLong(HouseCorrection.DISTRICT_ID, Long.valueOf(sync.getAdditionalParentId()));
         correction.setLong(HouseCorrection.STREET_ID, sync.getParentId());
         correction.setText(HouseCorrection.HOUSE_CODE, sync.getAdditionalExternalId());
-        correction.setText(HouseCorrection.HOUSE_NUMBER, locale, sync.getName());
-        correction.setText(HouseCorrection.HOUSE_NUMBER, getAltLocale(locale), sync.getAltName());
-        correction.setText(HouseCorrection.HOUSE_PART, locale, sync.getAdditionalName());
-        correction.setText(HouseCorrection.HOUSE_PART, getAltLocale(locale), sync.getAltAdditionalName());
+        correction.setText(HouseCorrection.HOUSE_NUMBER, sync.getName(), locale);
+        correction.setText(HouseCorrection.HOUSE_NUMBER, sync.getAltName(), getAltLocale(locale));
+        correction.setText(HouseCorrection.HOUSE_PART, sync.getAdditionalName(), locale);
+        correction.setText(HouseCorrection.HOUSE_PART, sync.getAltAdditionalName(), getAltLocale(locale));
         correction.setLong(HouseCorrection.SERVICING_ORGANIZATION_ID, sync.getServicingOrganization());
         correction.setLong(HouseCorrection.BALANCE_HOLDER_ID, sync.getBalanceHolder());
 
@@ -194,10 +194,10 @@ public class HouseSyncService extends SyncService {
 
         item.setReferenceId(House.STREET, getStreetId(correction.getLong(HouseCorrection.STREET_ID), date));
         item.setReferenceId(House.DISTRICT, getDistrictId(correction.getLong(HouseCorrection.DISTRICT_ID), date));
-        item.setText(House.HOUSE_NUMBER, locale, correction.getText(HouseCorrection.HOUSE_NUMBER, locale));
-        item.setText(House.HOUSE_NUMBER, getAltLocale(locale), correction.getText(HouseCorrection.HOUSE_NUMBER, getAltLocale(locale)));
-        item.setText(House.HOUSE_PART, locale, correction.getText(HouseCorrection.HOUSE_PART, locale));
-        item.setText(House.HOUSE_PART, getAltLocale(locale), correction.getText(HouseCorrection.HOUSE_PART, getAltLocale(locale)));
+        item.setText(House.HOUSE_NUMBER, correction.getText(HouseCorrection.HOUSE_NUMBER, locale), locale);
+        item.setText(House.HOUSE_NUMBER, correction.getText(HouseCorrection.HOUSE_NUMBER, getAltLocale(locale)), getAltLocale(locale));
+        item.setText(House.HOUSE_PART, correction.getText(HouseCorrection.HOUSE_PART, locale), locale);
+        item.setText(House.HOUSE_PART, correction.getText(HouseCorrection.HOUSE_PART, getAltLocale(locale)), getAltLocale(locale));
 
         return catalogService.update(item, date);
     }

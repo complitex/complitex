@@ -1,12 +1,12 @@
 package ru.complitex.catalog.service;
 
 import org.mybatis.cdi.Transactional;
-import ru.complitex.catalog.mapper.ItemMapper;
 import ru.complitex.catalog.entity.Catalog;
 import ru.complitex.catalog.entity.Data;
 import ru.complitex.catalog.entity.Item;
 import ru.complitex.catalog.mapper.CatalogMapper;
 import ru.complitex.catalog.mapper.DataMapper;
+import ru.complitex.catalog.mapper.ItemMapper;
 import ru.complitex.ui.entity.Filter;
 
 import javax.enterprise.context.RequestScoped;
@@ -53,8 +53,8 @@ public class CatalogService {
             return this;
         }
 
-        public ItemBuilder<T> withText(int value, int locale, String text) {
-            item.setText(value, locale, text);
+        public ItemBuilder<T> withText(int value, String text, int locale) {
+            item.setText(value, text, locale);
 
             return this;
         }

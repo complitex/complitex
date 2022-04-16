@@ -79,7 +79,7 @@ public class HousePage extends CatalogPage {
         if (catalogService.getItemsCount(House.CATALOG, getDate())
                 .withoutId(item.getId())
                 .withReferenceId(House.STREET, item.getReferenceId(House.STREET))
-                .withText(House.HOUSE_NUMBER, Locale.SYSTEM, item.getText(House.HOUSE_NUMBER, Locale.SYSTEM))
+                .withText(House.HOUSE_NUMBER, item.getText(House.HOUSE_NUMBER, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

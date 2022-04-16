@@ -50,25 +50,25 @@ public class AddressJsonPage extends WebPage {
 
         if (country != null) {
             countryId = catalogService.getItem(Country.CATALOG, date)
-                    .withText(Country.COUNTRY_NAME, Locale.SYSTEM, country)
+                    .withText(Country.COUNTRY_NAME, country, Locale.SYSTEM)
                     .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (region != null) {
             regionId = catalogService.getItem(Region.CATALOG, date)
                     .withReferenceId(Region.COUNTRY, countryId)
-                    .withText(Region.REGION_NAME, Locale.SYSTEM, region)
+                    .withText(Region.REGION_NAME, region, Locale.SYSTEM)
                     .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (cityType != null) {
             cityTypeId = catalogService.getItem(CityType.CATALOG, date)
-                    .withText(CityType.CITY_TYPE_NAME, Locale.SYSTEM, cityType)
+                    .withText(CityType.CITY_TYPE_NAME, cityType, Locale.SYSTEM)
                     .getOptional().map(Item::getId).orElse(null);
 
             if (cityTypeId == null) {
                 cityTypeId = catalogService.getItem(CityType.CATALOG, date)
-                        .withText(CityType.CITY_TYPE_SHORT_NAME, Locale.SYSTEM, cityType)
+                        .withText(CityType.CITY_TYPE_SHORT_NAME, cityType, Locale.SYSTEM)
                         .getOptional().map(Item::getId).orElse(-1L);
             }
         }
@@ -77,25 +77,25 @@ public class AddressJsonPage extends WebPage {
             cityId = catalogService.getItem(City.CATALOG, date)
                     .withReferenceId(City.REGION, regionId)
                     .withReferenceId(City.CITY_TYPE, cityTypeId)
-                    .withText(City.CITY_NAME, Locale.SYSTEM, city)
+                    .withText(City.CITY_NAME, city, Locale.SYSTEM)
                     .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (district != null) {
             districtId = catalogService.getItem(District.CATALOG, date)
                     .withReferenceId(District.CITY, cityId)
-                    .withText(District.DISTRICT_NAME, Locale.SYSTEM, district)
+                    .withText(District.DISTRICT_NAME, district, Locale.SYSTEM)
                     .getOptional().map(Item::getId).orElse(-1L);
         }
 
         if (streetType != null) {
             streetTypeId = catalogService.getItem(StreetType.CATALOG, date)
-                    .withText(StreetType.STREET_TYPE_NAME, Locale.SYSTEM, streetType)
+                    .withText(StreetType.STREET_TYPE_NAME, streetType, Locale.SYSTEM)
                     .getOptional().map(Item::getId).orElse(null);
 
             if (streetTypeId == null) {
                 streetTypeId = catalogService.getItem(StreetType.CATALOG, date)
-                        .withText(StreetType.STREET_TYPE_SHORT_NAME, Locale.SYSTEM, streetType)
+                        .withText(StreetType.STREET_TYPE_SHORT_NAME, streetType, Locale.SYSTEM)
                         .getOptional().map(Item::getId).orElse(-1L);
             }
         }
@@ -104,7 +104,7 @@ public class AddressJsonPage extends WebPage {
             streetId = catalogService.getItem(Street.CATALOG, date)
                     .withReferenceId(Street.CITY, cityId)
                     .withReferenceId(Street.STREET_TYPE, streetTypeId)
-                    .withText(Street.STREET_NAME, Locale.SYSTEM, street)
+                    .withText(Street.STREET_NAME, street, Locale.SYSTEM)
                     .getOptional().map(Item::getId).orElse(-1L);
         }
 
@@ -112,8 +112,8 @@ public class AddressJsonPage extends WebPage {
             houseId =  catalogService.getItem(House.CATALOG, date)
                     .withReferenceId(House.DISTRICT, districtId)
                     .withReferenceId(House.STREET, streetId)
-                    .withText(House.HOUSE_NUMBER, Locale.SYSTEM, houseNumber)
-                    .withText(House.HOUSE_PART, Locale.SYSTEM, housePart != null && !housePart.isEmpty() ? housePart : null)
+                    .withText(House.HOUSE_NUMBER, houseNumber, Locale.SYSTEM)
+                    .withText(House.HOUSE_PART, housePart != null && !housePart.isEmpty() ? housePart : null, Locale.SYSTEM)
                     .getOptional().map(Item::getId).orElse(-1L);
         }
 

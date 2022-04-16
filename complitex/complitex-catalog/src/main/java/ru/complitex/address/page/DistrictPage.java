@@ -57,7 +57,7 @@ public class DistrictPage extends CatalogPage {
         if (catalogService.getItemsCount(District.CATALOG, getDate())
                 .withoutId(item.getId())
                 .withReferenceId(District.CITY, item.getReferenceId(District.CITY))
-                .withText(District.DISTRICT_NAME, Locale.SYSTEM, item.getText(District.DISTRICT_NAME, Locale.SYSTEM))
+                .withText(District.DISTRICT_NAME, item.getText(District.DISTRICT_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

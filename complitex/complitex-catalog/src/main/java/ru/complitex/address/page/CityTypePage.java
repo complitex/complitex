@@ -29,7 +29,7 @@ public class CityTypePage extends CatalogPage {
     protected boolean validate(Item item) {
         if (catalogService.getItemsCount(CityType.CATALOG, getDate())
                 .withoutId(item.getId())
-                .withText(CityType.CITY_TYPE_NAME, Locale.SYSTEM, item.getText(CityType.CITY_TYPE_NAME, Locale.SYSTEM))
+                .withText(CityType.CITY_TYPE_NAME, item.getText(CityType.CITY_TYPE_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

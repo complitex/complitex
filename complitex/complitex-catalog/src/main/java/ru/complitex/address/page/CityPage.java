@@ -57,7 +57,7 @@ public class CityPage extends CatalogPage {
                 .withoutId(item.getId())
                 .withReferenceId(City.REGION, item.getReferenceId(City.REGION))
                 .withReferenceId(City.CITY_TYPE, item.getReferenceId(City.CITY_TYPE))
-                .withText(City.CITY_NAME, Locale.SYSTEM, item.getText(City.CITY_NAME, Locale.SYSTEM))
+                .withText(City.CITY_NAME, item.getText(City.CITY_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

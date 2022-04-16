@@ -29,7 +29,7 @@ public class CountryPage extends CatalogPage {
     protected boolean validate(Item item) {
         if (catalogService.getItemsCount(Country.CATALOG, getDate())
                 .withoutId(item.getId())
-                .withText(Country.COUNTRY_NAME, Locale.SYSTEM, item.getText(Country.COUNTRY_NAME, Locale.SYSTEM))
+                .withText(Country.COUNTRY_NAME, item.getText(Country.COUNTRY_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

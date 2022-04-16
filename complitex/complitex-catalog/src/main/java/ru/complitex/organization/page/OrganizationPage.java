@@ -50,7 +50,7 @@ public class OrganizationPage extends CatalogPage {
         if (catalogService.getItemsCount(Organization.CATALOG, getDate())
                 .withoutId(item.getId())
                 .withReferenceId(Organization.ORGANIZATION_PARENT, item.getReferenceId(Organization.ORGANIZATION_PARENT))
-                .withText(Organization.ORGANIZATION_NAME, Locale.SYSTEM, item.getText(Organization.ORGANIZATION_NAME, Locale.SYSTEM))
+                .withText(Organization.ORGANIZATION_NAME, item.getText(Organization.ORGANIZATION_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

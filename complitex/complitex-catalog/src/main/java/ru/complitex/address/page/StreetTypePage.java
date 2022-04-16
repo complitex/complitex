@@ -29,7 +29,7 @@ public class StreetTypePage extends CatalogPage {
     protected boolean validate(Item item) {
         if (catalogService.getItemsCount(StreetType.CATALOG, getDate())
                 .withoutId(item.getId())
-                .withText(StreetType.STREET_TYPE_NAME, Locale.SYSTEM, item.getText(StreetType.STREET_TYPE_NAME, Locale.SYSTEM))
+                .withText(StreetType.STREET_TYPE_NAME, item.getText(StreetType.STREET_TYPE_NAME, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 

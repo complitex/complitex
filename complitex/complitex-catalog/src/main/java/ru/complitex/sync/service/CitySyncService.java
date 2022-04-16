@@ -85,8 +85,8 @@ public class CitySyncService extends SyncService {
         return catalogService.getItem(City.CATALOG, date)
                 .withReferenceId(City.REGION, getRegionId(sync.getParentId(), date))
                 .withReferenceId(City.CITY_TYPE, getCityTypeId(Long.valueOf(sync.getAdditionalParentId()), date))
-                .withText(City.CITY_NAME, locale, sync.getName())
-                .withText(City.CITY_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(City.CITY_NAME, sync.getName(), locale)
+                .withText(City.CITY_NAME, sync.getAltName(), getAltLocale(locale))
                 .get();
     }
 
@@ -95,8 +95,8 @@ public class CitySyncService extends SyncService {
         Item item = catalogService.newItem(City.CATALOG)
                 .withReferenceId(City.REGION, getRegionId(sync.getParentId(), date))
                 .withReferenceId(City.CITY_TYPE, getCityTypeId(Long.valueOf(sync.getAdditionalParentId()), date))
-                .withText(City.CITY_NAME, locale, sync.getName())
-                .withText(City.CITY_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(City.CITY_NAME, sync.getName(), locale)
+                .withText(City.CITY_NAME, sync.getAltName(), getAltLocale(locale))
                 .get();
 
         return catalogService.inserts(item, date);
@@ -112,8 +112,8 @@ public class CitySyncService extends SyncService {
                 .withLong(CityCorrection.CITY_TYPE_ID, Long.valueOf(sync.getAdditionalParentId()))
                 .withLong(CityCorrection.CITY_ID, sync.getExternalId())
                 .withText(CityCorrection.CITY_CODE, sync.getAdditionalExternalId())
-                .withText(CityCorrection.CITY_NAME, locale, sync.getName())
-                .withText(CityCorrection.CITY_NAME, getAltLocale(locale), sync.getAltName())
+                .withText(CityCorrection.CITY_NAME, sync.getName(), locale)
+                .withText(CityCorrection.CITY_NAME, sync.getAltName(), getAltLocale(locale))
                 .withTimestamp(CityCorrection.SYNCHRONIZATION_DATE, date)
                 .get();
 
@@ -129,8 +129,8 @@ public class CitySyncService extends SyncService {
         correction.setLong(CityCorrection.REGION_ID, sync.getParentId());
         correction.setLong(CityCorrection.CITY_TYPE_ID, Long.valueOf(sync.getAdditionalParentId()));
         correction.setText(CityCorrection.CITY_CODE, sync.getAdditionalExternalId());
-        correction.setText(CityCorrection.CITY_NAME, locale, sync.getName());
-        correction.setText(CityCorrection.CITY_NAME, getAltLocale(locale), sync.getAltName());
+        correction.setText(CityCorrection.CITY_NAME, sync.getName(), locale);
+        correction.setText(CityCorrection.CITY_NAME, sync.getAltName(), getAltLocale(locale));
 
         return catalogService.update(correction, date);
     }
@@ -141,8 +141,8 @@ public class CitySyncService extends SyncService {
 
         item.setReferenceId(City.REGION, getRegionId(correction.getLong(CityCorrection.REGION_ID), date));
         item.setReferenceId(City.CITY_TYPE, getCityTypeId(correction.getLong(CityCorrection.CITY_TYPE_ID), date));
-        item.setText(City.CITY_NAME, locale, correction.getText(CityCorrection.CITY_NAME, locale));
-        item.setText(City.CITY_NAME, getAltLocale(locale), correction.getText(CityCorrection.CITY_NAME, getAltLocale(locale)));
+        item.setText(City.CITY_NAME, correction.getText(CityCorrection.CITY_NAME, locale), locale);
+        item.setText(City.CITY_NAME, correction.getText(CityCorrection.CITY_NAME, getAltLocale(locale)), getAltLocale(locale));
 
         return catalogService.update(item, date);
     }

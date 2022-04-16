@@ -56,7 +56,7 @@ public class FlatPage extends CatalogPage {
         if (catalogService.getItemsCount(Flat.CATALOG, getDate())
                 .withoutId(item.getId())
                 .withReferenceId(Flat.HOUSE, item.getReferenceId(Flat.HOUSE))
-                .withText(Flat.FLAT_NUMBER, Locale.SYSTEM, item.getText(Flat.FLAT_NUMBER, Locale.SYSTEM))
+                .withText(Flat.FLAT_NUMBER, item.getText(Flat.FLAT_NUMBER, Locale.SYSTEM), Locale.SYSTEM)
                 .get() > 0) {
             error(getString("error_unique"));
 
