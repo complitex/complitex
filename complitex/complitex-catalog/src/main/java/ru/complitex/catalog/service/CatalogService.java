@@ -231,6 +231,7 @@ public class CatalogService {
             if (data != null) {
                 if (!data.isEqual(db)) {
                     data.setId(null);
+
                     data.setStartDate(date);
 
                     db.setEndDate(date);
@@ -248,10 +249,20 @@ public class CatalogService {
 
         for (Data data : item.getData()) {
             if (data.getId() == null && !data.isEmpty()) {
-                Data dataAfter = dataMapper.selectDataAfter(item, data, date);
+                if (data.getStartDate() == null) {
+                    Data dataBefore = dataMapper.selectDataBefore(item, data, date);
 
-                if (dataAfter != null) {
-                    data.setEndDate(dataAfter.getStartDate());
+                    if (dataBefore != null) {
+                        data.setStartDate(dataBefore.getEndDate());
+                    }
+                }
+
+                if (data.getEndDate() == null) {
+                    Data dataAfter = dataMapper.selectDataAfter(item, data, date);
+
+                    if (dataAfter != null) {
+                        data.setEndDate(dataAfter.getStartDate());
+                    }
                 }
 
                 dataMapper.insertData(item, data);

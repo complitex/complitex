@@ -28,6 +28,15 @@ public interface DataMapper {
     @Select("SELECT * FROM ${item.catalog.table}_data " +
             "WHERE ${item.catalog.table}_id = #{item.id} AND value_id = #{data.value.id} " +
             "AND \"end\" IS NULL " +
+            "AND (end_date IS NOT NULL AND end_date <= #{date}) " +
+            "ORDER BY end_date DESC LIMIT 1")
+    Data selectDataBefore(@Param("item") Item item, @Param("data") Data data, @Param("date") LocalDate date);
+
+    @Result(property = "value", column = "value_id",
+            one = @One(select = "ru.complitex.catalog.mapper.ValueMapper.selectValue"))
+    @Select("SELECT * FROM ${item.catalog.table}_data " +
+            "WHERE ${item.catalog.table}_id = #{item.id} AND value_id = #{data.value.id} " +
+            "AND \"end\" IS NULL " +
             "AND (start_date IS NOT NULL AND start_date > #{date}) " +
             "ORDER BY start_date LIMIT 1")
     Data selectDataAfter(@Param("item") Item item, @Param("data") Data data, @Param("date") LocalDate date);
