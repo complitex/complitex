@@ -1,5 +1,6 @@
 package ru.flexpay.eirc.eirc_account.entity;
 
+import org.complitex.common.util.DateUtil;
 import ru.flexpay.eirc.dictionary.entity.Address;
 import ru.flexpay.eirc.dictionary.entity.DictionaryTemporalObject;
 import ru.flexpay.eirc.dictionary.entity.Person;
@@ -18,6 +19,7 @@ public class EircAccount extends DictionaryTemporalObject {
     private Boolean createdFromRegistry;
 
     public EircAccount() {
+        setBeginDate(DateUtil.getCurrentDate());
     }
 
     public EircAccount(Long objectId) {

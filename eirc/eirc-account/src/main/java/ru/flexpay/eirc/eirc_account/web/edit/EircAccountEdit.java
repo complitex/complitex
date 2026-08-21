@@ -256,7 +256,7 @@ public class EircAccountEdit extends TemplatePage {
             throw new RuntimeException("Failed EIRC Account`s address");
         }
 
-        DomainObject child = findObject(building.getParentId(), "building_address");
+        DomainObject child = findObject(building.getParentId(), "building");
 
         for (String desc : addressDescription) {
             child = findObject(child.getParentId(), desc);

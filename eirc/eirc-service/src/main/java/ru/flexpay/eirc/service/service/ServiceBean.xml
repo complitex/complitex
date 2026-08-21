@@ -19,11 +19,11 @@
     </resultMap>
 
     <resultMap id="Locale" type="org.complitex.common.entity.StringLocale">
-        <constructor>
+        <!--<constructor>
             <idArg column="service_locale_id"     javaType="Long"/>
             <arg   column="service_locale_name"   javaType="String"/>
             <arg   column="service_locale_system" javaType="_boolean" jdbcType="TINYINT"/>
-        </constructor>
+        </constructor>-->
     </resultMap>
 
     <sql id="serviceCondition">
@@ -66,7 +66,7 @@
     <select id="selectServices" parameterType="org.complitex.common.entity.FilterWrapper" resultMap="Service" flushCache="false" useCache="true">
         select
         <include refid="serviceColumns"/>
-        from `service` s
+        from `eirc_service` s
         <include refid="serviceJoin"/>
 
         <include refid="serviceWhere"/>
@@ -84,7 +84,7 @@
     </select>
 
     <select id="countServices" parameterType="org.complitex.common.entity.FilterWrapper" resultType="long" flushCache="false" useCache="true">
-        select count(distinct s.`id`) from `service` s
+        select count(distinct s.`id`) from `eirc_service` s
           left join `service_string_value` sn on s.`id` = sn.`service_id`
         <include refid="serviceWhere"/>
     </select>
@@ -92,7 +92,7 @@
     <select id="selectService" parameterType="long" resultMap="Service" flushCache="false" useCache="false">
         select
         <include refid="serviceColumns"/>
-        from `service` s
+        from `eirc_service` s
         <include refid="serviceJoin"/>
         where s.`id` = #{id}
     </select>
@@ -100,7 +100,7 @@
     <select id="selectServicesByIds" parameterType="list" resultMap="Service" flushCache="false" useCache="false">
         select
         <include refid="serviceColumns"/>
-        from `service` s
+        from `eirc_service` s
         <include refid="serviceJoin"/>
         where s.`id` IN
         <foreach collection="list" item="id" open="(" close=")" separator=",">
@@ -109,12 +109,12 @@
     </select>
 
     <insert id="insertService" parameterType="ru.flexpay.eirc.service.entity.Service" keyProperty="id" useGeneratedKeys="true" >
-        insert into `service` (`code`, `parent_id`)
+        insert into `eirc_service` (`code`, `parent_id`)
                             values (#{code}, #{parentId})
     </insert>
 
     <update id="updateService" parameterType="ru.flexpay.eirc.service.entity.Service" >
-        update `service` set `code` = #{code}, `parent_id` = #{parentId} where `id` = #{id}
+        update `eirc_service` set `code` = #{code}, `parent_id` = #{parentId} where `id` = #{id}
     </update>
 
     <insert id="insertServiceName" parameterType="map" >
@@ -134,7 +134,7 @@
     </delete>
 
     <delete id="deleteService" parameterType="ru.flexpay.eirc.service.entity.Service" >
-        delete from `service` where `id` = #{id}
+        delete from `eirc_service` where `id` = #{id}
     </delete>
 
 </mapper>
