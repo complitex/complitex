@@ -1,0 +1,5 @@
+ALTER TABLE `payment`
+    ADD COLUMN  `CODE2_27` INTEGER(6),
+    ADD COLUMN  `CODE3_27` INTEGER(6);
+
+INSERT INTO `update` (`version`) VALUE ('0.9.5');
