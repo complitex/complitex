@@ -166,15 +166,15 @@
 
             <!-- apartment -->
             <when test="status == 227">
-                SELECT CONCAT(p.`N_NAME`, p.`VUL_NAME`, p.`BLD_NUM`, p.`CORP_NUM`, p.`FLAT`) `id`, COUNT(DISTINCT b.id) `count`,
+                SELECT 
                 TO_CYRILLIC(p.`N_NAME`) `city`,
                 TO_CYRILLIC(p.`VUL_NAME`) `street`,
                 TO_CYRILLIC(p.`BLD_NUM`) `building`,
                 TO_CYRILLIC(p.`CORP_NUM`) `buildingCorp`,
-                TO_CYRILLIC(p.`FLAT`) `apartment` FROM `benefit` b
+                TO_CYRILLIC(p.`FLAT`) `apartment`, COUNT(1) `count` FROM `benefit` b
                     <include refid="joinPaymentByAccount"/>
                 WHERE b.`request_file_id` = #{id} AND b.`status` = #{status}
-                GROUP BY `id`
+                GROUP BY `city`, `street`, `building`, `buildingCorp`, `apartment`
             </when>
             <otherwise>
                 SELECT 1 FROM DUAL where 1=0;
